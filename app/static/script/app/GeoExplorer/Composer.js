@@ -317,6 +317,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 
                 win = new Ext.Window({
                     title: 'File Upload Form',
+                    id: 'upload-win',
                     layout: 'form',
                     labelAlign: 'top',
                     modal: true,

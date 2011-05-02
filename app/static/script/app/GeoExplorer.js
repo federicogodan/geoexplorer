@@ -204,6 +204,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     },
     
     loadUserConfig: function(json){
+        var uploadWin = Ext.getCmp('upload-win');
+        if(uploadWin != null)
+          uploadWin.destroy();
+          
         var config = Ext.util.JSON.decode(json);
         app = new GeoExplorer.Composer(config);
     },
