@@ -75,7 +75,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 7}
-            }, {
+            },
+/*            {
                 ptype: "gxp_featuremanager",
                 id: "featuremanager",
                 maxFeatures: 20
@@ -85,7 +86,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 autoLoadFeatures: true,
                 toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 8}
-            }, {
+            }, 
+*/
+            {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 10}
             }, {
@@ -216,7 +219,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
-
+        
+/*
         // unauthorized, show login button
         if (this.authorizedRoles.length === 0) {
             this.loginButton = new Ext.Button({
@@ -237,6 +241,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         });
 
         tools.unshift("-");
+*/        
         tools.unshift(new Ext.Button({
             tooltip: this.exportMapText,
             needsAuthorization: true,
@@ -332,7 +337,20 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             iconCls: "icon-load"
         }));
         tools.unshift("-");
-        tools.unshift(aboutButton);
+        //tools.unshift(aboutButton);
+        
+        var poweredByGeoSol = new Ext.Button({
+            tooltip: 'Powered by GeoSolutions',
+            iconCls: "icon-geosol",
+            width : 150,
+            handler: function(btn){
+                window.open('http://geo-solutions.it', '_blank');
+            },
+            //scope: this
+        });
+            
+        tools.unshift(poweredByGeoSol); 
+        
         return tools;
     },
 
