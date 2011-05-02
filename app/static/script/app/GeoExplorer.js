@@ -53,8 +53,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     layersText: "Layers",
     titleText: "Title",
     saveErrorText: "Trouble saving: ",
-    bookmarkText: "Bookmark URL",
-    permakinkText: 'Permalink',
+    
+    bookmarkText: "XML Map Context",
+    permakinkText: 'XML',
+    
     appInfoText: "GeoExplorer",
     aboutText: "About GeoExplorer",
     mapInfoText: "Map Info",
@@ -199,6 +201,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             this.applyConfig(config);
         }
         
+    },
+    
+    loadUserConfig: function(json){
+        var config = Ext.util.JSON.decode(json);
+        app = new GeoExplorer.Composer(config);
     },
     
     displayXHRTrouble: function(msg, status) {
@@ -348,15 +355,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      * Saves the map config and displays the URL in a window.
      */ 
     save: function(callback, scope) {
-        var configStr = Ext.util.JSON.encode(this.getState());
-        var method, url;
-        if (this.id) {
-            method = "PUT";
-            url = "maps/" + this.id;
-        } else {
-            method = "POST";
-            url = "maps";
-        }
+        var configStr = Ext.util.JSON.encode(this.getState());        
+        var method = "POST";
+        var url = app.proxy + app.xmlJsonTranslateService + "HTTPWebGISSave";
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -375,6 +376,45 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      *  :arg: ``XMLHttpRequest``
      */
     handleSave: function(request) {
+        if (request.status == 200) {
+            this.xmlContext = request.responseText;
+        } else {
+            throw this.saveErrorText + request.responseText;
+        }
+    },
+
+    /** private: method[saveAndExport]
+     *
+     * Saves the map config and displays the URL in a window.
+     */ 
+    saveAndExport: function(callback, scope) {
+        var configStr = Ext.util.JSON.encode(this.getState());
+        var method, url;
+        if (this.id) {
+            method = "PUT";
+            url = "maps/" + this.id;
+        } else {
+            method = "POST";
+            url = "maps";
+        }
+        OpenLayers.Request.issue({
+            method: method,
+            url: url,
+            data: configStr,
+            callback: function(request) {
+                this.handleSaveAndExport(request);
+                if (callback) {
+                    callback.call(scope || this);
+                }
+            },
+            scope: this
+        });
+    },
+        
+    /** private: method[handleSaveAndExport]
+     *  :arg: ``XMLHttpRequest``
+     */
+    handleSaveAndExport: function(request) {
         if (request.status == 200) {
             var config = Ext.util.JSON.decode(request.responseText);
             var mapId = config.id;
@@ -396,15 +436,42 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             labelAlign: 'top',
             modal: true,
             bodyStyle: "padding: 5px",
-            width: 300,
+            width: 400,
+            height: 400,
             items: [{
-                xtype: 'textfield',
+                xtype: 'textarea',
                 fieldLabel: this.permakinkText,
+                id: 'context_area',
                 readOnly: true,
+                height: 300,
                 anchor: "100%",
                 selectOnFocus: true,
-                value: window.location.href
-            }]
+                value: this.xmlContext
+            }],
+            buttons: [{
+	                text: 'Download File',
+	                handler: function(){
+	                    var xml = Ext.getCmp('context_area').getValue();
+	                    
+                      OpenLayers.Request.POST({
+                          url: app.proxy + app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+                          data: xml,
+                          callback: function(request) {
+                              if(request.status == 200){
+                                  window.open(request.responseText);
+                              }else{
+                                  Ext.Msg.show({
+                                     title:'File Download Error',
+                                     msg: request.statusText,
+                                     buttons: Ext.Msg.OK,
+                                     icon: Ext.MessageBox.ERROR
+                                  });
+                              }
+                          },
+                          scope: this
+                      });
+	                }
+	          }]
         });
         win.show();
         win.items.first().selectText();

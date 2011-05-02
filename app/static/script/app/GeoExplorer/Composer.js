@@ -19,6 +19,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
     // Begin i18n.
     saveMapText: "Save Map",
+    loadMap: "Load Map",
     exportMapText: "Export Map",
     toolsTitle: "Choose tools to include in the toolbar:",
     previewText: "Preview",
@@ -241,7 +242,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             needsAuthorization: true,
             disabled: !this.isAuthorized(),
             handler: function() {
-                this.save(this.showEmbedWindow);
+                this.saveAndExport(this.showEmbedWindow);
             },
             scope: this,
             iconCls: 'icon-export'
@@ -255,6 +256,79 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },
             scope: this,
             iconCls: "icon-save"
+        }));
+        tools.unshift(new Ext.Button({
+            tooltip: this.loadMap,
+            needsAuthorization: true,
+            disabled: !this.isAuthorized(),
+            handler: function() {    
+                var composer = this; 
+                var win;  
+                  
+                var fp = new Ext.FormPanel({
+                    fileUpload: true,
+                    autoWidth: true,
+                    autoHeight: true,
+                    frame: true,
+                    bodyStyle: 'padding: 10px 10px 0 10px;',
+                    labelWidth: 50,
+                    defaults: {
+                        anchor: '95%',
+                        allowBlank: false,
+                        msgTarget: 'side'
+                    },
+                    items: [{
+                        xtype: 'fileuploadfield',
+                        id: 'form-file',
+                        emptyText: 'Select a Map context file',
+                        fieldLabel: 'File',
+                        name: 'file-path',
+                        buttonText: '',
+                        buttonCfg: {
+                            iconCls: 'upload-icon'
+                        }
+                    }],
+                    buttons: [{
+                        text: 'Upload',
+                        handler: function(){
+                            if(fp.getForm().isValid()){
+                              fp.getForm().submit({
+                                  url: app.proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  waitMsg: 'Uploading your context file...',
+                                  success: function(fp, o){
+                                      win.hide();
+                                      var json_str = unescape(o.result.result);
+                                      json_str = json_str.replace(/\+/g, ' ');
+                                      composer.loadUserConfig(json_str);                                      
+                                  },                                    
+                                  failure: function(fp, o){
+                                      Ext.Msg.show({
+                                         title:'File Upload Error',
+                                         msg: o.result.errorMessage,
+                                         buttons: Ext.Msg.OK,
+                                         icon: Ext.MessageBox.ERROR
+                                      });
+                                  }
+                              });
+                            }
+                        }
+                    }]
+                });
+                
+                win = new Ext.Window({
+                    title: 'File Upload Form',
+                    layout: 'form',
+                    labelAlign: 'top',
+                    modal: true,
+                    bodyStyle: "padding: 5px",
+                    width: 380,
+                    items: [fp]
+                });
+                
+                win.show();
+            },
+            scope: this,
+            iconCls: "icon-load"
         }));
         tools.unshift("-");
         tools.unshift(aboutButton);
@@ -299,7 +373,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
            Ext.getCmp('wizard-prev').setDisabled(next==0);
            Ext.getCmp('wizard-next').setDisabled(next==1);
            if (incr == 1) {
-               this.save();
+               this.saveAndExport();
            }
        };
 
@@ -318,7 +392,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                id: 'preview',
                text: this.previewText,
                handler: function() {
-                   this.save(this.openPreview.createDelegate(this, [embedMap]));
+                   this.saveAndExport(this.openPreview.createDelegate(this, [embedMap]));
                },
                scope: this
            }, '->', {

@@ -69,6 +69,14 @@ body {
     background-image: url(img/geosilk/map_save.png);
 }
 
+.x-btn .icon-load {
+    background-image: url(img/geosilk/map.png);
+}
+
+.x-btn .upload-icon {
+    background: url(img/geosilk/page_white_map.png) no-repeat 0 0 !important;
+}
+
 .x-btn .icon-export {
     background-image: url(img/silk/map_go.png);
 }
