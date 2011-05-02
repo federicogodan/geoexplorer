@@ -107,7 +107,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 17},
                 apiKeys: {
                     "localhost": "ABQIAAAAeDjUod8ItM9dBg5_lz0esxTnme5EwnLVtEDGnh-lFVzRJhbdQhQBX5VH8Rb3adNACjSR5kaCLQuBmw",
-                    "example.com": "-your-api-key-here-"
+                    "demo1.geo-solutions.it": "ABQIAAAA5SREeKhHQ5CKTL33pm0kPRT-MyVOyNDghWyrQfAYOWRyYsiL2BQYy-OMEt_BxLLciTgd-PQzwthG8w"
                 }
             }
         ];
