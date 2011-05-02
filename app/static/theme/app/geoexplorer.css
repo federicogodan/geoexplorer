@@ -129,6 +129,11 @@ body {
     background-image: url(img/geosilk/google_earth.png);
 }
 
+.x-btn .icon-geosol {
+    background-image: url(img/poweredby.png);
+    width:150px !important;
+}
+
 /* Pan- and Zoom- Panel Styles*/
 
 .olControlPanPanel div {
