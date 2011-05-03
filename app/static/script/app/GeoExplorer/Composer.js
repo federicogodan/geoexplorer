@@ -110,7 +110,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 17},
                 apiKeys: {
                     "localhost": "ABQIAAAAeDjUod8ItM9dBg5_lz0esxTnme5EwnLVtEDGnh-lFVzRJhbdQhQBX5VH8Rb3adNACjSR5kaCLQuBmw",
-                    "demo1.geo-solutions.it": "ABQIAAAA5SREeKhHQ5CKTL33pm0kPRT-MyVOyNDghWyrQfAYOWRyYsiL2BQYy-OMEt_BxLLciTgd-PQzwthG8w"
+                    "geo-solutions.it": "ABQIAAAA5SREeKhHQ5CKTL33pm0kPRT-MyVOyNDghWyrQfAYOWRyYsiL2BQYy-OMEt_BxLLciTgd-PQzwthG8w"
                 }
             }
         ];
@@ -244,8 +244,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 */        
         tools.unshift(new Ext.Button({
             tooltip: this.exportMapText,
-            needsAuthorization: true,
-            disabled: !this.isAuthorized(),
+            needsAuthorization: false,
+            //disabled: !this.isAuthorized(),
             handler: function() {
                 this.saveAndExport(this.showEmbedWindow);
             },
@@ -254,8 +254,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }));
         tools.unshift(new Ext.Button({
             tooltip: this.saveMapText,
-            needsAuthorization: true,
-            disabled: !this.isAuthorized(),
+            needsAuthorization: false,
+            //disabled: !this.isAuthorized(),
             handler: function() {
                 this.save(this.showUrl);
             },
@@ -264,8 +264,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }));
         tools.unshift(new Ext.Button({
             tooltip: this.loadMap,
-            needsAuthorization: true,
-            disabled: !this.isAuthorized(),
+            needsAuthorization: false,
+            //disabled: !this.isAuthorized(),
             handler: function() {    
                 var composer = this; 
                 var win;  
@@ -345,8 +345,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             width : 150,
             handler: function(btn){
                 window.open('http://geo-solutions.it', '_blank');
-            },
-            //scope: this
+            }
         });
             
         tools.unshift(poweredByGeoSol); 

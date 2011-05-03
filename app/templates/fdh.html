@@ -19,6 +19,7 @@
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
+        <link rel="stylesheet" type="text/css" href="theme/app/fdh.css" />
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
     <link rel="stylesheet" type="text/css" href="theme/ux/colorpicker/color-picker.ux.css" />
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
@@ -29,92 +30,179 @@
     <script type="text/javascript" src="script/PrintPreview.js"></script>
 
     <script>
-        // optionally set locale based on query string parameter
-        if (GeoExt.Lang) {
-            GeoExt.Lang.set(OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale);
-        }
-        Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
-        OpenLayers.ImgPath = "externals/openlayers/img/";
-        // optionally set locale based on query string parameter
-        if (GeoExt.Lang) {
-            GeoExt.Lang.set(OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale);
-        }
-        var app = new GeoExplorer.Composer({
-            authStatus: <% status %>,
-            proxy: "proxy/?url=",
-            printService: "/geoserver/pdf/",
-            xmlJsonTranslateService: "http://demo1.geo-solutions.it/web-gis/",
-            defaultSourceType: "gxp_wmssource",
-            sources: {
-                fdh: {
-                    url: "http://demo1.geo-solutions.it/geoserver/ows",
-                    title: "FDH GeoServer",
-                    layerBaseParams: { 
-                        TILED : true,
-                        TILESORIGIN: '-20037508.34,-20037508.34'
+        
+        var app, addFDHLayer;
+    
+        Ext.onReady(function(){
+
+            Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
+            OpenLayers.ImgPath = "externals/openlayers/img/";
+            
+            // optionally set locale based on query string parameter
+            if (GeoExt.Lang) {
+                GeoExt.Lang.set(OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale);
+            }
+            
+            Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+                 onRender : function(ct, position){
+                      this.el = ct.createChild({
+                        tag: 'iframe',
+                        id: 'iframe-'+ this.id,
+                        frameBorder: 0, 
+                        src: this.url
+                      });
+                 }
+            });
+                                   
+            var geonetworkPanel = new Ext.Panel({
+                id: 'geonetworkPanel',
+                title: 'Search',
+                layout:'fit', 
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        id: 'fdh-gn',
+                        url: 'http://demo1.geo-solutions.it/geonetwork/srv/en/main.home' 
+                    }) 
+                ]
+            });
+            
+            var appTabs = new Ext.TabPanel({
+                items : [geonetworkPanel],
+                region: 'center',
+                border : false,
+                id : 'appTabs'
+                //deferredRender : false,
+                //hideParent: false,
+                //hideMode : 'visibility'
+            });
+            
+            
+            var appViewport = new Ext.Viewport({
+                id: 'appVieport',
+                layout:'border',
+                border:false,
+                items : [ {
+                    html: '<table id="fdh_header" width="100%"><tr>'+
+                        '<td background="theme/app/img/fdh/fdh_bgimg.gif">' + 
+                            '<img src="theme/app/img/fdh/fdh_left-banner.gif" alt="FDH logo" align="top" /></td>'+
+                        '<td align="right" background="theme/app/img/fdh/fdh_bgimg.gif">'+
+                            '<img src="theme/app/img/fdh/fdh_right-banner.gif" alt="FDH geospatial data warehouse" align="top" />'+
+                        '</td></tr></table>',
+                    region: 'north',
+                    height : 100
+                }, 
+                appTabs, {
+                    html: ['<div id="homelogos"><ul>',
+                    '<li><a class="logo_au_th" href="http://www.africa-union.org" title="African Union"></a></li>',
+                    '<li><a class="logo_ciat" href="http://www.ciat.cgiar.org" title="International Center for Tropical Agriculture"></a></li>',
+                    '<li><a class="logo_cilss" href="http://www.cilss.bf" title="Inter-State Committee for the Fight against Drought in the Sahel"></a></li>',
+                    '<li><a class="logo_ecowas" href="http://www.ecowas.int" title="Economic Community of West African States"></a></li>',
+                    '<li><a class="logo_fao" href="http://www.fao.org" title="Food and Agriculture Organization of the United Nations"></a></li>',
+                    '<li><a class="logo_gef" href="http://www.gefweb.org" title="Global Environment Facility"></a></li>',
+                    '<li><a class="logo_globalmechanism" href="http://www.globalmechanism.org" title="The Global Mechanism"></a></li>',
+                    '<li><a class="logo_manoriverunion" href="http://www.marwopnet.org" title="Mano River Union"></a></li>',
+                    '<li><a class="logo_omvg" href="http://www.omvg.org" title="Organization for the Development of the River Gambia"></a></li>',
+                    '<li><a class="logo_omvs" href="http://www.omvs-soe.org" title="Organization for the Development of the Senegal River"></a></li>',
+                    '<li><a class="logo_unep" href="http://www.unep.org" title="United Nations Environment Programme"></a></li>',
+                    '<li><a class="logo_wac" href="http://www.worldagroforestrycentre.org" title="World Agroforestry Center"></a></li>',
+                    '<li><a class="logo_abn" href="http://www.abn.ne" title="The Niger Basin Authority"></a></li>',
+                    '<li><a class="logo_gwpao4" href="http://www.gwpao.org" title="Global Water Partnership West Africa"></a></li>',
+                    '</ul></div>'].join(''),
+                    region: 'south',
+                    collapsible: true,
+                    collapseMode:  'mini',
+                    hideCollapseTool: true,
+                    split: true,
+                    minHeight: 66,
+                    maxHeight: 66,
+                    height: 66
+                 }]
+            });
+            
+            
+            app = new GeoExplorer.Composer({
+                authStatus: <% status %>,
+                proxy: "proxy/?url=",
+                printService: "/geoserver/pdf/",
+                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
+                defaultSourceType: "gxp_wmssource",
+                renderToTab : 'appTabs',
+                mapTitle : 'View',
+                sources: {
+                    fdh: {
+                        url: "http://demo1.geo-solutions.it/geoserver/ows",
+                        title: "FDH GeoServer",
+                        layerBaseParams: { 
+                            TILED : true,
+                            TILESORIGIN: '-20037508.34,-20037508.34'
+                        }
+                    },
+                    mapquest: {
+                        ptype: "gxp_mapquestsource"
+                    },
+                    osm: {
+                        ptype: "gxp_osmsource"
+                    },
+                    google: {
+                        ptype: "gxp_googlesource"
+                    },
+                    bing: {
+                        ptype: "gxp_bingsource"
+                    },
+                    ol: {
+                        ptype: "gxp_olsource"
                     }
                 },
-                mapquest: {
-                    ptype: "gxp_mapquestsource"
-                },
-                osm: {
-                    ptype: "gxp_osmsource"
-                },
-                google: {
-                    ptype: "gxp_googlesource"
-                },
-                bing: {
-                    ptype: "gxp_bingsource"
-                },
-                ol: {
-                    ptype: "gxp_olsource"
+                map: {
+                    projection: "EPSG:102113",
+                    units: "m",
+                    maxResolution: 156543.0339,
+                    maxExtent: [
+                        -20037508.34, -20037508.34,
+                        20037508.34, 20037508.34
+                    ],
+                    layers: [ {
+                        source: "osm",
+                        title: "Open Street Map",
+                        name: "mapnik",
+                        group: "background"
+                    },{
+                        source: "mapquest",
+                        title: "MapQuest OpenStreetMap",
+                        name: "osm",
+                        group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Terrain",
+                        name: "TERRAIN",
+                        group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Roadmap",
+                        name: "ROADMAP",
+                        group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Hybrid",
+                        name: "HYBRID",
+                        group: "background"
+                    }],
+                    center: [-39135.758482, 1340374.194989],
+                    zoom: 5
                 }
-            },
-            map: {
-                projection: "EPSG:102113",
-                units: "m",
-                maxResolution: 156543.0339,
-                maxExtent: [
-                    -20037508.34, -20037508.34,
-                    20037508.34, 20037508.34
-                ],
-                layers: [ {
-                    source: "osm",
-                    title: "Open Street Map",
-                    name: "mapnik",
-                    group: "background"
-                },{
-                    source: "mapquest",
-                    title: "MapQuest OpenStreetMap",
-                    name: "osm",
-                    group: "background"
-                },{
-                    source: "google",
-                    title: "Google Terrain",
-                    name: "TERRAIN",
-                    group: "background"
-                },{
-                    source: "google",
-                    title: "Google Roadmap",
-                    name: "ROADMAP",
-                    group: "background"
-                },{
-                    source: "google",
-                    title: "Google Hybrid",
-                    name: "HYBRID",
-                    group: "background"
-                }/*
-                ,{
-                    source: "ol",
-                    group: "background",
-                    fixed: true,
-                    type: "OpenLayers.Layer",
-                    args: [
-                        "None", {visibility: false}
-                    ]
-                }*/],
-                center: [-39135.758482, 1340374.194989],
-                zoom: 5
-            }
+            });
+            
+            addFDHLayer = function(fdhLayerName){
+                var FDHsource = app.layerSources.fdh;
+                
+                var record = FDHsource.createLayerRecord({
+                    name: fdhLayerName
+                });                
+                var layerStore = app.mapPanel.layers;                
+                if (record) {
+                    layerStore.add([record]);
+                }           
+                appTabs.setActiveTab(1);
+            };
         });
     </script>
