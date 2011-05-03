@@ -209,6 +209,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             uploadWin.destroy();
         }
           
+        var layerTree = Ext.getCmp('tree');
+        layerTree.destroy();
+        
         var config = Ext.util.JSON.decode(json);
         app = new GeoExplorer.Composer(config);
     },
@@ -362,7 +365,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     save: function(callback, scope) {
         var configStr = Ext.util.JSON.encode(this.getState());        
         var method = "POST";
-        var url = app.proxy + app.xmlJsonTranslateService + "HTTPWebGISSave";
+        var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -425,7 +428,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             var mapId = config.id;
             if (mapId) {
                 this.id = mapId;
-                window.location.hash = "#maps/" + mapId;
+                //window.location.hash = "#maps/" + mapId;
             }
         } else {
             throw this.saveErrorText + request.responseText;
@@ -459,7 +462,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	                    var xml = Ext.getCmp('context_area').getValue();
 	                    
                       OpenLayers.Request.POST({
-                          url: app.proxy + app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+                          url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
                           data: xml,
                           callback: function(request) {
                               if(request.status == 200){

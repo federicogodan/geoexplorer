@@ -298,7 +298,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         handler: function(){
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
-                                  url: app.proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
                                   waitMsg: 'Uploading your context file...',
                                   success: function(fp, o){
                                       win.hide();

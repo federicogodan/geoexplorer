@@ -118,13 +118,12 @@
                     height: 66
                  }]
             });
-            
-            
+                        
             app = new GeoExplorer.Composer({
                 authStatus: <% status %>,
                 proxy: "proxy/?url=",
                 printService: "/geoserver/pdf/",
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
+                xmlJsonTranslateService: "http://localhost:8081/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 mapTitle : 'View',
