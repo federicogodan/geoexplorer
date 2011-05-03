@@ -208,7 +208,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         if(uploadWin != null){
             uploadWin.destroy();
         }
-          
+        
+        var tree = Ext.getCmp('tree').destroy();          
+        app.destroy();
+        
         var config = Ext.util.JSON.decode(json);
         app = new GeoExplorer.Composer(config);
     },

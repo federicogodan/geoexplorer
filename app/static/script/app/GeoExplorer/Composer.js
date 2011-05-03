@@ -241,7 +241,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         });
 
         tools.unshift("-");
-*/        
+
         tools.unshift(new Ext.Button({
             tooltip: this.exportMapText,
             needsAuthorization: false,
@@ -252,6 +252,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: 'icon-export'
         }));
+        */        
         tools.unshift(new Ext.Button({
             tooltip: this.saveMapText,
             needsAuthorization: false,
