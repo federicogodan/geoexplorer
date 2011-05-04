@@ -212,6 +212,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         var layerTree = Ext.getCmp('tree');
         layerTree.destroy();
         
+        app.destroy();
+        
         var config = Ext.util.JSON.decode(json);
         app = new GeoExplorer.Composer(config);
     },
