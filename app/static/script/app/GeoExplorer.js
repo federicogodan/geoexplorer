@@ -263,7 +263,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 item.disable();
             });
         });
-
+        /*
         var googleEarthPanel = new gxp.GoogleEarthPanel({
             mapPanel: this.mapPanel,
             listeners: {
@@ -321,7 +321,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             }
 
         }, this);
-
+        */
+        
         this.mapPanelContainer = new Ext.Panel({
             layout: "card",
             region: "center",
@@ -329,8 +330,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 border: false
             },
             items: [
-                this.mapPanel,
-                googleEarthPanel
+                this.mapPanel
+                //,googleEarthPanel
             ],
             activeItem: 0
         });
