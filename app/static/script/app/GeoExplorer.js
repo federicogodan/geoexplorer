@@ -86,6 +86,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 })
             }
         ];
+        
+        gxp.plugins.ZoomToExtent.prototype.closest = false;
 
         // both the Composer and the Viewer need to know about the viewerTools
         // First row in each object is needed to correctly render a tool in the treeview
