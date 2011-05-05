@@ -61,6 +61,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_removelayer",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
+                ptype: "gxp_removeoverlays",
+                actionTarget: "tree.tbar"
+            }, {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
