@@ -52,7 +52,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_legend",
                 outputTarget: 'legend',
-                outputConfig: {autoScroll: true}
+                outputConfig: {
+                    autoScroll: true
+                }
             }, {
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
@@ -98,7 +100,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_zoom",
                 actionTarget: {target: "paneltbar", index: 11}
             }, {
-                ptype: "gxp_zoom_box",
+                ptype: "gxp_zoombox",
                 actionTarget: {target: "paneltbar", index: 11}
             }, {
                 ptype: "gxp_navigationhistory",

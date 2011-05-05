@@ -253,7 +253,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             header: false,
             items: [
                 {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
-                {region: 'south', xtype: "container", layout: "fit", border: false, height: 200, id: 'legend'}
+                {
+                    region: 'south', xtype: "panel", layout: "fit", 
+                    collapsible : true, collapseMode:  'mini',
+                    split : true, hideCollapseTool: true,
+                    border: false, height: 200, id: 'legend'
+                }
             ]
         });
         
