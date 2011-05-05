@@ -88,6 +88,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         ];
         
         gxp.plugins.ZoomToExtent.prototype.closest = false;
+        gxp.plugins.FDHGeoCoder.prototype.data = [
+                ['Africa', '-1597228.1428303,-17147.428766757,4180188.2022723,2238050.6534452'],
+                ['Europe', '-1024867.6743105,4326921.7613316,4752548.6707921,6582119.8435436']
+        ];
 
         // both the Composer and the Viewer need to know about the viewerTools
         // First row in each object is needed to correctly render a tool in the treeview
@@ -130,7 +134,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 checked: true, 
                 iconCls: "gxp-icon-zoombox-in",
                 ptype: "gxp_zoom_box",
-                actionTarget: {target: "paneltbar", index: 5}
+                actionTarget: {target: "paneltbar", index: 6}
             }, {
                 leaf: true, 
                 text: gxp.plugins.NavigationHistory.prototype.previousTooltip + " / " + gxp.plugins.NavigationHistory.prototype.nextTooltip, 
@@ -144,6 +148,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 checked: true, 
                 iconCls: gxp.plugins.ZoomToExtent.prototype.iconCls,
                 ptype: "gxp_zoomtoextent",
+                actionTarget: {target: "paneltbar", index: 8}
+            }, {
+                leaf: true, 
+                text: gxp.plugins.FDHGeoCoder.prototype.tooltip, 
+                checked: true, 
+                ptype: "gxp_fdhgeocoder",
                 actionTarget: {target: "paneltbar", index: 9}
             }, {
                 leaf: true, 

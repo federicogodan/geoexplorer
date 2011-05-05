@@ -101,12 +101,15 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 11}
             }, {
                 ptype: "gxp_zoombox",
-                actionTarget: {target: "paneltbar", index: 11}
+                actionTarget: {target: "paneltbar", index: 12}
             }, {
                 ptype: "gxp_navigationhistory",
                 actionTarget: {target: "paneltbar", index: 13}
             }, {
                 ptype: "gxp_zoomtoextent",
+                actionTarget: {target: "paneltbar", index: 14}
+            }, {
+                ptype: "gxp_fdhgeocoder",
                 actionTarget: {target: "paneltbar", index: 15}
             }/* {
                 ptype: "gxp_print",
