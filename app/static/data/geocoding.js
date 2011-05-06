@@ -7,6 +7,5 @@ var geocoding_data = [
     ['Guinea-Bissau', '-17,11,-13,13'],
     ['Mali', '-13,10,-5,25'],
     ['Sierra Leone', '-14,7,-10,10'],
-    ['Senegal', '-18,12,-11,17'],
-    
+    ['Senegal', '-18,12,-11,17']
 ];

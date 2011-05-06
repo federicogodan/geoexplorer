@@ -15,8 +15,7 @@
     <script type="text/javascript" src="script/gxp.js"></script> 
 
     <!-- proj4js resources -->
-    <script type="text/javascript" src="externals/proj4js/lib/proj4js-compressed.js"></script>
-    <script type="text/javascript" src="proj4js/EPSG102113.js"></script>
+    <script type="text/javascript" src="script/proj4js.js"></script>
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
@@ -41,6 +40,7 @@
 
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             OpenLayers.ImgPath = "externals/openlayers/img/";
+            Proj4js.defs["102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
             
             // optionally set locale based on query string parameter
             if (GeoExt.Lang) {
