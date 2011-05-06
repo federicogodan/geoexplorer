@@ -100,7 +100,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_zoom",
                 actionTarget: {target: "paneltbar", index: 11}
             }, {
-                ptype: "gxp_zoombox",
+                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 12}
             }, {
                 ptype: "gxp_navigationhistory",
