@@ -162,14 +162,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-legend",
                 ptype: "gxp_legend",
                 actionTarget: {target: "paneltbar", index: 10}
-            }, {
+            }/*, {
                 leaf: true,
                 text: gxp.plugins.GoogleEarth.prototype.tooltip,
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 11}
-        }];
+        }*/];
 
         GeoExplorer.superclass.constructor.apply(this, arguments);
     }, 
