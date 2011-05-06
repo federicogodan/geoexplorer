@@ -88,10 +88,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         ];
         
         gxp.plugins.ZoomToExtent.prototype.closest = false;
-        gxp.plugins.FDHGeoCoder.prototype.data = [
-                ['Africa', '-1597228.1428303,-17147.428766757,4180188.2022723,2238050.6534452'],
-                ['Europe', '-1024867.6743105,4326921.7613316,4752548.6707921,6582119.8435436']
-        ];
+        gxp.plugins.FDHGeoCoder.prototype.data = geocoding_data ? geocoding_data : [] ;
 
         // both the Composer and the Viewer need to know about the viewerTools
         // First row in each object is needed to correctly render a tool in the treeview
