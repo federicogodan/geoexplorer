@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
@@ -63,18 +65,6 @@ public class HTTPWebGISXmlUpload extends HttpServlet {
 	}
 
 	/**
-	 * Performs an HTTP GET request
-	 * @param httpServletRequest The {@link HttpServletRequest} object passed
-	 *                            in by the servlet engine representing the
-	 *                            client request
-	 * @param httpServletResponse The {@link HttpServletResponse} object by which
-	 *                             we can response to the client 
-	 */
-	public void doGet (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
-	throws IOException, ServletException {
-	}
-
-	/**
 	 * Performs an HTTP POST request
 	 * @param httpServletRequest The {@link HttpServletRequest} object passed
 	 *                            in by the servlet engine representing the
@@ -83,13 +73,45 @@ public class HTTPWebGISXmlUpload extends HttpServlet {
 	 *                             we can response to the client 
 	 */
 	@SuppressWarnings("unchecked")
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException {
 		
 
 		try {
 
 			StringBuilder stringBuilder = new StringBuilder();
+			
+			URL xmlData = new URL("http://demo1.geo-solutions.it/exist/rest/mapadmin/context.xml");
+	        URLConnection yc = xmlData.openConnection();
+
+
+			BufferedReader bufferedReader = null;
+			try {
+				InputStream inputStream = request.getInputStream();
+				if (inputStream != null) {
+					bufferedReader = new BufferedReader(new InputStreamReader(
+							yc.getInputStream()));
+					char[] charBuffer = new char[128];
+					int bytesRead = -1;
+					while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+						stringBuilder.append(charBuffer, 0, bytesRead);
+					}
+				} else {
+					stringBuilder.append("");
+				}
+			} catch (IOException ex) {
+				throw ex;
+			} finally {
+				if (bufferedReader != null) {
+					try {
+						bufferedReader.close();
+					} catch (IOException ex) {
+						throw ex;
+					}
+				}
+			}
+	        
+	        /*
 			BufferedReader bufferedReader = null;
 			try {
 				InputStream inputStream = request.getInputStream();
@@ -115,6 +137,8 @@ public class HTTPWebGISXmlUpload extends HttpServlet {
 					}
 				}
 			}
+			*/
+	        
 			String xml = stringBuilder.toString();
 
 			XMLSerializer xmlSerializer = new XMLSerializer();

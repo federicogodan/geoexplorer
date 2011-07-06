@@ -335,50 +335,7 @@
                     center: [-1224514, 1291331],
                     zoom: 6
                 }
-            });
-            
-			
-			app.on({
-				'portalready' : function(){
-					var url = 'http://demo1.geo-solutions.it/exist/rest/mapadmin/context.xml';
-					
-					OpenLayers.Request.issue({
-						method: 'GET',
-						url: url,
-						callback: function(request) {
-							if (request.status == 200) {
-								var xmlContext = request.responseText;
-								var url = app.xmlJsonTranslateService + "HTTPWebGISXmlUpload";
-								
-								OpenLayers.Request.issue({
-									method: 'POST',
-									url: url,
-									data: xmlContext,
-									callback: function(request) {
-										if (request.status == 200) {										  	
-										  var json_str = unescape(request.responseText);
-										  json_str = json_str.replace(/\+/g, ' ');
-										  
-										  var config = Ext.util.JSON.decode(json_str);
-										  
-										  if(config && config.success && config.success===true){	
-											app.loadUserConfig(json_str);                                      
-										  }
-										}
-									},
-									scope: this
-								});
-								
-							} else {
-								 //this.saveErrorText + 
-								throw request.responseText;
-							}
-						},
-						scope: this
-					});
-				},
-				scope : app
-			});
+            });           
 			
             addFDHLayer = function(fdhLayerName){
                 var FDHsource = app.layerSources.fdh;
