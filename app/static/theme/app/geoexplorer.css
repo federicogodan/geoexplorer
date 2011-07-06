@@ -65,6 +65,11 @@ body {
     background-image: url(img/silk/information.png);
 }
 
+.x-btn .icon-fullscreen {
+    background-image: url(img/silk/application_view_gallery.png);
+}
+
+
 .x-btn .icon-save {
     background-image: url(img/geosilk/map_save.png);
 }

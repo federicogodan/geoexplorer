@@ -63,6 +63,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     descriptionText: "Description",
     contactText: "Contact",
     aboutThisMapText: "About this Map",
+    viewTabTitle : "View",
+    searchTabTitle : "Search",
     // End i18n.
     
     /**
@@ -87,14 +89,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             }
         ];
         
-        gxp.plugins.ZoomToExtent.prototype.closest = false;
-        gxp.plugins.FDHGeoCoder.prototype.data = geocoding_data ? geocoding_data : [] ;
-
         // both the Composer and the Viewer need to know about the viewerTools
         // First row in each object is needed to correctly render a tool in the treeview
         // of the embed map dialog. TODO: make this more flexible so this is not needed.
         config.viewerTools = [
-            {
+            /*{
                 leaf: true, 
                 text: gxp.plugins.Navigation.prototype.tooltip, 
                 checked: true, 
@@ -160,14 +159,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-legend",
                 ptype: "gxp_legend",
                 actionTarget: {target: "paneltbar", index: 10}
-            }/*, {
+            }, {
                 leaf: true,
                 text: gxp.plugins.GoogleEarth.prototype.tooltip,
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 11}
-        }*/];
+        }
+        */];
 
         GeoExplorer.superclass.constructor.apply(this, arguments);
     }, 
@@ -285,6 +285,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 item.disable();
             });
         });
+        
         /*
         var googleEarthPanel = new gxp.GoogleEarthPanel({
             mapPanel: this.mapPanel,
@@ -355,13 +356,13 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 this.mapPanel
                 //,googleEarthPanel
             ],
-            activeItem: 0
+            activeItem: 0,
+            tbar: this.toolbar
         });
         
         this.portalItems = [{
             region: "center",
-            layout: "border",
-            tbar: this.toolbar,
+            layout: "border",            
             items: [
                 this.mapPanelContainer,
                 westPanel
@@ -463,6 +464,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     /** private: method[showUrl]
      */
     showUrl: function() {
+        /*
         var win = new Ext.Window({
             title: this.bookmarkText,
             layout: 'form',
@@ -485,11 +487,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	                text: 'Download File',
 	                handler: function(){
 	                    var xml = Ext.getCmp('context_area').getValue();
-	                    
+	        */            
                       OpenLayers.Request.POST({
                           url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
-                          data: xml,
+                          data: this.xmlContext,
                           callback: function(request) {
+						  
                               if(request.status == 200){
                                   window.open(request.responseText);
                               }else{
@@ -500,14 +503,17 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                      icon: Ext.MessageBox.ERROR
                                   });
                               }
+							 
                           },
                           scope: this
                       });
+                      /*
 	                }
 	          }]
         });
         win.show();
         win.items.first().selectText();
+        */
     },
     
     /** api: method[getBookmark]
@@ -538,6 +544,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             html: "<iframe style='border: none; height: 100%; width: 100%' src='about.html' frameborder='0' border='0'><a target='_blank' href='about.html'>"+this.aboutText+"</a> </iframe>"
         });
 
+        /*
         var about = Ext.applyIf(this.about, {
             title: '', 
             "abstract": '', 
@@ -553,10 +560,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             height: 'auto',
             width: 'auto'
         });
+        */
 
         var tabs = new Ext.TabPanel({
             activeTab: 0,
-            items: [mapInfo, appInfo]
+            items: [ appInfo]
         });
 
         var win = new Ext.Window({
@@ -565,7 +573,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "fit",
             width: 300,
             height: 300,
-            items: [tabs]
+            items: [appInfo]
         });
         win.show();
     }

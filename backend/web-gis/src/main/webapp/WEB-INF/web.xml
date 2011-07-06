@@ -24,6 +24,17 @@
     <servlet-name>HTTPWebGISFileUpload</servlet-name>
     <url-pattern>/HTTPWebGISFileUpload/*</url-pattern>
   </servlet-mapping>
+
+  <!-- XML Upload Servlet -->
+  <servlet>
+    <servlet-name>HTTPWebGISXmlUpload</servlet-name>
+    <servlet-class>webgis.HTTPWebGISXmlUpload</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>HTTPWebGISXmlUpload</servlet-name>
+    <url-pattern>/HTTPWebGISXmlUpload/*</url-pattern>
+  </servlet-mapping>
   
   <!-- File Download Servlet -->
   <servlet>

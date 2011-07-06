@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (c) 2009-2010 The Open Planning Project
  *
  * @requires GeoExplorer.js
@@ -18,8 +18,8 @@
 GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
     // Begin i18n.
-    saveMapText: "Save Map",
-    loadMap: "Load Map",
+    saveMapText: "Export Map",
+    loadMapText: "Import Map",
     exportMapText: "Export Map",
     toolsTitle: "Choose tools to include in the toolbar:",
     previewText: "Preview",
@@ -29,6 +29,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     loginErrorText: "Invalid username or password.",
     userFieldText: "User",
     passwordFieldText: "Password", 
+    fullScreenText: "Full Screen",
     // End i18n.
 
     constructor: function(config) {
@@ -54,6 +55,16 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputTarget: 'legend',
                 outputConfig: {
                     autoScroll: true
+                },
+                legendConfig : {
+                    legendPanelId : 'legendPanel',
+                    defaults: {
+                        style: 'padding:5px',                  
+                        baseParams: {
+                            LEGEND_OPTIONS: 'forceLabels:on;fontSize:10',
+                            WIDTH: 12, HEIGHT: 12
+                        }
+                    }
                 }
             }, {
                 ptype: "gxp_addlayers",
@@ -68,20 +79,20 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
+            },/* {
                 ptype: "gxp_styler",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
+            },*/ {
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
             }, {
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 6}
+                actionTarget: {target: "paneltbar", index: 15}
             }, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 7}
             },
-/*            {
+            /*  {
                 ptype: "gxp_featuremanager",
                 id: "featuremanager",
                 maxFeatures: 20
@@ -92,31 +103,40 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 8}
             }, 
-*/
-            {
+            */ {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 10}
-            }, {
-                ptype: "gxp_zoom",
-                actionTarget: {target: "paneltbar", index: 11}
-            }, {
-                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 12}
             }, {
+                ptype: "gxp_zoom",
+                actionTarget: {target: "paneltbar", index: 20}
+            }, {
+                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 24}
+            }, {
                 ptype: "gxp_navigationhistory",
-                actionTarget: {target: "paneltbar", index: 13}
+                actionTarget: {target: "paneltbar", index: 22}
             }, {
                 ptype: "gxp_zoomtoextent",
-                actionTarget: {target: "paneltbar", index: 14}
+                extent: function(){
+                    var bbox = new OpenLayers.Bounds.fromString('-15,8,-7,15');
+                    return bbox.transform(
+                        new OpenLayers.Projection("EPSG:4326"),
+                        new OpenLayers.Projection("EPSG:102113"));
+                },
+                actionTarget: {target: "paneltbar", index: 26}
             }, {
                 ptype: "gxp_fdhgeocoder",
-                actionTarget: {target: "paneltbar", index: 15}
-            }/* {
+                actionTarget: {target: "paneltbar", index: 30}
+            }, {
+                ptype: "gxp_saveDefaultContext",
+                actionTarget: {target: "paneltbar", index: 40}
+            }, {
                 ptype: "gxp_print",
-                customParams: {outputFilename: 'GeoExplorer-print'},
+                customParams: {outputFilename: 'fdh-print'},
                 printService: config.printService,
-                actionTarget: {target: "paneltbar", index: 5}
-            } {
+                legendPanelId: 'legendPanel',
+                actionTarget: {target: "paneltbar", index: 4}
+            }/*, {
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 17},
                 apiKeys: {
@@ -139,6 +159,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     /** private: method[showLoginDialog]
      * Show the login dialog for the user to login.
      */
+     /*
     showLoginDialog: function() {
         var panel = new Ext.FormPanel({
             url: "login",
@@ -223,7 +244,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         });
         win.show();
     },
-
+    */
     /**
      * api: method[createTools]
      * Create the toolbar configuration for the main view.
@@ -231,7 +252,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
         
-/*
+        /*
         // unauthorized, show login button
         if (this.authorizedRoles.length === 0) {
             this.loginButton = new Ext.Button({
@@ -243,13 +264,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.push(['->', this.loginButton]);
         } else {
         }
-
-        var aboutButton = new Ext.Button({
-            text: this.appInfoText,
-            iconCls: "icon-geoexplorer",
-            handler: this.displayAppInfo,
-            scope: this
-        });
 
         tools.unshift("-");
 
@@ -263,8 +277,31 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: 'icon-export'
         }));
-        */        
-        tools.unshift(new Ext.Button({
+        */
+                
+        var fullScreen = new Ext.Button({
+            text: this.fullScreenText,
+            iconCls: "icon-fullscreen",
+            enableToggle: true,
+            handler: function(button, evt){
+                if(button.pressed){
+                    Ext.getCmp('fdhHeader').collapse();
+                    //Ext.getCmp('fdhFooter').collapse();
+                    Ext.getCmp('tree').findParentByType('panel').collapse();
+                } else {
+                    Ext.getCmp('fdhHeader').expand();
+                    //Ext.getCmp('fdhFooter').expand();
+                    Ext.getCmp('tree').findParentByType('panel').expand();
+                }
+            }
+        });            
+                        
+        tools.unshift(fullScreen);    
+              
+        //tools.unshift(aboutButton);
+        //tools.unshift(poweredByGeoSol);
+        
+        tools.push(new Ext.Button({
             tooltip: this.saveMapText,
             needsAuthorization: false,
             //disabled: !this.isAuthorized(),
@@ -273,9 +310,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },
             scope: this,
             iconCls: "icon-save"
-        }));
-        tools.unshift(new Ext.Button({
-            tooltip: this.loadMap,
+        }));        
+        
+        tools.push(new Ext.Button({
+            tooltip: this.loadMapText,
             needsAuthorization: false,
             //disabled: !this.isAuthorized(),
             handler: function() {    
@@ -348,19 +386,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: "icon-load"
         }));
-        tools.unshift("-");
-        //tools.unshift(aboutButton);
-        
-        var poweredByGeoSol = new Ext.Button({
-            tooltip: 'Powered by GeoSolutions',
-            iconCls: "icon-geosol",
-            width : 150,
-            handler: function(btn){
-                window.open('http://geo-solutions.it', '_blank');
-            }
-        });
-            
-        tools.unshift(poweredByGeoSol); 
         
         return tools;
     },

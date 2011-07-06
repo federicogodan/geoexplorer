@@ -14,16 +14,18 @@ GeoExt.Lang.add("en", {
         saveErrorText: "Trouble saving: ",
         bookmarkText: "Bookmark URL",
         permakinkText: 'Permalink',
-        appInfoText: "GeoExplorer",
+        appInfoText: "About",
         aboutText: "About GeoExplorer",
         mapInfoText: "Map Info",
         descriptionText: "Description",
         contactText: "Contact",
-        aboutThisMapText: "About this Map"
+        aboutThisMapText: "About this Map",
+        searchTabTitle : "Search",
+        viewTabTitle : "View"
     },
     "GeoExplorer.Composer.prototype": {
-        exportMapText: "Export Map",
-        saveMapText: "Save Map",
+        loadMapText: "Import Map",
+        saveMapText: "Export Map",
         toolsTitle: "Choose tools to include in the toolbar:",
         previewText: "Preview",
         backText: "Back",

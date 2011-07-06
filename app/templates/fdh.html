@@ -32,19 +32,34 @@
     <!-- geocoding data  -->
     <script type="text/javascript" src="data/geocoding.js"></script>
     
+    <!-- translation data  -->
+    <script type="text/javascript" src="translations/en.js"></script>
+    <script type="text/javascript" src="translations/fr.js"></script>
+    
     <script>
         
         var app, addFDHLayer;
+		var activateSearchTab, activateViewTab, runSimpleSearch;
     
         Ext.onReady(function(){
+            Ext.BLANK_IMAGE_URL = (function() {
+                    if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
+                        return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+                    } else {
+                        return "theme/app/img/blank.gif";
+                    }
+            })();
 
-            Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             OpenLayers.ImgPath = "externals/openlayers/img/";
             Proj4js.defs["102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
+
+            gxp.plugins.ZoomToExtent.prototype.closest = false;
+            gxp.plugins.FDHGeoCoder.prototype.data = geocoding_data ? geocoding_data : [] ;
             
             // optionally set locale based on query string parameter
+            var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'en';
             if (GeoExt.Lang) {
-                GeoExt.Lang.set(OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale);
+                GeoExt.Lang.set(curLang);
             }
             
             Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
@@ -57,81 +72,184 @@
                       });
                  }
             });
-                                   
+            
+			var availLanguages = ['en','fr'];
+            var gnLangStr = curLang.substr(0,2);
+			
+			if(availLanguages.indexOf(gnLangStr) < 0){
+				gnLangStr = 'en';
+			}
+			
+			var portalPanel = new Ext.Panel({
+                id: 'portalPanel',
+                title: GeoExplorer.prototype.portalTabTitle || 'Portal',
+                layout:'fit', 
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        id: 'fdh-portal',
+                        url: '/geoserver/www/portal/' + gnLangStr + '/index.htm'
+                    }) 
+                ]
+            });
+			
             var geonetworkPanel = new Ext.Panel({
                 id: 'geonetworkPanel',
-                title: 'Search',
+                title: GeoExplorer.prototype.searchTabTitle || 'Search',
                 layout:'fit', 
                 items: [ 
                     new Ext.ux.IFrameComponent({ 
                         id: 'fdh-gn',
-                        url: 'http://demo1.geo-solutions.it/geonetwork/srv/en/main.home' 
+                        url: 'http://demo1.geo-solutions.it/geonetwork/srv/'+gnLangStr+'/main.home' 
                     }) 
                 ]
             });
-            
+            						
             var appTabs = new Ext.TabPanel({
-                items : [geonetworkPanel],
+                items : [portalPanel, geonetworkPanel],
                 region: 'center',
                 border : false,
-                id : 'appTabs'
-                //deferredRender : false,
+                id : 'appTabs',
+                deferredRender : false,
                 //hideParent: false,
-                //hideMode : 'visibility'
+                hideMode : 'visibility'
+            });            
+            
+            var aboutButton = new Ext.Button({
+                text: GeoExplorer.prototype.appInfoText,
+                iconCls: "icon-geoexplorer",
+                handler: function(){
+                    var appInfo = new Ext.Panel({
+                        header: false,
+                        html: "<iframe style='border: none; height: 100%; width: 100%' src='about.html' frameborder='0' border='0'><a target='_blank' href='about.html'>"+ GeoExplorer.prototype.aboutText+"</a> </iframe>"
+                    });
+
+                    var win = new Ext.Window({
+                        title:  GeoExplorer.prototype.aboutThisMapText,
+                        modal: true,
+                        layout: "fit",
+                        width: 300,
+                        height: 300,
+                        items: [appInfo]
+                    });
+                    win.show();
+                }
             });
             
+            var poweredByGeoSol = new Ext.Button({
+                tooltip: 'Powered by GeoSolutions',
+                iconCls: "icon-geosol",
+                width : 150,
+                handler: function(btn){
+                    window.open('http://geo-solutions.it/contact/', '_blank');
+                }
+            });    
+
+            var langData = [['en', 'English'],['fr','Français']];
+            
+            var query = location.search;        
+            if(query && query.substr(0,1) === "?"){
+                query = query.substring(1);
+            }
+            
+            var url = Ext.urlDecode(query);        
+            var code = url.locale;   
+
+            if(!code){
+                code = this.initialLanguage;
+            }
+            
+            var initialLanguageString;
+                    
+            //check if code is valid
+            if(code){
+                Ext.each(langData, function(rec){
+                    if(rec[0] === code.toLowerCase()){
+                        initialLanguageString = rec[1];
+                        return;
+                    }
+                });
+            } 
+            
+            if(!initialLanguageString){
+                initialLanguageString = "English";
+            }
+            
+            var languageSelector = new Ext.form.ComboBox({
+                store: new Ext.data.ArrayStore({
+                    fields: ['code', 'name'],
+                    data :  langData
+                }),
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: initialLanguageString,
+                selectOnFocus:false,
+                editable: false,
+                width: 100,
+                listeners: {
+                    select: function(cb, record, index) {
+                        var code = record.get('code');
+                        if(code){
+                            location.replace(
+                                location.pathname+'?locale='+code);
+                        }                    
+                    }
+                }
+            });
             
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
-                layout:'border',
+                layout:'fit',
                 border:false,
-                items : [ {
-                    html: '<table id="fdh_header" width="100%"><tr>'+
-                        '<td background="theme/app/img/fdh/fdh_bgimg.gif">' + 
-                            '<img src="theme/app/img/fdh/fdh_left-banner.gif" alt="FDH logo" align="top" /></td>'+
-                        '<td align="right" background="theme/app/img/fdh/fdh_bgimg.gif">'+
-                            '<img src="theme/app/img/fdh/fdh_right-banner.gif" alt="FDH geospatial data warehouse" align="top" />'+
-                        '</td></tr></table>',
-                    region: 'north',
-                    height : 100
-                }, 
-                appTabs, {
-                    html: ['<div id="homelogos"><ul>',
-                    '<li><a class="logo_au_th" href="http://www.africa-union.org" title="African Union"></a></li>',
-                    '<li><a class="logo_ciat" href="http://www.ciat.cgiar.org" title="International Center for Tropical Agriculture"></a></li>',
-                    '<li><a class="logo_cilss" href="http://www.cilss.bf" title="Inter-State Committee for the Fight against Drought in the Sahel"></a></li>',
-                    '<li><a class="logo_ecowas" href="http://www.ecowas.int" title="Economic Community of West African States"></a></li>',
-                    '<li><a class="logo_fao" href="http://www.fao.org" title="Food and Agriculture Organization of the United Nations"></a></li>',
-                    '<li><a class="logo_gef" href="http://www.gefweb.org" title="Global Environment Facility"></a></li>',
-                    '<li><a class="logo_globalmechanism" href="http://www.globalmechanism.org" title="The Global Mechanism"></a></li>',
-                    '<li><a class="logo_manoriverunion" href="http://www.marwopnet.org" title="Mano River Union"></a></li>',
-                    '<li><a class="logo_omvg" href="http://www.omvg.org" title="Organization for the Development of the River Gambia"></a></li>',
-                    '<li><a class="logo_omvs" href="http://www.omvs-soe.org" title="Organization for the Development of the Senegal River"></a></li>',
-                    '<li><a class="logo_unep" href="http://www.unep.org" title="United Nations Environment Programme"></a></li>',
-                    '<li><a class="logo_wac" href="http://www.worldagroforestrycentre.org" title="World Agroforestry Center"></a></li>',
-                    '<li><a class="logo_abn" href="http://www.abn.ne" title="The Niger Basin Authority"></a></li>',
-                    '<li><a class="logo_gwpao4" href="http://www.gwpao.org" title="Global Water Partnership West Africa"></a></li>',
-                    '</ul></div>'].join(''),
-                    region: 'south',
-                    collapsible: true,
-                    collapseMode:  'mini',
-                    hideCollapseTool: true,
-                    split: true,
-                    minHeight: 66,
-                    maxHeight: 66,
-                    height: 66
-                 }]
+                items: [{
+                    region : 'center',
+                    layout : 'border',
+                    border : false,
+                    header : false,                    
+                    items : [{
+							border: false,
+							header: false,
+							html: '<table id="fdh_header" width="100%"><tr>'+
+								'<td background="theme/app/img/fdh/fdh_bgimg.gif">' + 
+									'<img src="theme/app/img/fdh/fdh_left-banner.gif" alt="FDH logo" align="top" /></td>'+
+								'<td align="right" background="theme/app/img/fdh/fdh_bgimg.gif">'+
+									'<img src="theme/app/img/fdh/fdh_right-banner.gif" alt="FDH geospatial data warehouse" align="top" />'+
+								'</td></tr></table>',
+							region: 'north',
+							collapsible: true,
+							collapseMode:  'mini',
+							hideCollapseTool: true,
+							split: true,
+							animCollapse : false,
+							minHeight: 100,
+							maxHeight: 100,
+							height: 100,
+							id : 'fdhHeader'
+						}, appTabs
+					],                            
+                    bbar : [
+						poweredByGeoSol, ' ', aboutButton, '->', languageSelector
+					]
+                }]
             });
-                        
+            
+			
             app = new GeoExplorer.Composer({
                 authStatus: <% status %>,
                 proxy: "proxy/?url=",
-                printService: "/geoserver/pdf/",
+                printService: "http://demo1.geo-solutions.it/geoserver/pdf/",
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 //xmlJsonTranslateService: "http://localhost:8081/web-gis/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                mapTitle : 'View',
+                mapTitle : GeoExplorer.prototype.viewTabTitle || 'View',
+                about: {
+                    title: "Fouta Djallon Higlands programme",
+                    'abstract': "Fouta Djallon Higlands comment",
+                    contact: "<a href='http://www.fouta-djallon-programme.org/'>http://www.fouta-djallon-programme.org/</a>."
+                },
                 sources: {
                     fdh: {
                         url: "http://demo1.geo-solutions.it/geoserver/ows",
@@ -158,7 +276,8 @@
                     }
                 },
                 map: {
-                    projection: "EPSG:102113",
+                    //projection: "EPSG:102113",
+					projection: "EPSG:900913",
                     units: "m",
                     //maxResolution: 19567.87923828125,
                     //resolutions : [19567.87923828125, 9783.939619140625, 4891.9698095703125],
@@ -168,7 +287,12 @@
                         -20037508.34, -20037508.34,
                         20037508.34, 20037508.34
                     ],
-                    layers: [ {
+                    layers: [{
+                        source: "bing",
+                        title: "Bing Aerial",
+                        name: "Aerial",
+                        group: "background"
+                    }, {
                         source: "osm",
                         title: "Open Street Map",
                         name: "mapnik",
@@ -180,11 +304,6 @@
                         group: "background"
                     },{
                         source: "google",
-                        title: "Google Terrain",
-                        name: "TERRAIN",
-                        group: "background"
-                    },{
-                        source: "google",
                         title: "Google Roadmap",
                         name: "ROADMAP",
                         group: "background"
@@ -193,12 +312,74 @@
                         title: "Google Hybrid",
                         name: "HYBRID",
                         group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Terrain",
+                        name: "TERRAIN",
+                        group: "background"
+                    },{
+                        source: "fdh",
+                        name: "geonetwork:g2006_continents",
+                        visibility : false                        
+                    },{
+                        source: "fdh",
+                        name: "geonetwork:g2006_0gen",
+                        visibility : false
+                    },{
+                        source: "fdh",
+                        name: "geonetwork:Boundaries"
+                    },{
+                        source: "fdh",
+                        name: "geonetwork:Pilotsitepolygons"
                     }],
-                    center: [-39135.758482, 1340374.194989],
-                    zoom: 5
+                    center: [-1224514, 1291331],
+                    zoom: 6
                 }
             });
             
+			
+			app.on({
+				'portalready' : function(){
+					var url = 'http://demo1.geo-solutions.it/exist/rest/mapadmin/context.xml';
+					
+					OpenLayers.Request.issue({
+						method: 'GET',
+						url: url,
+						callback: function(request) {
+							if (request.status == 200) {
+								var xmlContext = request.responseText;
+								var url = app.xmlJsonTranslateService + "HTTPWebGISXmlUpload";
+								
+								OpenLayers.Request.issue({
+									method: 'POST',
+									url: url,
+									data: xmlContext,
+									callback: function(request) {
+										if (request.status == 200) {										  	
+										  var json_str = unescape(request.responseText);
+										  json_str = json_str.replace(/\+/g, ' ');
+										  
+										  var config = Ext.util.JSON.decode(json_str);
+										  
+										  if(config && config.success && config.success===true){	
+											app.loadUserConfig(json_str);                                      
+										  }
+										}
+									},
+									scope: this
+								});
+								
+							} else {
+								 //this.saveErrorText + 
+								throw request.responseText;
+							}
+						},
+						scope: this
+					});
+				},
+				scope : app
+			});
+			
             addFDHLayer = function(fdhLayerName){
                 var FDHsource = app.layerSources.fdh;
                 
@@ -210,7 +391,26 @@
                 if (record) {
                     layerStore.add([record]);
                 }           
-                appTabs.setActiveTab(1);
+                appTabs.setActiveTab(2);
             };
+			
+			var setActiveTab = function(tabId){        
+                appTabs.setActiveTab(tabId);
+            };
+			
+			activateSearchTab = function(){
+				setActiveTab(1);
+			}
+			
+			runSimpleSearch = function(keyword){
+				activateSearchTab();
+				var gnWindowObj = window.frames[1];
+				gnWindowObj.Ext.getDom('any').value=keyword;
+				gnWindowObj.runSimpleSearch();
+			}
+			
+			activateViewTab = function(){
+				setActiveTab(2);
+			}
         });
     </script>

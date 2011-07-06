@@ -13,15 +13,16 @@ GeoExt.Lang.add("fr", {
         saveErrorText: "Sauver Trouble:",
         bookmarkText: "Mettre en favori URL",
         permakinkText: "Permalink",
-        appInfoText: "GeoExplorer",
+        appInfoText: "About",
         aboutText: "À propos de GeoExplorer",
         mapInfoText: "Info carte",
         descriptionText: "Description",
         contactText: "Contact",
-        aboutThisMapText: "À propos de cette carte"
+        aboutThisMapText: "À propos de cette carte",
+        searchTabTitle : "Search",
+        viewTabTitle : "View"
     },
     "GeoExplorer.Composer.prototype": {
-        exportMapText: "Carte Export",
         saveMapText: "Enregistrez la carte",
         toolsTitle: "Choose tools to include in the toolbar:",
         previewText: "Preview",

@@ -1,8 +1,10 @@
 package webgis;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -33,7 +35,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * @author Tobia di Pisa
  *
  */
-public class HTTPWebGISFileUpload extends HttpServlet {
+public class HTTPWebGISXmlUpload extends HttpServlet {
 
 	/**
 	 * Serialization UID.
@@ -84,78 +86,53 @@ public class HTTPWebGISFileUpload extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException {
 		
-		String temp = this.props.getProperty("temp");
-		int buffSize = Integer.valueOf(this.props.getProperty("bufferSize"));
-		
-		File tempDir = new File(temp);
-		if (!tempDir.exists()){
-			if(!tempDir.mkdir())
-				throw new IOException("Unable to create temporary directory " + tempDir);
-		}
-		
-		DiskFileItemFactory  fileItemFactory = new DiskFileItemFactory ();
-		/*
-		 *Set the size threshold, above which content will be stored on disk.
-		 */
-		fileItemFactory.setSizeThreshold(buffSize); //1 MB
-		/*
-		 * Set the temporary directory to store the uploaded files of size above threshold.
-		 */
-		fileItemFactory.setRepository(tempDir);
 
-		ServletFileUpload uploadHandler = new ServletFileUpload(fileItemFactory);
 		try {
-			/*
-			 * Parse the request
-			 */
-			List<FileItem> items = uploadHandler.parseRequest(request);
-			Iterator<FileItem> itr = items.iterator();
-			while(itr.hasNext()) {
-				FileItem item = (FileItem) itr.next();
-				
-				//if(item.getContentType().equalsIgnoreCase("text/xml")){
-				if(item.getName().toLowerCase().endsWith(".map")){
-					/*
-					 * Handle Form Fields.
-					 */
-					if(!item.isFormField()) {		
-						String xml = item.getString();
-						
-				        XMLSerializer xmlSerializer = new XMLSerializer(); 
-				        JSON json = xmlSerializer.read( xml );  
-				     
-				        response.setContentType("text/html");	        
-				        
-				        JSONObject jsonObj = new JSONObject();
-				        jsonObj.put("success", true);
-				        jsonObj.put("result", URLEncoder.encode(json.toString(), "UTF-8"));
-				        
-						Writer writer = response.getWriter();
-						writer.write(jsonObj.toString());
-						writer.flush();
-						writer.close();
+
+			StringBuilder stringBuilder = new StringBuilder();
+			BufferedReader bufferedReader = null;
+			try {
+				InputStream inputStream = request.getInputStream();
+				if (inputStream != null) {
+					bufferedReader = new BufferedReader(new InputStreamReader(
+							inputStream));
+					char[] charBuffer = new char[128];
+					int bytesRead = -1;
+					while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+						stringBuilder.append(charBuffer, 0, bytesRead);
 					}
-				}else{
-					throw new ServletException("Invalid file type, we have to upload an .map file");
-				}	
-				
+				} else {
+					stringBuilder.append("");
+				}
+			} catch (IOException ex) {
+				throw ex;
+			} finally {
+				if (bufferedReader != null) {
+					try {
+						bufferedReader.close();
+					} catch (IOException ex) {
+						throw ex;
+					}
+				}
 			}
-		}catch(FileUploadException ex) {
-	    	if(LOGGER.isLoggable(Level.SEVERE))
-	    		LOGGER.log(Level.SEVERE,"Error encountered while parsing the request");
-	    	
-	    	response.setContentType("text/html");
-	    	
-	        JSONObject jsonObj = new JSONObject();
-	        jsonObj.put("success", false);
-	        jsonObj.put("errorMessage", ex.getLocalizedMessage());
-	        
+			String xml = stringBuilder.toString();
+
+			XMLSerializer xmlSerializer = new XMLSerializer();
+			JSON json = xmlSerializer.read(xml);
+
+			response.setContentType("text/html");
+
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("success", true);
+			//jsonObj.put("result", URLEncoder.encode(json.toString(), "UTF-8"));
+			jsonObj.put("result", json.toString());
+
 			Writer writer = response.getWriter();
 			writer.write(jsonObj.toString());
 			writer.flush();
 			writer.close();
-			
-		} catch(ServletException ex) {
+		
+		} catch(Exception ex) {
 	    	if(LOGGER.isLoggable(Level.SEVERE))
 	    		LOGGER.log(Level.SEVERE,"Error encountered while uploading file");
 	    	
