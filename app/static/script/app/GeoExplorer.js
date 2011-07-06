@@ -173,11 +173,23 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     }, 
 
     loadConfig: function(config) {
+	
 		OpenLayers.Request.GET({
-			url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload',
+			url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + (new Date().getTime()),
 			success: function(request) {
-				var addConfig = Ext.util.JSON.decode(request.responseText);
-				this.applyConfig(Ext.applyIf(addConfig, config));
+				
+				var addConfig;
+				try {
+					addConfig = Ext.util.JSON.decode(request.responseText);
+				} catch (err) {
+                    // pass
+                }
+				
+				if(addConfig && addConfig.success && addConfig.success==true){				
+					this.applyConfig(Ext.applyIf(addConfig.result, config));
+				} else {
+					this.applyConfig(config);
+				}
 			},
 			scope: this
 		});
