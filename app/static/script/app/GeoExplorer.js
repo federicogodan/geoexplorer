@@ -181,43 +181,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			},
 			scope: this
 		});
-		/*
-		var url = 'http://demo1.geo-solutions.it/exist/rest/mapadmin/context.xml';		
-		OpenLayers.Request.issue({
-			method: 'GET',
-			url: this.proxy + url,
-			callback: function(request) {
-				if (request.status == 200) {
-					var xmlContext = request.responseText;
-					var url = app.xmlJsonTranslateService + "HTTPWebGISXmlUpload";
-					
-					OpenLayers.Request.issue({
-						method: 'POST',
-						url: url,
-						data: xmlContext,
-						callback: function(request) {
-							if (request.status == 200) {										  	
-							  var json_str = unescape(request.responseText);
-							  json_str = json_str.replace(/\+/g, ' ');
-							  
-							  var config = Ext.util.JSON.decode(json_str);
-							  
-							  if(config && config.success && config.success===true){	
-								app.loadUserConfig(json_str);                                      
-							  }
-							}
-						},
-						scope: this
-					});
-					
-				} else {
-					 //this.saveErrorText + 
-					throw request.responseText;
-				}
-			},
-			scope: this
-		});
-		*/
+
 		/*
         var mapUrl = window.location.hash.substr(1);
         var match = mapUrl.match(/^maps\/(\d+)$/);
