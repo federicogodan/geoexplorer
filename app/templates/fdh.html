@@ -199,6 +199,41 @@
                 }
             });
             
+			var headerContent;
+			if(gnLangStr === 'fr'){
+				headerContent = [
+					'<div id="fdh-header">',
+					'<div id="left-banner"><img src="theme/app/img/fdh/fdh_left-banner_fr.gif" usemap="#IM_left-banner" width="420" height="86" border="0" /> </div>',
+					'<div id="right-banner"><img src="theme/app/img/fdh/fdh_right-banner_fr.gif" usemap="#IM_right-banner" width="378" height="86" border="0" />  </div>',
+					'</div>',
+					'<map name="IM_left-banner">',
+					'<area shape="rect" coords="0,6,72,75" href="http://www.fouta-djallon-programme.org/index.php?lang=fr" alt="Projet De Gestion Integée Des Ressources Naturelles Du Massif Du Fouta Djallon" title="Projet De Gestion Integée Des Ressources Naturelles Du Massif Du Fouta Djallon"    />',
+					'</map>',
+					'<map name="IM_right-banner">',
+					'<area shape="rect" coords="183,3,240,78" href="http://www.unep.org/french/" alt="Programme des Nations Unies pour l’environnement" title="Programme des Nations Unies pour l’environnement"    />',
+					'<area shape="rect" coords="246,4,303,79" href="http://www.gefweb.org/" alt="Global Environment Facility" title="Global Environment Facility"    />',
+					'<area shape="rect" coords="306,6,373,79" href="http://www.fao.org/index_fr.htm" alt="L\'Organisation des Nations Unies pour l\'alimentation et l\'agriculture" title="L\'Organisation des Nations Unies pour l\'alimentation et l\'agriculture"    />',
+					'</map>',
+					'</div>'
+				].join('');
+			} else {
+				headerContent = [
+					'<div id="fdh-header">',
+					'<div id="left-banner"><img src="theme/app/img/fdh/fdh_left-banner_en.gif" usemap="#IM_left-banner" width="420" height="86" border="0" /> </div>',
+					'<div id="right-banner"><img src="theme/app/img/fdh/fdh_right-banner_en.gif" usemap="#IM_right-banner" width="378" height="86" border="0" />  </div>',
+					'</div>',
+					'<map name="IM_left-banner">',
+					'<area shape="rect" coords="0,6,72,75" href="http://www.fouta-djallon-programme.org/index.php?lang=en" alt="Fouta Djallon HighLands Integrated Natural Resources Management Project" title="Fouta Djallon HighLands Integrated Natural Resources Management Project"    />',
+					'</map>',
+					'<map name="IM_right-banner">',
+					'<area shape="rect" coords="183,3,240,78" href="http://www.unep.org/" alt="United Nations Environment Programme" title="United Nations Environment Programme"    />',
+					'<area shape="rect" coords="246,4,303,79" href="http://www.gefweb.org/" alt="Global Environment Facility" title="Global Environment Facility"    />',
+					'<area shape="rect" coords="306,6,373,79" href="http://www.fao.org/" alt="Food and Agriculture Organization of the United Nations" title="Food and Agriculture Organization of the United Nations"    />',
+					'</map>',
+					'</div>'
+				];
+			}
+			
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
@@ -211,21 +246,23 @@
                     items : [{
 							border: false,
 							header: false,
-							html: '<table id="fdh_header" width="100%"><tr>'+
+							html:  headerContent, 							
+							/*'<table id="fdh_header" width="100%"><tr>'+
 								'<td background="theme/app/img/fdh/fdh_bgimg.gif">' + 
 									'<img src="theme/app/img/fdh/fdh_left-banner.gif" alt="FDH logo" align="top" /></td>'+
 								'<td align="right" background="theme/app/img/fdh/fdh_bgimg.gif">'+
 									'<img src="theme/app/img/fdh/fdh_right-banner.gif" alt="FDH geospatial data warehouse" align="top" />'+
 								'</td></tr></table>',
+							*/
 							region: 'north',
 							collapsible: true,
 							collapseMode:  'mini',
 							hideCollapseTool: true,
 							split: true,
 							animCollapse : false,
-							minHeight: 100,
-							maxHeight: 100,
-							height: 100,
+							minHeight: 86,
+							maxHeight: 86,
+							height: 86,
 							id : 'fdhHeader'
 						}, appTabs
 					],                            

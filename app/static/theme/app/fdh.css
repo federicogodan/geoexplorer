@@ -1,11 +1,25 @@
-#fdh_header {
-    border-collapse: collapse;
-    border-spacing: 0;
-    border-width: 0;
-    padding: 0;
-    vertical-align: top;
+#left-banner {
+	position : absolute;
+	left : 0;
+	top : 0;
+	width : 420px;
+	height : 86px;
 }
-
+#fdh-header {
+	position : absolute;
+	top : 0px;
+	left : 0px;
+	margin-right: 0px;
+	width : 100%;
+background: url(img/fdh/bgimg.gif) repeat-x;
+}
+#right-banner {
+	float : right;
+	display : inline;
+	top : 0;
+	width : 378px;
+	height : 86px;
+}
 
 
 /*********************************
