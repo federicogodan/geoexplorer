@@ -129,7 +129,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 30}
             }, {
                 ptype: "gxp_saveDefaultContext",
-                actionTarget: {target: "paneltbar", index: 40}
+                actionTarget: {target: "paneltbar", index: 40},
+				needsAuthorization: true
             }, {
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'fdh-print'},
@@ -159,10 +160,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     /** private: method[showLoginDialog]
      * Show the login dialog for the user to login.
      */
-     /*
+     
     showLoginDialog: function() {
+	
         var panel = new Ext.FormPanel({
-            url: "login",
+            url: "http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
             frame: true,
             labelWidth: 60,
             defaultType: "textfield",
@@ -208,7 +210,36 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         });
 
         function submitLogin() {
-            panel.buttons[0].disable();
+			var form = panel.getForm();
+			var fields = form.getValues();
+			var pass = fields.password;
+			var user = fields.username;
+			
+			Ext.Ajax.request({
+				method: 'GET',
+				url: "http://"+ user + ":"+ pass + "@demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
+				//proxy: '',
+				success: function(request) {
+					this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
+                    Ext.getCmp('paneltbar').items.each(function(tool) {
+                        if (tool.needsAuthorization === true) {
+                            tool.enable();
+                        }
+                    });
+                    this.loginButton.hide();
+                    win.close();
+				},
+				failure: function(request) {
+					form.markInvalid({
+                        "username": this.loginErrorText,
+                        "password": this.loginErrorText
+                    });										
+				},
+				scope: this
+			});	
+		
+			/*
+            //panel.buttons[0].disable();
             panel.getForm().submit({
                 success: function(form, action) {
                     this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
@@ -222,7 +253,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
                 failure: function(form, action) {
                     this.authorizedRoles = [];
-                    panel.buttons[0].enable();
+                    //panel.buttons[0].enable();
                     form.markInvalid({
                         "username": this.loginErrorText,
                         "password": this.loginErrorText
@@ -230,7 +261,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
                 scope: this
             });
+		*/
         }
+		
                 
         var win = new Ext.Window({
             title: this.loginText,
@@ -244,7 +277,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         });
         win.show();
     },
-    */
     /**
      * api: method[createTools]
      * Create the toolbar configuration for the main view.
@@ -252,19 +284,21 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
         
-        /*
+        
         // unauthorized, show login button
-        if (this.authorizedRoles.length === 0) {
+        //if (this.authorizedRoles.length === 0) {
             this.loginButton = new Ext.Button({
                 iconCls: 'login',
                 text: this.loginText,
                 handler: this.showLoginDialog,
                 scope: this
             });
-            tools.push(['->', this.loginButton]);
-        } else {
-        }
-
+            //tools.push(['->', this.loginButton]);
+			tools.push([this.loginButton]);
+        //} else {
+        //}
+		
+		/*
         tools.unshift("-");
 
         tools.unshift(new Ext.Button({
