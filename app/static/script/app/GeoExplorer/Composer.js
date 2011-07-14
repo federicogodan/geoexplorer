@@ -26,6 +26,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     backText: "Back",
     nextText: "Next",
     loginText: "Login",
+    logoutTitle: "Logout",
+    logoutText: "Are you sure to logout?",
     loginErrorText: "Invalid username or password.",
     userFieldText: "User",
     passwordFieldText: "Password", 
@@ -76,7 +78,20 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_removeoverlays",
                 actionTarget: "tree.tbar"
-            }, {
+            }, 
+            {
+                ptype: "gxp_addgroup",
+                actionTarget: "tree.tbar"
+            },
+            {
+                ptype: "gxp_removegroup",
+                actionTarget: "tree.tbar"
+            }, 
+            {
+                ptype: "gxp_groupproperties",
+                actionTarget: ["tree.tbar"]
+            },
+            {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             },/* {
@@ -130,7 +145,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
-				needsAuthorization: true
+				        needsAuthorization: true
             }, {
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'fdh-print'},
@@ -227,6 +242,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     });
                     this.loginButton.hide();
+                    this.logoutButton.show();
                     win.close();
 				},
 				failure: function(request) {
@@ -287,17 +303,41 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         
         // unauthorized, show login button
         //if (this.authorizedRoles.length === 0) {
-            this.loginButton = new Ext.Button({
-                iconCls: 'login',
-                text: this.loginText,
-                handler: this.showLoginDialog,
-                scope: this
-            });
+        this.loginButton = new Ext.Button({
+            iconCls: 'login',
+            text: this.loginText,
+            handler: this.showLoginDialog,
+            scope: this
+        });
             //tools.push(['->', this.loginButton]);
-			tools.push([this.loginButton]);
+			  tools.push([this.loginButton]);
         //} else {
         //}
-		
+        
+        this.logoutButton = new Ext.Button({
+            iconCls: 'logout',
+            text: this.logoutTitle,
+            hidden: true,
+            handler: function(){
+                var logoutFunction = function(buttonId, text,opt){
+                    if(buttonId === 'ok'){
+                        window.location.reload( false );
+                    }
+                };
+                
+                Ext.Msg.show({
+                   title: this.logoutTitle,
+                   msg: this.logoutText,
+                   buttons: Ext.Msg.OKCANCEL,
+                   fn: logoutFunction,
+                   icon: Ext.MessageBox.QUESTION,
+                   scope: this
+                });
+            },
+            scope: this
+        });
+        
+        tools.push([this.logoutButton]);
 		/*
         tools.unshift("-");
 
