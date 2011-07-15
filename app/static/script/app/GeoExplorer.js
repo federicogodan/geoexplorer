@@ -192,6 +192,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					this.applyConfig(config);
 				}
 			},
+			failure: function(request){
+				this.applyConfig(config);
+			},
 			scope: this
 		});
 
