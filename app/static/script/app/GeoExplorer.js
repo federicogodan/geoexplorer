@@ -174,9 +174,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
     loadConfig: function(config) {
 	
+		
 		OpenLayers.Request.GET({
-			//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-			url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
+			url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
+			//url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
 			success: function(request) {
 				
 				var addConfig;
@@ -197,7 +198,37 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			},
 			scope: this
 		});
+		
 
+		/*
+		var success = function(request) {                                
+			var addConfig;
+			try {
+				addConfig = Ext.util.JSON.decode(request.responseText);
+			} catch (err) {
+			  // pass
+			}
+
+			if(addConfig && addConfig.success && addConfig.success==true){                               
+				this.applyConfig(Ext.applyIf(addConfig.result, config));
+			} else {
+				this.applyConfig(config);
+			}
+		};
+						   
+		var failure = function(request) {                                                 
+			alert("ERROR: " + request.statusText);
+		};
+
+		OpenLayers.Request.GET({
+			url: "json2.txt",
+			params: '',
+			success: success,
+			failure: failure,
+			scope: this
+		});
+		*/
+		
 		/*
         var mapUrl = window.location.hash.substr(1);
         var match = mapUrl.match(/^maps\/(\d+)$/);

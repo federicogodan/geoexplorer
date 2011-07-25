@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="FDHWebGis2" default="dist" basedir=".">
+<project name="FDHWebGis-dev" default="dist" basedir=".">
 
     <description>
         GeoExplorer Build File

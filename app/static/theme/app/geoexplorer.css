@@ -237,6 +237,11 @@ body {
     margin-top: 1em;
 }
 
+.gx-item-margin-left{
+    margin-left: 2px;
+}
+
+
 /* TODO: Remove this if GetFeatureInfo is changed from text/html */
 
 table.featureInfo, table.featureInfo td, table.featureInfo th {

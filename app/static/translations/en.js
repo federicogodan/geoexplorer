@@ -84,8 +84,8 @@ GeoExt.Lang.add("en", {
     
     "gxp.plugins.LayerTree.prototype": {
         rootNodeText: "Layers",
-        overlayNodeText: "Overlays",
-        baseNodeText: "Base Layers"
+        overlayNodeText: "Default",
+        baseNodeText: "Background"
     },
 
     "gxp.plugins.Legend.prototype": {

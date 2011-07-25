@@ -232,7 +232,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 			
 			Ext.Ajax.request({
 				method: 'GET',
-				url: "http://"+ user + ":"+ pass + "@demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
+				url:  "proxy/?url=" + "http://"+ user + ":"+ pass + "@demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
 				//proxy: '',
 				success: function(request) {
 					this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
