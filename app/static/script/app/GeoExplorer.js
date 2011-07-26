@@ -65,6 +65,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     aboutThisMapText: "About this Map",
     viewTabTitle : "View",
     searchTabTitle : "Search",
+    
+    userConfigLoadTitle: "Loading User Context",
+    userConfigLoadMsg: "Error reading user map context",
     // End i18n.
     
     /**
@@ -174,107 +177,103 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
     loadConfig: function(config) {
 	
-		
-		OpenLayers.Request.GET({
-			url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-			//url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
-			success: function(request) {
-				
-				var addConfig;
-				try {
-					addConfig = Ext.util.JSON.decode(request.responseText);
-				} catch (err) {
+        if(config.loadedFromFonfig){
+            this.applyConfig(config);
+        }else{
+            OpenLayers.Request.GET({
+              url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
+              //url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
+              success: function(request) {
+                
+                var addConfig;
+                try {
+                  addConfig = Ext.util.JSON.decode(request.responseText);
+                } catch (err) {
                     // pass
                 }
-				
-				if(addConfig && addConfig.success && addConfig.success==true){				
-					this.applyConfig(Ext.applyIf(addConfig.result, config));
-				} else {
-					this.applyConfig(config);
-				}
-			},
-			failure: function(request){
-				this.applyConfig(config);
-			},
-			scope: this
-		});
-		
-
-		/*
-		var success = function(request) {                                
-			var addConfig;
-			try {
-				addConfig = Ext.util.JSON.decode(request.responseText);
-			} catch (err) {
-			  // pass
-			}
-
-			if(addConfig && addConfig.success && addConfig.success==true){                               
-				this.applyConfig(Ext.applyIf(addConfig.result, config));
-			} else {
-				this.applyConfig(config);
-			}
-		};
-						   
-		var failure = function(request) {                                                 
-			alert("ERROR: " + request.statusText);
-		};
-
-		OpenLayers.Request.GET({
-			url: "json2.txt",
-			params: '',
-			success: success,
-			failure: failure,
-			scope: this
-		});
-		*/
-		
-		/*
-        var mapUrl = window.location.hash.substr(1);
-        var match = mapUrl.match(/^maps\/(\d+)$/);
-        if (match) {
-            this.id = Number(match[1]);
-            OpenLayers.Request.GET({
-                url: mapUrl,
-                success: function(request) {
-                    var addConfig = Ext.util.JSON.decode(request.responseText);
-                    this.applyConfig(Ext.applyIf(addConfig, config));
-                },
-                failure: function(request) {
-                    var obj;
-                    try {
-                        obj = Ext.util.JSON.decode(request.responseText);
-                    } catch (err) {
-                        // pass
-                    }
-                    var msg = this.loadConfigErrorText;
-                    if (obj && obj.error) {
-                        msg += obj.error;
-                    } else {
-                        msg += this.loadConfigErrorDefaultText;
-                    }
-                    this.on({
-                        ready: function() {
-                            this.displayXHRTrouble(msg, request.status);
-                        },
-                        scope: this
-                    });
-                    delete this.id;
-                    window.location.hash = "";
-                    this.applyConfig(config);
-                },
-                scope: this
+                
+                if(addConfig && addConfig.success && addConfig.success==true){				
+                  this.applyConfig(Ext.applyIf(addConfig.result, config));
+                } else {
+                  this.applyConfig(config);
+                }
+              },
+              scope: this
             });
-        } else {
-            var query = Ext.urlDecode(document.location.search.substr(1));
-            if (query && query.q) {
-                var queryConfig = Ext.util.JSON.decode(query.q);
-                Ext.apply(config, queryConfig);
-            }
-            this.applyConfig(config);
         }
-		*/
         
+        /*var success = function(request) {					
+              var addConfig;
+              try {
+                addConfig = Ext.util.JSON.decode(request.responseText);
+              } catch (err) {
+                  // pass
+              }
+              
+              if(addConfig && addConfig.success && addConfig.success==true){				
+                this.applyConfig(Ext.applyIf(addConfig.result, config));
+              } else {
+                this.applyConfig(config);
+              }
+        };
+          
+        var failure = function(request) {							
+                alert("ERROR: " + request.statusText);
+        };
+
+        OpenLayers.Request.GET({
+            url: "json2.txt", 
+            params: '',
+            success: success, 
+            failure: failure, 
+            scope: this
+        });*/
+
+        /*
+            var mapUrl = window.location.hash.substr(1);
+            var match = mapUrl.match(/^maps\/(\d+)$/);
+            if (match) {
+                this.id = Number(match[1]);
+                OpenLayers.Request.GET({
+                    url: mapUrl,
+                    success: function(request) {
+                        var addConfig = Ext.util.JSON.decode(request.responseText);
+                        this.applyConfig(Ext.applyIf(addConfig, config));
+                    },
+                    failure: function(request) {
+                        var obj;
+                        try {
+                            obj = Ext.util.JSON.decode(request.responseText);
+                        } catch (err) {
+                            // pass
+                        }
+                        var msg = this.loadConfigErrorText;
+                        if (obj && obj.error) {
+                            msg += obj.error;
+                        } else {
+                            msg += this.loadConfigErrorDefaultText;
+                        }
+                        this.on({
+                            ready: function() {
+                                this.displayXHRTrouble(msg, request.status);
+                            },
+                            scope: this
+                        });
+                        delete this.id;
+                        window.location.hash = "";
+                        this.applyConfig(config);
+                    },
+                    scope: this
+                });
+            } else {
+                var query = Ext.urlDecode(document.location.search.substr(1));
+                if (query && query.q) {
+                    var queryConfig = Ext.util.JSON.decode(query.q);
+                    Ext.apply(config, queryConfig);
+                }
+                this.applyConfig(config);
+            }
+        */
     },
     
     loadUserConfig: function(json){
@@ -289,17 +288,25 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         app.destroy();
         
         var config = Ext.util.JSON.decode(json);
-        app = new GeoExplorer.Composer(config);
+        
+        if(config){
+            config.loadedFromFonfig = true;
+            app = new GeoExplorer.Composer(config);
+        }else{
+            Ext.Msg.show({
+                title: this.userConfigLoadTitle,
+                msg: this.userConfigLoadMsg,
+                icon: Ext.MessageBox.WARNING
+            });
+        }
     },
     
-    displayXHRTrouble: function(msg, status) {
-        
+    displayXHRTrouble: function(msg, status) {        
         Ext.Msg.show({
             title: this.xhrTroubleText + status,
             msg: msg,
             icon: Ext.MessageBox.WARNING
-        });
-        
+        });        
     },
     
     /** private: method[initPortal]
