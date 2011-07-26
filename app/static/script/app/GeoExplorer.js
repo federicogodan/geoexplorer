@@ -174,30 +174,33 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
     loadConfig: function(config) {
 	
-		
-		OpenLayers.Request.GET({
-			url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-			//url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
-			success: function(request) {
-				
-				var addConfig;
-				try {
-					addConfig = Ext.util.JSON.decode(request.responseText);
-				} catch (err) {
-                    // pass
-                }
-				
-				if(addConfig && addConfig.success && addConfig.success==true){				
-					this.applyConfig(Ext.applyIf(addConfig.result, config));
-				} else {
+		if(config.isLoadedFromConfigFile){
+			this.applyConfig(config);
+		} else {
+			OpenLayers.Request.GET({
+				url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
+				//url: '/proxy?url='+'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
+				success: function(request) {
+					
+					var addConfig;
+					try {
+						addConfig = Ext.util.JSON.decode(request.responseText);
+					} catch (err) {
+						// pass
+					}
+					
+					if(addConfig && addConfig.success && addConfig.success==true){				
+						this.applyConfig(Ext.applyIf(addConfig.result, config));
+					} else {
+						this.applyConfig(config);
+					}
+				},
+				failure: function(request){
 					this.applyConfig(config);
-				}
-			},
-			failure: function(request){
-				this.applyConfig(config);
-			},
-			scope: this
-		});
+				},
+				scope: this
+			});
+		}
 		
 
 		/*
@@ -289,7 +292,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         app.destroy();
         
         var config = Ext.util.JSON.decode(json);
-        app = new GeoExplorer.Composer(config);
+		if(config && config.map){
+			config.isLoadedFromConfigFile = true;
+			app = new GeoExplorer.Composer(config);
+		}        
     },
     
     displayXHRTrouble: function(msg, status) {
