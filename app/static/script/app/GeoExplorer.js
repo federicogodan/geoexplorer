@@ -177,6 +177,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
     loadConfig: function(config) {
 	
+		
 		if(config.isLoadedFromConfigFile){
 			this.applyConfig(config);
 		} else {
@@ -204,6 +205,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				scope: this
 			});
 		}
+		
 		
 
 		/*

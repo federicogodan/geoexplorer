@@ -54,13 +54,7 @@
             Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
-            gxp.plugins.FDHGeoCoder.prototype.data = geocoding_data ? geocoding_data : [] ;
-            
-            // optionally set locale based on query string parameter
-            var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'en';
-            if (GeoExt.Lang) {
-                GeoExt.Lang.set(curLang);
-            }
+            gxp.plugins.FDHGeoCoder.prototype.data = geocoding_data ? geocoding_data : [] ;            
             
             Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
                  onRender : function(ct, position){
@@ -73,6 +67,9 @@
                  }
             });
             
+			// optionally set locale based on query string parameter
+            var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'en';
+			
 			var availLanguages = ['en','fr'];
             var gnLangStr = curLang.substr(0,2);
 			
@@ -103,7 +100,7 @@
                     }) 
                 ]
             });
-            						
+					
             var appTabs = new Ext.TabPanel({
                 items : [portalPanel, geonetworkPanel],
                 region: 'center',
@@ -155,7 +152,7 @@
             var code = url.locale;   
 
             if(!code){
-                code = this.initialLanguage;
+                code = "en";
             }
             
             var initialLanguageString;
@@ -168,8 +165,12 @@
                         return;
                     }
                 });
+            }            
+			
+			if (GeoExt.Lang) {
+                GeoExt.Lang.set(code);
             }
-            
+			
             if(!initialLanguageString){
                 initialLanguageString = "English";
             }
@@ -265,6 +266,35 @@
                 }]
             });
             
+			/*
+			var mask = Ext.Msg;
+				mask.show({
+				   msg: "Loading ...",
+				   closable: false,
+				   mode: true,
+				   width: 200,
+				   icon: 'download-data'
+				});
+				
+				OpenLayers.Util.onImageLoad = function(){
+					 // //////////////////////
+					 // OL code
+					 // //////////////////////
+					 if (!this.viewRequestID ||
+						  (this.map && this.viewRequestID == this.map.viewRequestID)) { 
+						  this.style.display = "";  
+					 }
+					  
+					 OpenLayers.Element.removeClass(this, "olImageLoadError");
+					 
+					 // //////////////////////
+					 // FDH code
+					 // ////////////////////// 
+				mask.hide();
+				
+				appTabs.setActiveTab(0);
+			};
+			*/
 			
             app = new GeoExplorer.Composer({
                 authStatus: <% status %>,
@@ -360,18 +390,36 @@
                         name: "geonetwork:Boundaries"
                     },{
                         source: "fdh",
-                        name: "geonetwork:Pilotsitepolygons"
+                        name: "geonetwork:Pilotsitepolygons",
+						uuid : "46c2a724-e416-4054-9a7a-2af4baf3c948"
                     }],
                     center: [-1224514, 1291331],
                     zoom: 6
                 }
             });           
+
+			/*
+			app.on({
+				'portalready' : function(){
+					app.portal.on({
+						'activate' : function(){
+							var map = app.mapPanel.map;
+							map.size.w = map.size.w + 1;
+							map.updateSize();
+							map.size.w = map.size.w - 1;
+							map.updateSize();
+						}
+					});
+				}
+			});
+			*/
 			
-            addFDHLayer = function(fdhLayerName){
+            addFDHLayer = function(fdhLayerName, fdhLayerUUID){
                 var FDHsource = app.layerSources.fdh;
                 
                 var record = FDHsource.createLayerRecord({
                     name: fdhLayerName,
+					uuid : fdhLayerUUID,
                     source : 'fdh'
                 });                
                 var layerStore = app.mapPanel.layers;                
@@ -394,6 +442,14 @@
 				var gnWindowObj = window.frames[1];
 				gnWindowObj.Ext.getDom('any').value=keyword;
 				gnWindowObj.runSimpleSearch();
+			}
+			
+			viewRecordMetadata = function(uuid){
+				if(uuid){
+					activateSearchTab();
+					var gnWindowObj = window.frames[1];
+					gnWindowObj.gn_showSingleMetadataUUID(uuid);
+				}
 			}
 			
 			activateViewTab = function(){
