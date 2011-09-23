@@ -208,8 +208,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		
 		
 
-		/*
-		var success = function(request) {                                
+		
+		/*var success = function(request) {                                
 			var addConfig;
 			try {
 				addConfig = Ext.util.JSON.decode(request.responseText);
@@ -234,8 +234,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			success: success,
 			failure: failure,
 			scope: this
-		});
-		*/
+		});*/
+		
 		
         /*
 		var mapUrl = window.location.hash.substr(1);
@@ -298,6 +298,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         var config = Ext.util.JSON.decode(json);        
         if(config && config.map){
             config.isLoadedFromConfigFile = true;
+            
+            //if(modified){
+            //    config.modified = modified;
+            //}
+            
             app = new GeoExplorer.Composer(config);
         }else{
             Ext.Msg.show({
@@ -325,6 +330,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         var westPanel = new Ext.Panel({
             border: false,
             layout: "border",
+            id:'west',
             region: "west",
             width: 250,
             split: true,

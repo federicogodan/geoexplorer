@@ -39,6 +39,9 @@
     <script>
         
         var app, addFDHLayer;
+        
+        var modified = false;
+        
 		var activateSearchTab, activateViewTab, runSimpleSearch;
     
         Ext.onReady(function(){
@@ -295,8 +298,9 @@
 				appTabs.setActiveTab(0);
 			};
 			*/
-			
+			      
             app = new GeoExplorer.Composer({
+                modified: false,
                 authStatus: <% status %>,
                 proxy: "proxy/?url=",
                 printService: "http://demo1.geo-solutions.it/geoserver/pdf/",

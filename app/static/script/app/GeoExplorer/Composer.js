@@ -323,19 +323,77 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             hidden: true,
             handler: function(){
                 var logoutFunction = function(buttonId, text,opt){
-                    if(buttonId === 'ok'){
+                    if(buttonId === 'ok'){                        
                         window.location.reload( false );
+                    }else if(buttonId === 'no'){
+                        window.location.reload( false );
+                    }else if(buttonId === 'yes'){
+                        var xmlContext;
+                        var handleSave = function(){
+                            var xmlContext = this.xmlContext;            
+                            var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                            mask.show();
+                                
+                            Ext.Ajax.request({
+                               url: "proxy/?url=" + "http://admin:1geoadmin2@demo1.geo-solutions.it/exist/rest/mapadmin/context.xml",
+                               method: 'PUT',
+                               params: xmlContext,
+                               scope: this,
+                               success: function(response, opts){
+                                  mask.hide();
+                                  window.location.reload( false );
+                               },
+                               failure:  function(response, opts){
+                                  mask.hide();
+                                  Ext.Msg.show({
+                                     title: this.contextSaveFailString,
+                                     msg: response.statusText,
+                                     buttons: Ext.Msg.OK,
+                                     icon: Ext.MessageBox.ERROR
+                                  });
+                               }
+                            });		
+                        };
+                        
+                        var configStr = Ext.util.JSON.encode(app.getState());  
+                        var url = app.xmlJsonTranslateService + "HTTPWebGISSave";		
+                        
+                        OpenLayers.Request.issue({
+                            method: 'POST',
+                            url: url,
+                            data: configStr,
+                            callback: function(request) {
+                                if (request.status == 200) {
+                                    this.xmlContext = request.responseText;
+                                    handleSave.call(this);
+                                } else {
+                                    throw request.responseText;
+                                }						
+                            },
+                            scope: this
+                        });
                     }
                 };
-                
-                Ext.Msg.show({
-                   title: this.logoutTitle,
-                   msg: this.logoutText,
-                   buttons: Ext.Msg.OKCANCEL,
-                   fn: logoutFunction,
-                   icon: Ext.MessageBox.QUESTION,
-                   scope: this
-                });
+                                
+                if(modified || app.modified){
+                    Ext.Msg.show({
+                       title: this.logoutTitle,
+                       msg: "Save changes before logout?",
+                       buttons: Ext.Msg.YESNOCANCEL,
+                       fn: logoutFunction,
+                       icon: Ext.MessageBox.QUESTION,
+                       scope: this
+                    });
+                }else{
+                    Ext.Msg.show({
+                       title: this.logoutTitle,
+                       msg: this.logoutText,
+                       buttons: Ext.Msg.OKCANCEL,
+                       fn: logoutFunction,
+                       icon: Ext.MessageBox.QUESTION,
+                       scope: this
+                    });
+                }
             },
             scope: this
         });
@@ -432,7 +490,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                                       win.hide();
                                       var json_str = unescape(o.result.result);
                                       json_str = json_str.replace(/\+/g, ' ');
-                                      composer.loadUserConfig(json_str);                                      
+                                      
+                                      composer.loadUserConfig(json_str);  
+                                      
+                                      //app.modified = true;
+                                      modified = true;                                    
                                   },                                    
                                   failure: function(fp, o){
                                       win.hide();
