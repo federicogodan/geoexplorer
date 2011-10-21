@@ -235,7 +235,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 			
 			Ext.Ajax.request({
 				method: 'GET',
-				url:  "proxy/?url=" + "http://"+ user + ":"+ pass + "@demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
+				url: proxy + "http://"+ user + ":"+ pass + "@demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
 				//proxy: '',
 				success: function(request) {
 					this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
@@ -335,7 +335,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                             mask.show();
                                 
                             Ext.Ajax.request({
-                               url: "proxy/?url=" + "http://admin:1geoadmin2@demo1.geo-solutions.it/exist/rest/mapadmin/context.xml",
+                               url: proxy + "http://admin:1geoadmin2@demo1.geo-solutions.it/exist/rest/mapadmin/context.xml",
                                method: 'PUT',
                                params: xmlContext,
                                scope: this,
@@ -484,7 +484,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
                                   url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  //url: app.proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  //url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
                                   waitMsg: 'Uploading your context file...',
                                   success: function(fp, o){
                                       win.hide();
