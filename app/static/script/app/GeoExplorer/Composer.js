@@ -35,15 +35,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     // End i18n.
 
     constructor: function(config) {
-        if (config.authStatus === 401) {
-            // user has not authenticated or is not authorized
-            this.authorizedRoles = [];
-        } else {
-            // user has authenticated or auth back-end is not available
-            this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
-        }
-        // should not be persisted or accessed again
-        delete config.authStatus;
 
         config.tools = [
             {
@@ -78,50 +69,28 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_removeoverlays",
                 actionTarget: "tree.tbar"
-            }, 
-            {
+            }, {
                 ptype: "gxp_addgroup",
                 actionTarget: "tree.tbar"
-            },
-            {
+            }, {
                 ptype: "gxp_removegroup",
                 actionTarget: "tree.tbar"
-            }, 
-            {
+            }, {
                 ptype: "gxp_groupproperties",
                 actionTarget: ["tree.tbar"]
-            },
-            {
+            }, {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            },/* {
-                ptype: "gxp_styler",
-                actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            },*/ {
+            }, {
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
             }, {
-                ptype: "gxp_geonetworksearch",
-                actionTarget: ["layertree.contextMenu"]
-            },{
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 15}
             }, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 7}
-            },
-            /*  {
-                ptype: "gxp_featuremanager",
-                id: "featuremanager",
-                maxFeatures: 20
             }, {
-                ptype: "gxp_featureeditor",
-                featureManager: "featuremanager",
-                autoLoadFeatures: true,
-                toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 8}
-            }, 
-            */ {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 12}
             }, {
@@ -142,27 +111,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         new OpenLayers.Projection("EPSG:102113"));
                 },
                 actionTarget: {target: "paneltbar", index: 26}
-            }, {
-                ptype: "gxp_fdhgeocoder",
-                actionTarget: {target: "paneltbar", index: 30}
-            }, {
+            },{
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
-            }, {
-                ptype: "gxp_print",
-                customParams: {outputFilename: 'fdh-print'},
-                printService: config.printService,
-                legendPanelId: 'legendPanel',
-                actionTarget: {target: "paneltbar", index: 4}
-            }/*, {
-                ptype: "gxp_googleearth",
-                actionTarget: {target: "paneltbar", index: 17},
-                apiKeys: {
-                    "localhost": "ABQIAAAAeDjUod8ItM9dBg5_lz0esxTnme5EwnLVtEDGnh-lFVzRJhbdQhQBX5VH8Rb3adNACjSR5kaCLQuBmw",
-                    "geo-solutions.it": "ABQIAAAA5SREeKhHQ5CKTL33pm0kPRT-MyVOyNDghWyrQfAYOWRyYsiL2BQYy-OMEt_BxLLciTgd-PQzwthG8w"
-                }
-            }*/
+            }
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
@@ -174,272 +127,31 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         this.loginButton = null;
         GeoExplorer.Composer.superclass.destroy.apply(this, arguments);
     },
-
-    /** private: method[showLoginDialog]
-     * Show the login dialog for the user to login.
-     */
-     
-    showLoginDialog: function() {
-	
-        var panel = new Ext.FormPanel({
-            url: "http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
-            frame: true,
-            labelWidth: 60,
-            defaultType: "textfield",
-            errorReader: {
-                read: function(response) {
-                    var success = false;
-                    var records = [];
-                    if (response.status === 200) {
-                        success = true;
-                    } else {
-                        records = [
-                            {data: {id: "username", msg: this.loginErrorText}},
-                            {data: {id: "password", msg: this.loginErrorText}}
-                        ];
-                    }
-                    return {
-                        success: success,
-                        records: records
-                    };
-                }
-            },
-            items: [{
-                fieldLabel: this.userFieldText,
-                name: "username",
-                allowBlank: false
-            }, {
-                fieldLabel: this.passwordFieldText,
-                name: "password",
-                inputType: "password",
-                allowBlank: false
-            }],
-            buttons: [{
-                text: this.loginText,
-                formBind: true,
-                handler: submitLogin,
-                scope: this
-            }],
-            keys: [{ 
-                key: [Ext.EventObject.ENTER], 
-                handler: submitLogin,
-                scope: this
-            }]
-        });
-
-        function submitLogin() {
-			var form = panel.getForm();
-			var fields = form.getValues();
-			var pass = fields.password;
-			var user = fields.username;
-			
-			Ext.Ajax.request({
-				method: 'GET',
-				url: proxy + "http://"+ user + ":"+ pass + "@demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
-				//proxy: '',
-				success: function(request) {
-					this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
-                    Ext.getCmp('paneltbar').items.each(function(tool) {
-                        if (tool.needsAuthorization === true) {
-                            tool.enable();
-                        }
-                    });
-                    this.loginButton.hide();
-                    this.logoutButton.show();
-                    win.close();
-				},
-				failure: function(request) {
-					form.markInvalid({
-                        "username": this.loginErrorText,
-                        "password": this.loginErrorText
-                    });										
-				},
-				scope: this
-			});	
-		
-			/*
-            //panel.buttons[0].disable();
-            panel.getForm().submit({
-                success: function(form, action) {
-                    this.authorizedRoles = ["ROLE_ADMINISTRATOR"];
-                    Ext.getCmp('paneltbar').items.each(function(tool) {
-                        if (tool.needsAuthorization === true) {
-                            tool.enable();
-                        }
-                    });
-                    this.loginButton.hide();
-                    win.close();
-                },
-                failure: function(form, action) {
-                    this.authorizedRoles = [];
-                    //panel.buttons[0].enable();
-                    form.markInvalid({
-                        "username": this.loginErrorText,
-                        "password": this.loginErrorText
-                    });
-                },
-                scope: this
-            });
-		*/
-        }
-		
-                
-        var win = new Ext.Window({
-            title: this.loginText,
-            layout: "fit",
-            width: 235,
-            height: 130,
-            plain: true,
-            border: false,
-            modal: true,
-            items: [panel]
-        });
-        win.show();
-    },
+    
     /**
      * api: method[createTools]
      * Create the toolbar configuration for the main view.
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
-        
-        
-        // unauthorized, show login button
-        //if (this.authorizedRoles.length === 0) {
-        this.loginButton = new Ext.Button({
-            iconCls: 'login',
-            text: this.loginText,
-            handler: this.showLoginDialog,
-            scope: this
-        });
-            //tools.push(['->', this.loginButton]);
-			  tools.push([this.loginButton]);
-        //} else {
-        //}
-        
-        this.logoutButton = new Ext.Button({
-            iconCls: 'logout',
-            text: this.logoutTitle,
-            hidden: true,
-            handler: function(){
-                var logoutFunction = function(buttonId, text,opt){
-                    if(buttonId === 'ok'){                        
-                        window.location.reload( false );
-                    }else if(buttonId === 'no'){
-                        window.location.reload( false );
-                    }else if(buttonId === 'yes'){
-                        var xmlContext;
-                        var handleSave = function(){
-                            var xmlContext = this.xmlContext;            
-                            var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
-                            mask.show();
-                                
-                            Ext.Ajax.request({
-                               url: proxy + "http://admin:1geoadmin2@demo1.geo-solutions.it/exist/rest/mapadmin/context.xml",
-                               method: 'PUT',
-                               params: xmlContext,
-                               scope: this,
-                               success: function(response, opts){
-                                  mask.hide();
-                                  window.location.reload( false );
-                               },
-                               failure:  function(response, opts){
-                                  mask.hide();
-                                  Ext.Msg.show({
-                                     title: this.contextSaveFailString,
-                                     msg: response.statusText,
-                                     buttons: Ext.Msg.OK,
-                                     icon: Ext.MessageBox.ERROR
-                                  });
-                               }
-                            });		
-                        };
-                        
-                        var configStr = Ext.util.JSON.encode(app.getState());  
-                        var url = app.xmlJsonTranslateService + "HTTPWebGISSave";		
-                        
-                        OpenLayers.Request.issue({
-                            method: 'POST',
-                            url: url,
-                            data: configStr,
-                            callback: function(request) {
-                                if (request.status == 200) {
-                                    this.xmlContext = request.responseText;
-                                    handleSave.call(this);
-                                } else {
-                                    throw request.responseText;
-                                }						
-                            },
-                            scope: this
-                        });
-                    }
-                };
-                                
-                if(modified || app.modified){
-                    Ext.Msg.show({
-                       title: this.logoutTitle,
-                       msg: "Save changes before logout?",
-                       buttons: Ext.Msg.YESNOCANCEL,
-                       fn: logoutFunction,
-                       icon: Ext.MessageBox.QUESTION,
-                       scope: this
-                    });
-                }else{
-                    Ext.Msg.show({
-                       title: this.logoutTitle,
-                       msg: this.logoutText,
-                       buttons: Ext.Msg.OKCANCEL,
-                       fn: logoutFunction,
-                       icon: Ext.MessageBox.QUESTION,
-                       scope: this
-                    });
-                }
-            },
-            scope: this
-        });
-        
-        tools.push([this.logoutButton]);
-		/*
-        tools.unshift("-");
 
-        tools.unshift(new Ext.Button({
-            tooltip: this.exportMapText,
-            needsAuthorization: false,
-            //disabled: !this.isAuthorized(),
-            handler: function() {
-                this.saveAndExport(this.showEmbedWindow);
-            },
-            scope: this,
-            iconCls: 'icon-export'
-        }));
-        */
-                
         var fullScreen = new Ext.Button({
             text: this.fullScreenText,
             iconCls: "icon-fullscreen",
             enableToggle: true,
             handler: function(button, evt){
                 if(button.pressed){
-                    Ext.getCmp('fdhHeader').collapse();
-                    //Ext.getCmp('fdhFooter').collapse();
                     Ext.getCmp('tree').findParentByType('panel').collapse();
                 } else {
-                    Ext.getCmp('fdhHeader').expand();
-                    //Ext.getCmp('fdhFooter').expand();
                     Ext.getCmp('tree').findParentByType('panel').expand();
                 }
             }
         });            
                         
         tools.unshift(fullScreen);    
-              
-        //tools.unshift(aboutButton);
-        //tools.unshift(poweredByGeoSol);
         
         tools.push(new Ext.Button({
             tooltip: this.saveMapText,
-            needsAuthorization: false,
-            //disabled: !this.isAuthorized(),
             handler: function() {
                 this.save(this.showUrl);
             },
@@ -449,8 +161,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         
         tools.push(new Ext.Button({
             tooltip: this.loadMapText,
-            needsAuthorization: false,
-            //disabled: !this.isAuthorized(),
             handler: function() {    
                 var composer = this; 
                 var win;  
@@ -615,5 +325,4 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             items: [wizard]
        }).show();
     }
-
 });
