@@ -25,12 +25,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     previewText: "Preview",
     backText: "Back",
     nextText: "Next",
-    loginText: "Login",
-    logoutTitle: "Logout",
-    logoutText: "Are you sure to logout?",
-    loginErrorText: "Invalid username or password.",
-    userFieldText: "User",
-    passwordFieldText: "Password", 
     fullScreenText: "Full Screen",
     // End i18n.
 

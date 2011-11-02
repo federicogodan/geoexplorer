@@ -5,9 +5,9 @@
     <script type="text/javascript" src="script/OpenLayers.js"></script>
 
     <!-- GeoExt resources -->
-    <link rel="stylesheet" type="text/css" href="externals/geoext/resources/css/popup.css">
-    <link rel="stylesheet" type="text/css" href="externals/geoext/resources/css/layerlegend.css">
-    <link rel="stylesheet" type="text/css" href="externals/geoext/resources/css/gxtheme-gray.css">
+    <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/popup.css">
+    <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/layerlegend.css">
+    <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/gxtheme-gray.css">
     <script type="text/javascript" src="script/GeoExt.js"></script> 
 
     <!-- gxp resources -->
@@ -44,12 +44,8 @@
           }
         }
 		    
-		    var proxy = document.domain.indexOf('localhost') != -1 ?  "/proxy/?url=" : "";   		
+		    var proxy = document.domain.indexOf('localhost') != -1 ?  "/http_proxy/proxy/?url=" : "";   		
         var geoStoreBaseURL = "http://192.168.1.130:9191/geostore/rest/";
-        
-        Ext.Ajax.defaultHeaders = {
-          'Accept': "application/json"
-        };
         
         Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
@@ -60,7 +56,7 @@
                     }
             })();
 
-            OpenLayers.ImgPath = "externals/openlayers/img/";
+            OpenLayers.ImgPath = "externals/openlayers/theme/default/img/";
             Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
