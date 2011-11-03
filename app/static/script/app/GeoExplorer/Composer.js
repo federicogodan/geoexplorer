@@ -28,8 +28,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     fullScreenText: "Full Screen",
     // End i18n.
 
-    constructor: function(config) {
-
+    constructor: function(config) {        
         config.tools = [
             {
                 ptype: "gxp_layertree",
@@ -111,6 +110,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				        needsAuthorization: true
             }
         ];
+        
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },

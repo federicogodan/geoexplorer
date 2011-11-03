@@ -29,7 +29,7 @@
         
         var app;
         
-        var modified = false; var mapId;
+        var modified = false; var mapIdentifier; var authorization;
 
         //
         // Parsing the request to get the parameters
@@ -39,8 +39,24 @@
         for (var j=0; j < params.length; j++) {
           var param = params[j].split("=");
           switch ( param[0] ) {
-            case "mapId"	: mapId = param[1]; break;
-            default : mapId = -1;
+            case "mapId"	: 
+                            try{
+                                mapIdentifier = parseInt(param[1]);
+                            }catch(e){
+                                mapIdentifier = -1;
+                            } 
+                            break;
+            case "auth" : 
+                            if(param[1] == 'true') 
+                                authorization = true; 
+                            else if(param[1] == 'false') 
+                                authorization = false; 
+                            else
+                                authorization = false; 
+                            break;
+            default : 
+                            mapIdentifier = -1;
+                            authorization = false;
           }
         }
 		    
@@ -132,19 +148,11 @@
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 about: {
-                    title: "Fouta Djallon Higlands programme",
-                    'abstract': "Fouta Djallon Higlands comment",
-                    contact: "<a href='http://www.fouta-djallon-programme.org/'>http://www.fouta-djallon-programme.org/</a>."
+                    title: "Custom Map",
+                    'abstract': "Custom Map",
+                    contact: "<a href='#'>#</a>."
                 },
                 sources: {
-                    fdh: {
-                        url: "http://demo1.geo-solutions.it/geoserver/ows",
-                        title: "FDH GeoServer",
-                        layerBaseParams: { 
-                            TILED : true,
-                            TILESORIGIN: '-20037508.34,-20037508.34'
-                        }
-                    },
                     mapquest: {
                         ptype: "gxp_mapquestsource"
                     },
@@ -198,26 +206,12 @@
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
-                    },{
-                        source: "fdh",
-                        name: "geonetwork:g2006_continents",
-                        visibility : false                        
-                    },{
-                        source: "fdh",
-                        name: "geonetwork:g2006_0gen",
-                        visibility : false
-                    },{
-                        source: "fdh",
-                        name: "geonetwork:Boundaries"
-                    },{
-                        source: "fdh",
-                        name: "geonetwork:Pilotsitepolygons",
-						            uuid : "46c2a724-e416-4054-9a7a-2af4baf3c948"
                     }],
                     center: [-1224514, 1291331],
                     zoom: 6
                 }
-            });           
+            }, mapIdentifier, authorization);       
+
         });
         
     </script>

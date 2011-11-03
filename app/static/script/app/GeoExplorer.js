@@ -75,8 +75,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     mapPanel: null,
     
     toggleGroup: "toolGroup",
+    
+    mapId: -1,
+    
+    auth: false,
 
-    constructor: function(config) {
+    constructor: function(config, mapId, auth) {
+    
+        if(mapId)
+            this.mapId = mapId;
+        if(auth)
+            this.auth = auth;
+            
         this.mapItems = [
             {
                 xtype: "gxp_scaleoverlay"
@@ -179,7 +189,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
           this.applyConfig(config);
         } else {
             Ext.Ajax.request({
-               url: proxy + geoStoreBaseURL + "data/" + mapId,
+               url: proxy + geoStoreBaseURL + "data/" + this.mapId,
                method: 'GET',
                scope: this,
                headers:{
@@ -304,12 +314,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             id: 'paneltbar',
             items: this.createTools()
         });
+        
         this.on("ready", function() {
             // enable only those items that were not specifically disabled
             var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;
             });
+            
             this.toolbar.enable();
+            
             disabled.each(function(item) {
                 item.disable();
             });
