@@ -203,11 +203,17 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     } catch (err) {
                     }
                     
-                    if(addConfig){		
-                        this.applyConfig(Ext.applyIf(addConfig, config));
+                    if(addConfig){
+                        if(addConfig.data){	
+                            addConfig = Ext.util.JSON.decode(addConfig.data);
+                            this.applyConfig(Ext.applyIf(addConfig, config));
+                        }else{		
+                            this.applyConfig(Ext.applyIf(addConfig, config));
+                        }
                     } else {
                         this.applyConfig(config);
                     }
+
                },
                failure: function(response, opts){
                   this.applyConfig(config);
