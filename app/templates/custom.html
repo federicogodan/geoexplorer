@@ -65,11 +65,15 @@
           }
         }
 		    
-		    //var proxy = document.domain.indexOf('localhost') != -1 ?  "/http_proxy/proxy/?url=" : "";  
-		    var proxy = document.domain.indexOf('localhost') != -1 ?  "/proxy/?url=" : ""; 		
-        var geoStoreBaseURL = "http://192.168.1.130:9191/geostore/rest/";
+		    //var proxy = document.domain.indexOf('localhost') != -1 ?  /*"/http_proxy/proxy/?url="*/ "" : "";  
+		    //var proxy = document.domain.indexOf('localhost') != -1 ?  "/proxy/?url=" : ""; 		
+        //var geoStoreBaseURL = "http://localhost:8080/geostore/rest/";
         
-        Ext.onReady(function(){
+        var proxy; 
+        var geoStoreBaseURL;
+        
+        var onReady = function(){
+
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
                         return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
@@ -149,7 +153,8 @@
 			      
             app = new GeoExplorer.Composer({
                 modified: false,
-                proxy: "proxy/?url=",
+                //proxy: "proxy/?url=",
+                proxy: proxy,
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
@@ -228,6 +233,43 @@
                     }
                 }    
             });
-			});
+			};			
+			
+      Ext.Ajax.request({
+          url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
+          method: 'GET',
+          success: function(response, opts){      
+              var serverConfig;    
+              
+              try{
+                  serverConfig = Ext.util.JSON.decode(response.responseText);
+              }catch(e){
+                  Ext.Msg.show({
+                        title: "Startup",
+                        msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.ERROR
+                  });
+              }
+              
+              if(serverConfig){
+                  proxy = serverConfig.proxy; 
+                  geoStoreBaseURL = serverConfig.geoStoreBase;
+                          
+                  //      
+                  // Run the application when browser is ready
+                  //
+                  Ext.onReady(onReady);
+              }
+          },
+          failure:  function(response, opts){
+              Ext.Msg.show({
+                    title: "Startup",
+                    msg: "An error occurred while getting the GeoStore URL config: " + response.status,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+              });
+          }
+      });
         
     </script>
