@@ -79,13 +79,17 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     mapId: -1,
     
     auth: false,
+    
+    fScreen: false,
 
-    constructor: function(config, mapId, auth) {
+    constructor: function(config, mapId, auth, fScreen) {
     
         if(mapId)
             this.mapId = mapId;
         if(auth)
             this.auth = auth;
+        if(fScreen)
+            this.fScreen = fScreen;
             
         this.mapItems = [
             {

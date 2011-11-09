@@ -29,7 +29,7 @@
         
         var app;
         
-        var modified = false; var mapIdentifier; var authorization;
+        var modified = false; var mapIdentifier; var authorization; var fullScreen;
 
         //
         // Parsing the request to get the parameters
@@ -49,18 +49,24 @@
             case "auth" : 
                             if(param[1] == 'true') 
                                 authorization = true; 
-                            else if(param[1] == 'false') 
+                            else 
                                 authorization = false; 
-                            else
-                                authorization = false; 
+                            break;
+            case "fullScreen" : 
+                            if(param[1] == 'true') 
+                                fullScreen = true; 
+                            else 
+                                fullScreen = false; 
                             break;
             default : 
                             mapIdentifier = -1;
                             authorization = false;
+                            fullScreen = false; 
           }
         }
 		    
-		    var proxy = document.domain.indexOf('localhost') != -1 ?  "/http_proxy/proxy/?url=" : "";   		
+		    //var proxy = document.domain.indexOf('localhost') != -1 ?  "/http_proxy/proxy/?url=" : "";  
+		    var proxy = document.domain.indexOf('localhost') != -1 ?  "/proxy/?url=" : ""; 		
         var geoStoreBaseURL = "http://192.168.1.130:9191/geostore/rest/";
         
         Ext.onReady(function(){
@@ -210,8 +216,18 @@
                     center: [-1224514, 1291331],
                     zoom: 6
                 }
-            }, mapIdentifier, authorization);       
-
-        });
+            }, mapIdentifier, authorization, fullScreen);   
+            
+            app.on({
+                'portalready' : function(){
+                    if(fullScreen){
+                        var ovestPanel = Ext.getCmp('tree').findParentByType('panel');
+                        ovestPanel.setDisabled();
+                        ovestPanel.hide();
+                        ovestPanel.collapse();
+                    }
+                }    
+            });
+			});
         
     </script>

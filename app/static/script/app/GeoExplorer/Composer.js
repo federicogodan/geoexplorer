@@ -128,21 +128,24 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
-
-        var fullScreen = new Ext.Button({
-            text: this.fullScreenText,
-            iconCls: "icon-fullscreen",
-            enableToggle: true,
-            handler: function(button, evt){
-                if(button.pressed){
-                    Ext.getCmp('tree').findParentByType('panel').collapse();
-                } else {
-                    Ext.getCmp('tree').findParentByType('panel').expand();
+         
+        if(!this.fScreen){
+            var fullScreen = new Ext.Button({
+                text: this.fullScreenText,
+                id: "full-screen-button",
+                iconCls: "icon-fullscreen",
+                enableToggle: true,
+                handler: function(button, evt){
+                    if(button.pressed){
+                        Ext.getCmp('tree').findParentByType('panel').collapse();
+                    } else {
+                        Ext.getCmp('tree').findParentByType('panel').expand();
+                    }
                 }
-            }
-        });            
-                        
-        tools.unshift(fullScreen);    
+            });            
+                            
+            tools.unshift(fullScreen);
+        }
         
         tools.push(new Ext.Button({
             tooltip: this.saveMapText,
