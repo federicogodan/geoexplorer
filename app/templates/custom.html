@@ -236,7 +236,8 @@
 			};			
 			
       Ext.Ajax.request({
-          url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
+          //url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
+          url: "/geostore/urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
