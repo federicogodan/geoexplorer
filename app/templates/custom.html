@@ -64,13 +64,10 @@
                             fullScreen = false; 
           }
         }
-		    
-		    //var proxy = document.domain.indexOf('localhost') != -1 ?  /*"/http_proxy/proxy/?url="*/ "" : "";  
-		    //var proxy = document.domain.indexOf('localhost') != -1 ?  "/proxy/?url=" : ""; 		
-        //var geoStoreBaseURL = "http://localhost:8080/geostore/rest/";
-        
+		            
         var proxy; 
-        var geoStoreBaseURL;
+        var geoStoreBaseURL;        
+        var customSources;
         
         var onReady = function(){
 
@@ -150,20 +147,43 @@
                     ]
                 }]
             });
-			      
-            app = new GeoExplorer.Composer({
-                modified: false,
-                //proxy: "proxy/?url=",
-                proxy: proxy,
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
-                defaultSourceType: "gxp_wmssource",
-                renderToTab : 'appTabs',
-                about: {
-                    title: "Custom Map",
-                    'abstract': "Custom Map",
-                    contact: "<a href='#'>#</a>."
-                },
-                sources: {
+            
+            //
+            // Parsing WMS servers Sources for getCapabilities operation
+            //
+            var sources = "{" + 
+                "\"mapquest\": {" +
+                    "\"ptype\": \"gxp_mapquestsource\"" +
+                "}," + 
+                "\"osm\": {" + 
+                    "\"ptype\": \"gxp_osmsource\"" +
+                "}," +
+                "\"google\": {" +
+                    "\"ptype\": \"gxp_googlesource\"" + 
+                "}," +
+                "\"bing\": {" +
+                    "\"ptype\": \"gxp_bingsource\"" + 
+                "}," + 
+                "\"ol\": {" + 
+                    "\"ptype\": \"gxp_olsource\"" + 
+                "}";
+            
+            if(customSources.length > 0)
+                sources += ",";
+                
+            for(var s=0; s<customSources.length; s++){   
+                 sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
+                 
+                 if(s + 1 < customSources.length)
+                    sources += ",";
+            }
+             
+            sources +="}";
+
+            try{
+                sources = Ext.util.JSON.decode(sources);
+            }catch(e){
+                sources = {
                     mapquest: {
                         ptype: "gxp_mapquestsource"
                     },
@@ -179,7 +199,29 @@
                     ol: {
                         ptype: "gxp_olsource"
                     }
+                };
+          
+                Ext.Msg.show({
+                      title: "Startup",
+                      msg: "An error occurred while parsing the CUSTOM GeoServer sources",
+                      buttons: Ext.Msg.OK,
+                      icon: Ext.MessageBox.ERROR
+                });
+            }
+			      			      
+            app = new GeoExplorer.Composer({
+                modified: false,
+                //proxy: "proxy/?url=",
+                proxy: proxy,
+                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
+                defaultSourceType: "gxp_wmssource",
+                renderToTab : 'appTabs',
+                about: {
+                    title: "Custom Map",
+                    'abstract': "Custom Map",
+                    contact: "<a href='#'>#</a>."
                 },
+                sources: sources,
                 map: {
 					          projection: "EPSG:900913",
                     units: "m",
@@ -255,8 +297,9 @@
               
               if(serverConfig){
                   proxy = serverConfig.proxy; 
-                  geoStoreBaseURL = serverConfig.geoStoreBase;
-                          
+                  geoStoreBaseURL = serverConfig.geoStoreBase;                  
+                  customSources = serverConfig.gsSources;
+
                   //      
                   // Run the application when browser is ready
                   //
