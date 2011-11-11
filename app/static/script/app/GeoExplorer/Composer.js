@@ -147,7 +147,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.unshift(fullScreen);
         }
         
-        tools.push(new Ext.Button({
+        /*tools.push(new Ext.Button({
             tooltip: this.saveMapText,
             handler: function() {
                 this.save(this.showUrl);
@@ -235,7 +235,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },
             scope: this,
             iconCls: "icon-load"
-        }));
+        }));*/
         
         return tools;
     },
