@@ -34,7 +34,8 @@ GeoExt.Lang.add("en", {
         loginText: "Login",
         loginErrorText: "Invalid username or password.",
         userFieldText: "User",
-        passwordFieldText: "Password"
+        passwordFieldText: "Password",
+        fullScreenText: "Full Screen"
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -208,13 +209,13 @@ GeoExt.Lang.add("en", {
 	    removeGroupMenuText: "Remove Group",
 	    removeGroupActionTip: "Remove a group from the layer tree",
 	    removeGroupActionTip: "Removes the selected group and own layers from the map",
-	    removeGroupConfirmationText: "Are you sure you want to remove the selected group ? The all layers inside this group will be removed from the map.",
+	    removeGroupConfirmationText: "Are you sure you want to remove the selected group ? The all layers inside this group will be removed from the map."
     },
     
     "gxp.plugins.SaveDefaultContext.prototype": { 
 	    saveDefaultContextMenuText: "Save default context",
 	    saveDefaultContextActionTip: "Save current context as default one",
 	    contextSaveSuccessString: "Context saved succesfully",
-	    contextSaveFailString: "Context not saved succesfully",
+	    contextSaveFailString: "Context not saved succesfully"
     }
 });

@@ -34,7 +34,8 @@ GeoExt.Lang.add("fr", {
         loginText: "Se connecter",
         loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
         userFieldText: "Utilisateur",
-        passwordFieldText: "Mot de passe"
+        passwordFieldText: "Mot de passe",
+        fullScreenText: "Plein écran"
     },  
 
     "gxp.menu.LayerMenu.prototype": {
@@ -207,13 +208,13 @@ GeoExt.Lang.add("fr", {
 	    removeGroupMenuText: "Supprimer le groupe",
 	    removeGroupActionTip: "Supprimer le groupe de l'arbre des couvertures",
 	    removeGroupActionTip: "Supprimer le groupe sélectionné et ses couvertures de la carte",
-	    removeGroupConfirmationText: "Vous êtes certain que vous souhaitez supprimer le groupe ? Tous les couvertures au sein du groupe seront supprimés de la carte.",
+	    removeGroupConfirmationText: "Vous êtes certain que vous souhaitez supprimer le groupe ? Tous les couvertures au sein du groupe seront supprimés de la carte."
     },
     
     "gxp.plugins.SaveDefaultContext.prototype": { 
 	    saveDefaultContextMenuText: "Enregistrez le contexte par défaut.",
 	    saveDefaultContextActionTip: "Enregistrez le contexte actuel.",
 	    contextSaveSuccessString: "Sauver le contexte est géré.",
-	    contextSaveFailString: "Sauver le contexte a échoué.",
+	    contextSaveFailString: "Sauver le contexte a échoué."
     }
 });

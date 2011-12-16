@@ -182,8 +182,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			this.applyConfig(config);
 		} else {
 			OpenLayers.Request.GET({
-				url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-				//url: proxy + 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
+				//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
+				url: proxy + 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
 				success: function(request) {
 					
 					var addConfig;
@@ -229,7 +229,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		};
 
 		OpenLayers.Request.GET({
-			url: "json2.txt",
+			url: "json.txt",
 			params: '',
 			success: success,
 			failure: failure,

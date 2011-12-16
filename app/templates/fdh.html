@@ -200,15 +200,26 @@
                 editable: false,
                 width: 100,
                 listeners: {
+                    beforeselect: function(cb, record, index){
+                       if(gnLangStr == record.get('code'))
+                          return false; 
+                    },                    
                     select: function(cb, record, index) {         
                         
-                       var switchLang = function(buttonId, text,opt){
+                       var switchLang = function(buttonId, text, opt){
                             if(buttonId === 'ok'){
                                 var code = record.get('code');
                                 if(code){
                                     location.replace(
-                                        location.pathname+'?locale='+code);
+                                        location.pathname + '?locale=' + code);
                                 }  
+                            }else{
+                                var code = record.get('code');
+                                if(code == 'fr'){
+                                    cb.setValue('English');
+                                }else{
+                                    cb.setValue('Français');
+                                }
                             }
                         };
                         
@@ -226,7 +237,7 @@
                            buttons: Ext.Msg.OKCANCEL,
                            fn: switchLang,
                            icon: Ext.MessageBox.QUESTION
-                        });        
+                        });  
                     }
                 }
             });
