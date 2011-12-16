@@ -192,5 +192,28 @@ GeoExt.Lang.add("fr", {
 
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Niveau de zoom"
+    },
+    "gxp.plugins.AddGroup.prototype": { 
+	    addGroupMenuText: "Ajouter un Groupe",
+	    addGroupActionTip: "Ajoutez un nouveau groupe à l'arbre des couvertures.",   
+	    addGroupDialogTitle: "Nouveau Groupe", 
+	    addGroupFieldSetText: "Groupe Nom",
+	    addGroupFieldLabel: "Nouveau Groupe",
+	    addGroupButtonText: "Ajouter un Groupe",
+	    addGroupMsg: "Entrez le nom du groupe"	
+    },
+    
+    "gxp.plugins.RemoveGroup.prototype": { 
+	    removeGroupMenuText: "Supprimer le groupe",
+	    removeGroupActionTip: "Supprimer le groupe de l'arbre des couvertures",
+	    removeGroupActionTip: "Supprimer le groupe sélectionné et ses couvertures de la carte",
+	    removeGroupConfirmationText: "Vous êtes certain que vous souhaitez supprimer le groupe ? Tous les couvertures au sein du groupe seront supprimés de la carte.",
+    },
+    
+    "gxp.plugins.SaveDefaultContext.prototype": { 
+	    saveDefaultContextMenuText: "Enregistrez le contexte par défaut.",
+	    saveDefaultContextActionTip: "Enregistrez le contexte actuel.",
+	    contextSaveSuccessString: "Sauver le contexte est géré.",
+	    contextSaveFailString: "Sauver le contexte a échoué.",
     }
 });

@@ -125,7 +125,7 @@ GeoExt.Lang.add("en", {
         previewText: "Print Preview",
         notAllNotPrintableText: "Not All Layers Can Be Printed",
         nonePrintableText: "None of your current map layers can be printed",
-		notPrintableLayersText: "Following layers can not be printed:"
+        notPrintableLayersText: "Following layers can not be printed:"
     },
 
     "gxp.plugins.MapQuestSource.prototype": {
@@ -192,5 +192,29 @@ GeoExt.Lang.add("en", {
 
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Zoom level"
+    },
+    
+    "gxp.plugins.AddGroup.prototype": { 
+	    addGroupMenuText: "Add Group",
+	    addGroupActionTip: "Add a new group in the layer tree",   
+	    addGroupDialogTitle: "New Group", 
+	    addGroupFieldSetText: "Group Name",
+	    addGroupFieldLabel: "New Group",
+	    addGroupButtonText: "Add Group",
+	    addGroupMsg: "Please enter a group name"	
+    },
+    
+    "gxp.plugins.RemoveGroup.prototype": { 
+	    removeGroupMenuText: "Remove Group",
+	    removeGroupActionTip: "Remove a group from the layer tree",
+	    removeGroupActionTip: "Removes the selected group and own layers from the map",
+	    removeGroupConfirmationText: "Are you sure you want to remove the selected group ? The all layers inside this group will be removed from the map.",
+    },
+    
+    "gxp.plugins.SaveDefaultContext.prototype": { 
+	    saveDefaultContextMenuText: "Save default context",
+	    saveDefaultContextActionTip: "Save current context as default one",
+	    contextSaveSuccessString: "Context saved succesfully",
+	    contextSaveFailString: "Context not saved succesfully",
     }
 });

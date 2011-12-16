@@ -74,20 +74,20 @@
             });
             
 			// optionally set locale based on query string parameter
-            var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'en';
+            var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'fr';
 			
-			var availLanguages = ['en','fr'];
+			var availLanguages = ['fr', 'en'];
             var gnLangStr = curLang.substr(0,2);
 			
 			if(availLanguages.indexOf(gnLangStr) < 0){
-				gnLangStr = 'en';
+				gnLangStr = 'fr';
 			}
 			
 			var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home' ;
 			
 			var portalPanel = new Ext.Panel({
                 id: 'portalPanel',
-                title: GeoExplorer.prototype.portalTabTitle || 'Portal',
+                title: gnLangStr === 'en' ? GeoExplorer.prototype.portalTabTitle || 'Portal' : GeoExplorer.prototype.portalTabTitle || 'Portail',
                 layout:'fit', 
                 items: [ 
                     new Ext.ux.IFrameComponent({ 
@@ -100,7 +100,7 @@
 			
             var geonetworkPanel = new Ext.Panel({
                 id: 'geonetworkPanel',
-                title: GeoExplorer.prototype.searchTabTitle || 'Search',
+                title: gnLangStr === 'en' ? GeoExplorer.prototype.searchTabTitle || 'Search' : GeoExplorer.prototype.searchTabTitle || 'Chercher',
                 layout:'fit', 
                 items: [ 
                     new Ext.ux.IFrameComponent({ 
@@ -162,7 +162,7 @@
             var code = url.locale;   
 
             if(!code){
-                code = "en";
+                code = "fr";
             }
             
             var initialLanguageString;
@@ -182,7 +182,7 @@
             }
 			
             if(!initialLanguageString){
-                initialLanguageString = "English";
+                initialLanguageString = "Français";
             }
             
             var languageSelector = new Ext.form.ComboBox({
@@ -200,12 +200,33 @@
                 editable: false,
                 width: 100,
                 listeners: {
-                    select: function(cb, record, index) {
-                        var code = record.get('code');
-                        if(code){
-                            location.replace(
-                                location.pathname+'?locale='+code);
-                        }                    
+                    select: function(cb, record, index) {         
+                        
+                       var switchLang = function(buttonId, text,opt){
+                            if(buttonId === 'ok'){
+                                var code = record.get('code');
+                                if(code){
+                                    location.replace(
+                                        location.pathname+'?locale='+code);
+                                }  
+                            }
+                        };
+                        
+                        var switchLangActionTip = "Switch Language";
+                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost.";
+                        
+                        if(gnLangStr === 'fr'){
+                            switchLangActionTip = "Changement de langue";
+                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
+                        }
+                        
+                        Ext.Msg.show({
+                           title: switchLangActionTip,
+                           msg: switchLangConfirmationText,
+                           buttons: Ext.Msg.OKCANCEL,
+                           fn: switchLang,
+                           icon: Ext.MessageBox.QUESTION
+                        });        
                     }
                 }
             });
@@ -315,7 +336,7 @@
                 //xmlJsonTranslateService: "http://localhost:8081/web-gis/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                mapTitle : GeoExplorer.prototype.viewTabTitle || 'View',
+                mapTitle : gnLangStr === 'en' ? GeoExplorer.prototype.viewTabTitle || 'View' : GeoExplorer.prototype.viewTabTitle || 'Veu',
                 about: {
                     title: "Fouta Djallon Higlands programme",
                     'abstract': "Fouta Djallon Higlands comment",

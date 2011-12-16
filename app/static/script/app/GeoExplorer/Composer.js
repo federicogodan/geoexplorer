@@ -184,7 +184,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         var panel = new Ext.FormPanel({
             url: "http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
             frame: true,
-            labelWidth: 60,
+            labelWidth: 80,
             defaultType: "textfield",
             errorReader: {
                 read: function(response) {
@@ -287,7 +287,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         var win = new Ext.Window({
             title: this.loginText,
             layout: "fit",
-            width: 235,
+            width: 275,
             height: 130,
             plain: true,
             border: false,
@@ -483,8 +483,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         handler: function(){
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
-                                  url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  //url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
                                   waitMsg: 'Uploading your context file...',
                                   success: function(fp, o){
                                       win.hide();
