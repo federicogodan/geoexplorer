@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2009-2010 The Open Planning Project
  */
-
+/*
+	NOTE: configuration customization could override
+	these strings
+*/
 GeoExt.Lang.add("en", {
     "GeoExplorer.prototype": {
         zoomSliderText: "<div>Zoom Level: {zoom}</div><div>Scale: 1:{scale}</div>",
@@ -21,7 +24,8 @@ GeoExt.Lang.add("en", {
         contactText: "Contact",
         aboutThisMapText: "About this Map",
         searchTabTitle : "Search",
-        viewTabTitle : "View"
+        viewTabTitle : "View",
+        portalTabTitle : "Portal"
     },
     
     "GeoExplorer.Composer.prototype": {
@@ -54,6 +58,8 @@ GeoExt.Lang.add("en", {
         panelTitleText: "Title",
         layerSelectionText: "View available data from:",
         doneText: "Done",
+        removeFilterText: "Clear filter", 
+        filterEmptyText: "Filter",
         uploadText: "Upload Data"
     },
     
@@ -112,6 +118,7 @@ GeoExt.Lang.add("en", {
         nextMenuText: "Zoom To Next Extent",
         previousTooltip: "Zoom To Previous Extent",
         nextTooltip: "Zoom To Next Extent"
+		
     },
 
     "gxp.plugins.OSMSource.prototype": {
@@ -217,5 +224,27 @@ GeoExt.Lang.add("en", {
 	    saveDefaultContextActionTip: "Save current context as default one",
 	    contextSaveSuccessString: "Context saved succesfully",
 	    contextSaveFailString: "Context not saved succesfully"
+    },
+    "gxp.plugins.FDHGeoCoder.prototype": {
+        initialText: "Select an area",
+        menuText: "FDH Geo Coding",
+        tooltip: "FDH Geo Coding"
+    },
+    "gxp.plugins.ZoomBox.prototype":{
+        zoomInMenuText: "Zoom Box In",
+        zoomOutMenuText: "Zoom Box Out",
+        zoomInTooltip: "Zoom Box In",
+        zoomOutTooltip: "Zoom Box Out"
+	},
+     "GeoExt.ux.PrintPreview.prototype":{
+    paperSizeText: "Paper size:",
+    resolutionText: "Resolution:",
+    printText: "Print",
+    emptyTitleText: "Enter map title here.",
+    includeLegendText: "Include legend?",
+	legendOnSeparatePageText: "Legend on separate page?",
+	compactLegendText: "Compact legend?",	
+    emptyCommentText: "Enter comments here.",
+    creatingPdfText: "Creating PDF..."
     }
 });
