@@ -246,5 +246,18 @@ GeoExt.Lang.add("en", {
 	compactLegendText: "Compact legend?",	
     emptyCommentText: "Enter comments here.",
     creatingPdfText: "Creating PDF..."
+    },
+    "gxp.plugins.GeonetworkSearch.prototype":{
+        geonetworkSearchText: "View metadata",
+        geonetworkSearchActionTip: "View metadata"
+    },
+    "gxp.plugins.GroupProperties.prototype":{
+        groupPropertiesMenuText: "Modify Group Name",
+        groupPropertiesActionTip: "Modify group properties",
+        groupPropertiesDialogTitle: "Group Properties - ",
+        groupPropertiesFieldSetText: "Group Name",
+        groupPropertiesFieldLabel: "New Group Name",
+        groupPropertiesButtonText: "Done",
+        groupPropertiesMsg: "Please enter a group name"
     }
 });

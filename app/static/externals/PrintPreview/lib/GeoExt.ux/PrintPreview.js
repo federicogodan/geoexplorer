@@ -338,8 +338,9 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
 		if(this.legend){
 			panelElements.push({
 				xtype: "container",
-				layout: "hbox",
+				layout: "form",
 				cls: "x-form-item",
+                		style:"text-align:left",
 				items: [
 					legendCheckbox, 
 					legendOnSeparatePageCheckbox,
