@@ -111,3 +111,7 @@ div#homelogos ul li a:hover {
 .logo_gwpao4 {
     background: url(img/logos/logo_gwpao4.jpg) no-repeat center 50%;
 }
+
+.csw-viewer{
+    background-image: url(img/geosilk/server_table.png);
+}

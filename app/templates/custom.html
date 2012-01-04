@@ -25,6 +25,15 @@
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
     <script type="text/javascript" src="script/ux.js"></script>
     
+    <!-- PrintPreview resources -->
+    <link rel="stylesheet" type="text/css" href="externals/PrintPreview/resources/css/printpreview.css">
+    <script type="text/javascript" src="script/PrintPreview.js"></script>
+    
+    <!-- csw resources -->
+    <link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css">
+    <script type="text/javascript" src="auth/base64.js"></script>
+    <script type="text/javascript" src="script/CSWViewer.js"></script>
+    
     <script>
         
         var app;
@@ -95,13 +104,13 @@
                  }
             });
             
-            var appTabs = new Ext.Panel({
+            var appTabs = new Ext.TabPanel({
                 region: 'center',
-                layout:'fit', 
                 border : false,
-                id : 'appTabs'
+                id : 'appTabs',
+                enableTabScroll: true
             });         
-            
+
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
                 iconCls: "icon-geoexplorer",
@@ -119,6 +128,7 @@
                         height: 300,
                         items: [appInfo]
                     });
+                    
                     win.show();
                 }
             });
@@ -208,7 +218,12 @@
                       icon: Ext.MessageBox.ERROR
                 });
             }
-			      			      
+			      		     
+			      /*var auth = 'Basic ' + Base64.encode('admin:admin');
+			      Ext.Ajax.defaultHeaders = {
+                'Authorization' : auth
+            };*/
+             
             app = new GeoExplorer.Composer({
                 modified: false,
                 //proxy: "proxy/?url=",
@@ -216,12 +231,38 @@
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
+                printService:"http://demo1.geo-solutions.it/geoserver/pdf/","proxy":"proxy/?url=",
+                mapTitle: "View",
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
                     contact: "<a href='#'>#</a>."
                 },
                 sources: sources,
+                cswconfig: {
+                    catalogs: [
+                        {"name": "Demo1GeoSolutions" , "url": "http://demo1.geo-solutions.it/geonetwork/srv/en/csw", "description": "Iternal GeoNetwork demo"},
+                        {"name": "Treviso", "url": "http://ows.provinciatreviso.it/geonetwork/srv/it/csw", "description": "Treviso Geonetwork"},
+                        {"name": "kscNet", "url": "http://geoportal.kscnet.ru/geonetwork/srv/ru/csw", "description": "kscNet"},
+                        {"name": "CSI-CGIAR", "url": "http://geonetwork.csi.cgiar.org/geonetwork/srv/en/csw", "description" : "CSI-CGIAR"},
+                        {"name": "EauFrance", "url": "http://sandre.eaufrance.fr/geonetwork/srv/fr/csw", "description" : "EauFrance"},
+                        {"name": "SOPAC", "url": "http://geonetwork.sopac.org/geonetwork/srv/en/csw", "description" : "SOPAC"},
+                        {"name": "SADC", "url": "http://www.sadc.int/geonetwork/srv/en/csw", "description" : "SADC"},
+                        {"name": "MAPAS", "url": "http://mapas.mma.gov.br/geonetwork/srv/en/csw", "description" : "MAPAS"}
+                    ],
+                    dcProperty: "title",
+                    initialBBox: {
+                        minx:-13,
+                        miny:10,
+                        maxx:-10,
+                        maxy:13
+                    }, 
+                    cswVersion: "2.0.2",
+                    filterVersion: "1.1.0",
+                    start: 1,
+                    limit: 10,
+                    timeout: 60000
+                },
                 map: {
 					          projection: "EPSG:900913",
                     units: "m",
@@ -278,8 +319,8 @@
 			};			
 			
       Ext.Ajax.request({
-          //url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
-          url: "/geostore/urlConfig.js",
+          url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
+          //url: "/geostore/urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    

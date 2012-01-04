@@ -77,7 +77,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
-            }, {
+            },{
+                ptype:"gxp_geonetworksearch",
+                actionTarget:[
+                   "layertree.contextMenu"
+                ],
+            },{
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 15}
             }, {
@@ -97,20 +102,19 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 22}
             }, {
                 ptype: "gxp_zoomtoextent",
-                extent: function(){
-                    var bbox = new OpenLayers.Bounds.fromString('-15,8,-7,15');
-                    return bbox.transform(
-                        new OpenLayers.Projection("EPSG:4326"),
-                        new OpenLayers.Projection("EPSG:102113"));
-                },
                 actionTarget: {target: "paneltbar", index: 26}
             },{
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
+            },{
+                ptype: "gxp_print",
+                customParams: {outputFilename: 'mapstore-print'},
+                printService: config.printService,
+                legendPanelId: 'legendPanel',
+                actionTarget: {target: "paneltbar", index: 4}
             }
         ];
-        
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
@@ -145,6 +149,248 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             });            
                             
             tools.unshift(fullScreen);
+        }
+        
+        if(this.cswconfig){
+            var extent = this.mapPanel.map.getExtent();
+            
+            if(extent)
+                this.cswconfig.initialBBox = {
+                    minx: extent.left,
+                    miny: extent.bottom,
+                    maxx: extent.right,
+                    maxy: extent.top  
+                };
+            
+            tools.push(new Ext.Button({
+                tooltip: "CSW Viewer",
+                handler: function() {
+                      var viewer = this;
+                      
+                      // Loads bundle for i18n messages
+                      i18n = new Ext.i18n.Bundle({
+                        bundle : "CSWViewer",
+                        path : "externals/csw/CSWViewer/i18n",
+                        lang : "it-IT"
+                      });
+                      
+                      i18n.onReady( function() {
+                          //
+                          // Declares a panel for querying CSW catalogs
+                          //
+                          var cswPanel = new CSWPanel({
+                              config: viewer.cswconfig,
+                              listeners: {
+                                  zoomToExtent: function(layerInfo){
+                                      var map = viewer.mapPanel.map;
+                                      var bbox = layerInfo.bbox;
+                                      
+                                      //
+                                      // TODO: parse the urn crs code (like "urn:ogc:def:crs:::WGS 1984") inside the CSW BBOX tag. 
+                                      //
+                                      bbox.transform(
+                                          new OpenLayers.Projection("EPSG:4326"),
+                                          new OpenLayers.Projection(map.projection)
+                                      );
+                                      
+                                      map.zoomToExtent(bbox);
+                                  },
+                                  viewMap: function(el){       
+                                      var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                                      mask.show();
+                                                                  
+                                      var mapInfo = el.layers;  
+                                      var uuid = el.uuid;
+                                      var gnURL = el.gnURL;                          
+                                      var title = el.title;
+                                      
+                                      for(var i=0; i<mapInfo.length; i++){
+                                          var wms = mapInfo[i].wms;    
+                                          
+                                          var source;
+                                          for (var id in app.layerSources) {
+                                              var src = app.layerSources[id];    
+                                              var url  = src.initialConfig.url; 
+                                              //
+                                              // Checking if source url aldready exists
+                                              //
+                                              if(url && url.indexOf(wms) != -1)
+                                                  source = src;
+                                          }                                  
+                                          
+                                          var layer = mapInfo[i].layer;
+                                          
+                                          //
+                                          // Adding a new record to existing store
+                                          //
+                                          var addLayer = function(s){
+                                              var record = s.createLayerRecord({
+                                                  name: layer,
+                                                  title: title,
+                                                  source : s.id, // TODO: to check this
+                                                  gnURL: gnURL,
+                                                  uuid: uuid
+                                              });    
+                                                          
+                                              var layerStore = app.mapPanel.layers;  
+                                                            
+                                              if (record) {
+                                                  layerStore.add([record]);
+                                                  modified = true;
+                                              }  
+                                          }
+                                          
+                                          //
+                                          // Adding the sources only if exists
+                                          //
+                                          if(!source){
+                                              var sourceOpt = {
+                                                  config: {
+                                                      url: wms
+                                                  }
+                                              };
+                                              
+                                              source = viewer.addLayerSource(sourceOpt);
+                                              
+                                              //
+                                              // Waiting GetCapabilities response from the server.
+                                              //
+                                              source.on('ready', function(){
+                                                  addLayer(source);  
+                                                  mask.hide();
+                                              });
+                                              
+                                              //
+                                              // To manage failure in GetCapabilities request (invalid request url in 
+                                              // GeoNetwork configuration or server error).
+                                              //
+                                              source.on('failure', function(src, msg){
+                                                  //
+                                                  // Removing layer source from sources ?
+                                                  //
+                                                  /*for (var id in app.layerSources) {
+                                                      if(id.indexOf(source.id) != -1)
+                                                          app.layerSources[id] = null;    
+                                                  }*/  
+                                                  
+                                                  mask.hide();
+                                                  
+                                                  Ext.Msg.show({
+                                                      title: 'GetCapabilities',
+                                                      msg: msg + " The layer cant be added to the map",
+                                                      width: 300,
+                                                      icon: Ext.MessageBox.ERROR
+                                                  });  
+                                              });
+                                          }else{
+                                              addLayer(source); 
+                                              mask.hide();
+                                          }
+                                      }
+                                  }
+                              }
+                          });
+                          
+                          //
+                          // Overridding addListenerMD method to show metadata inside a new Tab.
+                          //
+                          cswPanel.cswGrid.plugins.tpl.addListenerMD = function(id, values){
+                              Ext.get(id).on('click', function(e){
+                                  //
+                                  // open GN inteface related to this resource
+                                  //
+                                  if(values.identifier){
+                                      viewer.viewMetadata(
+                                          values.absolutePath.substring(0,values.absolutePath.length-3), 
+                                          values.identifier, 
+                                          values.title
+                                      );
+                                  }else{
+                                      //
+                                      // Shows all DC values. TODO create dc visual
+                                      //
+                                      var text="<ul>";
+                                      var dc = values.dc;
+                                      
+                                      //eg. URI
+                                      for (var el in dc){
+                                          if (dc[el] instanceof Array){
+                                              //cicle URI array
+                                              for(var index=0;index<dc[el].length;index++){
+                                                  //cicle attributes of dc
+                                                  if(dc[el][index].value){
+                                                    text += "<li><strong>"+el+":</strong> ";
+                                                    
+                                                    for(name in dc[el][index]){
+                                                      text += "<strong>"+name+"</strong>="+dc[el][index][name]+" ";
+                                                      
+                                                    }
+                                                    
+                                                    text += "</li>";
+                                                  }else if(el=="abstract") {
+                                                    text += "<li><strong>abstract:</strong> "+dc[el][index]+"</li> ";
+                                                  }else{
+                                                    //DO NOTHING
+                                                  }
+                                              }
+                                          }
+                                      }
+                                      
+                                      dc+="</ul>";
+                                      
+                                      var dcPan = new Ext.Panel({
+                                        html:text,
+                                        preventBodyReset:true,
+                                        autoScroll:true,
+                                        autoHeight: false,
+                                        width: 600,
+                                        height: 400
+                                      
+                                      });		
+                                              
+                                      var dcWin = new Ext.Window({
+                                          title: "MetaData",
+                                          closable: true,
+                                          width:614,
+                                          resizable: false,
+                                          draggable: true,
+                                          items: [
+                                            dcPan
+                                          ]
+                                      });
+                                      
+                                      dcWin.show();
+                                  }
+                              });
+                          };
+
+                          var viewWin = new Ext.Window({
+                              width : 800,
+                              height: 578,
+                              renderTo: viewer.mapPanel.body,
+                              modal: true,
+                              constrainHeader: true,
+                              closable: true,
+                              resizable: false,
+                              draggable: true,
+                              items: [ 
+                                  cswPanel 
+                              ],
+                              listeners: {
+                                  close: function(){
+                                      cswPanel.destroy();
+                                  }
+                              }
+                          });
+
+                          viewWin.show();
+                      });
+                },
+                scope: this,
+                iconCls: "csw-viewer"
+            }));
+            
+            tools.push('-');
         }
         
         /*tools.push(new Ext.Button({
@@ -239,8 +485,37 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         
         return tools;
     },
+    
+    /*
+     * private: method[openPreview]
+     */
+    viewMetadata: function(gnURL, uuid, title){
+        var tabPanel = Ext.getCmp(app.renderToTab);
+        
+        var tabs = tabPanel.find('title', title);
+        if(tabs && tabs.length > 0){
+            tabPanel.setActiveTab(tabs[0]); 
+        }else{
+            var metaURL = gnURL + "metadata.show?uuid=" + uuid; 
+            
+            var meta = new Ext.Panel({
+                title: title,
+                layout:'fit', 
+                tabTip: title,
+                closable: true,
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        url: metaURL 
+                    }) 
+                ]
+            });
+            
+            tabPanel.add(meta);
+        }
+    },
 
-    /** private: method[openPreview]
+    /*
+     * private: method[openPreview]
      */
     openPreview: function(embedMap) {
         var preview = new Ext.Window({
