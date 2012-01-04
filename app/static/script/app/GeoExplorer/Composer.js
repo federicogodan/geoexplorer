@@ -67,10 +67,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: "tree.tbar"
             }, {
                 ptype: "gxp_removegroup",
-                actionTarget: "tree.tbar"
+                actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
                 ptype: "gxp_groupproperties",
-                actionTarget: ["tree.tbar"]
+                actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
