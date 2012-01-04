@@ -81,15 +81,15 @@
             <fileset dir="app/static/externals/PrintPreview/resources"/>
         </copy>
         <!-- copy CSWViewer css -->
-        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/csw/css">
+        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/csw/CSWViewer/css">
             <fileset dir="app/static/externals/csw/CSWViewer/css"/>
         </copy>
         <!-- copy CSWViewer img -->
-        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/csw/img">
+        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/csw/CSWViewer/img">
             <fileset dir="app/static/externals/csw/CSWViewer/img"/>
         </copy>
         <!-- copy CSWViewer i18n -->
-        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/csw/i18n">
+        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/csw/CSWViewer/i18n">
             <fileset dir="app/static/externals/csw/CSWViewer/i18n"/>
         </copy>
     </target>
