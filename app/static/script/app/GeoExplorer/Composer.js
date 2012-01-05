@@ -376,7 +376,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                               autoScroll: true,
                               constrainHeader: true,
                               closable: true,
-                              resizable: true,
+                              resizable: false,
                               draggable: true,
                               items: [ 
                                   cswPanel 
