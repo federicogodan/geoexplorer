@@ -165,6 +165,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.push(new Ext.Button({
                 tooltip: "CSW Explorer",
                 handler: function() {
+                      if(Ext.getCmp('csw-win'))
+                          return;
+
                       var viewer = this;
                       
                       // Loads bundle for i18n messages
@@ -367,6 +370,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                           var viewWin = new Ext.Window({
                               width : 800,
                               height: 560,
+                              id: 'csw-win',
                               renderTo: viewer.mapPanel.body,
                               modal: true,
                               autoScroll: true,
