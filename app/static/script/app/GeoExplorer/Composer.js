@@ -107,13 +107,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
-            },{
+            }/*,{
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'mapstore-print'},
                 printService: config.printService,
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
-            }
+            }*/
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
@@ -165,6 +165,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.push(new Ext.Button({
                 tooltip: "CSW Explorer",
                 handler: function() {
+                      if(Ext.getCmp('csw-win'))
+                          return;
+                          
                       var viewer = this;
                       
                       // Loads bundle for i18n messages
@@ -367,12 +370,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                           var viewWin = new Ext.Window({
                               width : 800,
                               height: 560,
+                              id: 'csw-win',
                               renderTo: viewer.mapPanel.body,
                               modal: true,
                               autoScroll: true,
                               constrainHeader: true,
                               closable: true,
-                              resizable: true,
+                              resizable: false,
                               draggable: true,
                               items: [ 
                                   cswPanel 
