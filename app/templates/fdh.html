@@ -43,8 +43,8 @@
         
 		    var activateSearchTab, activateViewTab, runSimpleSearch;
 		    
-		    //var proxy = "/proxy/?url=";
-		    var proxy = "/FDHWebGis-dev/proxy/?url=";
+		    var proxy = "/proxy/?url=";
+		    //var proxy = "/FDHWebGis-dev/proxy/?url=";
 
         Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
@@ -82,44 +82,6 @@
 			if(availLanguages.indexOf(gnLangStr) < 0){
 				gnLangStr = 'fr';
 			}
-			
-			var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home' ;
-			
-			var portalPanel = new Ext.Panel({
-                id: 'portalPanel',
-                title: gnLangStr === 'en' ? GeoExplorer.prototype.portalTabTitle || 'Portal' : GeoExplorer.prototype.portalTabTitle || 'Portail',
-                layout:'fit', 
-                items: [ 
-                    new Ext.ux.IFrameComponent({ 
-                        id: 'fdh-portal',
-                        //url: 'http://demo1.geo-solutions.it/geoserver/www/portal/' + gnLangStr + '/index.htm'
-                        url: 'http://localhost:8080/geoserver/www/portal/' + gnLangStr + '/index.htm'
-                    }) 
-                ]
-            });
-			
-            var geonetworkPanel = new Ext.Panel({
-                id: 'geonetworkPanel',
-                title: gnLangStr === 'en' ? GeoExplorer.prototype.searchTabTitle || 'Search' : GeoExplorer.prototype.searchTabTitle || 'Chercher',
-                layout:'fit', 
-                items: [ 
-                    new Ext.ux.IFrameComponent({ 
-                        id: 'fdh-gn',
-                        //url: 'http://demo1.geo-solutions.it/geonetwork/srv/'+gnLangStr+'/main.home' 
-                        url: gnURL 
-                    }) 
-                ]
-            });
-					
-            var appTabs = new Ext.TabPanel({
-                items : [portalPanel, geonetworkPanel],
-                region: 'center',
-                border : false,
-                id : 'appTabs',
-                deferredRender : false,
-                //hideParent: false,
-                hideMode : 'visibility'
-            });            
             
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
@@ -277,6 +239,48 @@
 				];
 			};
 			
+		    //var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home' ;
+			var gnURL = 'http://demo1.geo-solutions.it/geonetwork/srv/' + gnLangStr + '/main.home' ;
+
+			var portalPanel = new Ext.Panel({
+                id: 'portalPanel',
+                //title: gnLangStr === 'en' ? GeoExplorer.prototype.portalTabTitle || 'Portal' : GeoExplorer.prototype.portalTabTitle || 'Portail',
+				title: GeoExplorer.prototype.portalTabTitle || (gnLangStr == 'en' ? 'Portal' : 'Portail'),
+                layout:'fit', 
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        id: 'fdh-portal',
+                        url: 'http://demo1.geo-solutions.it/geoserver/www/portal/' + gnLangStr + '/index.htm'
+                        //url: 'http://localhost:8080/geoserver/www/portal/' + gnLangStr + '/index.htm'
+                    }) 
+                ]
+            });
+			
+            var geonetworkPanel = new Ext.Panel({
+                id: 'geonetworkPanel',
+                //title: gnLangStr === 'en' ? GeoExplorer.prototype.searchTabTitle) || 'Search' : GeoExplorer.prototype.searchTabTitle) || 'Chercher',
+				title: GeoExplorer.prototype.searchTabTitle || (gnLangStr == 'en' ? 'Search' : 'Chercher'),
+                layout:'fit', 
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        id: 'fdh-gn',
+                        //url: 'http://demo1.geo-solutions.it/geonetwork/srv/'+gnLangStr+'/main.home' 
+                        url: gnURL 
+                    }) 
+                ]
+            });
+					
+            appTabs = new Ext.TabPanel({
+                items : [portalPanel, geonetworkPanel],
+                region: 'center',
+                border : false,
+                id : 'appTabs',
+                deferredRender : false,
+                //hideParent: false,
+                hideMode : 'visibility'
+            });          
+			
+			
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
@@ -303,7 +307,7 @@
 						}, appTabs
 					],                            
                     bbar : [
-						poweredByGeoSol, ' ', aboutButton, '->', languageSelector
+						poweredByGeoSol, ' ', aboutButton, '->',languageSelector
 					]
                 }]
             });
@@ -337,9 +341,9 @@
 				appTabs.setActiveTab(0);
 			};
 			*/
-			      
+			 
             app = new GeoExplorer.Composer({
-                modified: false,
+                //modified: false,
                 authStatus: <% status %>,
                 proxy: "proxy/?url=",
                 printService: "http://demo1.geo-solutions.it/geoserver/pdf/",
@@ -347,7 +351,7 @@
                 //xmlJsonTranslateService: "http://localhost:8081/web-gis/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                mapTitle : gnLangStr === 'en' ? GeoExplorer.prototype.viewTabTitle || 'View' : GeoExplorer.prototype.viewTabTitle || 'Veu',
+                //mapTitle : GeoExplorer.prototype.viewTabTitle || (gnLangStr === 'en' ? 'View' : 'Veu'),
                 about: {
                     title: "Fouta Djallon Higlands programme",
                     'abstract': "Fouta Djallon Higlands comment",
@@ -434,16 +438,17 @@
                     },{
                         source: "fdh",
                         name: "geonetwork:Pilotsitepolygons",
-						            uuid : "46c2a724-e416-4054-9a7a-2af4baf3c948"
+						uuid : "46c2a724-e416-4054-9a7a-2af4baf3c948"
                     }],
                     center: [-1224514, 1291331],
                     zoom: 6
                 }
             });           
 
-			/*
+			
 			app.on({
 				'portalready' : function(){
+				/*
 					app.portal.on({
 						'activate' : function(){
 							var map = app.mapPanel.map;
@@ -453,9 +458,14 @@
 							map.updateSize();
 						}
 					});
+				
+					var currentTab = OpenLayers.Util.getParameters()["currentTab"] || 0;
+					appTabs.setActiveTab(currentTab);
+				*/		
+					
 				}
 			});
-			*/
+			
 			
             addFDHLayer = function(fdhLayerName, fdhLayerUUID){
                 var FDHsource = app.layerSources.fdh;
@@ -477,8 +487,8 @@
             };
 			
 			var setActiveTab = function(tabId){        
-          appTabs.setActiveTab(tabId);
-      };
+                appTabs.setActiveTab(tabId);
+            };
 			
 			activateSearchTab = function(){
 				setActiveTab(1);
