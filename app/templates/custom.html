@@ -77,7 +77,23 @@
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        
+        var headerContent = [
+					'<div >',
+					'<div style="float:right"><img src="theme/app/img/fdh/fdh_left-banner_en.gif" usemap="#IM_left-banner"  border="0" /> </div>',
+					'<div style="float:left"><img src="theme/app/img/fdh/fdh_right-banner_en.jpg" usemap="#IM_right-banner"  border="0" />  </div>',
+					'</div>',
+					'<map name="IM_left-banner">',
+					'<area shape="rect" coords="0,6,72,75" href="http://www.fouta-djallon-programme.org/index.php?lang=en" alt="Fouta Djallon HighLands Integrated Natural Resources Management Project" title="Fouta Djallon HighLands Integrated Natural Resources Management Project"    />',
+					'</map>',
+					'<map name="IM_right-banner">',
+					'<area shape="rect" coords="183,3,240,78" href="http://www.unep.org/" alt="United Nations Environment Programme" title="United Nations Environment Programme"    />',
+					'<area shape="rect" coords="246,4,303,79" href="http://www.gefweb.org/" alt="Global Environment Facility" title="Global Environment Facility"    />',
+					'<area shape="rect" coords="306,6,373,79" href="http://www.fao.org/" alt="Food and Agriculture Organization of the United Nations" title="Food and Agriculture Organization of the United Nations"    />',
+					'</map>',
+					'</div>'
+				];
+		
+		
         var onReady = function(){
 
             Ext.BLANK_IMAGE_URL = (function() {
@@ -151,7 +167,21 @@
                     layout : 'border',
                     border : false,
                     header : false,                    
-                    items : [appTabs],                            
+                    items : [{
+							border: false,
+							header: false,
+							html:  headerContent,
+							region: 'north',
+							collapsible: true,
+							collapseMode:  'mini',
+							hideCollapseTool: true,
+							split: true,
+							animCollapse : false,
+							minHeight: 86,
+							maxHeight: 86,
+							height: 86,
+							id : 'fdhHeader'
+						},appTabs],                            
                     bbar : [
                       poweredByGeoSol, ' ', aboutButton
                     ]
@@ -319,8 +349,8 @@
 			};			
 			
       Ext.Ajax.request({
-          url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          //url: "/geostore/urlConfig.js",
+          //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
+          url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
