@@ -43,7 +43,7 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 
 	/**
 	 * Initialize the <code>ProxyServlet</code>
-	 * @param servletConfig The Servlet configuration passed in by the servlet conatiner
+	 * @param servletConfig The Servlet configuration passed in by the servlet container
 	 */
 	public void init(ServletConfig servletConfig)throws ServletException {
 		super.init(servletConfig);
@@ -75,11 +75,27 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 		String filePath = temp + "/" + fileName;
 		
 		response.setContentType("application/force-download");
-	    //response.setContentType("application/x-download");
 	    response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 	    PrintWriter  out = response.getWriter();
 	    returnFile(filePath, out);  
-		
+	    //---------------
+	    //--Delete file--
+	    //---------------
+	    
+	    // Make sure the file or directory exists and isn't write protected
+	    File f=new File(filePath);
+	    if (!f.exists()){
+	      throw new IllegalArgumentException("Delete: no such file or directory: " + fileName);
+	    }
+	    if (!f.canWrite()){
+	      throw new IllegalArgumentException("Delete: write protected: " + fileName);
+	    }
+	    // Attempt to delete it
+	    boolean success = f.delete();
+	    if (!success){
+	      throw new IllegalArgumentException("Delete: deletion failed");
+	 
+	    }
 		
 		
 	}
@@ -109,16 +125,9 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 			InputStream is  = request.getInputStream();
 			
 			long nanoTime = System.nanoTime();
-			//File contextDir = new File(temp ,"context" + nanoTime);
 			
-			/*
-			if (!contextDir.exists()){
-				if(!contextDir.mkdir())
-					throw new IOException("Unable to create context directory " + contextDir);
-			}
-			*/
 			
-			String fileName= "context"+nanoTime+".map";
+			String fileName= "context" + nanoTime + ".map";
 			IOUtil.stream2localfile(is, fileName, tempDir);
 
 			String downloadUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + 
@@ -164,6 +173,7 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 	public static void returnFile(String filename, Writer out)
 			throws FileNotFoundException, IOException {
 		Reader in = null;
+		
 		try {
 			in = new BufferedReader(new FileReader(filename));
 			char[] buf = new char[4 * 1024]; // 4K char buffer
