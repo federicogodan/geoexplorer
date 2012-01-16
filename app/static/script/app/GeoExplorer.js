@@ -571,30 +571,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     /** private: method[showUrl]
      */
     showUrl: function() {
-        /*
-        var win = new Ext.Window({
-            title: this.bookmarkText,
-            layout: 'form',
-            labelAlign: 'top',
-            modal: true,
-            bodyStyle: "padding: 5px",
-            width: 400,
-            height: 400,
-            items: [{
-                xtype: 'textarea',
-                fieldLabel: this.permakinkText,
-                id: 'context_area',
-                readOnly: true,
-                height: 300,
-                anchor: "100%",
-                selectOnFocus: true,
-                value: this.xmlContext
-            }],
-            buttons: [{
-	                text: 'Download File',
-	                handler: function(){
-	                    var xml = Ext.getCmp('context_area').getValue();
-	        */            
+              
                       OpenLayers.Request.POST({
                           url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
                           data: this.xmlContext,
@@ -625,13 +602,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                           },
                           scope: this
                       });
-                      /*
-	                }
-	          }]
-        });
-        win.show();
-        win.items.first().selectText();
-        */
+                      
     },
     
     /** api: method[getBookmark]
@@ -664,23 +635,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             html: "<iframe style='border: none; height: 100%; width: 100%' src='about.html' frameborder='0' border='0'><a target='_blank' href='about.html'>"+this.aboutText+"</a> </iframe>"
         });
 
-        /*
-        var about = Ext.applyIf(this.about, {
-            title: '', 
-            "abstract": '', 
-            contact: ''
-        });
-
-        var mapInfo = new Ext.Panel({
-            title: this.mapInfoText,
-            html: '<div class="gx-info-panel">' +
-                  '<h2>'+this.titleText+'</h2><p>' + about.title +
-                  '</p><h2>'+this.descriptionText+'</h2><p>' + about['abstract'] +
-                  '</p> <h2>'+this.contactText+'</h2><p>' + about.contact +'</p></div>',
-            height: 'auto',
-            width: 'auto'
-        });
-        */
+       
 
         var tabs = new Ext.TabPanel({
             activeTab: 0,
