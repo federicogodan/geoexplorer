@@ -54,7 +54,7 @@
 						</connector>
 					</connectors>
 					<contextPath>web-gis</contextPath>
-					<webAppSourceDirectory>${project.build.directory}/http_proxy-1.0-SNAPSHOT</webAppSourceDirectory>
+					<webAppSourceDirectory>${project.build.directory}/web-gis-1.0-SNAPSHOT</webAppSourceDirectory>
 				</configuration>
 			</plugin>
 			
