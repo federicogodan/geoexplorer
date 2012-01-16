@@ -65,7 +65,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     aboutThisMapText: "About this Map",
     viewTabTitle : "View",
     searchTabTitle : "Search",
-    
+	portalTabTitle : "Portal",
+    resetButtonTooltip: "Reset Page",
+	helpButtonTooltip: "help",
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
     // End i18n.
@@ -181,6 +183,37 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		if(config.isLoadedFromConfigFile){
 			this.applyConfig(config);
 		} else {
+				//LOCAL CONFIGURATION DEBUG
+				var success = function(request) {                                
+					var addConfig;
+					try {
+						addConfig = Ext.util.JSON.decode(request.responseText);
+					} catch (err) {
+					  // pass
+					}
+
+					if(addConfig && addConfig.success && addConfig.success==true){    
+						addConfig.result.modified = false;         
+						this.applyConfig(Ext.applyIf(addConfig.result, config));
+					} else {
+						config.modified = false;  
+						this.applyConfig(config);
+					}
+				};
+								   
+				var failure = function(request) {                                                 
+					alert("ERROR: " + request.statusText);
+				};
+
+				OpenLayers.Request.GET({
+					url: "json2.txt",
+					params: '',
+					success: success,
+					failure: failure,
+					scope: this
+				});
+		
+			/* ORIGINAL 
 			OpenLayers.Request.GET({
 				//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
 				url: proxy + 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
@@ -193,9 +226,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 						// pass
 					}
 					
-					if(addConfig && addConfig.success && addConfig.success==true){				
+					if(addConfig && addConfig.success && addConfig.success == true){	
+                        addConfig.result.modified = false;                     
 						this.applyConfig(Ext.applyIf(addConfig.result, config));
 					} else {
+                        config.modified = false; 
 						this.applyConfig(config);
 					}
 				},
@@ -204,37 +239,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				},
 				scope: this
 			});
+			*/
 		}
 		
 		
-
 		
-		/*var success = function(request) {                                
-			var addConfig;
-			try {
-				addConfig = Ext.util.JSON.decode(request.responseText);
-			} catch (err) {
-			  // pass
-			}
-
-			if(addConfig && addConfig.success && addConfig.success==true){                               
-				this.applyConfig(Ext.applyIf(addConfig.result, config));
-			} else {
-				this.applyConfig(config);
-			}
-		};
-						   
-		var failure = function(request) {                                                 
-			alert("ERROR: " + request.statusText);
-		};
-
-		OpenLayers.Request.GET({
-			url: "json.txt",
-			params: '',
-			success: success,
-			failure: failure,
-			scope: this
-		});*/
 		
 		
         /*
@@ -358,6 +367,25 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;
             });
+			//add buttons for reset and help
+			this.toolbar.addButton([
+				 {xtype: 'tbfill'},
+				 {
+					tooltip:  this.resetButtonTooltip ,
+					iconCls: "x-tbar-loading",
+					handler: function(btn){
+						window.location.reload();
+					}
+				},
+				{
+					tooltip:  this.helpButtonTooltip ,
+					iconCls: "icon-help",
+					handler: function(btn){
+						window.open('http://geo-solutions.it/contact/', '_blank');
+					}
+				}
+				
+			]);
             this.toolbar.enable();
             disabled.each(function(item) {
                 item.disable();
@@ -475,7 +503,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             url: url,
             data: configStr,
             callback: function(request) {
-                this.handleSave(request);
+				this.handleSave(request);
                 if (callback) {
                     callback.call(scope || this);
                 }
@@ -500,6 +528,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      * Saves the map config and displays the URL in a window.
      */ 
     saveAndExport: function(callback, scope) {
+		
         var configStr = Ext.util.JSON.encode(this.getState());
         var method, url;
         if (this.id) {
@@ -572,7 +601,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                           callback: function(request) {
 						  
                               if(request.status == 200){
-                                  window.open(request.responseText);
+									
+									//delete other iframes appended
+									if(document.getElementById("downloadIFrame")) {
+										document.body.removeChild( document.getElementById("downloadIFrame") ); 
+									}
+									//Create an hidden iframe for forced download
+									var elemIF = document.createElement("iframe"); 
+									elemIF.setAttribute("id","downloadIFrame");
+									elemIF.src = app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText; 
+									elemIF.style.display = "none"; 
+									document.body.appendChild(elemIF); 
+									 
                               }else{
                                   Ext.Msg.show({
                                      title:'File Download Error',
@@ -600,8 +640,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      *  Generate a bookmark for an unsaved map.
      */
     getBookmark: function() {
+		
         var params = Ext.apply(
             OpenLayers.Util.getParameters(),
+			
             {q: Ext.util.JSON.encode(this.getState())}
         );
         

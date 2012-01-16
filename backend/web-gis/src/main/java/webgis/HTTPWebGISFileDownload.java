@@ -27,6 +27,7 @@ import webgis.utils.IOUtil;
  * HTTPWebGISFileDownload class.
  * 
  * @author Tobia di Pisa
+ * @author Lorenzo Natali
  *
  */
 public class HTTPWebGISFileDownload extends HttpServlet {
@@ -63,9 +64,24 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 	 *                            client request
 	 * @param httpServletResponse The {@link HttpServletResponse} object by which
 	 *                             we can response to the client 
+	 *                             
+	 * Used for download a file saved from the temp directory
 	 */
-	public void doGet (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
+	public void doGet (HttpServletRequest request, HttpServletResponse response)
 	throws IOException, ServletException {
+		
+		String fileName=(String) request.getParameter("file");
+		String temp = this.props.getProperty("temp");
+		String filePath = temp + "/" + fileName;
+		
+		response.setContentType("application/force-download");
+	    //response.setContentType("application/x-download");
+	    response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+	    PrintWriter  out = response.getWriter();
+	    returnFile(filePath, out);  
+		
+		
+		
 	}
 
 	/**
@@ -74,7 +90,9 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 	 *                            in by the servlet engine representing the
 	 *                            client request
 	 * @param httpServletResponse The {@link HttpServletResponse} object by which
-	 *                             we can response to the client 
+	 *                             we can response to the client
+	 *                             
+	 * used to save the xml file in a temp directory.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException {
@@ -129,13 +147,13 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 		    }
 		    */
 
-		    //response.setContentType("text/plain");
-			
-		    response.setContentType("application/x-download");
+		    response.setContentType("text/plain");
+			response.setContentType("application/force-download");
+		    //response.setContentType("application/x-download");
 		    response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		    
 		    PrintWriter  out = response.getWriter();
-		    out.print(downloadUrl);
+		    out.print(fileName);
 		    
 		    //returnFile(filePath, out);  
 			
