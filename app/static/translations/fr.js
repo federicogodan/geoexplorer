@@ -24,6 +24,8 @@ GeoExt.Lang.add("fr", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "À propos de cette carte",
+		resetButtonTooltip: "Réinitialiser la Page",
+		helpButtonTooltip: "Aide",
         searchTabTitle : "Chercher",
         viewTabTitle : "Vue",
         portalTabTitle : "Portail"
@@ -252,12 +254,18 @@ GeoExt.Lang.add("fr", {
         geonetworkSearchActionTip: "Afficher les métadonnées"
     },
     "gxp.plugins.GroupProperties.prototype":{
-        groupPropertiesMenuText: "Modifier le nom du groupe",
-        groupPropertiesActionTip: "Modifiez les propriétés du groupe",
+        groupPropertiesMenuText: "Propriétés du groupe",
+        groupPropertiesActionTip: "Propriétés du groupe",
         groupPropertiesDialogTitle: "Propriétés du groupe - ",
         groupPropertiesFieldSetText: "Nom du groupe",
         groupPropertiesFieldLabel: "nom du nouveau groupe",
         groupPropertiesButtonText: "Fait",
         groupPropertiesMsg: "Veuillez entrer un nom de groupe"
-    }
+    },
+	"gxp.plugins.Login.prototype":{
+		loginText: "Se connecter",
+        loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
+        userFieldText: "Utilisateur",
+        passwordFieldText: "Mot de passe"
+	}
 });

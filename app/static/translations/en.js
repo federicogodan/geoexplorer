@@ -23,6 +23,8 @@ GeoExt.Lang.add("en", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "About this Map",
+		resetButtonTooltip: "Reset Page",
+		helpButtonTooltip: "Help",
         searchTabTitle : "Search",
         viewTabTitle : "View",
         portalTabTitle : "Portal"
@@ -252,12 +254,18 @@ GeoExt.Lang.add("en", {
         geonetworkSearchActionTip: "View metadata"
     },
     "gxp.plugins.GroupProperties.prototype":{
-        groupPropertiesMenuText: "Modify Group Name",
-        groupPropertiesActionTip: "Modify group properties",
+        groupPropertiesMenuText:  "Group Properties",
+        groupPropertiesActionTip:  "Group Properties",
         groupPropertiesDialogTitle: "Group Properties - ",
         groupPropertiesFieldSetText: "Group Name",
         groupPropertiesFieldLabel: "New Group Name",
         groupPropertiesButtonText: "Done",
         groupPropertiesMsg: "Please enter a group name"
-    }
+    },
+	"gxp.plugins.Login.prototype":{
+		loginText: "Login",
+        loginErrorText: "Invalid username or password.",
+        userFieldText: "User",
+        passwordFieldText: "Password"
+	}
 });
