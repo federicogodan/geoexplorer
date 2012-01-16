@@ -41,6 +41,9 @@ body {
     background-image: url(img/silk/door_out.png);
 }
 
+.x-btn .icon-help{
+	background-image: url(img/silk/help.png);
+}
 .x-btn .icon-geoexplorer {
     background-image: url(img/geoexplorer.png);
 }

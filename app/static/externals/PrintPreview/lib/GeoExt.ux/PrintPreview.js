@@ -196,6 +196,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
         });
         this.on({
             "render": function() {
+				this.updateLayout();
 				this.busyMask = new Ext.LoadMask(this.getEl(), {
 					msg: this.creatingPdfText
 				});
@@ -323,6 +324,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
                 checked: this.compactLegend,
                 boxLabel: this.compactLegendText,
                 hideLabel: true,
+				hidden:true,
                 ctCls: "gx-item-nowrap",
                 handler: function(cb, checked) {
                     this.compactLegend = checked;
