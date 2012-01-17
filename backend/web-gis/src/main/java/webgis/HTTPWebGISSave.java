@@ -2,7 +2,6 @@ package webgis;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -11,9 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONSerializer;
@@ -22,8 +18,8 @@ import net.sf.json.xml.XMLSerializer;
 import org.apache.commons.io.IOUtils;
 import org.apache.xml.serialize.OutputFormat;
 import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+
+import webgis.utils.Utilities;
 
 
 /**
@@ -77,8 +73,19 @@ public class HTTPWebGISSave extends HttpServlet {
         JSON json = JSONSerializer.toJSON( jsonData ); 
         String xml = serializer.write( json );  
 		
-		Document document = parseXmlFile(xml);
-		 
+		Document document = Utilities.parseXmlFile(xml);
+		
+		//put FDH before all sources
+		try{
+			Utilities.putAtFirst(document,"sources","fdh");
+		
+		}catch(Exception e){ 
+			
+			System.out.print("Unable to move fdh at first\nERROR:");
+			System.out.print(e.toString());
+		}
+
+		
         OutputFormat format = new OutputFormat(document);
         format.setLineWidth(65);
         format.setIndenting(true);
@@ -92,24 +99,6 @@ public class HTTPWebGISSave extends HttpServlet {
         
     }
 
-    /**
-     * This function converts String XML to Document object
-     * @param in - XML String
-     * @return Document object
-     */
-    private Document parseXmlFile(String in) {
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            InputSource is = new InputSource(new StringReader(in));
-            return db.parse(is);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+    
+   
 }

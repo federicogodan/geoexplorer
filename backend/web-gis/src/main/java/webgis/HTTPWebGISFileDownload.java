@@ -6,16 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +32,7 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 	 */
 	private static final long serialVersionUID = -138662992151524493L;	
 	
-	private final static Logger LOGGER = Logger.getLogger(HTTPWebGISFileDownload.class.toString());
+	//private final static Logger LOGGER = Logger.getLogger(HTTPWebGISFileDownload.class.toString());
 	
 	private Properties props;
 
@@ -114,7 +109,6 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 	throws ServletException, IOException {
 							
 			String temp = this.props.getProperty("temp");
-			int buffSize = Integer.valueOf(this.props.getProperty("bufferSize"));
 			
 			File tempDir = new File(temp);
 			if (!tempDir.exists()){
@@ -129,42 +123,15 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 			
 			String fileName= "context" + nanoTime + ".map";
 			IOUtil.stream2localfile(is, fileName, tempDir);
-
-			String downloadUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + 
-				request.getContextPath() + "/temp/" + fileName;
 			
-			ServletContext ctx = getServletContext();
-			
-			String filePath = temp + "/" + fileName;
-			
-			/*
-			IOUtil.zipDirectory(contextDir.getAbsolutePath(), 
-					temp + File.separatorChar + "context" + nanoTime + ".zip", buffSize);	
-			
-			
-			String downloadUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + 
-				request.getContextPath() + "/temp/context" + nanoTime + ".zip";
-		
-		    boolean success = IOUtil.deleteDirectory(contextDir);
-		    
-		    if (success){
-		    	if(LOGGER.isLoggable(Level.INFO))
-		    		LOGGER.log(Level.INFO,"Context directory deleted");
-		    }else{
-		    	if(LOGGER.isLoggable(Level.INFO))
-		    		LOGGER.log(Level.INFO,"Context directory not deleted");
-		    }
-		    */
-
 		    response.setContentType("text/plain");
 			response.setContentType("application/force-download");
-		    //response.setContentType("application/x-download");
 		    response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		    
 		    PrintWriter  out = response.getWriter();
 		    out.print(fileName);
 		    
-		    //returnFile(filePath, out);  
+		    
 			
 			out.flush();
 			out.close();
