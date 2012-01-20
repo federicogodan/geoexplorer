@@ -1,10 +1,7 @@
 /**
  * Copyright (c) 2009-2010 The Open Planning Project
  */
-/*
-	NOTE: configuration customization could override
-	these strings
-*/
+
 GeoExt.Lang.add("en", {
     "GeoExplorer.prototype": {
         zoomSliderText: "<div>Zoom Level: {zoom}</div><div>Scale: 1:{scale}</div>",
@@ -23,11 +20,8 @@ GeoExt.Lang.add("en", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "About this Map",
-		resetButtonTooltip: "Reset Page",
-		helpButtonTooltip: "Help",
         searchTabTitle : "Search",
-        viewTabTitle : "View",
-        portalTabTitle : "Portal"
+        viewTabTitle : "View"
     },
     
     "GeoExplorer.Composer.prototype": {
@@ -40,8 +34,7 @@ GeoExt.Lang.add("en", {
         loginText: "Login",
         loginErrorText: "Invalid username or password.",
         userFieldText: "User",
-        passwordFieldText: "Password",
-        fullScreenText: "Full Screen"
+        passwordFieldText: "Password"
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -60,9 +53,13 @@ GeoExt.Lang.add("en", {
         panelTitleText: "Title",
         layerSelectionText: "View available data from:",
         doneText: "Done",
-        removeFilterText: "Clear filter", 
-        filterEmptyText: "Filter",
         uploadText: "Upload Data"
+    },
+
+    "gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Retirer des superpositions",
+	    removeOverlaysActionTip: "Supprime toutes les superpositions de la carte",
+	    removeOverlaysConfirmationText: "Etes-vous sûr de vouloir supprimer tous les calques chargés de la carte?",
     },
     
     "gxp.plugins.BingSource.prototype": {
@@ -120,7 +117,6 @@ GeoExt.Lang.add("en", {
         nextMenuText: "Zoom To Next Extent",
         previousTooltip: "Zoom To Previous Extent",
         nextTooltip: "Zoom To Next Extent"
-		
     },
 
     "gxp.plugins.OSMSource.prototype": {
@@ -135,7 +131,7 @@ GeoExt.Lang.add("en", {
         previewText: "Print Preview",
         notAllNotPrintableText: "Not All Layers Can Be Printed",
         nonePrintableText: "None of your current map layers can be printed",
-        notPrintableLayersText: "Following layers can not be printed:"
+		notPrintableLayersText: "Following layers can not be printed:"
     },
 
     "gxp.plugins.MapQuestSource.prototype": {
@@ -202,8 +198,8 @@ GeoExt.Lang.add("en", {
 
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Zoom level"
-    },
-    
+    }
+
     "gxp.plugins.AddGroup.prototype": { 
 	    addGroupMenuText: "Add Group",
 	    addGroupActionTip: "Add a new group in the layer tree",   
