@@ -33,7 +33,10 @@
     <link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css">
     <script type="text/javascript" src="auth/base64.js"></script>
     <script type="text/javascript" src="script/CSWViewer.js"></script>
-    
+
+    <!-- translation data  -->
+    <script type="text/javascript" src="translations/it.js"></script>
+
     <script>
         
         var app;
@@ -76,23 +79,7 @@
 		            
         var proxy; 
         var geoStoreBaseURL;        
-        var customSources;
-        var headerContent = [
-					'<div >',
-					'<div style="float:right"><img src="theme/app/img/fdh/fdh_left-banner_en.gif" usemap="#IM_left-banner"  border="0" /> </div>',
-					'<div style="float:left"><img src="theme/app/img/fdh/fdh_right-banner_en.jpg" usemap="#IM_right-banner"  border="0" />  </div>',
-					'</div>',
-					'<map name="IM_left-banner">',
-					'<area shape="rect" coords="0,6,72,75" href="http://www.fouta-djallon-programme.org/index.php?lang=en" alt="Fouta Djallon HighLands Integrated Natural Resources Management Project" title="Fouta Djallon HighLands Integrated Natural Resources Management Project"    />',
-					'</map>',
-					'<map name="IM_right-banner">',
-					'<area shape="rect" coords="183,3,240,78" href="http://www.unep.org/" alt="United Nations Environment Programme" title="United Nations Environment Programme"    />',
-					'<area shape="rect" coords="246,4,303,79" href="http://www.gefweb.org/" alt="Global Environment Facility" title="Global Environment Facility"    />',
-					'<area shape="rect" coords="306,6,373,79" href="http://www.fao.org/" alt="Food and Agriculture Organization of the United Nations" title="Food and Agriculture Organization of the United Nations"    />',
-					'</map>',
-					'</div>'
-				];
-		
+        var customSources;		
 		
         var onReady = function(){
 
@@ -120,7 +107,31 @@
                  }
             });
             
+	    var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'fr';
+
+	    var availLanguages = ['it'];
+	    var gnLangStr = curLang.substr(0,2);
+		
+	    if(availLanguages.indexOf(gnLangStr) < 0){
+		gnLangStr = 'it';
+	    }
+
+	    var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home';
+
+            var geonetworkPanel = new Ext.Panel({
+                id: 'geonetworkPanel',
+                title: GeoExplorer.prototype.searchTabTitle || 'Portale',
+                layout:'fit', 
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        id: 'gn-panel',
+                        url: gnURL 
+                    }) 
+                ]
+            });
+            
             var appTabs = new Ext.TabPanel({
+                items: [geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
@@ -157,7 +168,44 @@
                     window.open('http://geo-solutions.it/contact/', '_blank');
                 }
             });    
+		
+            var langData = [['it', 'Italiano']];
+
+            var query = location.search;        
+            if(query && query.substr(0,1) === "?"){
+                query = query.substring(1);
+            }
+            
+            var url = Ext.urlDecode(query);     
+            var code = url.locale;   
+
+            if(!code){
+                code = "it";
+            }
+            
+            var initialLanguageString;
+                    
+            //check if code is valid
+            if(code){
+                Ext.each(langData, function(rec){
+                    if(rec[0] === code.toLowerCase()){
+                        initialLanguageString = rec[1];
+                        return;
+                    }
+                });
+            }            
 			
+	    if (GeoExt.Lang) {
+                GeoExt.Lang.set(code);
+            }
+	
+            var headerContent = [
+		'<div>',
+		'<div style="float:right"><img src="theme/app/img/fdh/fdh_left-banner_en.gif" usemap="#IM_left-banner"  border="0" /></div>',
+		'<div style="float:left"><img src="theme/app/img/fdh/fdh_right-banner_en.jpg" usemap="#IM_right-banner"  border="0" /></div>',
+		'</div>'
+	    ];
+
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
@@ -168,20 +216,20 @@
                     border : false,
                     header : false,                    
                     items : [{
-							border: false,
-							header: false,
-							html:  headerContent,
-							region: 'north',
-							collapsible: true,
-							collapseMode:  'mini',
-							hideCollapseTool: true,
-							split: true,
-							animCollapse : false,
-							minHeight: 86,
-							maxHeight: 86,
-							height: 86,
-							id : 'fdhHeader'
-						},appTabs],                            
+                      border: false,
+                      header: false,
+                      html:  headerContent,
+                      region: 'north',
+                      collapsible: true,
+                      collapseMode:  'mini',
+                      hideCollapseTool: true,
+                      split: true,
+                      animCollapse : false,
+                      minHeight: 86,
+                      maxHeight: 86,
+                      height: 86,
+                      id : 'fdhHeader'
+                    },appTabs],                            
                     bbar : [
                       poweredByGeoSol, ' ', aboutButton
                     ]
@@ -191,7 +239,15 @@
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
-            var sources = "{" + 
+            var sources = "{" +                
+                "\"comunefi\": {" + 
+                    "\"url\":\"http://sr-vm107-sitgs1:8082/geoserver/wms\"," +
+                    "\"title\":\"Comune FI GeoServer\"," +
+                    "\"layerBaseParams\": {" +
+                        "\"TILED\": true," +
+                        "\"TILESORIGIN\": \"-20037508.34,-20037508.34\"" +
+                    "}" +
+                "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -219,7 +275,7 @@
             }
              
             sources +="}";
-
+            
             try{
                 sources = Ext.util.JSON.decode(sources);
             }catch(e){
@@ -249,7 +305,7 @@
                 });
             }
 			      		     
-			      /*var auth = 'Basic ' + Base64.encode('admin:admin');
+	    /*var auth = 'Basic ' + Base64.encode('admin:admin');
 			      Ext.Ajax.defaultHeaders = {
                 'Authorization' : auth
             };*/
@@ -262,7 +318,7 @@
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 //printService:"http://demo1.geo-solutions.it/geoserver/pdf/",
-                mapTitle: "View",
+                mapTitle: GeoExplorer.prototype.viewTabTitle || 'Vista',
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -271,6 +327,7 @@
                 sources: sources,
                 cswconfig: {
                     catalogs: [
+                        {"name": "Comune FI" , "url": "http://datigis.comune.fi.it/geonetwork/srv/it/csw", "description": "GeoNetwork del Comune di Firenze"},
                         {"name": "Demo1GeoSolutions" , "url": "http://demo1.geo-solutions.it/geonetwork/srv/en/csw", "description": "Iternal GeoNetwork demo"},
                         {"name": "Treviso", "url": "http://ows.provinciatreviso.it/geonetwork/srv/it/csw", "description": "Treviso Geonetwork"},
                         {"name": "kscNet", "url": "http://geoportal.kscnet.ru/geonetwork/srv/ru/csw", "description": "kscNet"},
@@ -346,11 +403,82 @@
                     }
                 }    
             });
-			};			
+            
+            addMSLayer = function(msLayerName, msLayerUUID, gnUrl){
+                var msSource = app.layerSources.comunefi;
+                var id = msSource.id;
+
+                var record = msSource.createLayerRecord({
+                    name: msLayerName,
+                    title: msLayerName,
+                    uuid : msLayerUUID,
+                    gnURL: gnUrl,
+                    source : id
+                });   
+                              
+                if (record) {
+                    var layerStore = app.mapPanel.layers;  
+                    layerStore.add([record]);
+                    modified = true;
+
+                    appTabs.setActiveTab(1);
+                }     
+            };
+
+	    addMSSource = function(url){
+                  var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                  mask.show();
+
+		  var source;
+		  for (var id in app.layerSources) {
+		      var src = app.layerSources[id];    
+		      var url  = src.initialConfig.url; 
+		      //
+		      // Checking if source url aldready exists
+		      //
+		      if(url && url.indexOf(wms) != -1)
+		          source = src;
+		  } 
+
+		  if(!source){
+		      var sourceOpt = {
+		          config: {
+		              url: wms
+		          }
+		      };
+		      
+		      source = app.addLayerSource(sourceOpt);
+		      
+		      //
+		      // Waiting GetCapabilities response from the server.
+		      //
+		      source.on('ready', function(){ 
+		          mask.hide();
+		      });
+		      
+		      //
+		      // To manage failure in GetCapabilities request (invalid request url in 
+		      // GeoNetwork configuration or server error).
+		      //
+		      source.on('failure', function(src, msg){		          
+		          mask.hide();
+		          
+		          Ext.Msg.show({
+		              title: 'GetCapabilities',
+		              msg: msg + " The layer cant be added to the map",
+		              width: 300,
+		              icon: Ext.MessageBox.ERROR
+		          });  
+		      });
+		  }else{
+		      mask.hide();
+		  }
+	    }
+      };			
 			
       Ext.Ajax.request({
-          //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          url: "/urlConfig.js", //TEST
+          url: "http://localhost:8080/geostore/urlConfig.js",
+          //url: "/MapStore/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    

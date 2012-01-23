@@ -56,6 +56,12 @@ GeoExt.Lang.add("fr", {
         uploadText: "Télécharger les données"
     }, 
 
+    "gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Remove overlays",
+	    removeOverlaysActionTip: "Removes all overlays from the map",
+	    removeOverlaysConfirmationText: "Are you sure you want to remove all loaded overlays from the map?",
+    }, 
+
     "gxp.plugins.BingSource.prototype": {
         title: "Bing couvertures",
         roadTitle: "Bing routes",
