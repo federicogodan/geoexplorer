@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/all.css">
     <script type="text/javascript" src="script/gxp.js"></script> 
 
-    <!-- proj4js resources -->
-    <script type="text/javascript" src="script/proj4js.js"></script>
+    <!-- proj4js resources 
+    <script type="text/javascript" src="script/proj4js.js"></script> -->
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
@@ -92,7 +92,7 @@
             })();
 
             OpenLayers.ImgPath = "externals/openlayers/theme/default/img/";
-            Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
+            //Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
                         
@@ -113,7 +113,7 @@
 	    var gnLangStr = curLang.substr(0,2);
 		
 	    if(availLanguages.indexOf(gnLangStr) < 0){
-		gnLangStr = 'it';
+            gnLangStr = 'it';
 	    }
 
 	    var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home';
@@ -144,7 +144,7 @@
                 handler: function(){
                     var appInfo = new Ext.Panel({
                         header: false,
-                        html: "<iframe style='border: none; height: 100%; width: 100%' src='about.html' frameborder='0' border='0'><a target='_blank' href='about.html'>"+ GeoExplorer.prototype.aboutText+"</a> </iframe>"
+                        html: "<iframe style='border: none; height: 100%; width: 100%' src='about.html' frameborder='0' border='0'><a target='_blank' href='about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
                     });
 
                     var win = new Ext.Window({
