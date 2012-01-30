@@ -381,7 +381,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					tooltip:  this.helpButtonTooltip ,
 					iconCls: "icon-help",
 					handler: function(btn){
-						window.open('http://geo-solutions.it/contact/', '_blank');
+						window.open('user_manual.pdf', '_blank');
 					}
 				}
 				
