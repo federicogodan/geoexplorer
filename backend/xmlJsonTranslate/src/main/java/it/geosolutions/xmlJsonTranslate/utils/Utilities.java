@@ -1,4 +1,4 @@
-package webgis.utils;
+package it.geosolutions.xmlJsonTranslate.utils;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -1,4 +1,4 @@
-package webgis.utils;
+package it.geosolutions.xmlJsonTranslate.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
