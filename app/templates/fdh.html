@@ -43,8 +43,8 @@
         
 		    var activateSearchTab, activateViewTab, runSimpleSearch;
 		    
-		    var proxy = "/proxy/?url=";
-		    //var proxy = "/FDHWebGis-dev/proxy/?url=";
+		    //var proxy = "/proxy/?url=";
+		    var proxy = "/http_proxy/proxy/?url=";
 
         Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
@@ -345,7 +345,7 @@
             app = new GeoExplorer.Composer({
                 //modified: false,
                 authStatus: <% status %>,
-                proxy: "proxy/?url=",
+                proxy: "http_proxy/proxy/?url=",
                 printService: "http://demo1.geo-solutions.it/geoserver/pdf/",
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 //xmlJsonTranslateService: "http://localhost:8081/web-gis/",
