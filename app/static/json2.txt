@@ -128,7 +128,7 @@
       
       "modified":false,
       "printService":"http://demo1.geo-solutions.it/geoserver/pdf/",
-      "proxy":"proxy/?url=",
+      "proxy":"/http_proxy/proxy/?url=",
       "renderToTab":"appTabs",
       "sources":{
 			"fdh":{
@@ -335,6 +335,6 @@
       "viewerTools":[
 
       ],
-      "xmlJsonTranslateService":"http://localhost:8082/web-gis/"
+      "xmlJsonTranslateService":"http://localhost:8080/xmlJsonTranslate/"
    }
 }
