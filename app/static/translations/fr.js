@@ -34,6 +34,11 @@ GeoExt.Lang.add("fr", {
     "GeoExplorer.Composer.prototype": {
         loadMapText: "Importer une carte",
         saveMapText: "Exporter une carte",
+		loadMapEmptyText: "Sélectionnez un fichier de contexte",
+		loadMapUploadText: "Chargement...",
+		uploadText: "Télécharger",
+		loadMapWindowTitle: 'formulaire de téléchargement de  fichier',
+		loadMapErrorText:'Erreur de chargement de fichier',
         toolsTitle: "Sélectionner l`application à inclure dans la barre d`outils",
         previewText: "Previsualiser",
         backText: "Retour en arrière",

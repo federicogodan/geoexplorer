@@ -21,6 +21,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     saveMapText: "Export Map",
     loadMapText: "Import Map",
     exportMapText: "Export Map",
+	loadMapEmptyText: 'Select a Map context file',
+	loadMapUploadText: 'Uploading your context file...',
+	loadMapWindowTitle: 'File Upload Form',
+	loadMapErrorText:'File Upload Error',
+	uploadText: 'Upload',
     toolsTitle: "Choose tools to include in the toolbar:",
     previewText: "Preview",
     backText: "Back",
@@ -247,7 +252,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     items: [{
                         xtype: 'fileuploadfield',
                         id: 'form-file',
-                        emptyText: 'Select a Map context file',
+                        emptyText: this.loadMapEmptyText,
                         fieldLabel: 'File',
                         name: 'file-path',
                         buttonText: '',
@@ -256,13 +261,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }],
                     buttons: [{
-                        text: 'Upload',
+                        text: this.uploadText,
                         handler: function(){
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
                                   //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
                                   url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  waitMsg: 'Uploading your context file...',
+                                  waitMsg: this.loadMapUploadText,
                                   success: function(fp, o){
                                       win.hide();
                                       var json_str = unescape(o.result.result);
@@ -278,7 +283,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                                       win.destroy();
                                       
                                       Ext.Msg.show({
-                                         title:'File Upload Error',
+                                         title:this.loadMapErrorText,
                                          msg: o.result.errorMessage,
                                          buttons: Ext.Msg.OK,
                                          icon: Ext.MessageBox.ERROR
@@ -291,10 +296,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 });
                 
                 win = new Ext.Window({
-                    title: 'File Upload Form',
+                    title: this.loadMapWindowTitle,
                     id: 'upload-win',
                     layout: 'form',
-                    labelAlign: 'top',
+                    //labelAlign: 'top',
                     modal: true,
                     bodyStyle: "padding: 5px",
                     width: 380,

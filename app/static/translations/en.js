@@ -33,6 +33,11 @@ GeoExt.Lang.add("en", {
     "GeoExplorer.Composer.prototype": {
         loadMapText: "Import Map",
         saveMapText: "Export Map",
+		loadMapEmptyText: "Select a Map context file",
+		loadMapUploadText: "Uploading your context file...",
+		uploadText: "Upload",
+		loadMapWindowTitle: 'File Upload Form',
+		loadMapErrorText:'File Upload Error',
         toolsTitle: "Choose tools to include in the toolbar:",
         previewText: "Preview",
         backText: "Back",
