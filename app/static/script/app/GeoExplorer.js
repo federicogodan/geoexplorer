@@ -211,8 +211,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					success: success,
 					failure: failure,
 					scope: this
-				});
-			*/
+				});*/
+			
 			//ORIGINAL 
 			OpenLayers.Request.GET({
 				//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
@@ -497,7 +497,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     save: function(callback, scope) {
         var configStr = Ext.util.JSON.encode(this.getState());        
         var method = "POST";
-        var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
+        var url = proxy + app.xmlJsonTranslateService + "HTTPWebGISSave";
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -573,7 +573,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     showUrl: function() {
               
                       OpenLayers.Request.POST({
-                          url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+                          url: proxy + app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
                           data: this.xmlContext,
                           callback: function(request) {
 						  
@@ -586,7 +586,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 									//Create an hidden iframe for forced download
 									var elemIF = document.createElement("iframe"); 
 									elemIF.setAttribute("id","downloadIFrame");
-									elemIF.src = app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText; 
+									elemIF.src = proxy + encodeURIComponent(app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText); 
 									elemIF.style.display = "none"; 
 									document.body.appendChild(elemIF); 
 									 
