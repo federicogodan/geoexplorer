@@ -69,7 +69,7 @@ GeoExt.Lang.add("fr", {
 	"gxp.plugins.RemoveOverlays.prototype": {
 	    removeOverlaysMenuText: "Retirer des superpositions",
 	    removeOverlaysActionTip: "Supprime toutes les superpositions de la carte",
-	    removeOverlaysConfirmationText: "Etes-vous sûr de vouloir supprimer tous les calques chargés de la carte?",
+	    removeOverlaysConfirmationText: "Etes-vous sûr de vouloir supprimer tous les calques chargés de la carte?"
     },
     
 	
