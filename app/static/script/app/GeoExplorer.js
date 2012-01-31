@@ -211,12 +211,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					success: success,
 					failure: failure,
 					scope: this
-				});*/
-			
+				});
+			*/
 			//ORIGINAL 
 			OpenLayers.Request.GET({
 				//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-				url: proxy + 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload%3F' + 'd=' + (new Date().getTime()),
+				url: proxy + encodeURIComponent('http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime())),
 				success: function(request) {
 					
 					var addConfig;
@@ -240,7 +240,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				scope: this
 			});
 			
+			
 		}
+		
 		
 		
 		
@@ -313,6 +315,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             //}
             
             app = new GeoExplorer.Composer(config);
+			
+			
         }else{
             Ext.Msg.show({
                 title: this.userConfigLoadTitle,
@@ -362,7 +366,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             id: 'paneltbar',
             items: this.createTools()
         });
-        this.on("ready", function() {
+        this.on("portalready", function() {
             // enable only those items that were not specifically disabled
             var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;

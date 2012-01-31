@@ -125,8 +125,7 @@
          "units":"m",
          "zoom":7
       },
-      
-      "modified":false,
+	  "loginService":"http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
       "printService":"http://demo1.geo-solutions.it/geoserver/pdf/",
       "proxy":"/http_proxy/proxy/?url=",
       "renderToTab":"appTabs",
@@ -317,7 +316,7 @@
                "target":"paneltbar"
             },
             "ptype":"gxp_login",
-			"url":"http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml"
+			"loginService":"http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml"
          },
          {
             "actionTarget":{

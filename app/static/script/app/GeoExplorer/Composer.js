@@ -86,15 +86,15 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, 
             {
                 ptype: "gxp_addgroup",
-                actionTarget: "tree.tbar"
+                actionTarget:  "tree.tbar"
             },
             {
                 ptype: "gxp_removegroup",
-                actionTarget: "tree.tbar"
+                actionTarget:  ["tree.tbar", "layertree.contextMenu"]
             }, 
             {
                 ptype: "gxp_groupproperties",
-                actionTarget: ["tree.tbar"]
+                actionTarget:  ["tree.tbar", "layertree.contextMenu"]
             },
             {
                 ptype: "gxp_layerproperties",
@@ -159,7 +159,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				   index:50,
 				   target:"paneltbar"
 				},
-				ptype:"gxp_login"
+				ptype:"gxp_login",
+				loginService: config.loginService
 			}, {
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'fdh-print'},
