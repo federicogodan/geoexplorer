@@ -111,7 +111,7 @@ GeoExt.Lang.add("fr", {
     },  
 
     "gxp.plugins.Legend.prototype": { 
-        menuText: "Montrer la légende",
+        menuText: "Légende",
         tooltip: "Montrer la légende"
     },  
 
