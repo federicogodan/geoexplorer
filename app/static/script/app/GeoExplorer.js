@@ -63,7 +63,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     descriptionText: "Description",
     contactText: "Contact",
     aboutThisMapText: "About this Map",
-    
+    viewTabTitle : "View",
+
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
     // End i18n.
@@ -88,8 +89,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             this.mapId = mapId;
         if(auth)
             this.auth = auth;
-        if(fScreen)
+        if(fScreen){
             this.fScreen = fScreen;
+            this.auth = false;
+        }
             
         this.mapItems = [
             {

@@ -55,6 +55,12 @@ GeoExt.Lang.add("en", {
         doneText: "Done",
         uploadText: "Upload Data"
     },
+
+    "gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Retirer des superpositions",
+	    removeOverlaysActionTip: "Supprime toutes les superpositions de la carte",
+	    removeOverlaysConfirmationText: "Etes-vous sûr de vouloir supprimer tous les calques chargés de la carte?",
+    },
     
     "gxp.plugins.BingSource.prototype": {
         title: "Bing Layers",
@@ -193,4 +199,69 @@ GeoExt.Lang.add("en", {
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Zoom level"
     }
+
+    "gxp.plugins.AddGroup.prototype": { 
+	    addGroupMenuText: "Add Group",
+	    addGroupActionTip: "Add a new group in the layer tree",   
+	    addGroupDialogTitle: "New Group", 
+	    addGroupFieldSetText: "Group Name",
+	    addGroupFieldLabel: "New Group",
+	    addGroupButtonText: "Add Group",
+	    addGroupMsg: "Please enter a group name"	
+    },
+    
+    "gxp.plugins.RemoveGroup.prototype": { 
+	    removeGroupMenuText: "Remove Group",
+	    removeGroupActionTip: "Remove a group from the layer tree",
+	    removeGroupActionTip: "Removes the selected group and own layers from the map",
+	    removeGroupConfirmationText: "Are you sure you want to remove the selected group ? The all layers inside this group will be removed from the map."
+    },
+    
+    "gxp.plugins.SaveDefaultContext.prototype": { 
+	    saveDefaultContextMenuText: "Save default context",
+	    saveDefaultContextActionTip: "Save current context as default one",
+	    contextSaveSuccessString: "Context saved succesfully",
+	    contextSaveFailString: "Context not saved succesfully"
+    },
+    "gxp.plugins.FDHGeoCoder.prototype": {
+        initialText: "Select an area",
+        menuText: "FDH Geo Coding",
+        tooltip: "FDH Geo Coding"
+    },
+    "gxp.plugins.ZoomBox.prototype":{
+        zoomInMenuText: "Zoom Box In",
+        zoomOutMenuText: "Zoom Box Out",
+        zoomInTooltip: "Zoom Box In",
+        zoomOutTooltip: "Zoom Box Out"
+	},
+     "GeoExt.ux.PrintPreview.prototype":{
+    paperSizeText: "Paper size:",
+    resolutionText: "Resolution:",
+    printText: "Print",
+    emptyTitleText: "Enter map title here.",
+    includeLegendText: "Include legend?",
+	legendOnSeparatePageText: "Legend on separate page?",
+	compactLegendText: "Compact legend?",	
+    emptyCommentText: "Enter comments here.",
+    creatingPdfText: "Creating PDF..."
+    },
+    "gxp.plugins.GeonetworkSearch.prototype":{
+        geonetworkSearchText: "View metadata",
+        geonetworkSearchActionTip: "View metadata"
+    },
+    "gxp.plugins.GroupProperties.prototype":{
+        groupPropertiesMenuText:  "Group Properties",
+        groupPropertiesActionTip:  "Group Properties",
+        groupPropertiesDialogTitle: "Group Properties - ",
+        groupPropertiesFieldSetText: "Group Name",
+        groupPropertiesFieldLabel: "New Group Name",
+        groupPropertiesButtonText: "Done",
+        groupPropertiesMsg: "Please enter a group name"
+    },
+	"gxp.plugins.Login.prototype":{
+		loginText: "Login",
+        loginErrorText: "Invalid username or password.",
+        userFieldText: "User",
+        passwordFieldText: "Password"
+	}
 });
