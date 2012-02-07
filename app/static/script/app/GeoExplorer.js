@@ -192,7 +192,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
     loadConfig: function(config) {
 
-        if(config.isLoadedFromConfigFile){
+        /*if(config.isLoadedFromConfigFile){
           this.applyConfig(config);
         } else {
             Ext.Ajax.request({
@@ -227,9 +227,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                   this.applyConfig(config);
                }
             });		
-        }
+        }*/
 
-        /*
+        
         var success = function(request) {                                
                   var addConfig;
                   try {
@@ -250,13 +250,13 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         };
 
         OpenLayers.Request.GET({
-          url: "json2.txt",
+          url: "../json2.js",
           params: '',
           success: success,
           failure: failure,
           scope: this
         });
-        */
+		
     },
     
     loadUserConfig: function(json){

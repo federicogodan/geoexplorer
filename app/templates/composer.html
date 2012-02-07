@@ -61,9 +61,8 @@
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        
-        var onReady = function(){
-
+        //var onReady = function(){
+        Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
                         return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
@@ -96,8 +95,12 @@
             gnLangStr = 'it';
 	    }
 
-        var gnURL = 'http://159.213.57.108/geonetwork/srv/en/main.home' ;
-        
+        var gnURL = 'http://159.213.57.108/geonetwork/srv/en/main.home';
+		var gpURL = 'http://geoportale.lamma.rete.toscana.it';
+
+			//
+            //Pannello per Geonetwork Consorzio LaMMA
+			//
             var geonetworkPanel = new Ext.Panel({
                 id: 'geonetworkPanel',
                 title: GeoExplorer.prototype.searchTabTitle || 'Portale',
@@ -109,9 +112,24 @@
                     }) 
                 ]
             });
+
+			//
+            //Pannello per Geoportale Consorzio LaMMA
+			//
+            var geoportalPanel = new Ext.Panel({
+                id: 'geoportalPanel',
+                title: GeoExplorer.prototype.searchTabTitle || 'Geoportal',
+                layout:'fit', 
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        id: 'gp-panel',
+                        url: gpURL
+                    }) 
+                ]
+            });
             
             var appTabs = new Ext.TabPanel({
-                items: [geonetworkPanel],
+                items: [geoportalPanel,geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
@@ -182,24 +200,35 @@
 
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
-                layout:'fit',
-                border:false,
+                layout: 'border',
+                margins: '0 0 0 0 ',
                 items: [{
-                    region : 'center',
-                    layout : 'border',
-                    border : false,
-                    header : false,                    
-                    items : [appTabs],                            
-                    bbar : [
-                      poweredByGeoSol, ' ', aboutButton
-                    ]
+                        region: 'north',
+                        border: false,
+                        height: 75,
+                        hideCollapseTool: true,
+                        collapsible : true,
+                        collapsed: false,
+                        collapseMode: 'mini',
+                        split: true,
+                        html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',
+                        bodyStyle: 'padding:0px;background-color: #222b43;'
+                    },{
+                        region : 'center',
+                        layout : 'border',
+                        border : false,
+                        header : false,                    
+                        items : [appTabs],                            
+                        bbar : [
+                          poweredByGeoSol, ' ', aboutButton
+                        ]
                 }]
             });
             
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
-            var sources = "{" + 
+            /*var sources = "{" + 
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -230,8 +259,8 @@
 
             try{
                 sources = Ext.util.JSON.decode(sources);
-            }catch(e){
-                sources = {
+            }catch(e){*/
+                var sources = {
                     mapquest: {
                         ptype: "gxp_mapquestsource"
                     },
@@ -249,13 +278,13 @@
                     }
                 };
           
-                Ext.Msg.show({
+                /*Ext.Msg.show({
                       title: "Startup",
                       msg: "An error occurred while parsing the CUSTOM GeoServer sources",
                       buttons: Ext.Msg.OK,
                       icon: Ext.MessageBox.ERROR
                 });
-            }
+            }*/
 			      			      
             app = new GeoExplorer.Composer({
                 modified: false,
@@ -322,9 +351,10 @@
                     }
                 }    
             });
-			};			
-			
-      Ext.Ajax.request({
+			});
+            //};            
+            
+      /*Ext.Ajax.request({
           //url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
           url: "http://localhost:8080/urlConfig.js",
           method: 'GET',
@@ -361,6 +391,6 @@
                     icon: Ext.MessageBox.ERROR
               });
           }
-      });
+      });*/
         
     </script>
