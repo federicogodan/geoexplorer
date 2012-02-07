@@ -250,7 +250,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         };
 
         OpenLayers.Request.GET({
-          url: "../json2.js",
+          //url: "../json2.js",
+		  url: "../json2_TOTALE.js",
           params: '',
           success: success,
           failure: failure,
