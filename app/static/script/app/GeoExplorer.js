@@ -211,10 +211,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     }
                     
                     if(addConfig){
-                        if(addConfig.data){	
+                        if(addConfig.data){    
                             addConfig = Ext.util.JSON.decode(addConfig.data);
                             this.applyConfig(Ext.applyIf(addConfig, config));
-                        }else{		
+                        }else{        
                             this.applyConfig(Ext.applyIf(addConfig, config));
                         }
                     } else {
@@ -225,7 +225,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                failure: function(response, opts){
                   this.applyConfig(config);
                }
-            });		
+            });        
         }
 
         /*
@@ -479,7 +479,106 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             scope: this
         });
     },
+
+    /** api: method[showMarkerOnMap]
+     *  :return: ``String``
+     *
+     *  Descrizione.
+     */
+    showMarkerOnMap: function(id, lat, lon) {
+        var lon;
+        var lat;
+        var zoom;
+        var markerURL = 'http://localhost:8080/iframe/img/markers/marker1.png';
+        var markerWidth = 16;
+        var markerHeight = 16;
+        var markerOffsetX = -20;
+        var markerOffsetY = -20;
+        var markerLayer = null;
+        if (markerLayer == null) {
+            markerLayer = new OpenLayers.Layer.Markers('Markers');
+            markerLayer.Id = 'Markers';
+            app.mapPanel.map.addLayer(markerLayer);
+        }
+        var lonLat = new OpenLayers.LonLat(lon,lat)
+        lonLat.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                            app.mapPanel.map.getProjectionObject() // to Spherical Mercator Projection
+                        );
+        var size = new OpenLayers.Size(markerWidth, markerHeight);
+        var offset = new OpenLayers.Pixel(markerOffsetX, markerOffsetY);
+        var icon = new OpenLayers.Icon(markerURL, size, offset);
+
+        // Move the map to the new marker to hightlight it
+        app.mapPanel.map.setCenter(lonLat, zoom);
+        var newMarker = new OpenLayers.Marker(new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), app.mapPanel.map.getProjectionObject())); 
+        newMarker.Id = id;
+        newMarker.icon = icon;
+        newMarker.events.register('mousedown', newMarker, function(evt) { alert(this.icon.url); OpenLayers.Event.stop(evt); });
+        markerLayer.addMarker(newMarker, icon);
+    },
     
+    /** api: method[showMarkerGeoRSS]
+     *  :return: ``String``
+     *
+     *  Descrizione.
+     */
+    showMarkerGeoRSS: function() {
+            var yelp = new OpenLayers.Icon("http://localhost:8080/iframe/img/markers/marker1.png", new OpenLayers.Size(16,16));
+            var markerGeoRSS = new OpenLayers.Layer.GeoRSS( 'GeoRSS', 'http://localhost:8080/iframe/GeoRSS_xml/georss.xml', {'icon':yelp, 'projection': new OpenLayers.Projection("EPSG:4326")});
+            app.mapPanel.map.addLayer(markerGeoRSS);
+    },
+
+    /** api: method[showMarkerText]
+     *  :return: ``String``
+     *
+     *  Descrizione.
+     */
+    showMarkerText: function() {
+            var markerText = new OpenLayers.Layer.Text( "text", {'location': "http://localhost:8080/iframe/Marker_txt/textfile.txt", 'projection': new OpenLayers.Projection("EPSG:4326")} );
+            app.mapPanel.map.addLayer(markerText);
+    },
+
+    /** api: method[showMarkerGeoJSON]
+     *  :return: ``String``
+     *
+     *  Descrizione.
+     */
+    showMarkerGeoJSON: function(markerName, GeoJSON_file) {
+           var selectControl, selectedFeature;
+           var vector_layer = new OpenLayers.Layer.Vector(markerName, {
+                                    strategies: [new OpenLayers.Strategy.Fixed()],
+                                    protocol: new OpenLayers.Protocol.HTTP(
+                                        {
+                                            url: GeoJSON_file,
+                                            format: new OpenLayers.Format.GeoJSON({internalProjection: new OpenLayers.Projection("EPSG:900913"),externalProjection: new OpenLayers.Projection("EPSG:4326")})
+                                        })
+                                    });
+            function onFeatureSelect(feature) {
+                selectedFeature = feature;
+                var items = [];
+                items.push({
+                    xtype: "propertygrid",
+                    title: feature.fid,
+                    source: feature.attributes
+                });
+                new GeoExt.Popup({
+                    title: "Feature Info",
+                    width: 300,
+                    height: 200,
+                    layout: "accordion",
+                    map: app.mapPanel,
+                    location: feature.geometry.getBounds().getCenterLonLat(),
+                    items: items
+                }).show();
+            }            
+           app.mapPanel.map.addLayer(vector_layer);
+
+           selectControl = new OpenLayers.Control.SelectFeature(vector_layer,
+               {onSelect: onFeatureSelect});
+           app.mapPanel.map.addControl(selectControl);
+           selectControl.activate();
+    },
+
     /** api: method[getBookmark]
      *  :return: ``String``
      *

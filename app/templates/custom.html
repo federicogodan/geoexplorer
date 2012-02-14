@@ -3,6 +3,7 @@
     <!-- OpenLayers resources -->
     <link rel="stylesheet" type="text/css" href="externals/openlayers/theme/default/style.css">
     <script type="text/javascript" src="script/OpenLayers.js"></script>
+    <!--script type="text/javascript" src="externals/openlayers/lib/OpenLayers.js"></script-->
 
     <!-- GeoExt resources -->
     <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/popup.css">
@@ -16,6 +17,7 @@
 
     <!-- proj4js resources -->
     <script type="text/javascript" src="script/proj4js.js"></script>
+    <!--script type="text/javascript" src="externals/proj4js/lib/proj4js.js"></script-->
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
@@ -39,7 +41,7 @@
         for (var j=0; j < params.length; j++) {
           var param = params[j].split("=");
           switch ( param[0] ) {
-            case "mapId"	: 
+            case "mapId"    : 
                             try{
                                 mapIdentifier = parseInt(param[1]);
                             }catch(e){
@@ -64,12 +66,12 @@
                             fullScreen = false; 
           }
         }
-		            
+                    
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        
-        var onReady = function(){
+        //var onReady = function(){
+        Ext.onReady(function(){
 
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
@@ -100,7 +102,7 @@
                 layout:'fit', 
                 border : false,
                 id : 'appTabs'
-            });         
+            });    
             
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
@@ -131,7 +133,7 @@
                     window.open('http://geo-solutions.it/contact/', '_blank');
                 }
             });    
-			
+            
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
@@ -151,7 +153,7 @@
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
-            var sources = "{" + 
+            /*var sources = "{" + 
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -182,8 +184,8 @@
 
             try{
                 sources = Ext.util.JSON.decode(sources);
-            }catch(e){
-                sources = {
+            }catch(e){*/
+                var sources = {
                     mapquest: {
                         ptype: "gxp_mapquestsource"
                     },
@@ -201,14 +203,14 @@
                     }
                 };
           
-                Ext.Msg.show({
+               /* Ext.Msg.show({
                       title: "Startup",
                       msg: "An error occurred while parsing the CUSTOM GeoServer sources",
                       buttons: Ext.Msg.OK,
                       icon: Ext.MessageBox.ERROR
                 });
-            }
-			      			      
+            }*/
+                                    
             app = new GeoExplorer.Composer({
                 modified: false,
                 //proxy: "proxy/?url=",
@@ -223,7 +225,7 @@
                 },
                 sources: sources,
                 map: {
-					          projection: "EPSG:900913",
+                    projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
                         -20037508.34, -20037508.34,
@@ -261,7 +263,7 @@
                         group: "background"
                     }],
                     center: [-1224514, 1291331],
-                    zoom: 6
+                    zoom: 2
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
@@ -275,9 +277,9 @@
                     }
                 }    
             });
-			};			
-			
-      Ext.Ajax.request({
+            });            
+            
+      /*Ext.Ajax.request({
           //url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
           url: "/geostore/urlConfig.js",
           method: 'GET',
@@ -314,6 +316,6 @@
                     icon: Ext.MessageBox.ERROR
               });
           }
-      });
+      });*/
         
     </script>
