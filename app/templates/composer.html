@@ -21,9 +21,9 @@
     <script>
         
         var app;
-		
+        
         var startTime = OpenLayers.Date.parse('2011-12-04T12:00:00.000Z').toISOString();
-		
+        
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
 
         //
@@ -34,7 +34,7 @@
         for (var j=0; j < params.length; j++) {
           var param = params[j].split("=");
           switch ( param[0] ) {
-            case "mapId"	: 
+            case "mapId"    : 
                             try{
                                 mapIdentifier = parseInt(param[1]);
                             }catch(e){
@@ -59,7 +59,7 @@
                             fullScreen = false; 
           }
         }
-		            
+                    
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
@@ -88,21 +88,21 @@
                  }
             });
             
-	    var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'it';
+        var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'it';
 
-	    var availLanguages = ['it'];
-	    var gnLangStr = curLang.substr(0,2);
-		
-	    if(availLanguages.indexOf(gnLangStr) < 0){
+        var availLanguages = ['it'];
+        var gnLangStr = curLang.substr(0,2);
+        
+        if(availLanguages.indexOf(gnLangStr) < 0){
             gnLangStr = 'it';
-	    }
+        }
 
         var gnURL = 'http://159.213.57.108/geonetwork/srv/en/main.home';
-		var gpURL = 'http://geoportale.lamma.rete.toscana.it';
+        var gpURL = 'http://geoportale.lamma.rete.toscana.it';
 
-			//
+            //
             //Pannello per Geonetwork Consorzio LaMMA
-			//
+            //
             var geonetworkPanel = new Ext.Panel({
                 id: 'geonetworkPanel',
                 title: GeoExplorer.prototype.searchTabTitle || 'Portale',
@@ -115,9 +115,9 @@
                 ]
             });
 
-			//
+            //
             //Pannello per Geoportale Consorzio LaMMA
-			//
+            //
             var geoportalPanel = new Ext.Panel({
                 id: 'geoportalPanel',
                 title: GeoExplorer.prototype.searchTabTitle || 'Geoportal',
@@ -168,7 +168,7 @@
                     window.open('http://geo-solutions.it/contact/', '_blank');
                 }
             });    
-		
+        
             var langData = [['it', 'Italiano']];
 
             var query = location.search;        
@@ -194,11 +194,11 @@
                     }
                 });
             }            
-			
-	    if (GeoExt.Lang) {
+            
+        if (GeoExt.Lang) {
                 GeoExt.Lang.set(code);
             }
-	
+    
 
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
@@ -287,7 +287,7 @@
                       icon: Ext.MessageBox.ERROR
                 });
             }*/
-			      			      
+                                    
             app = new GeoExplorer.Composer({
                 modified: false,
                 proxy: proxy,
@@ -301,7 +301,7 @@
                 },
                 sources: sources,
                 map: {
-					          projection: "EPSG:900913",
+                              projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
                         -20037508.34, -20037508.34,
@@ -353,7 +353,7 @@
                     }
                 }    
             });
-			});
+            });
             //};            
             
       /*Ext.Ajax.request({

@@ -81,9 +81,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -97,9 +95,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -114,9 +110,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -130,9 +124,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -146,9 +138,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -163,9 +153,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -179,9 +167,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -195,9 +181,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -212,9 +196,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -228,9 +210,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -244,9 +224,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -261,9 +239,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -277,9 +253,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -293,9 +267,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -310,9 +282,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -326,9 +296,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -342,9 +310,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -359,9 +325,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -375,9 +339,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -391,9 +353,7 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -408,9 +368,7 @@
                "uuid":"",
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -425,9 +383,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -442,9 +398,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -460,9 +414,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -477,9 +429,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -494,9 +444,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -512,9 +460,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -529,9 +475,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -546,9 +490,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -564,9 +506,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -581,9 +521,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -598,9 +536,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -616,9 +552,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -633,9 +567,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -650,9 +582,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -668,9 +598,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -685,9 +613,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -702,9 +628,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -720,9 +644,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -737,9 +659,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -754,9 +674,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -772,9 +690,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -789,9 +705,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -806,9 +720,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -824,9 +736,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -841,9 +751,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -858,9 +766,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -876,9 +782,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -893,9 +797,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -910,9 +812,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -928,9 +828,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -945,9 +843,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -962,9 +858,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -980,9 +874,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -997,9 +889,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1014,9 +904,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1032,9 +920,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1049,9 +935,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1066,9 +950,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1084,9 +966,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1101,9 +981,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1118,9 +996,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1136,9 +1012,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1153,9 +1027,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1170,9 +1042,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1188,9 +1058,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1205,9 +1073,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1222,9 +1088,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1240,9 +1104,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1257,9 +1119,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1274,9 +1134,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },
             {
                "format":"image/png",
@@ -1292,9 +1150,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-			   "time": "2011-12-04T12:00:00.000Z",
-			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             }
          ],
          "maxExtent":["-20037508.34","-20037508.34","20037508.34","20037508.34"],
@@ -1314,7 +1170,9 @@
             "ptype": "gxp_wmssource",
             "layerBaseParams":{
                "TILED":false,
-               "TILESORIGIN":"-20037508.34,-20037508.34"
+               "TILESORIGIN":"-20037508.34,-20037508.34",
+               "time": "startTime",
+               "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT6H"]]}
             },
             "url":"http://172.16.1.139:8080/geoserver/ows"
          },
@@ -1491,7 +1349,14 @@
             "ptype":"gxp_print"
          },
          {
-            "ptype":"gxp_playback"
+            "ptype":"gxp_playback",
+            "controlOptions":{
+                "units":"OpenLayers.TimeUnit.HOURS",
+                "step":6
+            },
+            "outputConfig": {
+                "dynamicRange": false
+            }
         }
       ],
       "viewerTools":[

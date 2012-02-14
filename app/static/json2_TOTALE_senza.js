@@ -68,27 +68,6 @@
                "source":"google",
                "title":"Google Terrain",
                "visibility":true
-            },
-            {
-                "source": "LaMMA-Modelli",
-                "type": "OpenLayers.Layer.WMS",
-                "group":"Temperature height above ground",
-                "args": ["Temp 2m above ARW-ECM 3km", "http://172.16.1.139:8080/geoserver/ows", {
-                    "layers": ["lamma:arw_3km_Temperature_height_above_ground_20111204T120000000Z"],
-                    "transparent": true,
-                    "format": "image/png",
-                    "srs": "EPSG:900913",
-                    "time": "2011-12-04T12:00:00.000Z"
-                }, {
-                    "metadata": {
-                        "timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]
-                    },
-                    "singleTile": true,
-                    "ratio": 1,
-                    "transitionEffect": "resize",
-                    "visibility": false
-                }],
-                "selected": true
             }
          ],
          "maxExtent":["-20037508.34","-20037508.34","20037508.34","20037508.34"],
@@ -105,8 +84,12 @@
       "renderToTab":"appTabs",
       "sources":{
          "LaMMA-Modelli":{
-            "projection":"EPSG:900913",
-            "ptype": "gxp_olsource"
+            "ptype": "gxp_wmssource",
+            "layerBaseParams":{
+               "TILED":false,
+               "TILESORIGIN":"-20037508.34,-20037508.34"
+            },
+            "url":"http://172.16.1.139:8080/geoserver/ows"
          },
          "bing":{
             "projection":"EPSG:900913",
@@ -280,11 +263,11 @@
             "printService":"http://demo1.geo-solutions.it/geoserver/pdf/",
             "ptype":"gxp_print"
          },
-		 {
+         {
             "ptype":"gxp_playback",
             "controlOptions":{
                 "units":"OpenLayers.TimeUnit.HOURS",
-                "step":1
+                "step":6
             },
             "outputConfig": {
                 "dynamicRange": false

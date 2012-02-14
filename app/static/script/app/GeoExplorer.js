@@ -212,10 +212,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     }
                     
                     if(addConfig){
-                        if(addConfig.data){	
+                        if(addConfig.data){    
                             addConfig = Ext.util.JSON.decode(addConfig.data);
                             this.applyConfig(Ext.applyIf(addConfig, config));
-                        }else{		
+                        }else{        
                             this.applyConfig(Ext.applyIf(addConfig, config));
                         }
                     } else {
@@ -226,7 +226,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                failure: function(response, opts){
                   this.applyConfig(config);
                }
-            });		
+            });        
         }*/
 
         
@@ -251,13 +251,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
         OpenLayers.Request.GET({
           //url: "../json2.js",
-		  url: "../json2_TOTALE.js",
+          //url: "../json2_TOTALE_senza.js",
+		  //url: "../json2_TOTALE.js",
+		  url: "../json2_TOTALE_senza_50km.js",
           params: '',
           success: success,
           failure: failure,
           scope: this
         });
-		
+        
     },
     
     loadUserConfig: function(json){
