@@ -486,16 +486,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      *  Descrizione.
      */
     showMarkerGeoJSON: function(markerName, GeoJSON_file) {
-        var selectControl, selectedFeature;
         var layers = app.mapPanel.map.getLayersByName(markerName);           
         if (layers.length) {
            for (var key in layers.features) {
                 layers.removeFeatures(layers.features[key]);
                 layers.addFeatures(layers.features[key]);
             }
-        } else {
-           var styleMap = new OpenLayers.StyleMap({pointRadius: 14, externalGraphic: '../iframe/img/markers/winebar.png'});
-           var vector_layer = new OpenLayers.Layer.Vector(markerName, {
+        }else {
+            var styleMap = new OpenLayers.StyleMap({pointRadius: 14, externalGraphic: '../iframe/img/markers/information.png'});
+            var vector_layer = new OpenLayers.Layer.Vector(markerName, {
                                     strategies: [new OpenLayers.Strategy.Fixed()],
                                     protocol: new OpenLayers.Protocol.HTTP(
                                         {
@@ -506,36 +505,40 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                             })
                                         }),
                                     styleMap: styleMap,
-                                    displayInLayerSwitcher: false //disabilita l'aggiunta del layer in layertree
+                                    displayInLayerSwitcher: false
                                     });
 
             function onFeatureSelect(feature) {
-                selectedFeature = feature;
                 new GeoExt.Popup({
                     title: "Marker Info",
-                    width: 300,
-                    height: 200,
+                    width: 400,
+                    height: 300,
                     layout: "fit",
-                    //layout: "accordion",
                     map: app.mapPanel,
                     location: feature.geometry.getBounds().getCenterLonLat(),
                     items: [{   
                         title: feature.fid,   
                         layout: "fit",
+                        bodyStyle: 'padding:10px;background-color:#F5F5DC',
                         html: feature.attributes.html,
                         autoScroll: true,
                         autoWidth: true,
                         collapsible: false
-                    }]
+                    }],
+                    listeners: { 
+                      close : function() {
+                           selectControl.unselect(feature);
+                        }
+                    }
                 }).show();
-            }            
-           app.mapPanel.map.addLayer(vector_layer);
+            }
+            app.mapPanel.map.addLayer(vector_layer);
 
-           selectControl = new OpenLayers.Control.SelectFeature(vector_layer,
-               {onSelect: onFeatureSelect});
-           app.mapPanel.map.addControl(selectControl);
-           selectControl.activate();
-        }
+            var selectControl = new OpenLayers.Control.SelectFeature(vector_layer,
+                {onSelect: onFeatureSelect, clickout: false, multiple: true});
+            app.mapPanel.map.addControl(selectControl);
+            selectControl.activate();
+            }
     },
 
     /** api: method[getBookmark]
