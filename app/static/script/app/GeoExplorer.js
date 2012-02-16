@@ -485,7 +485,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      *
      *  Descrizione.
      */
-    showMarkerGeoJSON: function(markerName, GeoJSON_file) {
+    showMarkerGeoJSON: function(markerName,stringaGeoJSON) {
         var layers = app.mapPanel.map.getLayersByName(markerName);           
         if (layers.length) {
            for (var key in layers.features) {
@@ -493,21 +493,16 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 layers.addFeatures(layers.features[key]);
             }
         }else {
-            var styleMap = new OpenLayers.StyleMap({pointRadius: 14, externalGraphic: '../iframe/img/markers/information.png'});
-            var vector_layer = new OpenLayers.Layer.Vector(markerName, {
-                                    strategies: [new OpenLayers.Strategy.Fixed()],
-                                    protocol: new OpenLayers.Protocol.HTTP(
-                                        {
-                                            url: GeoJSON_file,
-                                            format: new OpenLayers.Format.GeoJSON({
+            var geojson_format = new OpenLayers.Format.GeoJSON({
                                                 internalProjection: new OpenLayers.Projection("EPSG:900913"),
                                                 externalProjection: new OpenLayers.Projection("EPSG:4326")
-                                            })
-                                        }),
+                                            });
+            var styleMap = new OpenLayers.StyleMap({pointRadius: 14, externalGraphic: 'theme/app/img/markers/information.png'});
+            var vector_layer = new OpenLayers.Layer.Vector(markerName, {
                                     styleMap: styleMap,
                                     displayInLayerSwitcher: false
                                     });
-
+                                    
             function onFeatureSelect(feature) {
                 new GeoExt.Popup({
                     title: "Marker Info",
@@ -533,6 +528,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }).show();
             }
             app.mapPanel.map.addLayer(vector_layer);
+            vector_layer.addFeatures(geojson_format.read(stringaGeoJSON));
 
             var selectControl = new OpenLayers.Control.SelectFeature(vector_layer,
                 {onSelect: onFeatureSelect, clickout: false, multiple: true});
