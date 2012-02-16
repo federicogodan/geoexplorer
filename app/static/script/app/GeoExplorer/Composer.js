@@ -369,14 +369,14 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
                           var viewWin = new Ext.Window({
                               width : 800,
-                              height: 500,
+                              height: 560,
                               id: 'csw-win',
                               renderTo: viewer.mapPanel.body,
                               modal: true,
                               autoScroll: true,
                               constrainHeader: true,
                               closable: true,
-                              resizable: true,
+                              resizable: false,
                               draggable: true,
                               items: [ 
                                   cswPanel 
