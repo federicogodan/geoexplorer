@@ -84,6 +84,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 7}
             }, {
+                ptype: "gxp_wmsgeojsongetfeatureinfo", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 10}
+            }, {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 12}
             }, {
@@ -104,7 +107,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         new OpenLayers.Projection("EPSG:102113"));
                 },
                 actionTarget: {target: "paneltbar", index: 26}
-            },{
+            }, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true

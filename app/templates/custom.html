@@ -24,9 +24,7 @@
 
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
     <script type="text/javascript" src="script/ux.js"></script>
-    
-    <script type="text/javascript" src="auth/base64.js"></script>
-    
+        
     <script>
         
         var app;
@@ -215,7 +213,7 @@
                 modified: false,
                 //proxy: "proxy/?url=",
                 proxy: proxy,
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
+                //xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 about: {
@@ -275,13 +273,32 @@
                         ovestPanel.hide();
                         ovestPanel.collapse();
                     }
-                }    
+                },
+                'geojsongetfeatureinfo' : function(e){                   
+                    var popup = new GeoExt.Popup({
+                        title: "GeoJson Info",
+                        width: 400,
+                        height: 300,
+                        layout: "fit",
+                        map: app.mapPanel,
+                        location: e.evt.xy,
+                        items: [{   
+                            title: e.title,   
+                            layout: "fit",
+                            bodyStyle: 'padding:10px;background-color:#F5F5DC',
+                            html: e.evt.text,
+                            autoScroll: true,
+                            autoWidth: true,
+                            collapsible: false
+                        }]
+                    }).show();
+                }
             });
 			};			
 			
       Ext.Ajax.request({
           //url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
-          url: "urlConfig.js",
+          url: "/urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
