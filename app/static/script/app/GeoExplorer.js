@@ -82,8 +82,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     auth: false,
     
     fScreen: false,
+    
+    models: null,
 
-    constructor: function(config, mapId, auth, fScreen) {
+    constructor: function(config, mapId, auth, fScreen, models) {
     
         if(mapId)
             this.mapId = mapId;
@@ -229,7 +231,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             });        
         }*/
 
-        
         var success = function(request) {                                
                   var addConfig;
                   try {
@@ -239,9 +240,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                   }
 
                   if(addConfig && addConfig.success && addConfig.success==true){                               
-                    this.applyConfig(Ext.applyIf(addConfig.result, config));
+                    //this.applyConfig(Ext.applyIf(addConfig.result, config));
+                    this.applyConfig(Ext.applyIf(addConfig.result));
                   } else {
-                    this.applyConfig(config);
+                    //this.applyConfig(config);
                   }
         };
                        
@@ -250,10 +252,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         };
 
         OpenLayers.Request.GET({
-          //url: "../json2.js",
-          //url: "../json2_TOTALE_senza.js",
-		  //url: "../json2_TOTALE.js",
-		  url: "../json2_TOTALE_senza_50km.js",
+          //url: "../json2_3KM.js",
+          url: models,
           params: '',
           success: success,
           failure: failure,
@@ -514,7 +514,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
         var tabs = new Ext.TabPanel({
             activeTab: 0,
-            items: [ appInfo]
+            items: [appInfo]
         });
 
         var win = new Ext.Window({

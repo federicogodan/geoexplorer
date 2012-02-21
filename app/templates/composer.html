@@ -21,17 +21,15 @@
     <script>
         
         var app;
-        
         var startTime = OpenLayers.Date.parse('2011-12-04T12:00:00.000Z').toISOString();
-        
-        var modified = false; var mapIdentifier; var authorization; var fullScreen;
+        var modified = false; var mapIdentifier; var authorization; var fullScreen; var models;
 
         //
         // Parsing the request to get the parameters
         //
         var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
         
-        for (var j=0; j < params.length; j++) {
+        for (var j=0; j < params.length; j++) {  //inserire un nuovo parametro per il nuovo json da caricare per 
           var param = params[j].split("=");
           switch ( param[0] ) {
             case "mapId"    : 
@@ -131,12 +129,44 @@
             });
             
             var appTabs = new Ext.TabPanel({
-                items: [geoportalPanel,geonetworkPanel],
+                //items: [geoportalPanel,geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
                 enableTabScroll: true
-            });         
+            });
+        
+            //
+            //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
+            //
+            
+        models = "../json2_3KM.js";
+
+        var storeModels = new Ext.data.SimpleStore({
+                            fields: ['modelValue', 'modelName'],
+                            data: [
+                                ['../json2_3KM.js', 'ARW 3km'],
+                                ['../json2_9KM.js', 'ARW 9km'],
+                                ['../json2_50KM.js', 'GFS 50km']                            
+                            ]
+                        });
+                        
+        var comboModels = new Ext.form.ComboBox({
+                                triggerAction: 'all',
+                                store: storeModels,
+                                mode: 'local',
+                                displayField: 'modelName',
+                                valueField: 'modelValue',
+                                listClass: 'x-combo-list-small',
+                                resizable: true,
+                                emptyText:'Seleziona un modello',
+                                selectOnFocus:true,
+                                listeners: { 
+                                    select: function(combo, record, index) {
+                                        GeoExplorer.prototype.models = combo.getValue();
+                                    }
+                                }                                        
+                            });
 
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
@@ -214,7 +244,8 @@
                         collapseMode: 'mini',
                         split: true,
                         html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',
-                        bodyStyle: 'padding:0px;background-color: #222b43;'
+                        bodyStyle: 'padding:0px;background-color: #222b43;',
+                        tbar : [comboModels]
                     },{
                         region : 'center',
                         layout : 'border',

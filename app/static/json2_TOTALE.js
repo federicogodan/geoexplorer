@@ -1295,6 +1295,23 @@
                "transitionEffect":"resize",
 			   "time": "2011-12-04T12:00:00.000Z",
 			   "metadata": {"timeInterval": [["2011-12-04T12:00:00.000Z","2011-12-07T00:00:00.000Z","PT1H"]]}
+            },
+            {
+               "format":"image/png",
+               "group":"Stazioni",
+               "name":"stazioni:TempAria2012_02_16_12",
+               "opacity":1,
+               "selected":false,
+               "source":"LaMMA-StazioniTempAria",
+               "styles":[],
+               "title":"TempAria2012_02_16_12",
+               "transparent":true,
+               "uuid":"",
+               "tiled":false,
+               "visibility":false,
+               "ratio":1,
+               "srs":"EPSG:900913",
+               "transitionEffect":"resize"
             }
          ],
          "maxExtent":["-20037508.34","-20037508.34","20037508.34","20037508.34"],
@@ -1310,6 +1327,14 @@
       "proxy":"proxy/?url=",
       "renderToTab":"appTabs",
       "sources":{
+         "LaMMA-StazioniTempAria":{
+            "ptype": "gxp_wmssource",
+            "layerBaseParams":{
+               "TILED":false,
+               "TILESORIGIN":"-20037508.34,-20037508.34"
+            },
+            "url":"http://172.16.1.139:8080/geoserver/ows?namespace=stazioni"
+         },
          "LaMMA-Modelli":{
             "ptype": "gxp_wmssource",
             "layerBaseParams":{
@@ -1491,8 +1516,15 @@
             "ptype":"gxp_print"
          },
          {
-            "ptype":"gxp_playback"
-        }
+            "ptype":"gxp_playback",
+            "controlOptions":{
+                "units":"OpenLayers.TimeUnit.HOURS",
+                "step":6
+            },
+            "outputConfig": {
+                "dynamicRange": false
+            }
+         }
       ],
       "viewerTools":[
 
