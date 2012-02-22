@@ -154,6 +154,7 @@ GeoExt.Lang.add("it", {
         infoActionTip: "Recupera Feature Info",
         popupTitle: "Feature Info"
     },
+	
 	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
         infoActionTip: "GeoJson Info",
         popupTitle: "Feature Info"
@@ -221,6 +222,13 @@ GeoExt.Lang.add("it", {
          stylesFieldsetTitle: "Stili",
          rulesFieldsetTitle: "Regole"
     },
+	
+	"gxp.plugins.ZoomBox.prototype":{
+        zoomInMenuText: "Zoom Box Avanti",
+        zoomOutMenuText: "Zoom Box Indietro",
+        zoomInTooltip: "Zoom Box Avanti",
+        zoomOutTooltip: "Zoom Box Indietro"
+    },
 
     "gxp.NewSourceWindow.prototype": {
         title: "Aggiungi nuovo Server...",
@@ -230,10 +238,16 @@ GeoExt.Lang.add("it", {
         contactingServerText: "Si cerca di contattare il Server..."
     },
 
-    "gxp.ScaleOverlay.prototype": { 
-        zoomLevelText: "Livello di Zoom"
+	"gxp.plugins.GroupProperties.prototype":{
+        groupPropertiesMenuText:  "Proprietà del gruppo",
+        groupPropertiesActionTip:  "Proprietà del gruppo",
+        groupPropertiesDialogTitle: "Proprietà del gruppo - ",
+        groupPropertiesFieldSetText: "Nome del Gruppo",
+        groupPropertiesFieldLabel: "Nuovo nome del Gruppo",
+        groupPropertiesButtonText: "Fatto",
+        groupPropertiesMsg: "Si prega di inserire il nome del gruppo."
     },
-
+	
     "gxp.plugins.AddGroup.prototype": { 
 	    addGroupMenuText: "Aggiungi Gruppo",
 	    addGroupActionTip: "Aggiungi nuovo Gruppo all'albero dei livelli",   
@@ -250,7 +264,10 @@ GeoExt.Lang.add("it", {
 	    removeGroupActionTip: "Rimuovi il gruppo selezionato e i suoi livelli dalla mappa",
 	    removeGroupConfirmationText: "Sei sicuro di voler rimuovere il gruppo selezionato ? Tutti i livelli in esso presenti saranno rimossi dalla mappa."
     },
-    
+	
+    "gxp.ScaleOverlay.prototype": { 
+        zoomLevelText: "Livello di Zoom"
+    },
     "gxp.plugins.SaveDefaultContext.prototype": { 
 	    saveDefaultContextMenuText: "Salva il contesto",
 	    saveDefaultContextActionTip: "Salva il contesto",
@@ -264,12 +281,6 @@ GeoExt.Lang.add("it", {
         tooltip: "FDH Geo Coding"
     },
 
-    "gxp.plugins.ZoomBox.prototype":{
-        zoomInMenuText: "Zoom Box Avanti",
-        zoomOutMenuText: "Zoom Box Indietro",
-        zoomInTooltip: "Zoom Box Avanti",
-        zoomOutTooltip: "Zoom Box Indietro"
-    },
 
     "GeoExt.ux.PrintPreview.prototype":{
 	    paperSizeText: "Dimesioni del foglio:",
@@ -287,17 +298,7 @@ GeoExt.Lang.add("it", {
         geonetworkSearchText: "Visualizza metadati",
         geonetworkSearchActionTip: "Visualizza metadati"
     },
-
-    "gxp.plugins.GroupProperties.prototype":{
-        groupPropertiesMenuText:  "Proprietà del gruppo",
-        groupPropertiesActionTip:  "Proprietà del gruppo",
-        groupPropertiesDialogTitle: "Proprietà del gruppo - ",
-        groupPropertiesFieldSetText: "Nome del Gruppo",
-        groupPropertiesFieldLabel: "Nuovo nome del Gruppo",
-        groupPropertiesButtonText: "Fatto",
-        groupPropertiesMsg: "Si prega di inserire il nome del gruppo."
-    },
-
+	
     "gxp.plugins.Login.prototype":{
 	loginText: "Login",
 	loginErrorText: "Username o password invalidi.",

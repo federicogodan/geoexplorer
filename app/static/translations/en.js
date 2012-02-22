@@ -154,6 +154,7 @@ GeoExt.Lang.add("en", {
         infoActionTip: "Get Feature Info",
         popupTitle: "Feature Info"
     },
+	
 	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
         infoActionTip: "Get GeoJSON Feature Info",
         popupTitle: "Feature Info"
@@ -195,6 +196,32 @@ GeoExt.Lang.add("en", {
         stylesText: "Styles"
     },
 	
+	 "gxp.WMSStylesDialog.prototype": {
+		 addStyleText: "Add",
+		 addStyleTip: "Add a new style",
+		 chooseStyleText: "Choose style",
+		 deleteStyleText: "Remove",
+		 deleteStyleTip: "Delete the selected style",
+		 editStyleText: "Edit",
+		 editStyleTip: "Edit the selected style",
+		 duplicateStyleText: "Duplicate",
+		 duplicateStyleTip: "Duplicate the selected style",
+		 addRuleText: "Add",
+		 addRuleTip: "Add a new rule",
+		 newRuleText: "New Rule",
+		 deleteRuleText: "Remove",
+		 deleteRuleTip: "Delete the selected rule",
+		 editRuleText: "Edit",
+		 editRuleTip: "Edit the selected rule",
+		 duplicateRuleText: "Duplicate",
+		 duplicateRuleTip: "Duplicate the selected rule",
+		 cancelText: "Cancel",
+		 saveText: "Save",
+		 styleWindowTitle: "User Style: {0}",
+		 ruleWindowTitle: "Style Rule: {0}",
+		 stylesFieldsetTitle: "Styles",
+		 rulesFieldsetTitle: "Rules"
+    },
 	
 	"gxp.plugins.ZoomBox.prototype":{
         zoomInMenuText: "Zoom Box In",
@@ -210,6 +237,7 @@ GeoExt.Lang.add("en", {
         invalidURLText: "Enter a valid URL to a WMS endpoint (e.g. http://example.com/geoserver/wms)",
         contactingServerText: "Contacting Server..."
     },
+	
 	 "gxp.plugins.GroupProperties.prototype":{
         groupPropertiesMenuText:  "Group Properties",
         groupPropertiesActionTip:  "Group Properties",
@@ -219,6 +247,7 @@ GeoExt.Lang.add("en", {
         groupPropertiesButtonText: "Done",
         groupPropertiesMsg: "Please enter a group name"
     },
+	
 	"gxp.plugins.AddGroup.prototype": { 
 	    addGroupMenuText: "Add Group",
 	    addGroupActionTip: "Add a new group in the layer tree",   

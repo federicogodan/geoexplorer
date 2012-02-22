@@ -154,6 +154,7 @@ GeoExt.Lang.add("fr", {
         infoActionTip: "Obtenir des infos sur l`entité",
         popupTitle: "Info sur l`entité"
     },  
+	
 	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
         infoActionTip: "GeoJson Info",
         popupTitle: "Info sur l`entité"
@@ -194,6 +195,34 @@ GeoExt.Lang.add("fr", {
         cacheFieldText: "Utiliser la version mise en cache",
         stylesText: "Styles"
     },  
+	
+	 "gxp.WMSStylesDialog.prototype": {
+		 addStyleText: "Ajouter",
+		 addStyleTip: "Ajouter un nouveau style",
+		 chooseStyleText: "Choisissez style",
+		 deleteStyleText: "Supprimer",
+		 deleteStyleTip: "Supprimer le style sélectionné",
+		 editStyleText: "Edit",
+		 editStyleTip: "Modifier le style sélectionné",
+		 duplicateStyleText: "Duplicate",
+		 duplicateStyleTip: "Dupliquer le style sélectionné",
+		 addRuleText: "Ajouter",
+		 addRuleTip: "Ajouter une nouvelle règle",
+		 newRuleText: " Nouvelle règle",
+		 deleteRuleText: "Supprimer",
+		 deleteRuleTip: "Supprimer la règle sélectionnée",
+		 editRuleText: "Edit",
+		 editRuleTip: "Editer la règle sélectionnée",
+		 duplicateRuleText: "Duplicate",
+		 duplicateRuleTip: "Dupliquer la règle sélectionnée",
+		 cancelText: "Annuler",
+		 saveText: "Save",
+		 styleWindowTitle: "Style utilisateur: {0}",
+		 ruleWindowTitle: "Règle de Style: {0}",
+		 stylesFieldsetTitle: "Styles",
+		 rulesFieldsetTitle: "Règles"
+    },
+	
 	"gxp.plugins.ZoomBox.prototype":{
         zoomInMenuText: "Zoom Box Avant",
         zoomOutMenuText: "Zoom Box Arrière",
@@ -208,6 +237,7 @@ GeoExt.Lang.add("fr", {
         invalidURLText: "Enter un URL valide jusqu`au WMS final (e.g. http://example.com/geoserver/wms)",
         contactingServerText: "Contacter un serveur"
     },  
+	
 	"gxp.plugins.GroupProperties.prototype":{
         groupPropertiesMenuText: "Propriétés du groupe",
         groupPropertiesActionTip: "Propriétés du groupe",
@@ -217,6 +247,7 @@ GeoExt.Lang.add("fr", {
         groupPropertiesButtonText: "Fait",
         groupPropertiesMsg: "Veuillez entrer un nom de groupe"
     },
+	
 	"gxp.plugins.AddGroup.prototype": { 
 	    addGroupMenuText: "Ajouter un Groupe",
 	    addGroupActionTip: "Ajoutez un nouveau groupe à l'arbre des couvertures.",   
