@@ -34,7 +34,8 @@ GeoExt.Lang.add("fr", {
         loginText: "Se connecter",
         loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
         userFieldText: "Utilisateur",
-        passwordFieldText: "Mot de passe"
+        passwordFieldText: "Mot de passe",
+		fullScreenText: "Plein écran"
     },  
 
     "gxp.menu.LayerMenu.prototype": {
@@ -145,6 +146,10 @@ GeoExt.Lang.add("fr", {
         infoActionTip: "Obtenir des infos sur l`entité",
         popupTitle: "Info sur l`entité"
     },  
+	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
+        infoActionTip: "GeoJson Info",
+        popupTitle: "Info sur l`entité"
+    },
 
     "gxp.plugins.Zoom.prototype": {
         zoomInMenuText: "Zoom Avant",

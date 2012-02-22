@@ -34,7 +34,8 @@ GeoExt.Lang.add("en", {
         loginText: "Login",
         loginErrorText: "Invalid username or password.",
         userFieldText: "User",
-        passwordFieldText: "Password"
+        passwordFieldText: "Password",
+		fullScreenText: "Full Screen"
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -143,6 +144,10 @@ GeoExt.Lang.add("en", {
 
     "gxp.plugins.WMSGetFeatureInfo.prototype": {
         infoActionTip: "Get Feature Info",
+        popupTitle: "Feature Info"
+    },
+	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
+        infoActionTip: "Get GeoJSON Feature Info",
         popupTitle: "Feature Info"
     },
 

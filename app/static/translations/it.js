@@ -154,6 +154,10 @@ GeoExt.Lang.add("it", {
         infoActionTip: "Recupera Feature Info",
         popupTitle: "Feature Info"
     },
+	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
+        infoActionTip: "GeoJson Info",
+        popupTitle: "Feature Info"
+    },
 
     "gxp.plugins.Zoom.prototype": {
         zoomInMenuText: "Zoom Avanti",
