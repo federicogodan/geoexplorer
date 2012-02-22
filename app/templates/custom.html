@@ -34,7 +34,7 @@
         
         var app;
         
-        var modified = false; var mapIdentifier; var authorization; var fullScreen;
+        var modified = false; var mapIdentifier=-1; var authorization=false; var fullScreen=false;
 
         //
         // Parsing the request to get the parameters
@@ -64,9 +64,9 @@
                                 fullScreen = false; 
                             break;
             default : 
-                            mapIdentifier = -1;
-                            authorization = false;
-                            fullScreen = false; 
+                            //mapIdentifier = -1;
+                            //authorization = false;
+                            //fullScreen = false; 
           }
         }
 		            
