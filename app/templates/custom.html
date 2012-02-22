@@ -42,6 +42,7 @@
         var app;
         
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
+        var uuid; var layer; var wmsurl;
 
         //
         // Parsing the request to get the parameters
@@ -69,6 +70,16 @@
                                 fullScreen = true; 
                             else 
                                 fullScreen = false; 
+                            break;
+            case "layer" : 
+                            layer = param[1]; 
+                            break;
+            case "wmsurl" : 
+                            wmsurl = param[1]; 
+                            wmsurl = decodeURIComponent(wmsurl);
+                            break;
+            case "uuid" : 
+                            uuid = param[1]; 
                             break;
             default : 
                             mapIdentifier = -1;
@@ -116,7 +127,8 @@
             gnLangStr = 'it';
 	    }
 
-	    var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home';
+        var gnBaseUrl = 'http://localhost:8080/geonetwork/';
+	    var gnURL = gnBaseUrl + 'srv/' + gnLangStr + '/main.home';
 
             var geonetworkPanel = new Ext.Panel({
                 id: 'geonetworkPanel',
@@ -241,12 +253,8 @@
             //
             var sources = "{" +                
                 "\"comunefi\": {" + 
-                    "\"url\":\"http://sr-vm107-sitgs1:8082/geoserver/wms\"," +
-                    "\"title\":\"Comune FI GeoServer\"," +
-                    "\"layerBaseParams\": {" +
-                        "\"TILED\": true," +
-                        "\"TILESORIGIN\": \"-20037508.34,-20037508.34\"" +
-                    "}" +
+                    "\"url\":\"http://tms.comune.fi.it/geowebcache/service/wms\"," +
+                    "\"title\":\"Comune FI GeoWebCache\"" +
                 "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
@@ -386,11 +394,20 @@
                         ovestPanel.hide();
                         ovestPanel.collapse();
                     }
+
+                    //
+                    // Visualizing metadata tab and layer at startup
+                    //
+                    
+                    if(layer && wmsurl && gnBaseUrl && uuid)
+						addMSLayer(layer, uuid, gnBaseUrl, wmsurl);
+					
+					if(layer && wmsurl && gnBaseUrl && uuid)	
+						app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, layer);
                 }    
             });
 
             addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl){
-
 				  var record = source.createLayerRecord({
 					name: msLayerName,
 					title: msLayerName,
@@ -516,8 +533,8 @@
       };			
 			
       Ext.Ajax.request({
-          url: "http://localhost:8080/geostore/urlConfig.js",
-          //url: "/MapStore/urlConfig.js", //TEST
+          //url: "http://localhost:8080/geostore/urlConfig.js",
+          url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
