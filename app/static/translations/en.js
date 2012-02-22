@@ -34,7 +34,8 @@ GeoExt.Lang.add("en", {
         loginText: "Login",
         loginErrorText: "Invalid username or password.",
         userFieldText: "User",
-        passwordFieldText: "Password"
+        passwordFieldText: "Password",
+		fullScreenText: "Full Screen"
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -53,9 +54,17 @@ GeoExt.Lang.add("en", {
         panelTitleText: "Title",
         layerSelectionText: "View available data from:",
         doneText: "Done",
+        removeFilterText: "Clear filter", 
+        filterEmptyText: "Filter",
         uploadText: "Upload Data"
     },
-    
+	
+    "gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Remove overlays",
+	    removeOverlaysActionTip: "Removes all overlays from the map",
+	    removeOverlaysConfirmationText: "Are you sure you want to remove all loaded overlays from the map?"
+    }, 
+	
     "gxp.plugins.BingSource.prototype": {
         title: "Bing Layers",
         roadTitle: "Bing Roads",
@@ -100,7 +109,7 @@ GeoExt.Lang.add("en", {
         areaTooltip: "Measure area",
         measureTooltip: "Measure"
     },
-
+	
     "gxp.plugins.Navigation.prototype": {
         menuText: "Pan Map",
         tooltip: "Pan Map"
@@ -145,6 +154,10 @@ GeoExt.Lang.add("en", {
         infoActionTip: "Get Feature Info",
         popupTitle: "Feature Info"
     },
+	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
+        infoActionTip: "Get GeoJSON Feature Info",
+        popupTitle: "Feature Info"
+    },
 
     "gxp.plugins.Zoom.prototype": {
         zoomInMenuText: "Zoom In",
@@ -181,6 +194,14 @@ GeoExt.Lang.add("en", {
         cacheFieldText: "Use cached version",
         stylesText: "Styles"
     },
+	
+	
+	"gxp.plugins.ZoomBox.prototype":{
+        zoomInMenuText: "Zoom Box In",
+        zoomOutMenuText: "Zoom Box Out",
+        zoomInTooltip: "Zoom Box In",
+        zoomOutTooltip: "Zoom Box Out"
+    },
 
     "gxp.NewSourceWindow.prototype": {
         title: "Add New Server...",
@@ -189,7 +210,32 @@ GeoExt.Lang.add("en", {
         invalidURLText: "Enter a valid URL to a WMS endpoint (e.g. http://example.com/geoserver/wms)",
         contactingServerText: "Contacting Server..."
     },
-
+	 "gxp.plugins.GroupProperties.prototype":{
+        groupPropertiesMenuText:  "Group Properties",
+        groupPropertiesActionTip:  "Group Properties",
+        groupPropertiesDialogTitle: "Group Properties - ",
+        groupPropertiesFieldSetText: "Group Name",
+        groupPropertiesFieldLabel: "New Group Name",
+        groupPropertiesButtonText: "Done",
+        groupPropertiesMsg: "Please enter a group name"
+    },
+	"gxp.plugins.AddGroup.prototype": { 
+	    addGroupMenuText: "Add Group",
+	    addGroupActionTip: "Add a new group in the layer tree",   
+	    addGroupDialogTitle: "New Group", 
+	    addGroupFieldSetText: "Group Name",
+	    addGroupFieldLabel: "New Group",
+	    addGroupButtonText: "Add Group",
+	    addGroupMsg: "Please enter a group name"	
+    },
+    
+    "gxp.plugins.RemoveGroup.prototype": { 
+	    removeGroupMenuText: "Remove Group",
+	    removeGroupActionTip: "Remove a group from the layer tree",
+	    removeGroupActionTip: "Removes the selected group and own layers from the map",
+	    removeGroupConfirmationText: "Are you sure you want to remove the selected group ? The all layers inside this group will be removed from the map."
+    },
+	
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Zoom level"
     }

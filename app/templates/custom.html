@@ -24,7 +24,11 @@
 
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
     <script type="text/javascript" src="script/ux.js"></script>
-        
+        <!-- translation data  -->
+    <script type="text/javascript" src="translations/en.js"></script>
+    <script type="text/javascript" src="translations/fr.js"></script>  
+    <script type="text/javascript" src="translations/it.js"></script>    
+	
     <script>
         
         var app;
@@ -95,6 +99,11 @@
                  }
             });
             
+			var curLang=OpenLayers.Util.getParameters()["locale"] || "it"; //view
+			if (GeoExt.Lang) {
+                GeoExt.Lang.set(curLang);
+            }
+			
             var appTabs = new Ext.Panel({
                 region: 'center',
                 layout:'fit', 

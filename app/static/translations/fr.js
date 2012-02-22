@@ -34,7 +34,8 @@ GeoExt.Lang.add("fr", {
         loginText: "Se connecter",
         loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
         userFieldText: "Utilisateur",
-        passwordFieldText: "Mot de passe"
+        passwordFieldText: "Mot de passe",
+		fullScreenText: "Plein écran"
     },  
 
     "gxp.menu.LayerMenu.prototype": {
@@ -45,17 +46,25 @@ GeoExt.Lang.add("fr", {
         addActionMenuText: "Ajouter des couvertures",
         addActionTip: "Ajouter des couvertures",
         addServerText: "Ajouter un nouveau serveur",
-        addButtonText: "",
+        addButtonText: "Ajouter des couvertures",
         untitledText: "Sans titre",
         addLayerSourceErrorText: "Erreur d`obtention des capacités WMS ({msg}).\nVeuillez vérifier l`URL et essayez à nouveau.",
         availableLayersText: "Couvertures disponibles",
-        expanderTemplateText: "<p><b>Résumé:</b> {résumé}</p>",
+        expanderTemplateText: "<p><b>Résumé:</b> {abstract}</p>",
         panelTitleText: "Titre",
         layerSelectionText: "Visualiser les données disponibles depuis:",
         doneText: "Terminé",
+        removeFilterText: "effacer le filtre", 
+        filterEmptyText: "Filtre",
         uploadText: "Télécharger les données"
     }, 
-
+	
+	"gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Retirer des superpositions",
+	    removeOverlaysActionTip: "Supprime toutes les superpositions de la carte",
+	    removeOverlaysConfirmationText: "Etes-vous sûr de vouloir supprimer tous les calques chargés de la carte?"
+    },
+	
     "gxp.plugins.BingSource.prototype": {
         title: "Bing couvertures",
         roadTitle: "Bing routes",
@@ -145,6 +154,10 @@ GeoExt.Lang.add("fr", {
         infoActionTip: "Obtenir des infos sur l`entité",
         popupTitle: "Info sur l`entité"
     },  
+	"gxp.plugins.WMSGeoJsonGetFeatureInfo.prototype": {
+        infoActionTip: "GeoJson Info",
+        popupTitle: "Info sur l`entité"
+    },
 
     "gxp.plugins.Zoom.prototype": {
         zoomInMenuText: "Zoom Avant",
@@ -181,6 +194,12 @@ GeoExt.Lang.add("fr", {
         cacheFieldText: "Utiliser la version mise en cache",
         stylesText: "Styles"
     },  
+	"gxp.plugins.ZoomBox.prototype":{
+        zoomInMenuText: "Zoom Box Avant",
+        zoomOutMenuText: "Zoom Box Arrière",
+        zoomInTooltip: "Zoom Box Avant",
+        zoomOutTooltip: "Zoom Box Arrière"
+    },
 
     "gxp.NewSourceWindow.prototype": {
         title: "Ajouter un nouveau serveur...",
@@ -189,7 +208,32 @@ GeoExt.Lang.add("fr", {
         invalidURLText: "Enter un URL valide jusqu`au WMS final (e.g. http://example.com/geoserver/wms)",
         contactingServerText: "Contacter un serveur"
     },  
-
+	"gxp.plugins.GroupProperties.prototype":{
+        groupPropertiesMenuText: "Propriétés du groupe",
+        groupPropertiesActionTip: "Propriétés du groupe",
+        groupPropertiesDialogTitle: "Propriétés du groupe - ",
+        groupPropertiesFieldSetText: "Nom du groupe",
+        groupPropertiesFieldLabel: "nom du nouveau groupe",
+        groupPropertiesButtonText: "Fait",
+        groupPropertiesMsg: "Veuillez entrer un nom de groupe"
+    },
+	"gxp.plugins.AddGroup.prototype": { 
+	    addGroupMenuText: "Ajouter un Groupe",
+	    addGroupActionTip: "Ajoutez un nouveau groupe à l'arbre des couvertures.",   
+	    addGroupDialogTitle: "Nouveau Groupe", 
+	    addGroupFieldSetText: "Groupe Nom",
+	    addGroupFieldLabel: "Nouveau Groupe",
+	    addGroupButtonText: "Ajouter un Groupe",
+	    addGroupMsg: "Entrez le nom du groupe"	
+    },
+    
+    "gxp.plugins.RemoveGroup.prototype": { 
+	    removeGroupMenuText: "Supprimer le groupe",
+	    removeGroupActionTip: "Supprimer le groupe de l'arbre des couvertures",
+	    removeGroupActionTip: "Supprimer le groupe sélectionné et ses couvertures de la carte",
+	    removeGroupConfirmationText: "Vous êtes certain que vous souhaitez supprimer le groupe ? Tous les couvertures au sein du groupe seront supprimés de la carte."
+    },
+	
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Niveau de zoom"
     }
