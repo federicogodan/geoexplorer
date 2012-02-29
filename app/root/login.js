@@ -14,8 +14,7 @@ exports.app = function(req) {
         var headers = new Headers(objects.clone(request.headers));
         headers.set("Authorization", "Basic " + base64.encode(params.username + ":" + params.password));
         headers.set("Cookie", details.token);
-        var client = new Client(undefined, false);
-        var exchange = client.request({
+        var exchange = getClient().request({
             url: details.url,
             method: "GET",
             async: false,
