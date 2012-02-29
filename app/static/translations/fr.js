@@ -14,7 +14,7 @@ GeoExt.Lang.add("fr", {
         saveErrorText: "Problème de sauvegarde",
         bookmarkText: "Mettre l`URL en favori",
         permakinkText: "Permalien",
-        appInfoText: "A propos",
+        appInfoText: "GeoExplorer",
         aboutText: "À propos de GeoExplorer",
         mapInfoText: "Info cartographique",
         descriptionText: "Description",
@@ -54,6 +54,12 @@ GeoExt.Lang.add("fr", {
         layerSelectionText: "Visualiser les données disponibles depuis:",
         doneText: "Terminé",
         uploadText: "Télécharger les données"
+    }, 
+
+    "gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Remove overlays",
+	    removeOverlaysActionTip: "Removes all overlays from the map",
+	    removeOverlaysConfirmationText: "Are you sure you want to remove all loaded overlays from the map?",
     }, 
 
     "gxp.plugins.BingSource.prototype": {

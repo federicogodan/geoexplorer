@@ -2,6 +2,14 @@ var Client = require("ringo/httpclient").Client;
 var Headers = require("ringo/utils/http").Headers;
 var objects = require("ringo/utils/objects");
 
+// avoid reinstantiating default client if module is reevaluated.
+var defaultClient;
+
+function getClient() {
+    defaultClient = defaultClient ||  new Client(undefined, false);
+    return defaultClient;
+} ;
+
 function getAuthUrl(request) {
     var url = java.lang.System.getProperty("app.proxy.geoserver");
     if (url) {
@@ -18,12 +26,11 @@ var getDetails = exports.getDetails = function(request) {
     var url = getAuthUrl(request);
     var status = 401;
     var headers = new Headers(objects.clone(request.headers));
-    var client = new Client(undefined, false);
     var token = headers.get("Cookie");
     var exchange;
     if (token) {
         // already have a cookie, check if authorized
-        exchange = client.request({
+        exchange = getClient().request({
             url: url,
             method: "GET",
             async: false,
@@ -37,7 +44,7 @@ var getDetails = exports.getDetails = function(request) {
         if (auth) {
             headers.unset("Authorization");
         }
-        exchange = client.request({
+        exchange = getClient().request({
             url: url,
             method: "GET",
             async: false,
@@ -53,7 +60,7 @@ var getDetails = exports.getDetails = function(request) {
         // finally, if we got a cookie and we had auth header, check if authorized
         if (cookie && auth) {
             headers.set("Authorization", auth);
-            exchange = client.request({
+            exchange = getClient().request({
                 url: url,
                 method: "GET",
                 async: false,
