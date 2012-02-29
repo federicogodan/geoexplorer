@@ -14,12 +14,12 @@ GeoExt.Lang.add("it", {
         saveErrorText: "Problemi di salvataggio: ",
         bookmarkText: "URL del Segnalibro",
         permakinkText: "Permalink",
-        appInfoText: "GeoExplorer",
+        appInfoText: "Crediti",
         aboutText: "Riguardo GeoExplorer",
         mapInfoText: "Informazioni Mappa",
         descriptionText: "Descrizione",
         contactText: "Contatto",
-        aboutThisMapText: "Approposito di questa Mappa",
+        aboutThisMapText: "Riguardo a questa Mappa",
         searchTabTitle : "Portale",
         viewTabTitle : "Vista"
     },
@@ -116,10 +116,10 @@ GeoExt.Lang.add("it", {
     },
 
     "gxp.plugins.NavigationHistory.prototype": {
-        previousMenuText: "Zoom alla precedente estenzione",
-        nextMenuText: "Zoom alla prossima estenzione",
-        previousTooltip: "Zoom alla precedente estenzione",
-        nextTooltip: "Zoom alla prossima estenzione"
+        previousMenuText: "Zoom alla precedente estensione",
+        nextMenuText: "Zoom alla prossima estensione",
+        previousTooltip: "Zoom alla precedente estensione",
+        nextTooltip: "Zoom alla prossima estensione"
     },
 
     "gxp.plugins.OSMSource.prototype": {
@@ -163,8 +163,8 @@ GeoExt.Lang.add("it", {
     },
     
     "gxp.plugins.ZoomToExtent.prototype": {
-        menuText: "Zoom massima estenzione",
-        tooltip: "Zoom massima estenzione"
+        menuText: "Zoom massima estensione",
+        tooltip: "Zoom massima estensione"
     },
     
     "gxp.plugins.ZoomToDataExtent.prototype": {

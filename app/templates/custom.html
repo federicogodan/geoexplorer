@@ -37,18 +37,44 @@
     <!-- translation data  -->
     <script type="text/javascript" src="translations/it.js"></script>
 
+    <!-- OpenData resources -->
+    <link rel="stylesheet" type="text/css" href="theme/app/opendata_styleopendata.css" media="all">
     <script>
-        
+		function fbs_click() {
+		        u=location.href;
+		        t=document.title;
+		        window.open('http://www.facebook.com/sharer.php?u=' +
+		             encodeURIComponent(u) +
+		             '&t=' +
+		             encodeURIComponent(t),
+		             ' sharer', 'toolbar=0, status=0, width=626, height=436');
+		        return false;
+		}
+		
+		function twt_click() {
+		        u=location.href;
+		        t=document.title;
+		        window.open('http://twitter.com/share?url=' + u + '&text=' +
+		        t + '&hashtags=opendatafirenze',
+		        ' sharer2', 'toolbar=0, status=0, width=626, height=436');
+		        return false;
+		}
+    </script>
+
+
+
+    <script>
+
         var app;
-        
+
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var layer; var wmsurl;
+        var uuid; var lay; var wmsurl;
 
         //
         // Parsing the request to get the parameters
         //
         var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
-        
+
         for (var j=0; j < params.length; j++) {
           var param = params[j].split("=");
           switch ( param[0] ) {
@@ -72,7 +98,7 @@
                                 fullScreen = false; 
                             break;
             case "layer" : 
-                            layer = param[1]; 
+                            lay = param[1]; 
                             break;
             case "wmsurl" : 
                             wmsurl = param[1]; 
@@ -87,12 +113,13 @@
                             fullScreen = false; 
           }
         }
-		            
+
         var proxy; 
-        var geoStoreBaseURL;        
-        var customSources;	
-        var gnLangStr;	
-		
+        var geoStoreBaseURL;
+        var customSources;
+        var gnLangStr;
+        var gnBaseUrl;
+        
         var onReady = function(){
 
             Ext.BLANK_IMAGE_URL = (function() {
@@ -106,7 +133,7 @@
             OpenLayers.ImgPath = "externals/openlayers/theme/default/img/";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
-                        
+
             Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
                  onRender : function(ct, position){
                       this.el = ct.createChild({
@@ -117,18 +144,18 @@
                       });
                  }
             });
-            
-	    var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'it';
 
-	    var availLanguages = ['it'];
-	    gnLangStr = curLang.substr(0,2);
-		
-	    if(availLanguages.indexOf(gnLangStr) < 0){
+        var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'it';
+
+        var availLanguages = ['it'];
+        gnLangStr = curLang.substr(0,2);
+
+        if(availLanguages.indexOf(gnLangStr) < 0){
             gnLangStr = 'it';
-	    }
+        }
 
-        var gnBaseUrl = 'http://localhost:8080/geonetwork/';
-	    var gnURL = gnBaseUrl + 'srv/' + gnLangStr + '/main.home';
+        gnBaseUrl = 'http://datigis.comune.fi.it/geonetwork/';
+            var gnURL = gnBaseUrl + 'srv/' + gnLangStr + '/main.home';
 
             var geonetworkPanel = new Ext.Panel({
                 id: 'geonetworkPanel',
@@ -141,14 +168,14 @@
                     }) 
                 ]
             });
-            
+
             var appTabs = new Ext.TabPanel({
                 items: [geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
                 enableTabScroll: true
-            });         
+            });
 
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
@@ -172,14 +199,14 @@
                 }
             });
             
-            var poweredByGeoSol = new Ext.Button({
+            /*var poweredByGeoSol = new Ext.Button({
                 tooltip: 'Powered by GeoSolutions',
                 iconCls: "icon-geosol",
                 width : 150,
                 handler: function(btn){
                     window.open('http://geo-solutions.it/contact/', '_blank');
                 }
-            });    
+            });*/    
 		
             var langData = [['it', 'Italiano']];
 
@@ -212,10 +239,38 @@
             }
 	
             var headerContent = [
-		'<div>',
+'			<div class="body1">',
+		'				<div class="main">',
+		'					<div class="header">',
+		'						<div class="logoopendata"><a href="http://opendata.comune.fi.it/index.html"><img src="theme/app/img/opendata/opendata_logo.png" alt="comune di firenze"></a></div>',
+		'						<div class="comune"><a href="http://www.comune.fi.it/"><img src="theme/app/img/opendata/giglio_firenze.gif" alt="comune di firenze"></a></div>',
+		'						<h1><a href="http://opendata.comune.fi.it/index.html">Open<span>Data</span></a></h1>',
+		'						<h2>I dati aperti del Comune di Firenze</h2>',
+		'							<ul id="icons">',
+		'								<li><a href="#"	onclick="return fbs_click()" class="normaltip" title="Condividi su Facebook"><img src="theme/app/img/opendata/icon1.jpg" alt="Facebook"></a></li>',
+		'								<li><a href="#"  onclick="return twt_click()" class="normaltip" title="Condividi su Twitter"><img src="theme/app/img/opendata/icon2.jpg" alt="Twitter"></a></li>',
+		'							</ul>',
+/*		'						<div id="ricerca">',
+		'							<form action="http://search.comune.fi.it/search" method="get">',
+		'								<fieldset>',
+		'									<input type="text" accesskey="C" onfocus="this.value=\'\';" onblur="if(this.value==\'\') this.value=\'Parole chiave\';" id="ricercacampo" size="23" value="Parole chiave" name="q" />',
+		'									<input name="btnG" type="submit" value="CERCA">',
+		'									<input type="hidden" value="main_frontend" name="client" />',
+		'									<input type="hidden" value="main_frontend" name="proxystylesheet" />',
+		'									<input type="hidden" value="xml_no_dtd" name="output" />',
+		'									<input type="hidden" value="5" name="numgm" />',
+		'									<input type="hidden" value="open_data" name="site" />',
+		'								</fieldset>',
+		'							</form>',
+		'						</div>',
+		'						<div class="ic">Comune di Firenze</div>',*/
+		'					</div>',
+		'				</div>',
+		'			</div>'
+              /*'<div>',
 		'<div style="float:right"><img src="theme/app/img/fdh/fdh_left-banner_en.gif" usemap="#IM_left-banner"  border="0" /></div>',
 		'<div style="float:left"><img src="theme/app/img/fdh/fdh_right-banner_en.jpg" usemap="#IM_right-banner"  border="0" /></div>',
-		'</div>'
+		'</div>'*/
 	    ];
 
             var appViewport = new Ext.Viewport({
@@ -237,13 +292,13 @@
                       hideCollapseTool: true,
                       split: true,
                       animCollapse : false,
-                      minHeight: 86,
-                      maxHeight: 86,
-                      height: 86,
+                      minHeight: 140,
+                      maxHeight: 140,
+                      height: 140,
                       id : 'fdhHeader'
                     },appTabs],                            
                     bbar : [
-                      poweredByGeoSol, ' ', aboutButton
+                      /*poweredByGeoSol, ' ',*/ aboutButton
                     ]
                 }]
             });
@@ -253,8 +308,8 @@
             //
             var sources = "{" +                
                 "\"comunefi\": {" + 
-                    "\"url\":\"http://tms.comune.fi.it/geowebcache/service/wms\"," +
-                    "\"title\":\"Comune FI GeoWebCache\"" +
+                    "\"url\":\"http://tms.comune.fi.it/tiles/service/wms\"," +
+                    "\"title\":\"Comune FI WMS Server\"" +
                 "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
@@ -307,7 +362,7 @@
           
                 Ext.Msg.show({
                       title: "Startup",
-                      msg: "An error occurred while parsing the CUSTOM GeoServer sources",
+                      msg: "Errore nel parsing dei sorgenti WMS",
                       buttons: Ext.Msg.OK,
                       icon: Ext.MessageBox.ERROR
                 });
@@ -327,16 +382,16 @@
                 sources: sources,
                 cswconfig: {
                     catalogs: [
-                        {"name": "Local" , "url": "http://localhost:8080/geonetwork/srv/it/csw", "description": "Local GeoNetwork demo"},
-                        {"name": "Comune FI" , "url": "http://sr-vm107-sitgs1:8080/geonetwork/srv/it/csw", "description": "GeoNetwork del Comune di Firenze"}
+                        //{"name": "Local" , "url": "http://localhost:8080/geonetwork/srv/it/csw", "description": "Local GeoNetwork demo"},
+                        {"name": "SIT Comune FI" , "url": "http://datigis.comune.fi.it/geonetwork/srv/it/csw", "description": "GeoNetwork del Comune di Firenze"}
                     ],
                     dcProperty: "title",
                     initialBBox: {
-                        minx:-13,
-                        miny:10,
-                        maxx:-10,
-                        maxy:13
-                    }, 
+                        minx:11.145,
+                        miny:43.718,
+                        maxx:11.348,
+                        maxy:43.84
+                    },
                     cswVersion: "2.0.2",
                     filterVersion: "1.1.0",
                     start: 1,
@@ -344,11 +399,13 @@
                     timeout: 60000
                 },
                 map: {
-		            projection: "EPSG:900913",
+		   projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
-                        -20037508.34, -20037508.34,
-                        20037508.34, 20037508.34
+                        //-20037508.34, -20037508.34,
+                        //20037508.34, 20037508.34
+		        1233700, 5418400,
+                        1269600, 5442200
                     ],
                     layers: [{
                         source: "bing",
@@ -367,11 +424,6 @@
                         group: "background"
                     },{
                         source: "google",
-                        title: "Google Roadmap",
-                        name: "ROADMAP",
-                        group: "background"
-                    },{
-                        source: "google",
                         title: "Google Hybrid",
                         name: "HYBRID",
                         group: "background"
@@ -380,14 +432,19 @@
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Roadmap",
+                        name: "ROADMAP",
+                        group: "background"
                     }],
-                    center: [-1224514, 1291331],
-                    zoom: 6
+                    center: [1251650, 5430300],
+                    zoom: 12
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
             app.on({
-                'portalready' : function(){
+                'ready' : function(){
                     if(fullScreen){
                         var ovestPanel = Ext.getCmp('tree').findParentByType('panel');
                         ovestPanel.setDisabled();
@@ -399,15 +456,17 @@
                     // Visualizing metadata tab and layer at startup
                     //
                     
-                    if(layer && wmsurl && gnBaseUrl && uuid)
-						addMSLayer(layer, uuid, gnBaseUrl, wmsurl);
+                    if(lay && wmsurl && gnBaseUrl && uuid)
+		    	addMSLayer(lay, uuid, gnBaseUrl, wmsurl, false);
 					
-					if(layer && wmsurl && gnBaseUrl && uuid)	
-						app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, layer);
+		    if(lay && gnBaseUrl && uuid){
+                        app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, lay);
+		    	appTabs.setActiveTab(2);	
+		    }
                 }    
             });
 
-            addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl){
+            addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl, enableViewTab){
 				  var record = source.createLayerRecord({
 					name: msLayerName,
 					title: msLayerName,
@@ -421,14 +480,30 @@
 					layerStore.add([record]);
 
 					modified = true;
-
-					appTabs.setActiveTab(1);
+                                        
+                                        if(enableViewTab){
+						appTabs.setActiveTab(1);
+                                        }
 					
 					//
 					// Zoom To Layer extent
 					//
 					var layer = record.get('layer');
-					app.mapPanel.map.zoomToExtent(layer.restrictedExtent || layer.maxExtent || app.mapPanel.map.maxExtent);
+					var extent = layer.restrictedExtent || layer.maxExtent || app.mapPanel.map.maxExtent;
+					var map = app.mapPanel.map;
+
+					// respect map properties
+					var restricted = map.restrictedExtent || map.maxExtent;
+					if (restricted) {
+						extent = new OpenLayers.Bounds(
+							Math.max(extent.left, restricted.left),
+							Math.max(extent.bottom, restricted.bottom),
+							Math.min(extent.right, restricted.right),
+							Math.min(extent.top, restricted.top)
+						);
+					}
+
+					map.zoomToExtent(extent, true);
 				  }
             };
 
@@ -450,11 +525,12 @@
                 return source;
             };
             
-            addMSLayer = function(msLayerName, msLayerUUID, gnUrl, wmsURL){		
-                var source = checkLayerSource(wmsURL);
+            addMSLayer = function(msLayerName, msLayerUUID, gnUrl, wmsURL, enableViewTab){		
+
+                                var source = checkLayerSource(wmsURL);
 
 				if(source){
-					addMSLayerRecord(source, source.id, msLayerName, msLayerUUID, gnUrl);
+					addMSLayerRecord(source, source.id, msLayerName, msLayerUUID, gnUrl, enableViewTab);
 				}else{
 					var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Attendere prego..."});
 					mask.show();
@@ -472,7 +548,7 @@
 					//
 					source.on('ready', function(){ 
 						mask.hide();
-						addMSLayerRecord(source, source.id, msLayerName, msLayerUUID, gnUrl);
+						addMSLayerRecord(source, source.id, msLayerName, msLayerUUID, gnUrl, enableViewTab);
 					});
 				  
 					//
@@ -484,13 +560,13 @@
 						 
 						 Ext.Msg.show({
 							 title: 'GetCapabilities',
-							 msg: msg + " The layer cant be added to the map",
+							 msg: msg + " Il layer non può essere aggiunto alla mappa",
 							 width: 300,
 							 icon: Ext.MessageBox.ERROR
 						 });  
 					 });
 				}
-            };
+            }; 
 
 	        addMSSource = function(wmsURL){		  
                 var source = checkLayerSource(wmsURL);
@@ -523,7 +599,7 @@
 						  
 						  Ext.Msg.show({
 							  title: 'GetCapabilities',
-							  msg: msg + " The layer cant be added to the map",
+							  msg: msg + " Il layer non può essere aggiunto alla mappa",
 							  width: 300,
 							  icon: Ext.MessageBox.ERROR
 						  });  
@@ -533,8 +609,8 @@
       };			
 			
       Ext.Ajax.request({
-          //url: "http://localhost:8080/geostore/urlConfig.js",
-          url: "/urlConfig.js", //TEST
+          url: "http://datigis.comune.fi.it/geostore/urlConfig.js",
+          //url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
@@ -544,7 +620,7 @@
               }catch(e){
                   Ext.Msg.show({
                         title: "Startup",
-                        msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
+                        msg: "Errore nel parsing di GeoStore URL config: " + response.status,
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.ERROR
                   });
@@ -564,7 +640,7 @@
           failure:  function(response, opts){
               Ext.Msg.show({
                     title: "Startup",
-                    msg: "An error occurred while getting the GeoStore URL config: " + response.status,
+                    msg: "Errore nel parsing di GeoStore URL config: " + response.status,
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
               });
