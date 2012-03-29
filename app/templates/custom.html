@@ -3,7 +3,7 @@
     <!-- OpenLayers resources -->
     <link rel="stylesheet" type="text/css" href="externals/openlayers/theme/default/style.css">
     <script type="text/javascript" src="script/OpenLayers.js"></script>
-
+	
     <!-- GeoExt resources -->
     <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/popup.css">
     <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/layerlegend.css">
@@ -12,14 +12,15 @@
 
     <!-- gxp resources -->
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/all.css">
+    <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/gxpmapstore.css">
     <script type="text/javascript" src="script/gxp.js"></script> 
 
-    <!-- proj4js resources -->
-    <script type="text/javascript" src="script/proj4js.js"></script>
+    <!-- proj4js resources 
+    <script type="text/javascript" src="script/proj4js.js"></script>-->
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
-    <link rel="stylesheet" type="text/css" href="theme/app/fdh.css" />
+    <link rel="stylesheet" type="text/css" href="theme/app/mapstore.css" />
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
 
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
@@ -33,6 +34,11 @@
     <link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css">
     <script type="text/javascript" src="auth/base64.js"></script>
     <script type="text/javascript" src="script/CSWViewer.js"></script>
+    
+    <!-- translation data  -->
+    <script type="text/javascript" src="translations/en.js"></script>
+    <script type="text/javascript" src="translations/fr.js"></script>
+    <script type="text/javascript" src="translations/it.js"></script>
     
     <script>
         
@@ -89,10 +95,9 @@
             })();
 
             OpenLayers.ImgPath = "externals/openlayers/theme/default/img/";
-            Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
-                        
+                                    
             Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
                  onRender : function(ct, position){
                       this.el = ct.createChild({
@@ -102,6 +107,106 @@
                         src: this.url
                       });
                  }
+            });
+            
+            //            
+            // optionally set locale based on query string parameter
+            //
+            var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';            
+            var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
+            
+            var query = location.search;        
+            if(query && query.substr(0,1) === "?"){
+                query = query.substring(1);
+            }
+            
+            var url = Ext.urlDecode(query);        
+            var code = url.locale;   
+
+            if(!code){
+                code = "en";
+            }
+            
+            var initialLanguageString;
+            
+            //        
+            //check if code is valid
+            //
+            if(code){
+                Ext.each(langData, function(rec){
+                    if(rec[0] === code.toLowerCase()){
+                        initialLanguageString = rec[1];
+                        return;
+                    }
+                });
+            }            
+			
+			      if (GeoExt.Lang) {
+                GeoExt.Lang.set(code);
+            }
+			
+            if(!initialLanguageString){
+                initialLanguageString = "English";
+            }
+            
+            var languageSelector = new Ext.form.ComboBox({
+                store: new Ext.data.ArrayStore({
+                    fields: ['code', 'name'],
+                    data :  langData
+                }),
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: initialLanguageString,
+                selectOnFocus:false,
+                editable: false,
+                width: 100,
+                listeners: {
+                    beforeselect: function(cb, record, index){
+                       if(curLang == record.get('code'))
+                          return false; 
+                    },                    
+                    select: function(cb, record, index) {         
+                        
+                       var switchLang = function(buttonId, text, opt){
+                            if(buttonId === 'ok'){
+                                var code = record.get('code');
+                                if(code){
+                                    location.replace(
+                                        location.pathname + '?locale=' + code);
+                                }  
+                            }else{
+                                var code = record.get('code');
+                                if(code == 'fr'){
+                                    cb.setValue('English');
+                                }else{
+                                    cb.setValue('Français');
+                                }
+                            }
+                        };
+                        
+                        var switchLangActionTip = "Switch Language";
+                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
+                        
+                        if(curLang === 'fr'){
+                            switchLangActionTip = "Changement de langue";
+                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
+                        }else if(curLang === 'it'){
+                            switchLangActionTip = "Cambiamento Lingua";
+                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
+                        }
+                        
+                        Ext.Msg.show({
+                           title: switchLangActionTip,
+                           msg: switchLangConfirmationText,
+                           buttons: Ext.Msg.OKCANCEL,
+                           fn: switchLang,
+                           icon: Ext.MessageBox.QUESTION
+                        });  
+                    }
+                }
             });
             
             var appTabs = new Ext.TabPanel({
@@ -142,6 +247,21 @@
                 }
             });    
 			
+            var headerContent = [
+              '<table class="banner">',
+              '<td>',
+              '<img src="theme/app/img/logos/nurc_logo_3.jpg"/>',
+              '</td>',
+              '<td class="header">',
+              '<h1>NURC</h1>',
+              '<p>Integrated Decision Aid</p>',
+              '</td>',
+              '<td align="right">',
+              '<img src="theme/app/img/logos/banner4.gif"/>',
+              '</td>',
+              '</table>'
+            ];
+	    
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
@@ -150,18 +270,42 @@
                     region : 'center',
                     layout : 'border',
                     border : false,
-                    header : false,                    
-                    items : [appTabs],                            
+                    header : false,                                     
+                    items : [{
+                      border: false,
+                      header: false,
+                      html:  headerContent,
+                      region: 'north',
+                      collapsible: true,
+                      collapseMode:  'mini',
+                      hideCollapseTool: true,
+                      split: true,
+                      animCollapse : false,
+                      minHeight: 90,
+                      maxHeight: 90,
+                      height: 90,
+                      id : 'fdhHeader'
+                    },appTabs],                            
                     bbar : [
-                      poweredByGeoSol, ' ', aboutButton
+                      poweredByGeoSol, ' ', aboutButton, '->',languageSelector
                     ]
                 }]
             });
-            
+
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
             var sources = "{" + 
+                "\"ida\": {" + 
+                    "\"url\":\"http://192.168.1.8:8080/geoserver/ows\"," +
+                    "\"title\":\"IDA GeoServer\"," +
+                    "\"version\":\"1.1.1\"" +
+                "}," +
+                "\"playground\": {" + 
+                    "\"url\":\"http://demo1.geo-solutions.it/geoserver-enterprise/ows\"," +
+                    "\"title\":\"GeoServer Enterprise\"," +
+                    "\"version\":\"1.1.1\"" +
+                "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -182,7 +326,8 @@
                 sources += ",";
                 
             for(var s=0; s<customSources.length; s++){   
-                 sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
+                 var src = Ext.util.JSON.encode(customSources[s]);
+                 sources += "\"source" + s + "\":" + src; //JSON.stringify(customSources[s]);
                  
                  if(s + 1 < customSources.length)
                     sources += ",";
@@ -219,90 +364,120 @@
                 });
             }
 			      		     
-			      /*var auth = 'Basic ' + Base64.encode('admin:admin');
+		        /*var auth = 'Basic ' + Base64.encode('admin:admin');
 			      Ext.Ajax.defaultHeaders = {
                 'Authorization' : auth
             };*/
              
             app = new GeoExplorer.Composer({
                 modified: false,
-                //proxy: "proxy/?url=",
                 proxy: proxy,
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                printService:"http://demo1.geo-solutions.it/geoserver/pdf/",
-                mapTitle: "View",
+                printService: "http://demo1.geo-solutions.it/geoserver/pdf/",
+                mapTitle: GeoExplorer.prototype.viewTabTitle || 'View',
                 about: {
-                    title: "Custom Map",
-                    'abstract': "Custom Map",
+                    title: "IDA Map",
+                    'abstract': "IDA Map",
                     contact: "<a href='#'>#</a>."
                 },
+                geocodingData: [
+                    ['WESTERN AFRICA', '5.778,3.425,-25.443,24.83'],
+                    ['AFRICA', '-17,-35,51,37'],
+                    ['GLOBAL', '-170,-80,170,80']
+                ],
                 sources: sources,
-                cswconfig: {
-                    catalogs: [
-                        {"name": "Demo1GeoSolutions" , "url": "http://demo1.geo-solutions.it/geonetwork/srv/en/csw", "description": "Iternal GeoNetwork demo"},
-                        {"name": "Treviso", "url": "http://ows.provinciatreviso.it/geonetwork/srv/it/csw", "description": "Treviso Geonetwork"},
-                        {"name": "kscNet", "url": "http://geoportal.kscnet.ru/geonetwork/srv/ru/csw", "description": "kscNet"},
-                        {"name": "CSI-CGIAR", "url": "http://geonetwork.csi.cgiar.org/geonetwork/srv/en/csw", "description" : "CSI-CGIAR"},
-                        {"name": "EauFrance", "url": "http://sandre.eaufrance.fr/geonetwork/srv/fr/csw", "description" : "EauFrance"},
-                        {"name": "SOPAC", "url": "http://geonetwork.sopac.org/geonetwork/srv/en/csw", "description" : "SOPAC"},
-                        {"name": "SADC", "url": "http://www.sadc.int/geonetwork/srv/en/csw", "description" : "SADC"},
-                        {"name": "MAPAS", "url": "http://mapas.mma.gov.br/geonetwork/srv/en/csw", "description" : "MAPAS"}
-                    ],
-                    dcProperty: "title",
-                    initialBBox: {
-                        minx:-13,
-                        miny:10,
-                        maxx:-10,
-                        maxy:13
-                    }, 
-                    cswVersion: "2.0.2",
-                    filterVersion: "1.1.0",
-                    start: 1,
-                    limit: 10,
-                    timeout: 60000
-                },
                 map: {
-					          projection: "EPSG:900913",
-                    units: "m",
+					          projection: "EPSG:4326",
+                    units: "degrees",
                     maxExtent: [
-                        -20037508.34, -20037508.34,
-                        20037508.34, 20037508.34
+                        -180, -90, 180, 90
                     ],
-                    layers: [{
-                        source: "bing",
-                        title: "Bing Aerial",
-                        name: "Aerial",
-                        group: "background"
-                    }, {
-                        source: "osm",
-                        title: "Open Street Map",
-                        name: "mapnik",
+                    extent: [
+                        -13.86475, 29.72412, 28.58643, 51.16944
+                    ],
+                    layers: [ {
+                        source: "playground",
+                        title: "Global Cover",
+                        name: "GeoSolutions:GLOBCOVER_2009",
                         group: "background"
                     },{
-                        source: "mapquest",
-                        title: "MapQuest OpenStreetMap",
-                        name: "osm",
+                        source: "playground",
+                        title: "Natural Earth",
+                        name: "GeoSolutions:ne_shaded",
                         group: "background"
                     },{
-                        source: "google",
-                        title: "Google Roadmap",
-                        name: "ROADMAP",
-                        group: "background"
+                        source: "ida",
+                        title: "Ports",
+                        name: "nurc:ports",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
                     },{
-                        source: "google",
-                        title: "Google Hybrid",
-                        name: "HYBRID",
-                        group: "background"
+                        source: "ida",
+                        title: "Strandings",
+                        name: "nurc:strandings",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
                     },{
-                        source: "google",
-                        title: "Google Terrain",
-                        name: "TERRAIN",
-                        group: "background"
-                    }],
-                    center: [-1224514, 1291331],
-                    zoom: 6
+                        source: "ida",
+                        title: "Chl Spring 2009",
+                        name: "nurc:spring2009",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "Chl Spring 2008",
+                        name: "nurc:spring2008",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "Chl Spring 2007",
+                        name: "nurc:spring2007",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "Distance 1000 m",
+                        name: "nurc:eucdist_1000m",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "DEM aspect",
+                        name: "nurc:aspect",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "DEM slope",
+                        name: "nurc:slope",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "Bathymetry",
+                        name: "nurc:gebco_sea",
+                        group: "ida"
+                    },{
+                        source: "ida",
+                        title: "Coastlines",
+                        name: "nurc:gshs_coastline",
+                        selected: false,
+                        visibility: false,
+                        group: "ida"
+                    }]/*,
+                    center: [-15,20],
+                    zoom: 1*/
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
@@ -314,13 +489,89 @@
                         ovestPanel.hide();
                         ovestPanel.collapse();
                     }
+                },
+                
+                'ready' : function(){
+                     var graticule = new OpenLayers.Control.Graticule({ 
+                          targetSize: 600,
+                          displayInLayerSwitcher: false,
+                          labelled: true, 
+                          visible: true                  
+                     });
+                     
+                     graticule.labelSymbolizer.fontColor = '#45F760';   
+                     graticule.lineSymbolizer.strokeColor = "#45F760";  
+                     app.mapPanel.map.addControl(graticule); 
+                     
+                     var mousePositionControl = new OpenLayers.Control.MousePosition();
+                     
+                     // ////////////////////////////////////////////
+                     // Overridding mouse position redraw function
+                     // ////////////////////////////////////////////
+                     
+                     mousePositionControl.formatCoords = function (base) {
+                         var t, t2;
+                         var degrees = Math.floor(base);
+                         var minutes = Math.floor(t = ( base - degrees ) * 60);
+                         var seconds = Math.floor(t2 = ( t - minutes ) * 6000);
+                         seconds = seconds / 100.00;
+                         return ("" +degrees+ "\u00B0 "+minutes +"\u0027 "+seconds+"\u0022");
+                     };
+                     
+                     mousePositionControl.redraw = function(evt) {
+                        var lonLat;
+
+                        if (evt == null) {
+                            this.reset();
+                            return;
+                        } else {
+                            if (this.lastXy == null ||
+                                Math.abs(evt.xy.x - this.lastXy.x) > this.granularity ||
+                                Math.abs(evt.xy.y - this.lastXy.y) > this.granularity)
+                            {
+                                this.lastXy = evt.xy;
+                                return;
+                            }
+
+                            lonLat = this.map.getLonLatFromPixel(evt.xy);
+                            if (!lonLat) { 
+                                // map has not yet been properly initialized
+                                return;
+                            }    
+                            if (this.displayProjection) {
+                                lonLat.transform(this.map.getProjectionObject(), 
+                                                 this.displayProjection );
+                            }      
+                            this.lastXy = evt.xy;
+                        }
+                        
+                        var newHtml;
+                        if (this.map.units == "degrees") {
+                            newHtml =  this.formatCoords(lonLat.lon)  + this.separator +
+                            this.formatCoords(lonLat.lat);
+                        }else{
+                           var digits = parseInt(this.numdigits);
+                            newHtml =
+                                this.prefix +
+                                lonLat.lon.toFixed(digits) +
+                                this.separator +
+                                lonLat.lat.toFixed(digits) +
+                                this.suffix;
+                        }
+
+                        if (newHtml != this.element.innerHTML) {
+                            this.element.innerHTML = newHtml;
+                        }
+                     };
+                     
+                     app.mapPanel.map.addControl(mousePositionControl);
                 }    
             });
 			};			
 			
       Ext.Ajax.request({
-          url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          //url: "/geostore/urlConfig.js",
+          //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
+          url: "/urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    

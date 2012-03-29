@@ -73,6 +73,9 @@ body {
     background-image: url(img/silk/application_view_gallery.png);
 }
 
+.x-btn .icon-help{
+	background-image: url(img/silk/help.png);
+}
 
 .x-btn .icon-save {
     background-image: url(img/geosilk/map_save.png);

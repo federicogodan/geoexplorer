@@ -77,12 +77,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
-            },{
-                ptype:"gxp_geonetworksearch",
-                actionTarget:[
-                   "layertree.contextMenu"
-                ]
-            },{
+            }, {
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 15}
             }, {
@@ -104,15 +99,51 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 26}
             },{
+                // shared FeatureManager for feature editing, grid and querying
+                ptype: "gxp_featuremanager",
+                id: "featuremanager"
+            }, {
+                ptype: "gxp_featuregrid",
+                featureManager: "featuremanager",
+                outputConfig: {
+                    id: "featuregrid",
+                    title: "Features"
+                },
+                outputTarget: "idalaylist"
+            }, {
+                ptype: "gxp_queryform",
+                featureManager: "featuremanager",
+                outputConfig: {
+                    title: "Search"
+                },
+                outputTarget: "idacontrol",
+                toggleGroup: this.toggleGroup,
+                appendActions: false
+            }, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
-            },{
+            }, {
+                ptype: "gxp_idaspm",
+                outputConfig: {
+                    id: "spmpanel"
+                },
+                outputTarget: "idacontrol"
+            }, {
+                ptype: "gxp_idaattribute",
+                outputConfig: {
+                    id: "attributepanel"
+                },
+                outputTarget: "idacontrol"
+            }, {
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'mapstore-print'},
                 printService: config.printService,
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
+            }, {
+                ptype: "gxp_mapstoregeocoder",
+                actionTarget: {target: "paneltbar", index: 60}
             }
         ];
         
@@ -141,9 +172,15 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 enableToggle: true,
                 handler: function(button, evt){
                     if(button.pressed){
-                        Ext.getCmp('tree').findParentByType('panel').collapse();
+                        Ext.getCmp('west').collapse();
+                        Ext.getCmp('east').collapse();
+                        Ext.getCmp('south').collapse();
+                        Ext.getCmp('fdhHeader').collapse();
                     } else {
-                        Ext.getCmp('tree').findParentByType('panel').expand();
+                        Ext.getCmp('west').expand();
+                        Ext.getCmp('east').expand();
+                        Ext.getCmp('south').expand();
+                        Ext.getCmp('fdhHeader').expand();
                     }
                 }
             });            
@@ -398,8 +435,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.push('-');
         }
         
-        /*tools.push(new Ext.Button({
+        tools.push(new Ext.Button({
             tooltip: this.saveMapText,
+            needsAuthorization: false,
+            //disabled: !this.isAuthorized(),
             handler: function() {
                 this.save(this.showUrl);
             },
@@ -409,6 +448,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         
         tools.push(new Ext.Button({
             tooltip: this.loadMapText,
+            needsAuthorization: false,
+            //disabled: !this.isAuthorized(),
             handler: function() {    
                 var composer = this; 
                 var win;  
@@ -428,7 +469,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     items: [{
                         xtype: 'fileuploadfield',
                         id: 'form-file',
-                        emptyText: 'Select a Map context file',
+                        emptyText: this.loadMapEmptyText,
                         fieldLabel: 'File',
                         name: 'file-path',
                         buttonText: '',
@@ -437,29 +478,29 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }],
                     buttons: [{
-                        text: 'Upload',
+                        text: this.uploadText,
                         handler: function(){
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
-                                  url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  //url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  waitMsg: 'Uploading your context file...',
+                                  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  waitMsg: this.loadMapUploadText,
                                   success: function(fp, o){
                                       win.hide();
                                       var json_str = unescape(o.result.result);
                                       json_str = json_str.replace(/\+/g, ' ');
-                                      
                                       composer.loadUserConfig(json_str);  
                                       
                                       //app.modified = true;
-                                      modified = true;                                    
+                                      modified = true;   
+                                                             
                                   },                                    
                                   failure: function(fp, o){
                                       win.hide();
                                       win.destroy();
                                       
                                       Ext.Msg.show({
-                                         title:'File Upload Error',
+                                         title:this.loadMapErrorText,
                                          msg: o.result.errorMessage,
                                          buttons: Ext.Msg.OK,
                                          icon: Ext.MessageBox.ERROR
@@ -472,10 +513,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 });
                 
                 win = new Ext.Window({
-                    title: 'File Upload Form',
+                    title: this.loadMapWindowTitle,
                     id: 'upload-win',
                     layout: 'form',
-                    labelAlign: 'top',
+                    //labelAlign: 'top',
                     modal: true,
                     bodyStyle: "padding: 5px",
                     width: 380,
@@ -486,7 +527,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },
             scope: this,
             iconCls: "icon-load"
-        }));*/
+        }));
+        
+        tools.push('-');
         
         return tools;
     },

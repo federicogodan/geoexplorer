@@ -66,6 +66,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
+    
+    southPanelTitle: "Layer List Panel",
+    eastPanelTitle: "Control Panel",
+    
+    resetButtonTooltip: "Reset Page",
+   	helpButtonTooltip: "help",
+   	
+   	reloadTitle: "Context Reload",
+   	reloadText: "You are sure to reload the context? All unsaved data will be lost",
     // End i18n.
     
     /**
@@ -106,9 +115,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             }
         ];
         
+        // //////////////////////////////////////////////////////////////////////////////////
         // both the Composer and the Viewer need to know about the viewerTools
         // First row in each object is needed to correctly render a tool in the treeview
         // of the embed map dialog. TODO: make this more flexible so this is not needed.
+        // //////////////////////////////////////////////////////////////////////////////////
         config.viewerTools = [
             /*{
                 leaf: true, 
@@ -329,7 +340,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         });
         
         this.on("ready", function() {
+            //
             // enable only those items that were not specifically disabled
+            //
             var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;
             });
@@ -339,6 +352,45 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             disabled.each(function(item) {
                 item.disable();
             });
+        });
+        
+        var c = this;
+        this.on("portalready", function() {            
+            //
+            //add buttons for reset and help
+            //
+            this.toolbar.addButton([
+               {
+                  xtype: 'tbfill'
+               },{
+                  tooltip:  this.resetButtonTooltip ,
+                  iconCls: "x-tbar-loading",
+                  handler: function(btn){
+                  
+                      var reloadFun = function(buttonId, text,opt){
+                          if(buttonId === 'ok'){                        
+                                window.location.reload(false);
+                          }
+                      };
+		
+                      Ext.Msg.show({
+                         title: c.reloadTitle,
+                         msg: c.reloadText,
+                         buttons: Ext.Msg.YESNO,
+                         fn: reloadFun,
+                         icon: Ext.MessageBox.QUESTION,
+                         scope: this
+                      });
+                  }
+              },{
+                  tooltip:  this.helpButtonTooltip ,
+                  iconCls: "icon-help",
+                  disabled: true,
+                  handler: function(btn){
+                      window.open('user_manual.pdf', '_blank');
+                  }
+              }
+            ]);
         });
         
         this.mapPanelContainer = new Ext.Panel({
@@ -355,10 +407,51 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             tbar: this.toolbar
         });
         
+        var southPanel = new Ext.Panel({
+            border: false,
+            layout: "fit",
+            id:'south',
+            region: "south",
+            height: 200,
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
+            collapsed: false,
+            header: false,
+            items: [
+                {
+                  xtype: 'tabpanel', activeTab: 0, region: 'center', id: 'idalaylist', autoScroll: true, border: false,
+                  items:[
+                      {xtype:"panel", title:"All", disabled: true},
+                      {xtype:"panel", title:"Processed", disabled: true},
+                      {xtype:"panel", title:"Pending", disabled: true}
+                  ]
+                }
+            ]
+        });
+        
+        var estPanel = new Ext.Panel({
+            border: false,
+            layout: "border",
+            id:'east',
+            region: "east",
+            width: 450,
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
+            collapsed: false,
+            header: false,
+            items: [
+                {xtype: 'tabpanel', region: 'center', id: 'idacontrol', autoScroll: true, border: false}
+            ]
+        });
+        
         this.portalItems = [{
             region: "center",
             layout: "border",            
             items: [
+                southPanel,
+                estPanel,
                 this.mapPanelContainer,
                 westPanel
             ]
@@ -460,12 +553,27 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     showUrl: function() {
         OpenLayers.Request.POST({
-            url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+            url: proxy + app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
             data: this.xmlContext,
             callback: function(request) {
 
-                if(request.status == 200){
-                    window.open(request.responseText);
+                if(request.status == 200){							
+                    
+                    //		
+                    //delete other iframes appended
+                    //
+                    if(document.getElementById("downloadIFrame")) {
+                      document.body.removeChild( document.getElementById("downloadIFrame") ); 
+                    }
+                    
+                    //
+                    //Create an hidden iframe for forced download
+                    //
+                    var elemIF = document.createElement("iframe"); 
+                    elemIF.setAttribute("id","downloadIFrame");
+                    elemIF.src = proxy + encodeURIComponent(app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText); 
+                    elemIF.style.display = "none"; 
+                    document.body.appendChild(elemIF); 
                 }else{
                     Ext.Msg.show({
                        title:'File Download Error',
@@ -474,7 +582,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                        icon: Ext.MessageBox.ERROR
                     });
                 }
-
             },
             scope: this
         });

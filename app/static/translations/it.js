@@ -14,7 +14,7 @@ GeoExt.Lang.add("it", {
         saveErrorText: "Problemi di salvataggio: ",
         bookmarkText: "URL del Segnalibro",
         permakinkText: "Permalink",
-        appInfoText: "GeoExplorer",
+        appInfoText: "Crediti",
         aboutText: "Riguardo GeoExplorer",
         mapInfoText: "Informazioni Mappa",
         descriptionText: "Descrizione",
@@ -295,9 +295,52 @@ GeoExt.Lang.add("it", {
     },
 
     "gxp.plugins.Login.prototype":{
-	loginText: "Login",
-	loginErrorText: "Username o password invalidi.",
-	userFieldText: "Utente",
-	passwordFieldText: "Password"
+        loginText: "Login",
+        loginErrorText: "Username o password invalidi.",
+        userFieldText: "Utente",
+        passwordFieldText: "Password"
+    },
+    
+    //
+    // TODO
+    //
+    "gxp.plugins.Login.prototype":{
+      loginText: "Se connecter",
+          loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
+          userFieldText: "Utilisateur",
+          passwordFieldText: "Mot de passe"
+    },
+    "gxp.plugins.FeatureGrid.prototype": {
+        displayFeatureText: "Display on map",
+        firstPageTip: "First page",
+        previousPageTip: "Previous page",
+        zoomPageExtentTip: "Zoom to page extent",
+        nextPageTip: "Next page",
+        nextPageTip: "Last page",
+        totalMsg: "Total: {0} records"
+    },
+    "gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Query",
+        queryMenuText: "Query layer",
+        queryActionTip: "Query the selected layer",
+        queryByLocationText: "Region Of Interest",
+        currentTextText: "Current extent",
+        queryByAttributesText: "Query by attributes",
+        queryMsg: "Querying...",
+        cancelButtonText: "Reset",
+        noFeaturesTitle: "No Match",
+        noFeaturesMessage: "Your query did not return any results.",
+        title: "Search",
+        northLabel:"North",
+        westLabel:"West",
+        eastLabel:"East",
+        southLabel:"South",
+        setAoiText: "SetROI",
+        setAoiTooltip: "Enable the SetBox control to draw a ROI (BBOX) on the map",
+        attributeEnablement: "Query by Attribute",
+        attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
+        searchType: "Base Settings",
+        typeLabel: "Type",
+        featureLabel: "Max Features"
     }
 });

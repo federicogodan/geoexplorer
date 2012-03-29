@@ -1,7 +1,10 @@
 /**
  * Copyright (c) 2009-2010 The Open Planning Project
  */
-
+/*
+	NOTE: configuration customization could override
+	these strings
+*/
 GeoExt.Lang.add("en", {
     "GeoExplorer.prototype": {
         zoomSliderText: "<div>Zoom Level: {zoom}</div><div>Scale: 1:{scale}</div>",
@@ -14,19 +17,27 @@ GeoExt.Lang.add("en", {
         saveErrorText: "Trouble saving: ",
         bookmarkText: "Bookmark URL",
         permakinkText: "Permalink",
-        appInfoText: "About",
+        appInfoText: "Credits",
         aboutText: "About GeoExplorer",
         mapInfoText: "Map Info",
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "About this Map",
+		    resetButtonTooltip: "Reset Page",
+		    helpButtonTooltip: "Help",
         searchTabTitle : "Search",
-        viewTabTitle : "View"
+        viewTabTitle : "View",
+        portalTabTitle : "Portal"
     },
     
     "GeoExplorer.Composer.prototype": {
         loadMapText: "Import Map",
         saveMapText: "Export Map",
+		    loadMapEmptyText: "Select a Map context file",
+		    loadMapUploadText: "Uploading your context file...",
+		    uploadText: "Upload",
+		    loadMapWindowTitle: 'File Upload Form',
+		    loadMapErrorText:'File Upload Error',
         toolsTitle: "Choose tools to include in the toolbar:",
         previewText: "Preview",
         backText: "Back",
@@ -34,7 +45,8 @@ GeoExt.Lang.add("en", {
         loginText: "Login",
         loginErrorText: "Invalid username or password.",
         userFieldText: "User",
-        passwordFieldText: "Password"
+        passwordFieldText: "Password",
+        fullScreenText: "Full Screen"
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -53,9 +65,17 @@ GeoExt.Lang.add("en", {
         panelTitleText: "Title",
         layerSelectionText: "View available data from:",
         doneText: "Done",
+        removeFilterText: "Clear filter", 
+        filterEmptyText: "Filter",
         uploadText: "Upload Data"
     },
     
+	 "gxp.plugins.RemoveOverlays.prototype": {
+	    removeOverlaysMenuText: "Remove overlays",
+	    removeOverlaysActionTip: "Removes all overlays from the map",
+	    removeOverlaysConfirmationText: "Are you sure you want to remove all loaded overlays from the map?"
+    }, 
+
     "gxp.plugins.BingSource.prototype": {
         title: "Bing Layers",
         roadTitle: "Bing Roads",
@@ -111,6 +131,7 @@ GeoExt.Lang.add("en", {
         nextMenuText: "Zoom To Next Extent",
         previousTooltip: "Zoom To Previous Extent",
         nextTooltip: "Zoom To Next Extent"
+		
     },
 
     "gxp.plugins.OSMSource.prototype": {
@@ -125,7 +146,7 @@ GeoExt.Lang.add("en", {
         previewText: "Print Preview",
         notAllNotPrintableText: "Not All Layers Can Be Printed",
         nonePrintableText: "None of your current map layers can be printed",
-		notPrintableLayersText: "Following layers can not be printed:"
+        notPrintableLayersText: "Following layers can not be printed:"
     },
 
     "gxp.plugins.MapQuestSource.prototype": {
@@ -192,5 +213,103 @@ GeoExt.Lang.add("en", {
 
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Zoom level"
+    },
+    
+    "gxp.plugins.AddGroup.prototype": { 
+	    addGroupMenuText: "Add Group",
+	    addGroupActionTip: "Add a new group in the layer tree",   
+	    addGroupDialogTitle: "New Group", 
+	    addGroupFieldSetText: "Group Name",
+	    addGroupFieldLabel: "New Group",
+	    addGroupButtonText: "Add Group",
+	    addGroupMsg: "Please enter a group name"	
+    },
+    
+    "gxp.plugins.RemoveGroup.prototype": { 
+	    removeGroupMenuText: "Remove Group",
+	    removeGroupActionTip: "Remove a group from the layer tree",
+	    removeGroupActionTip: "Removes the selected group and own layers from the map",
+	    removeGroupConfirmationText: "Are you sure you want to remove the selected group ? The all layers inside this group will be removed from the map."
+    },
+    
+    "gxp.plugins.SaveDefaultContext.prototype": { 
+	    saveDefaultContextMenuText: "Save default context",
+	    saveDefaultContextActionTip: "Save current context as default one",
+	    contextSaveSuccessString: "Context saved succesfully",
+	    contextSaveFailString: "Context not saved succesfully"
+    },
+    "gxp.plugins.FDHGeoCoder.prototype": {
+        initialText: "Select an area",
+        menuText: "FDH Geo Coding",
+        tooltip: "FDH Geo Coding"
+    },
+    "gxp.plugins.ZoomBox.prototype":{
+        zoomInMenuText: "Zoom Box In",
+        zoomOutMenuText: "Zoom Box Out",
+        zoomInTooltip: "Zoom Box In",
+        zoomOutTooltip: "Zoom Box Out"
+    },
+    "GeoExt.ux.PrintPreview.prototype":{
+        paperSizeText: "Paper size:",
+        resolutionText: "Resolution:",
+        printText: "Print",
+        emptyTitleText: "Enter map title here.",
+        includeLegendText: "Include legend?",
+        legendOnSeparatePageText: "Legend on separate page?",
+        compactLegendText: "Compact legend?",	
+        emptyCommentText: "Enter comments here.",
+        creatingPdfText: "Creating PDF..."
+    },
+    "gxp.plugins.GeonetworkSearch.prototype":{
+        geonetworkSearchText: "View metadata",
+        geonetworkSearchActionTip: "View metadata"
+    },
+    "gxp.plugins.GroupProperties.prototype":{
+        groupPropertiesMenuText:  "Group Properties",
+        groupPropertiesActionTip:  "Group Properties",
+        groupPropertiesDialogTitle: "Group Properties - ",
+        groupPropertiesFieldSetText: "Group Name",
+        groupPropertiesFieldLabel: "New Group Name",
+        groupPropertiesButtonText: "Done",
+        groupPropertiesMsg: "Please enter a group name"
+    },
+    "gxp.plugins.Login.prototype":{
+        loginText: "Login",
+        loginErrorText: "Invalid username or password.",
+        userFieldText: "User",
+        passwordFieldText: "Password"
+    },
+    "gxp.plugins.FeatureGrid.prototype": {
+        displayFeatureText: "Display on map",
+        firstPageTip: "First page",
+        previousPageTip: "Previous page",
+        zoomPageExtentTip: "Zoom to page extent",
+        nextPageTip: "Next page",
+        nextPageTip: "Last page",
+        totalMsg: "Total: {0} records"
+    },
+    "gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Query",
+        queryMenuText: "Query layer",
+        queryActionTip: "Query the selected layer",
+        queryByLocationText: "Region Of Interest",
+        currentTextText: "Current extent",
+        queryByAttributesText: "Query by attributes",
+        queryMsg: "Querying...",
+        cancelButtonText: "Reset",
+        noFeaturesTitle: "No Match",
+        noFeaturesMessage: "Your query did not return any results.",
+        title: "Search",
+        northLabel:"North",
+        westLabel:"West",
+        eastLabel:"East",
+        southLabel:"South",
+        setAoiText: "SetROI",
+        setAoiTooltip: "Enable the SetBox control to draw a ROI (BBOX) on the map",
+        attributeEnablement: "Query by Attribute",
+        attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
+        searchType: "Base Settings",
+        typeLabel: "Type",
+        featureLabel: "Max Features"
     }
 });

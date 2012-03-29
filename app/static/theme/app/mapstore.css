@@ -1,4 +1,4 @@
-#left-banner {
+/*#left-banner {
 	position : absolute;
 	left : 0;
 	top : 0;
@@ -11,7 +11,7 @@
 	left : 0px;
 	margin-right: 0px;
 	width : 100%;
-background: url(img/fdh/bgimg.gif) repeat-x;
+  background: url(img/fdh/bgimg.gif) repeat-x;
 }
 #right-banner {
 	float : right;
@@ -19,8 +19,32 @@ background: url(img/fdh/bgimg.gif) repeat-x;
 	top : 0;
 	width : 378px;
 	height : 86px;
+}*/
+
+.banner {
+    height: 90px;
+    width: 100%;
+    border-spacing:0px;
+    padding-left: 10px;  
+    padding-right: 10px; 
+    /*table-layout:fixed;*/
+    background: url(img/mapstore/bgimg.jpg) repeat-x;
 }
 
+.header{
+    color: #2b4c93;
+    text-align: left;
+    font-weight: bold; 
+    font: 28px tahoma,arial,sans-serif;
+    background: url(img/mapstore/bgimg.jpg) repeat-x;
+}
+
+.header p{
+    color: #3487c9;
+    text-align: left;
+    font-weight: normal; 
+    font: 24px tahoma,arial,sans-serif;
+}
 
 /*********************************
  Custom FDH logos
@@ -111,7 +135,6 @@ div#homelogos ul li a:hover {
 .logo_gwpao4 {
     background: url(img/logos/logo_gwpao4.jpg) no-repeat center 50%;
 }
-
 .csw-viewer{
     background-image: url(img/geosilk/server_table.png);
 }
