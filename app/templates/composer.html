@@ -21,7 +21,9 @@
     <script>
         
         var app;
-        var startTime = OpenLayers.Date.parse('2011-12-04T12:00:00.000Z').toISOString();
+        
+        //var startTime = OpenLayers.Date.parse('2011-12-04T12:00:00.000Z').toISOString();
+        
         var modified = false; var mapIdentifier; var authorization; var fullScreen; var models;
 
         //
@@ -29,7 +31,7 @@
         //
         var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
         
-        for (var j=0; j < params.length; j++) {  //inserire un nuovo parametro per il nuovo json da caricare per 
+        for (var j=0; j < params.length; j++) {
           var param = params[j].split("=");
           switch ( param[0] ) {
             case "mapId"    : 
@@ -61,8 +63,8 @@
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        //var onReady = function(){
-        Ext.onReady(function(){
+        var onReady = function(){
+       // Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
                         return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
@@ -129,7 +131,7 @@
             });
             
             var appTabs = new Ext.TabPanel({
-                //items: [geoportalPanel,geonetworkPanel],
+                items: [geoportalPanel,geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
@@ -140,6 +142,7 @@
             //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
             //
             
+        //models = "../json2_ORIGINALE.js";
         models = "../json2_3KM.js";
 
         var storeModels = new Ext.data.SimpleStore({
@@ -147,11 +150,14 @@
                             data: [
                                 ['../json2_3KM.js', 'ARW 3km'],
                                 ['../json2_9KM.js', 'ARW 9km'],
-                                ['../json2_50KM.js', 'GFS 50km']                            
+                                ['../json2_50KM.js', 'GFS 50km']
+                                //['../json2_ORIGINALE.js', 'ORIGINALE1'],
+                                //['../json2_ORIGINALE2.js', 'ORIGINALE2']
                             ]
                         });
                         
         var comboModels = new Ext.form.ComboBox({
+                                id: 'comboModel',
                                 triggerAction: 'all',
                                 store: storeModels,
                                 mode: 'local',
@@ -163,9 +169,25 @@
                                 selectOnFocus:true,
                                 listeners: { 
                                     select: function(combo, record, index) {
-                                        GeoExplorer.prototype.models = combo.getValue();
+                                        Ext.Ajax.request({
+                                          url: combo.getValue(),
+                                          method: 'GET',
+                                          success: function(response, opts){
+                                                  models = combo.getValue();
+                                                  app.loadUserConfig(response.responseText);  
+                                                  modified = true;
+                                          },
+                                          failure:  function(response, opts){
+                                              Ext.Msg.show({
+                                                    title: "Startup",
+                                                    msg: "An error occurred while getting the json.js: " + response.status,
+                                                    buttons: Ext.Msg.OK,
+                                                    icon: Ext.MessageBox.ERROR
+                                              });
+                                          }
+                                        });
                                     }
-                                }                                        
+                                }
                             });
 
             var aboutButton = new Ext.Button({
@@ -245,7 +267,7 @@
                         split: true,
                         html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',
                         bodyStyle: 'padding:0px;background-color: #222b43;',
-                        tbar : [comboModels]
+                        tbar: [comboModels]
                     },{
                         region : 'center',
                         layout : 'border',
@@ -255,13 +277,13 @@
                         bbar : [
                           poweredByGeoSol, ' ', aboutButton
                         ]
-                }]
+                    }]
             });
             
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
-            /*var sources = "{" + 
+            var sources = "{" + 
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -292,7 +314,7 @@
 
             try{
                 sources = Ext.util.JSON.decode(sources);
-            }catch(e){*/
+            }catch(e){
                 var sources = {
                     mapquest: {
                         ptype: "gxp_mapquestsource"
@@ -308,16 +330,24 @@
                     },
                     ol: {
                         ptype: "gxp_olsource"
+                    },
+                    LaMMAStazioniTempAria:{
+                        ptype: "gxp_wmssource",
+                        layerBaseParams:{
+                            TILED:false,
+                            TILESORIGIN: "-20037508.34,-20037508.34"
+                        },
+                        url:"http://172.16.1.139:8080/geoserver/ows?namespace=stazioni"
                     }
                 };
           
-                /*Ext.Msg.show({
+                Ext.Msg.show({
                       title: "Startup",
                       msg: "An error occurred while parsing the CUSTOM GeoServer sources",
                       buttons: Ext.Msg.OK,
                       icon: Ext.MessageBox.ERROR
                 });
-            }*/
+            }
                                     
             app = new GeoExplorer.Composer({
                 modified: false,
@@ -332,7 +362,7 @@
                 },
                 sources: sources,
                 map: {
-                              projection: "EPSG:900913",
+                    projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
                         -20037508.34, -20037508.34,
@@ -368,6 +398,22 @@
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
+                    },{
+                        format:"image/png",
+                        group:"Stazioni",
+                        name:"stazioni:Prec2012_02_17_12",
+                        opacity:1,
+                        selected:false,
+                        source:"LaMMA-StazioniTempAria",
+                        styles:[],
+                        title:"Prec 2012-02-17 12",
+                        transparent:true,
+                        uuid:"",
+                        tiled:false,
+                        visibility:false,
+                        ratio:1,
+                        srs:"EPSG:900913",
+                        transitionEffect:"resize"
                     }],
                     center: [-1224514, 1291331],
                     zoom: 6
@@ -384,12 +430,12 @@
                     }
                 }    
             });
-            });
-            //};            
+            //});
+            };            
             
-      /*Ext.Ajax.request({
+      Ext.Ajax.request({
           //url: "proxy/?url=" + "http://192.168.1.130:8080/geostore/urlConfig.js",
-          url: "http://localhost:8080/urlConfig.js",
+          url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
@@ -424,6 +470,6 @@
                     icon: Ext.MessageBox.ERROR
               });
           }
-      });*/
+      });
         
     </script>

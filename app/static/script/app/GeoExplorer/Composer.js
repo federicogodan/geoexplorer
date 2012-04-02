@@ -108,7 +108,16 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
+            }, {
+                ptype:"gxp_playback",
+                controlOptions:{
+                    units:OpenLayers.TimeUnit.HOURS,
+                    step:1
+                },
+                outputConfig: {
+                    dynamicRange: false
             }
+        }
         ];
         
         
