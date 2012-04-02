@@ -70,7 +70,7 @@
                "visibility":true
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Temperature_height_above_ground_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -78,14 +78,12 @@
                "styles":[],
                "title":"Temp 2m above ARW-ECM 9km",
                "transparent":true,
-               "visibility":false,
+               "visibility":true,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km"
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Convective_Avail_Pot_Energy_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -95,12 +93,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km"
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Convective_inhibition_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -110,12 +106,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Convective_precip_rate_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -125,12 +119,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Dew_point_temperature_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -140,12 +132,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Downward_long_wave_flux_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -155,12 +145,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Downward_short_wave_flux_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -170,12 +158,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Geopotential_height_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -186,12 +172,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Geopotential_height_highest_tropospheric_freezing_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -202,12 +186,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Geopotential_height_surface_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -218,12 +200,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Geopotential_height_tropopause_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -234,12 +214,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Land_cover_land1sea0_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -250,12 +228,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Mean_sea_level_pressure_NAM_model_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -266,12 +242,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Relative_humidity_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -282,12 +256,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Relative_humidity_height_above_ground_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -298,12 +270,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Soil_temperature_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -314,12 +284,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Surface_wind_gust_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -330,12 +298,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Temperature_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -346,12 +312,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Temperature_surface_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -362,12 +326,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Visibility_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -378,12 +340,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Volumetric_soil_moisture_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -394,12 +354,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Wind_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -410,12 +368,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Wind_height_above_ground_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -426,12 +382,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 9km",
+               "group":"ARW 9km 2011_12_05 RUN00",
                "name":"lamma:arw_9Km_Categorical_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -442,9 +396,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-08T00:00:00.000Z","PT1H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
                "group":"Stazioni",
@@ -477,6 +429,22 @@
                "ratio":1,
                "srs":"EPSG:900913",
                "transitionEffect":"resize"
+            },{
+               "format":"image/png",
+               "group":"Stazioni",
+               "name":"stazioni:Prec2012_02_17_12",
+               "opacity":1,
+               "selected":false,
+               "source":"LaMMA-StazioniTempAria",
+               "styles":[],
+               "title":"Prec 2012-02-17 12",
+               "transparent":true,
+               "uuid":"",
+               "tiled":false,
+               "visibility":false,
+               "ratio":1,
+               "srs":"EPSG:900913",
+               "transitionEffect":"resize"
             }
          ],
          "maxExtent":["-20037508.34","-20037508.34","20037508.34","20037508.34"],
@@ -494,6 +462,7 @@
       "sources":{
          "LaMMA-StazioniTempAria":{
             "ptype": "gxp_wmssource",
+            "title":"LaMMA Stazioni",
             "layerBaseParams":{
                "TILED":false,
                "TILESORIGIN":"-20037508.34,-20037508.34"
@@ -502,11 +471,48 @@
          },
          "LaMMA-Modelli":{
             "ptype": "gxp_wmssource",
+            "title":"LaMMA Modelli",
+            "layerBaseParams":{
+               "TILED":true,
+               "TILESORIGIN":"-20037508.34,-20037508.34"
+            },
+            "url":"http://172.16.1.139:8080/geoserver/ows"
+         },
+         "LaMMA-NDVI":{
+            "ptype": "gxp_wmssource",
+            "title":"LaMMA NDVI",
             "layerBaseParams":{
                "TILED":false,
                "TILESORIGIN":"-20037508.34,-20037508.34"
             },
-            "url":"http://172.16.1.139:8080/geoserver/ows"
+            "url":"http://159.213.57.104/geoserver_clima/ows?namespace=NDVI"
+         },
+         "LaMMA-Geologia-BD_Sottosuolo":{
+            "ptype": "gxp_wmssource",
+            "title":"LaMMA Geologia-BD_Sottosuolo",
+            "layerBaseParams":{
+               "TILED":false,
+               "TILESORIGIN":"-20037508.34,-20037508.34"
+            },
+            "url":"http://159.213.57.104/geoserver_clima/ows?namespace=Geologia-BD_Sottosuolo"
+         },
+         "LaMMA-Geologia-CriticitaGeologiche":{
+            "ptype": "gxp_wmssource",
+            "title":"LaMMA Geologia-CriticitaGeologiche",
+            "layerBaseParams":{
+               "TILED":false,
+               "TILESORIGIN":"-20037508.34,-20037508.34"
+            },
+            "url":"http://159.213.57.104/geoserver_clima/ows?namespace=Geologia-CriticitaGeologiche"
+         },
+         "LaMMA-Geologia-Risorse":{
+            "ptype": "gxp_wmssource",
+            "title":"LaMMA Geologia-Risorse",
+            "layerBaseParams":{
+               "TILED":false,
+               "TILESORIGIN":"-20037508.34,-20037508.34"
+            },
+            "url":"http://159.213.57.104/geoserver_clima/ows?namespace=Geologia-Risorse"
          },
          "bing":{
             "projection":"EPSG:900913",

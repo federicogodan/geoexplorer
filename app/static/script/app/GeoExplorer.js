@@ -86,6 +86,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     models: null,
 
     constructor: function(config, mapId, auth, fScreen, models) {
+    //constructor: function(config, mapId, auth, fScreen) {
     
         if(mapId)
             this.mapId = mapId;
@@ -240,8 +241,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                   }
 
                   if(addConfig && addConfig.success && addConfig.success==true){                               
-                    //this.applyConfig(Ext.applyIf(addConfig.result, config));
-                    this.applyConfig(Ext.applyIf(addConfig.result));
+                    this.applyConfig(Ext.applyIf(addConfig.result, config));
+                    //this.applyConfig(Ext.applyIf(addConfig.result));
                   } else {
                     //this.applyConfig(config);
                   }
@@ -252,7 +253,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         };
 
         OpenLayers.Request.GET({
-          //url: "../json2_3KM.js",
+          //url: "../json2_ORIGINALE.js",
           url: models,
           params: '',
           success: success,
@@ -267,14 +268,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         if(uploadWin != null){
             uploadWin.destroy();
         }
-          
+
         var layerTree = Ext.getCmp('tree');
         layerTree.destroy();
         
         app.destroy();
-        
-        var config = Ext.util.JSON.decode(json);        
-        if(config && config.map){
+
+        var config = Ext.util.JSON.decode(json);
+        if(config && config.result.map){
             config.isLoadedFromConfigFile = true;
             
             //if(modified){
@@ -325,7 +326,28 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }
             ]
         });
-        
+
+        var eastPanel = new Ext.Panel({
+            border: false,
+            layout: "border",
+            id:'east',
+            region: "east",
+            width: 250,
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
+            header: false,
+            items: [
+                {region: 'center', autoScroll: true, tbar: [], border: false}, 
+                {
+                    region: 'south', xtype: "panel", layout: "fit", 
+                    collapsible : true, collapseMode:  'mini',
+                    split : true, hideCollapseTool: true,
+                    border: false, height: 200
+                }
+            ]
+        });
+
         this.toolbar = new Ext.Toolbar({
             disabled: true,
             id: 'paneltbar',
@@ -364,6 +386,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "border",            
             items: [
                 this.mapPanelContainer,
+                //eastPanel,
                 westPanel
             ]
         }];

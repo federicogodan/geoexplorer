@@ -71,7 +71,7 @@
             },
             {
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Temperature_height_above_ground_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -79,14 +79,12 @@
                "styles":[],
                "title":"Temp 2m above GFS-ECM 50km",
                "transparent":true,
-               "visibility":false,
+               "visibility":true,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Convective_Avail_Pot_Energy_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -96,12 +94,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Convective_inhibition_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -111,12 +107,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Convective_precip_rate_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -126,12 +120,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Dew_point_temperature_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -141,12 +133,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Downward_long_wave_flux_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -156,12 +146,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Downward_short_wave_flux_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -171,12 +159,10 @@
                "transparent":true,
                "visibility":false,
                "ratio":1,
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Geopotential_height_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -187,12 +173,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Geopotential_height_highest_tropospheric_freezing_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -203,12 +187,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Geopotential_height_surface_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -219,12 +201,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Geopotential_height_tropopause_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -235,12 +215,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Land_cover_land1sea0_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -251,12 +229,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Pressure_reduced_to_MSL_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -267,12 +243,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Relative_humidity_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -283,12 +257,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Relative_humidity_height_above_ground_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -299,12 +271,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Soil_temperature_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -315,12 +285,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Surface_wind_gust_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -331,12 +299,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Temperature_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -347,12 +313,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Temperature_surface_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -363,12 +327,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Visibility_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -379,12 +341,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Volumetric_soil_moisture_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -395,12 +355,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Wind_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -411,12 +369,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Wind_height_above_ground_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -427,12 +383,10 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"GFS 50km",
+               "group":"GFS 50km 2011_12_05 RUN00",
                "name":"lamma:gfs_50km_Categorical_20111205T000000000Z",
                "opacity":1,
                "selected":false,
@@ -443,9 +397,7 @@
                "visibility":false,
                "ratio":1,
                "srs":"EPSG:900913",
-               "transitionEffect":"resize",
-               "time": "2011-12-04T12:00:00.000Z",
-               "metadata": {"timeInterval": [["2011-12-05T00:00:00.000Z","2011-12-12T12:00:00.000Z","PT6H"]]}
+               "transitionEffect":"resize"
             },{
                "format":"image/png",
                "group":"Stazioni",
@@ -471,6 +423,22 @@
                "source":"LaMMA-StazioniTempAria",
                "styles":[],
                "title":"TempAria 2012-02-16 12",
+               "transparent":true,
+               "uuid":"",
+               "tiled":false,
+               "visibility":false,
+               "ratio":1,
+               "srs":"EPSG:900913",
+               "transitionEffect":"resize"
+            },{
+               "format":"image/png",
+               "group":"Stazioni",
+               "name":"stazioni:Prec2012_02_17_12",
+               "opacity":1,
+               "selected":false,
+               "source":"LaMMA-StazioniTempAria",
+               "styles":[],
+               "title":"Prec 2012-02-17 12",
                "transparent":true,
                "uuid":"",
                "tiled":false,
