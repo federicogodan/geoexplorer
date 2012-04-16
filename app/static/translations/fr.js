@@ -32,9 +32,9 @@ GeoExt.Lang.add("fr", {
     },  
 
     "GeoExplorer.Composer.prototype": {
-        loadMapText: "Importer une carte",
+        loadMapText: "Importer une carte ou un fichier KML",
         saveMapText: "Exporter une carte",
-		loadMapEmptyText: "Sélectionnez un fichier de contexte",
+		loadMapEmptyText: "Sélectionnez un fichier KML ou de contexte",
 		loadMapUploadText: "Chargement...",
 		uploadText: "Télécharger",
 		loadMapWindowTitle: 'formulaire de téléchargement de  fichier',

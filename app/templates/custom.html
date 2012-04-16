@@ -373,7 +373,7 @@
             app = new GeoExplorer.Composer({
                 modified: false,
                 proxy: proxy,
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
+                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 printService: "http://localhost:8080/geoserver/pdf/",
@@ -483,14 +483,14 @@
                         visibility: false,
                         group: "ida"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Strandings",
                         name: "nurc:strandings",
                         selected: false,
                         visibility: false,
                         group: "ida"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Ports",
                         name: "nurc:ports",
                         selected: false,

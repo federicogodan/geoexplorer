@@ -19,7 +19,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
     // Begin i18n.
     saveMapText: "Export Map",
-    loadMapText: "Import Map",
+    loadMapText: "Import KML or Map file",
     exportMapText: "Export Map",
     toolsTitle: "Choose tools to include in the toolbar:",
     previewText: "Preview",
@@ -163,7 +163,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
-         
+		
         if(!this.fScreen){
             var fullScreen = new Ext.Button({
                 text: this.fullScreenText,
@@ -446,6 +446,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             iconCls: "icon-save"
         }));      		
         
+		var gxMap = this.mapPanel.map;
         tools.push(new Ext.Button({
             tooltip: this.loadMapText,
             needsAuthorization: false,
@@ -487,13 +488,34 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                                   waitMsg: this.loadMapUploadText,
                                   success: function(fp, o){
                                       win.hide();
-                                      var json_str = unescape(o.result.result);
-                                      json_str = json_str.replace(/\+/g, ' ');
-                                      composer.loadUserConfig(json_str);  
-                                      
-                                      //app.modified = true;
-                                      modified = true;   
-                                                             
+                                      win.destroy();
+									  
+									  if(o.result.result.indexOf('kml') == -1){
+										  var json_str = unescape(o.result.result);
+										  json_str = json_str.replace(/\+/g, ' ');
+										  composer.loadUserConfig(json_str);  
+										  
+										  //app.modified = true;
+										  modified = true;   
+									  }else{
+									     var url = proxy + app.xmlJsonTranslateService + "temp/" + o.result.result;
+										 
+										 var geographic = new OpenLayers.Projection("EPSG:4326");
+										 var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
+										    projection: geographic,
+											strategies: [new OpenLayers.Strategy.Fixed()],
+											protocol: new OpenLayers.Protocol.HTTP({
+												url: url,
+												format: new OpenLayers.Format.KML({
+													extractStyles: true, 
+													extractAttributes: true,
+													maxDepth: 2
+												})
+											})
+										});
+										
+										gxMap.addLayer(kmlLayer);
+									  }
                                   },                                    
                                   failure: function(fp, o){
                                       win.hide();

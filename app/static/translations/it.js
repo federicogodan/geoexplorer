@@ -25,9 +25,14 @@ GeoExt.Lang.add("it", {
     },
     
     "GeoExplorer.Composer.prototype": {
-        loadMapText: "Importazione Mappa",
+        loadMapText: "Importazione Mappa o file KML",
         saveMapText: "Esportazione Mappa",
-        toolsTitle: "Scegliere gli strumenti da includere nelal barra:",
+	    loadMapEmptyText: "Selecionare un file di contesto o un file KML",
+		loadMapUploadText: "Caricamento in corso",
+		uploadText: "Caricamento",
+		loadMapWindowTitle: 'Form di Caricamento File',
+		loadMapErrorText:'Errore nel caricamento del file',
+        toolsTitle: "Scegliere gli strumenti da includere nella barra:",
         previewText: "Anteprima",
         backText: "Precedente",
         nextText: "Prossimo",
