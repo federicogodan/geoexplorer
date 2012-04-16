@@ -163,7 +163,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 };
             
             tools.push(new Ext.Button({
-                tooltip: "CSW Explorer",
+                tooltip: "Metadata Explorer",
                 handler: function() {
                       if(Ext.getCmp('csw-win'))
                           return;
