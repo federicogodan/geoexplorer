@@ -93,6 +93,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 24}
             }, {
+                ptype: "gxp_graticule",
+                actionTarget: {target: "paneltbar", index: 28}
+            }, {
                 ptype: "gxp_navigationhistory",
                 actionTarget: {target: "paneltbar", index: 22}
             }, {
@@ -113,9 +116,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_queryform",
                 featureManager: "featuremanager",
-                outputConfig: {
-                    title: "Search"
-                },
                 outputTarget: "idacontrol",
                 toggleGroup: this.toggleGroup,
                 appendActions: false
@@ -123,7 +123,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
-            }, {
+            }, /*{
                 ptype: "gxp_idaspm",
                 outputConfig: {
                     id: "spmpanel"
@@ -135,16 +135,16 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     id: "attributepanel"
                 },
                 outputTarget: "idacontrol"
-            }, {
+            },*/ {
                 ptype: "gxp_print",
-                customParams: {outputFilename: 'mapstore-print'},
+                customParams: {outputFilename: 'ida-print'},
                 printService: config.printService,
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
-            }, {
+            }/*, {
                 ptype: "gxp_mapstoregeocoder",
                 actionTarget: {target: "paneltbar", index: 60}
-            }
+            }*/
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
@@ -444,7 +444,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },
             scope: this,
             iconCls: "icon-save"
-        }));        
+        }));      		
         
         tools.push(new Ext.Button({
             tooltip: this.loadMapText,

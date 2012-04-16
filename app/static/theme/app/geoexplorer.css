@@ -212,6 +212,12 @@ body {
     right: inherit;
 }
 
+.olControlLoadingPanel {
+	background-image: url(img/loader5.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
 /* position the zoom slider within map panel */
 .gx-zoomslider {
     top: 90px;

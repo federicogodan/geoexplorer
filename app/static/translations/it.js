@@ -300,47 +300,46 @@ GeoExt.Lang.add("it", {
         userFieldText: "Utente",
         passwordFieldText: "Password"
     },
-    
-    //
-    // TODO
-    //
+
     "gxp.plugins.Login.prototype":{
       loginText: "Se connecter",
           loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
           userFieldText: "Utilisateur",
           passwordFieldText: "Mot de passe"
     },
+	
     "gxp.plugins.FeatureGrid.prototype": {
-        displayFeatureText: "Display on map",
-        firstPageTip: "First page",
-        previousPageTip: "Previous page",
-        zoomPageExtentTip: "Zoom to page extent",
-        nextPageTip: "Next page",
-        nextPageTip: "Last page",
-        totalMsg: "Total: {0} records"
+        displayFeatureText: "Visualizza in mappa",
+        firstPageTip: "Prima pagina",
+        previousPageTip: "Pagina precedente",
+        zoomPageExtentTip: "Zoom all'estensione della pagina",
+        nextPageTip: "Prossima pagina",
+        nextPageTip: "Ultima pagina",
+        totalMsg: "Totale: {0} righe"
     },
+	
     "gxp.plugins.QueryForm.prototype": {
-        queryActionText: "Query",
-        queryMenuText: "Query layer",
-        queryActionTip: "Query the selected layer",
-        queryByLocationText: "Region Of Interest",
-        currentTextText: "Current extent",
-        queryByAttributesText: "Query by attributes",
-        queryMsg: "Querying...",
-        cancelButtonText: "Reset",
-        noFeaturesTitle: "No Match",
-        noFeaturesMessage: "Your query did not return any results.",
-        title: "Search",
-        northLabel:"North",
-        westLabel:"West",
-        eastLabel:"East",
-        southLabel:"South",
-        setAoiText: "SetROI",
-        setAoiTooltip: "Enable the SetBox control to draw a ROI (BBOX) on the map",
-        attributeEnablement: "Query by Attribute",
-        attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
-        searchType: "Base Settings",
-        typeLabel: "Type",
+        queryActionText: "Interrogazione",
+        queryMenuText: "Interrogazione livello",
+        queryActionTip: "Interrogazione il livello selezionato",
+        queryByLocationText: "Regione di Interesse",
+        currentTextText: "Estensione corrente",
+        queryByAttributesText: "Interrogazione per attributo",
+        queryMsg: "Interrogazione in corso...",
+        cancelButtonText: "Reimposta",
+        noFeaturesTitle: "Nessun Risultato",
+        noFeaturesMessage: "La tua ricerca non ha prodotto risultati.",
+        title: "Ricerca",
+        northLabel:"Nord",
+        westLabel:"Ovest",
+        eastLabel:"Est",
+        southLabel:"Sud",
+        setAoiText: "ImpostaROI",
+        setAoiTooltip: "Abilita il controllo SetBox per disegnare una ROI (BBOX) sulla mappa",
+        attributeEnablement: "Interrogazione per Attributo",
+        attributeEnablementMsg: "Tipo di ricerca invalido! Si deve prima selezionare il tipo 'Feature' e il layer vettoriale.",
+        searchType: "Impostazioni di base",
+        typeLabel: "Tipo",
         featureLabel: "Max Features"
     }
 });

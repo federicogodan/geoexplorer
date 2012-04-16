@@ -31,15 +31,16 @@
     <script type="text/javascript" src="script/PrintPreview.js"></script>
     
     <!-- csw resources -->
-    <link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css">
-    <script type="text/javascript" src="auth/base64.js"></script>
-    <script type="text/javascript" src="script/CSWViewer.js"></script>
+    <!--link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css"-->
+    <!--script type="text/javascript" src="script/CSWViewer.js"></script-->
     
     <!-- translation data  -->
     <script type="text/javascript" src="translations/en.js"></script>
     <script type="text/javascript" src="translations/fr.js"></script>
     <script type="text/javascript" src="translations/it.js"></script>
     
+	<script type="text/javascript" src="auth/base64.js"></script>
+	
     <script>
         
         var app;
@@ -113,7 +114,7 @@
             // optionally set locale based on query string parameter
             //
             var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';            
-            var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
+            var langData = [['en', 'English'],['fr','FranÃ§ais'],['it','Italiano']];
             
             var query = location.search;        
             if(query && query.substr(0,1) === "?"){
@@ -182,7 +183,7 @@
                                 if(code == 'fr'){
                                     cb.setValue('English');
                                 }else{
-                                    cb.setValue('Français');
+                                    cb.setValue('FranÃ§ais');
                                 }
                             }
                         };
@@ -192,10 +193,10 @@
                         
                         if(curLang === 'fr'){
                             switchLangActionTip = "Changement de langue";
-                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
+                            switchLangConfirmationText = "Vous Ãªtes certain que vous souhaitez modifier la langue ? toutes les donnÃ©es non enregistrÃ©es seront a perdu";
                         }else if(curLang === 'it'){
                             switchLangActionTip = "Cambiamento Lingua";
-                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
+                            switchLangConfirmationText = "Si Ã¨ sicuri di voler cambiare lingua? I dati non salvati saranno persi";
                         }
                         
                         Ext.Msg.show({
@@ -297,13 +298,13 @@
             //
             var sources = "{" + 
                 "\"ida\": {" + 
-                    "\"url\":\"http://192.168.1.8:8080/geoserver/ows\"," +
+                    "\"url\":\"http://localhost:8080/geoserver/ows\"," +
                     "\"title\":\"IDA GeoServer\"," +
                     "\"version\":\"1.1.1\"" +
                 "}," +
-                "\"playground\": {" + 
-                    "\"url\":\"http://demo1.geo-solutions.it/geoserver-enterprise/ows\"," +
-                    "\"title\":\"GeoServer Enterprise\"," +
+                "\"gwc\": {" + 
+                    "\"url\":\"http://localhost:8080/geowebcache/service/wms\"," +
+                    "\"title\":\"IDA GeoWebCache\"," +
                     "\"version\":\"1.1.1\"" +
                 "}," +
                 "\"mapquest\": {" +
@@ -327,7 +328,7 @@
                 
             for(var s=0; s<customSources.length; s++){   
                  var src = Ext.util.JSON.encode(customSources[s]);
-                 sources += "\"source" + s + "\":" + src; //JSON.stringify(customSources[s]);
+                 sources += "\"source" + s + "\":" + src; 
                  
                  if(s + 1 < customSources.length)
                     sources += ",";
@@ -364,7 +365,7 @@
                 });
             }
 			      		     
-		        /*var auth = 'Basic ' + Base64.encode('admin:admin');
+		    /*var auth = 'Basic ' + Base64.encode('admin:admin');
 			      Ext.Ajax.defaultHeaders = {
                 'Authorization' : auth
             };*/
@@ -375,7 +376,7 @@
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                printService: "http://demo1.geo-solutions.it/geoserver/pdf/",
+                printService: "http://localhost:8080/geoserver/pdf/",
                 mapTitle: GeoExplorer.prototype.viewTabTitle || 'View',
                 about: {
                     title: "IDA Map",
@@ -389,93 +390,114 @@
                 ],
                 sources: sources,
                 map: {
-					          projection: "EPSG:4326",
+					projection: "EPSG:4326",
                     units: "degrees",
                     maxExtent: [
                         -180, -90, 180, 90
                     ],
                     extent: [
-                        -13.86475, 29.72412, 28.58643, 51.16944
+                       -0.52734, 36.68946, 20.69824, 46.53321
                     ],
-                    layers: [ {
-                        source: "playground",
-                        title: "Global Cover",
-                        name: "GeoSolutions:GLOBCOVER_2009",
-                        group: "background"
-                    },{
-                        source: "playground",
+					layers: [{
+                        source: "gwc",
+                        title: "NURC BG",
+                        name: "geosolutions:nurcbg",
+                        group: "background",
+						format: "image/jpeg",
+						transparent: false
+                    }, {
+                        source: "gwc",
                         title: "Natural Earth",
-                        name: "GeoSolutions:ne_shaded",
-                        group: "background"
+                        name: "geosolutions:ne_shaded",
+                        group: "background",
+						format: "image/jpeg",
+						transparent: false
                     },{
-                        source: "ida",
-                        title: "Ports",
-                        name: "nurc:ports",
+                        source: "gwc",
+                        title: "Bathymetry",
+                        name: "nurc:gebco_sea",
+						format: "image/jpeg",
+						transparent: false,
                         selected: false,
+                        visibility: false,
+                        group: "reference"
+                    },{
+                        source: "gwc",
+                        title: "DEM slope",
+                        name: "nurc:slope",
+						format: "image/jpeg",
+						transparent: false,
+                        selected: false,
+                        visibility: false,
+                        group: "reference"
+                    },{
+                        source: "gwc",
+                        title: "DEM aspect",
+                        name: "nurc:aspect",
+						format: "image/jpeg",
+						transparent: false,
+                        selected: false,
+                        visibility: false,
+                        group: "reference"
+                    },{
+                        source: "gwc",
+                        title: "Distance 1000 m",
+                        name: "nurc:eucdist_1000m",
+						format: "image/jpeg",
+						transparent: false,
+                        selected: false,
+                        visibility: false,
+                        group: "reference"
+                    },{
+                        source: "gwc",
+                        title: "Chl spring 2007",
+                        name: "nurc:spring2007",
+						format: "image/jpeg",
+						transparent: false,
+                        selected: false,
+                        visibility: false,
+                        group: "chl"
+                    },{
+                        source: "gwc",
+                        title: "Chl spring 2008",
+                        name: "nurc:spring2008",
+						format: "image/jpeg",
+						transparent: false,
+                        selected: false,
+                        visibility: false,
+                        group: "chl"
+                    },{
+                        source: "gwc",
+                        title: "Chl spring 2009",
+                        name: "nurc:spring2009",
+						format: "image/jpeg",
+						transparent: false,
+                        selected: false,
+                        visibility: false,
+                        group: "chl"
+                    },{
+                        source: "gwc",
+                        title: "Coastlines",
+                        name: "nurc:gshs_coastline",
+						selected: false,
                         visibility: false,
                         group: "ida"
                     },{
-                        source: "ida",
+                        source: "gwc",
                         title: "Strandings",
                         name: "nurc:strandings",
                         selected: false,
                         visibility: false,
                         group: "ida"
                     },{
-                        source: "ida",
-                        title: "Chl Spring 2009",
-                        name: "nurc:spring2009",
+                        source: "gwc",
+                        title: "Ports",
+                        name: "nurc:ports",
                         selected: false,
                         visibility: false,
                         group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Chl Spring 2008",
-                        name: "nurc:spring2008",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Chl Spring 2007",
-                        name: "nurc:spring2007",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Distance 1000 m",
-                        name: "nurc:eucdist_1000m",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "DEM aspect",
-                        name: "nurc:aspect",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "DEM slope",
-                        name: "nurc:slope",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Bathymetry",
-                        name: "nurc:gebco_sea",
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Coastlines",
-                        name: "nurc:gshs_coastline",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    }]/*,
+                    }]
+                    /*,
                     center: [-15,20],
                     zoom: 1*/
                 }
@@ -491,19 +513,8 @@
                     }
                 },
                 
-                'ready' : function(){
-                     var graticule = new OpenLayers.Control.Graticule({ 
-                          targetSize: 600,
-                          displayInLayerSwitcher: false,
-                          labelled: true, 
-                          visible: true                  
-                     });
-                     
-                     graticule.labelSymbolizer.fontColor = '#45F760';   
-                     graticule.lineSymbolizer.strokeColor = "#45F760";  
-                     app.mapPanel.map.addControl(graticule); 
-                     
-                     var mousePositionControl = new OpenLayers.Control.MousePosition();
+                'ready' : function(){                     
+                     /*var mousePositionControl = new OpenLayers.Control.MousePosition();
                      
                      // ////////////////////////////////////////////
                      // Overridding mouse position redraw function
@@ -564,48 +575,48 @@
                         }
                      };
                      
-                     app.mapPanel.map.addControl(mousePositionControl);
+                     app.mapPanel.map.addControl(mousePositionControl);*/
                 }    
             });
-			};			
+		};			
 			
-      Ext.Ajax.request({
-          //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          url: "/urlConfig.js",
-          method: 'GET',
-          success: function(response, opts){      
-              var serverConfig;    
-              
-              try{
-                  serverConfig = Ext.util.JSON.decode(response.responseText);
-              }catch(e){
-                  Ext.Msg.show({
-                        title: "Startup",
-                        msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.ERROR
-                  });
-              }
-              
-              if(serverConfig){
-                  proxy = serverConfig.proxy; 
-                  geoStoreBaseURL = serverConfig.geoStoreBase;                  
-                  customSources = serverConfig.gsSources;
+		Ext.Ajax.request({
+		  //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
+		  url: "/urlConfig.js",
+		  method: 'GET',
+		  success: function(response, opts){      
+			  var serverConfig;    
+			  
+			  try{
+				  serverConfig = Ext.util.JSON.decode(response.responseText);
+			  }catch(e){
+				  Ext.Msg.show({
+						title: "Startup",
+						msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.ERROR
+				  });
+			  }
+			  
+			  if(serverConfig){
+				  proxy = serverConfig.proxy; 
+				  geoStoreBaseURL = serverConfig.geoStoreBase;                  
+				  customSources = serverConfig.gsSources;
 
-                  //      
-                  // Run the application when browser is ready
-                  //
-                  Ext.onReady(onReady);
-              }
-          },
-          failure:  function(response, opts){
-              Ext.Msg.show({
-                    title: "Startup",
-                    msg: "An error occurred while getting the GeoStore URL config: " + response.status,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-              });
-          }
-      });
+				  //      
+				  // Run the application when browser is ready
+				  //
+				  Ext.onReady(onReady);
+			  }
+		  },
+		  failure:  function(response, opts){
+			  Ext.Msg.show({
+					title: "Startup",
+					msg: "An error occurred while getting the GeoStore URL config: " + response.status,
+					buttons: Ext.Msg.OK,
+					icon: Ext.MessageBox.ERROR
+			  });
+		  }
+		});
         
     </script>

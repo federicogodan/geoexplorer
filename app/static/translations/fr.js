@@ -275,45 +275,44 @@ GeoExt.Lang.add("fr", {
         groupPropertiesMsg: "Veuillez entrer un nom de groupe"
     },
     
-    //
-    // TODO
-    //
     "gxp.plugins.Login.prototype":{
       loginText: "Se connecter",
           loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
           userFieldText: "Utilisateur",
           passwordFieldText: "Mot de passe"
     },
-    "gxp.plugins.FeatureGrid.prototype": {
-        displayFeatureText: "Display on map",
-        firstPageTip: "First page",
-        previousPageTip: "Previous page",
-        zoomPageExtentTip: "Zoom to page extent",
-        nextPageTip: "Next page",
-        nextPageTip: "Last page",
+	
+	"gxp.plugins.FeatureGrid.prototype": {
+        displayFeatureText: "Afficher sur la carte",
+        firstPageTip: "Première page",
+        previousPageTip: "Page précédente",
+        zoomPageExtentTip: "Zoom sur la page",
+        nextPageTip: "Page suivante",
+        nextPageTip: "Dernière page",
         totalMsg: "Total: {0} records"
     },
-    "gxp.plugins.QueryForm.prototype": {
+	
+	"gxp.plugins.QueryForm.prototype": {
         queryActionText: "Query",
-        queryMenuText: "Query layer",
-        queryActionTip: "Query the selected layer",
-        queryByLocationText: "Region Of Interest",
-        currentTextText: "Current extent",
-        queryByAttributesText: "Query by attributes",
-        queryMsg: "Querying...",
-        cancelButtonText: "Reset",
-        noFeaturesTitle: "No Match",
-        noFeaturesMessage: "Your query did not return any results.",
-        title: "Search",
-        northLabel:"North",
-        westLabel:"West",
-        eastLabel:"East",
-        southLabel:"South",
-        setAoiText: "SetROI",
-        setAoiTooltip: "Enable the SetBox control to draw a ROI (BBOX) on the map",
-        attributeEnablement: "Query by Attribute",
+        queryMenuText: "Couche de requêtes",
+        queryActionTip: "Interroger la couche sélectionnée",
+        queryByLocationText: "Query selon le lieu",
+        currentTextText: "Mesure actuelle",
+        queryByAttributesText: "Requête par attributs",
+		queryMsg: "Recherche...",
+        cancelButtonText: "Remettre",
+        noFeaturesTitle: "Pas de correspondance",
+        noFeaturesMessage: "Votre requête n'a retourné aucun résultat.",
+        title: "Rechercher",
+        northLabel:"Nord",
+        westLabel:"Ouest",
+        eastLabel:"Est",
+        southLabel:"Sud",
+        setAoiText: "FixéROI",
+        setAoiTooltip: "Activer le contrôle TextBox pour dessiner un ROI (BOX) sur la carte",
+        attributeEnablement: "Requête par attributs",
         attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
-        searchType: "Base Settings",
+        searchType: "Réglages de base",
         typeLabel: "Type",
         featureLabel: "Max Features"
     }

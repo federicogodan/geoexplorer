@@ -75,6 +75,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
    	
    	reloadTitle: "Context Reload",
    	reloadText: "You are sure to reload the context? All unsaved data will be lost",
+	waitMsg: "Please wait...",
     // End i18n.
     
     /**
@@ -289,14 +290,13 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             //}
             
             app = new GeoExplorer.Composer(config);
-        }else{
+		}else{
             Ext.Msg.show({
                 title: this.userConfigLoadTitle,
                 msg: this.userConfigLoadMsg,
                 icon: Ext.MessageBox.WARNING
             });
         }
-
     },
     
     displayXHRTrouble: function(msg, status) {        
@@ -368,7 +368,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                   handler: function(btn){
                   
                       var reloadFun = function(buttonId, text,opt){
-                          if(buttonId === 'ok'){                        
+                          if(buttonId === 'yes'){    
                                 window.location.reload(false);
                           }
                       };
@@ -410,7 +410,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         var southPanel = new Ext.Panel({
             border: false,
             layout: "fit",
-            id:'south',
+            id: 'south',
             region: "south",
             height: 200,
             split: true,
@@ -420,12 +420,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             header: false,
             items: [
                 {
-                  xtype: 'tabpanel', activeTab: 0, region: 'center', id: 'idalaylist', autoScroll: true, border: false,
+                  xtype: 'tabpanel', activeTab: 0, region: 'center', id: 'idalaylist', autoScroll: true, border: false/*,
                   items:[
                       {xtype:"panel", title:"All", disabled: true},
                       {xtype:"panel", title:"Processed", disabled: true},
                       {xtype:"panel", title:"Pending", disabled: true}
-                  ]
+                  ]*/
                 }
             ]
         });
@@ -477,6 +477,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      * Saves the map config and displays the URL in a window.
      */ 
     save: function(callback, scope) {
+	    var mask = new Ext.LoadMask(Ext.getBody(), {msg: this.waitMsg});
+		mask.show();
+		
         var configStr = Ext.util.JSON.encode(this.getState());        
         var method = "POST";
         var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
@@ -489,6 +492,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 if (callback) {
                     callback.call(scope || this);
                 }
+				mask.hide();
             },
             scope: this
         });
