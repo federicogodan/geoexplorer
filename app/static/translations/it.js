@@ -14,7 +14,7 @@ GeoExt.Lang.add("it", {
         saveErrorText: "Problemi di salvataggio: ",
         bookmarkText: "URL del Segnalibro",
         permakinkText: "Permalink",
-        appInfoText: "GeoExplorer",
+        appInfoText: "Crediti",
         aboutText: "Riguardo GeoExplorer",
         mapInfoText: "Informazioni Mappa",
         descriptionText: "Descrizione",
@@ -25,9 +25,14 @@ GeoExt.Lang.add("it", {
     },
     
     "GeoExplorer.Composer.prototype": {
-        loadMapText: "Importazione Mappa",
+        loadMapText: "Importazione Mappa o file KML",
         saveMapText: "Esportazione Mappa",
-        toolsTitle: "Scegliere gli strumenti da includere nelal barra:",
+	    loadMapEmptyText: "Selecionare un file di contesto o un file KML",
+		loadMapUploadText: "Caricamento in corso",
+		uploadText: "Caricamento",
+		loadMapWindowTitle: 'Form di Caricamento File',
+		loadMapErrorText:'Errore nel caricamento del file',
+        toolsTitle: "Scegliere gli strumenti da includere nella barra:",
         previewText: "Anteprima",
         backText: "Precedente",
         nextText: "Prossimo",
@@ -295,9 +300,51 @@ GeoExt.Lang.add("it", {
     },
 
     "gxp.plugins.Login.prototype":{
-	loginText: "Login",
-	loginErrorText: "Username o password invalidi.",
-	userFieldText: "Utente",
-	passwordFieldText: "Password"
+        loginText: "Login",
+        loginErrorText: "Username o password invalidi.",
+        userFieldText: "Utente",
+        passwordFieldText: "Password"
+    },
+
+    "gxp.plugins.Login.prototype":{
+      loginText: "Se connecter",
+          loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
+          userFieldText: "Utilisateur",
+          passwordFieldText: "Mot de passe"
+    },
+	
+    "gxp.plugins.FeatureGrid.prototype": {
+        displayFeatureText: "Visualizza in mappa",
+        firstPageTip: "Prima pagina",
+        previousPageTip: "Pagina precedente",
+        zoomPageExtentTip: "Zoom all'estensione della pagina",
+        nextPageTip: "Prossima pagina",
+        nextPageTip: "Ultima pagina",
+        totalMsg: "Totale: {0} righe"
+    },
+	
+    "gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Interrogazione",
+        queryMenuText: "Interrogazione livello",
+        queryActionTip: "Interrogazione il livello selezionato",
+        queryByLocationText: "Regione di Interesse",
+        currentTextText: "Estensione corrente",
+        queryByAttributesText: "Interrogazione per attributo",
+        queryMsg: "Interrogazione in corso...",
+        cancelButtonText: "Reimposta",
+        noFeaturesTitle: "Nessun Risultato",
+        noFeaturesMessage: "La tua ricerca non ha prodotto risultati.",
+        title: "Ricerca",
+        northLabel:"Nord",
+        westLabel:"Ovest",
+        eastLabel:"Est",
+        southLabel:"Sud",
+        setAoiText: "ImpostaROI",
+        setAoiTooltip: "Abilita il controllo SetBox per disegnare una ROI (BBOX) sulla mappa",
+        attributeEnablement: "Interrogazione per Attributo",
+        attributeEnablementMsg: "Tipo di ricerca invalido! Si deve prima selezionare il tipo 'Feature' e il layer vettoriale.",
+        searchType: "Impostazioni di base",
+        typeLabel: "Tipo",
+        featureLabel: "Max Features"
     }
 });
