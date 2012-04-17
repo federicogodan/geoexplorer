@@ -82,7 +82,8 @@
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        
+        var code;
+		
         var onReady = function(){
 
             Ext.BLANK_IMAGE_URL = (function() {
@@ -121,7 +122,7 @@
             }
             
             var url = Ext.urlDecode(query);        
-            var code = url.locale;   
+            code = url.locale;   
 
             if(!code){
                 code = "en";

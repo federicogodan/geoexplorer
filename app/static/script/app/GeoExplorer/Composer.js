@@ -174,7 +174,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                       i18n = new Ext.i18n.Bundle({
                         bundle : "CSWViewer",
                         path : "externals/csw/CSWViewer/i18n",
-                        lang : "it-IT"
+                        lang : code == 'en' ? "en-EN" : (code == 'it' ? "it-IT" : "fr-FR")
                       });
                       
                       i18n.onReady( function() {
