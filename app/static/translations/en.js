@@ -310,6 +310,8 @@ GeoExt.Lang.add("en", {
         attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
         searchType: "Base Settings",
         typeLabel: "Type",
-        featureLabel: "Max Features"
+        featureLabel: "Max Features",
+        spatialLabelText: "Without setting a ROI you query the entire set of data in the current Map extent.",
+	featureLabelText: "With an high number of features the server can take a long time to respond. Limit your search!"
     }
 });

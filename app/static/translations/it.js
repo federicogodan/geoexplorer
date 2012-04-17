@@ -345,6 +345,8 @@ GeoExt.Lang.add("it", {
         attributeEnablementMsg: "Tipo di ricerca invalido! Si deve prima selezionare il tipo 'Feature' e il layer vettoriale.",
         searchType: "Impostazioni di base",
         typeLabel: "Tipo",
-        featureLabel: "Max Features"
+        featureLabel: "Max Features",
+       	spatialLabelText: "Non settando una ROI stai chiedendo l'intero insieme di dati nell'estenzione corrente della mappa.",
+	featureLabelText: "Con un elevato numero di features il server può richiedere lungo tempo prima di rispondere. Limita la tua ricerca!"
     }
 });

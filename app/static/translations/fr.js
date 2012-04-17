@@ -314,6 +314,8 @@ GeoExt.Lang.add("fr", {
         attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
         searchType: "Réglages de base",
         typeLabel: "Type",
-        featureLabel: "Max Features"
+        featureLabel: "Max Features",
+		spatialLabelText: "Sans établir un ROI vous interrogez l'ensemble des données dans la mesure où la carte actuelle.",
+		featureLabelText: "Avec un nombre élevé de caractéristiques que le serveur peut prendre un certain temps à réagir. Limitez votre recherche!"
     }
 });
