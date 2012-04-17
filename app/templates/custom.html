@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/all.css">
     <script type="text/javascript" src="script/gxp.js"></script> 
 
-    <!-- proj4js resources -->
-    <script type="text/javascript" src="script/proj4js.js"></script>
+    <!-- proj4js resources 
+    <script type="text/javascript" src="script/proj4js.js"></script>-->
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
@@ -89,7 +89,7 @@
             })();
 
             OpenLayers.ImgPath = "externals/openlayers/theme/default/img/";
-            Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
+            //Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
                         
@@ -181,8 +181,10 @@
             if(customSources.length > 0)
                 sources += ",";
                 
-            for(var s=0; s<customSources.length; s++){   
-                 sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
+            for(var s=0; s<customSources.length; s++){ 
+                var src = Ext.util.JSON.encode(customSources[s]);
+                sources += "\"source" + s + "\":" + src;
+                //sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
                  
                  if(s + 1 < customSources.length)
                     sources += ",";
@@ -314,13 +316,19 @@
                         ovestPanel.hide();
                         ovestPanel.collapse();
                     }
-                }    
+                }, 
+                'ready' : function(){
+                    //var m = app.modified;
+                    //var p;
+                    app.modified = false;
+                }
             });
 			};			
 			
       Ext.Ajax.request({
-          url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
+          url: "/http_proxy/proxy?url=" + "http://localhost:8080/geostore/urlConfig.js",
           //url: "/geostore/urlConfig.js",
+          //url: "urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
