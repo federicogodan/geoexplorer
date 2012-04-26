@@ -103,6 +103,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 26}
+            }, {
+                ptype: "gxp_geocoder",
+                actionTarget: {target: "paneltbar", index: 27},
+                data: [["Toscana" , "9.67931072001958,42.2350044813343,12.3776912610717,44.4807346918204"]]
             },{
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
