@@ -70,8 +70,8 @@
                "visibility":true
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Temperature_height_above_ground_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Temperature_height_above_ground_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -85,8 +85,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Convective_Avail_Pot_Energy_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Convective_Avail_Pot_Energy_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -99,8 +99,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Convective_inhibition_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Convective_inhibition_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -113,8 +113,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Convective_precip_rate_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Convective_precip_rate_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -127,8 +127,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Dew_point_temperature_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Dew_point_temperature_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -141,8 +141,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Downward_long_wave_flux_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Downward_long_wave_flux_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -155,8 +155,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Downward_short_wave_flux_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Downward_short_wave_flux_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -169,8 +169,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Geopotential_height_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Geopotential_height_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -184,8 +184,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Geopotential_height_highest_tropospheric_freezing_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Geopotential_height_highest_tropospheric_freezing_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -199,8 +199,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Geopotential_height_surface_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Geopotential_height_surface_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -214,8 +214,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Geopotential_height_tropopause_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Geopotential_height_tropopause_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -229,8 +229,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Land_cover_land1sea0_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Land_cover_land1sea0_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -244,8 +244,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Mean_sea_level_pressure_NAM_model_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Mean_sea_level_pressure_NAM_model_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -259,8 +259,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Relative_humidity_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Relative_humidity_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -274,8 +274,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Relative_humidity_height_above_ground_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Relative_humidity_height_above_ground_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -289,8 +289,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Soil_temperature_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Soil_temperature_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -304,8 +304,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Surface_wind_gust_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Surface_wind_gust_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -319,8 +319,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Temperature_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Temperature_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -334,8 +334,8 @@
                "elevation":"850.0"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Temperature_surface_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Temperature_surface_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -349,8 +349,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Visibility_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Visibility_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -364,8 +364,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Volumetric_soil_moisture_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Volumetric_soil_moisture_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -379,8 +379,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Wind_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Wind_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -394,8 +394,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Wind_height_above_ground_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Wind_height_above_ground_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
@@ -409,8 +409,8 @@
                "transitionEffect":"resize"
             },{
                "format":"image/png",
-               "group":"ARW 3km 2012_04_16 RUN12",
-               "name":"lamma:arw_3km_Categorical_20120416T120000000Z",
+               "group":"ARW 3km 2012_04_26 RUN12",
+               "name":"lamma:arw_3km_Categorical_20120426T120000000Z",
                "opacity":0.7,
                "selected":false,
                "source":"LaMMA-Modelli",
