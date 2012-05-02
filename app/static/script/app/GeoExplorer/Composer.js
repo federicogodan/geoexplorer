@@ -105,8 +105,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 26}
             }, {
                 ptype: "gxp_geocoder",
-                actionTarget: {target: "paneltbar", index: 27},
-                data: [["Toscana" , "9.67931072001958,42.2350044813343,12.3776912610717,44.4807346918204"]]
+                actionTarget: {target: "paneltbar", index: 27}
             },{
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
@@ -495,8 +494,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         return tools;
     },
     
-    /*
-     * private: method[openPreview]
+    /** private: method[viewMetadata]
      */
     viewMetadata: function(gnURL, uuid, title){
         var tabPanel = Ext.getCmp(app.renderToTab);
@@ -523,8 +521,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }
     },
 
-    /*
-     * private: method[openPreview]
+    /** private: method[openPreview]
      */
     openPreview: function(embedMap) {
         var preview = new Ext.Window({
