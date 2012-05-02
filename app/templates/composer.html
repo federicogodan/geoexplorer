@@ -14,6 +14,11 @@
     <link rel="stylesheet" type="text/css" href="../theme/app/composer.css" />
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
 
+    <!-- TimeManager OpenLayers -->
+    <script src="../static/TimeManager_openlayers/OpenLayers/Control/TimeManager.js"></script>
+    <script src="../static/TimeManager_openlayers/OpenLayers/TimeAgent.js"></script>
+    <script src="../static/TimeManager_openlayers/OpenLayers/TimeAgent/WMS.js"></script>
+    
     <script type="text/javascript" src="../script/GeoExplorer.js"></script>
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/it.js"></script>
@@ -142,17 +147,17 @@
             //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
             //
             
-        //models = "../json2_ORIGINALE.js";
-        models = "../json2_3KM.js";
+        models = "../json2_3KM00_uff.js";
 
         var storeModels = new Ext.data.SimpleStore({
                             fields: ['modelValue', 'modelName'],
                             data: [
-                                ['../json2_3KM.js', 'ARW 3km'],
-                                ['../json2_9KM.js', 'ARW 9km'],
-                                ['../json2_50KM.js', 'GFS 50km']
-                                //['../json2_ORIGINALE.js', 'ORIGINALE1'],
-                                //['../json2_ORIGINALE2.js', 'ORIGINALE2']
+                                ['../json2_3KM00_uff.js', 'ARW 3km 00'],
+                                ['../json2_3KM12_uff.js', 'ARW 3km 12'],
+                                ['../json2_9KM00_uff.js', 'ARW 9km 00'],
+                                ['../json2_9KM12_uff.js', 'ARW 9km 12'],
+                                ['../json2_50KM00_uff.js', 'GFS 50km 00'],
+                                ['../json2_50KM12_uff.js', 'GFS 50km 12']
                             ]
                         });
                         
@@ -162,10 +167,11 @@
                                 store: storeModels,
                                 mode: 'local',
                                 displayField: 'modelName',
+                                fieldLabel: 'Seleziona un Modello',
                                 valueField: 'modelValue',
                                 listClass: 'x-combo-list-small',
                                 resizable: true,
-                                emptyText:'Seleziona un modello',
+                                emptyText:'ARW 3km 00',
                                 selectOnFocus:true,
                                 listeners: { 
                                     select: function(combo, record, index) {
