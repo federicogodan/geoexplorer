@@ -238,10 +238,10 @@ GeoExt.Lang.add("fr", {
 	    contextSaveSuccessString: "Sauver le contexte est géré.",
 	    contextSaveFailString: "Sauver le contexte a échoué."
     },
-    "gxp.plugins.FDHGeoCoder.prototype":{
+    "gxp.plugins.GeoReferences.prototype":{
         initialText: "Sélectionner une zone",
-        menuText: "FDH Codification Géographique",
-        tooltip: "FDH Codification Géographique"
+        menuText: "Codification Géographique",
+        tooltip: "Codification Géographique"
 	
     },
 	"gxp.plugins.ZoomBox.prototype":{
