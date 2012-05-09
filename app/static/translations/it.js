@@ -261,8 +261,8 @@ GeoExt.Lang.add("it", {
 
     "gxp.plugins.FDHGeoCoder.prototype": {
         initialText: "Seleziona un'area",
-        menuText: "FDH Geo Coding",
-        tooltip: "FDH Geo Coding"
+        menuText: "GeoReferences",
+        tooltip: "GeoReferences"
     },
 
     "gxp.plugins.ZoomBox.prototype":{
