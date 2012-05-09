@@ -522,6 +522,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             items: [appInfo]
         });
         win.show();
+    },
+    
+    /** private: method[setAuthHeader]
+     *
+     * Set Authorization Headers in gxp_saveDefaultContext.
+     */ 
+    setAuthHeaders: function(auth) {
+        for(var tool in this.tools){
+            if(this.tools[tool].ptype == "gxp_saveDefaultContext"){
+                this.tools[tool].auth = auth;
+            }
+        }
     }
 });
 
