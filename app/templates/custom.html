@@ -100,8 +100,7 @@
             //Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
-            gxp.plugins.GeoCoder.prototype.data = geocoding_data ? geocoding_data : [];
-            
+
             Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
                  onRender : function(ct, position){
                       this.el = ct.createChild({
@@ -366,6 +365,7 @@
                     contact: "<a href='#'>#</a>."
                 },
                 sources: sources,
+                georeferences: geocoding_data,
                 cswconfig: {
                     catalogs: [
                         {"name": "Demo1GeoSolutions" , "url": "http://demo1.geo-solutions.it/geonetwork/srv/en/csw", "description": "Iternal GeoNetwork demo"},
@@ -451,8 +451,8 @@
 			};			
 			
       Ext.Ajax.request({
-          url: "/http_proxy/proxy?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          //url: "/urlConfig.js",
+          //url: "/http_proxy/proxy?url=" + "http://localhost:8080/geostore/urlConfig.js",
+          url: "urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
