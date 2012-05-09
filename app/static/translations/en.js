@@ -238,10 +238,10 @@ GeoExt.Lang.add("en", {
 	    contextSaveSuccessString: "Context saved succesfully",
 	    contextSaveFailString: "Context not saved succesfully"
     },
-    "gxp.plugins.FDHGeoCoder.prototype": {
+    "gxp.plugins.GeoReferences.prototype": {
         initialText: "Select an area",
-        menuText: "FDH Geo Coding",
-        tooltip: "FDH Geo Coding"
+        menuText: "GeoReferences",
+        tooltip: "GeoReferences"
     },
     "gxp.plugins.ZoomBox.prototype":{
         zoomInMenuText: "Zoom Box In",
