@@ -25,9 +25,9 @@ GeoExt.Lang.add("it", {
     },
     
     "GeoExplorer.Composer.prototype": {
-        loadMapText: "Importazione Mappa o file KML",
+        loadMapText: "Importazione Mappa",
         saveMapText: "Esportazione Mappa",
-	    loadMapEmptyText: "Selecionare un file di contesto o un file KML",
+	    loadMapEmptyText: "Selezionare un file di contesto",
 		loadMapUploadText: "Caricamento in corso",
 		uploadText: "Caricamento",
 		loadMapWindowTitle: 'Form di Caricamento File',
@@ -258,11 +258,11 @@ GeoExt.Lang.add("it", {
 	    contextSaveSuccessString: "Contesto salvato con successo",
 	    contextSaveFailString: "Contesto non salvato con successo"
     },
-
-    "gxp.plugins.FDHGeoCoder.prototype": {
+	
+    "gxp.plugins.GeoReferences.prototype": {
         initialText: "Seleziona un'area",
-        menuText: "GeoReferences",
-        tooltip: "GeoReferences"
+        menuText: "Geo Referimenti",
+        tooltip: "Geo Referimenti"
     },
 
     "gxp.plugins.ZoomBox.prototype":{

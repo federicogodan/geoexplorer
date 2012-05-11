@@ -31,9 +31,9 @@ GeoExt.Lang.add("en", {
     },
     
     "GeoExplorer.Composer.prototype": {
-        loadMapText: "Import KML or Map file",
+        loadMapText: "Import a Map file",
         saveMapText: "Export Map",
-		loadMapEmptyText: "Select a KML or a Map context file",
+		loadMapEmptyText: "Select a Map context file",
 		loadMapUploadText: "Uploading your file...",
 		uploadText: "Upload",
 		loadMapWindowTitle: 'File Upload Form',

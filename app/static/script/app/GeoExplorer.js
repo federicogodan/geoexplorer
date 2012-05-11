@@ -66,6 +66,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
+	
+	viewTabTitle : "View",
+	
     // End i18n.
     
     /**
@@ -386,7 +389,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     save: function(callback, scope) {
         var configStr = Ext.util.JSON.encode(this.getState());        
         var method = "POST";
-        var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
+        var url = proxy + app.xmlJsonTranslateService + "HTTPWebGISSave";
+		//var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -460,12 +464,27 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     showUrl: function() {
         OpenLayers.Request.POST({
-            url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+            url: proxy + app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
             data: this.xmlContext,
             callback: function(request) {
 
-                if(request.status == 200){
-                    window.open(request.responseText);
+                if(request.status == 200){							
+                    
+                    //		
+                    //delete other iframes appended
+                    //
+                    if(document.getElementById("downloadIFrame")) {
+                      document.body.removeChild( document.getElementById("downloadIFrame") ); 
+                    }
+                    
+                    //
+                    //Create an hidden iframe for forced download
+                    //
+                    var elemIF = document.createElement("iframe"); 
+                    elemIF.setAttribute("id","downloadIFrame");
+                    elemIF.src = proxy + encodeURIComponent(app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText); 
+                    elemIF.style.display = "none"; 
+                    document.body.appendChild(elemIF); 
                 }else{
                     Ext.Msg.show({
                        title:'File Download Error',
@@ -474,7 +493,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                        icon: Ext.MessageBox.ERROR
                     });
                 }
-
             },
             scope: this
         });

@@ -401,7 +401,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.push('-');
         }
         
-        /*tools.push(new Ext.Button({
+        tools.push(new Ext.Button({
             tooltip: this.saveMapText,
             handler: function() {
                 this.save(this.showUrl);
@@ -444,8 +444,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         handler: function(){
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
-                                  url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  //url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                  url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
                                   waitMsg: 'Uploading your context file...',
                                   success: function(fp, o){
                                       win.hide();
@@ -489,7 +489,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },
             scope: this,
             iconCls: "icon-load"
-        }));*/
+        }));
         
         return tools;
     },

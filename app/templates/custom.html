@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/all.css">
     <script type="text/javascript" src="script/gxp.js"></script> 
 
-    <script type="text/javascript" src="script/proj4js.js"></script>
+    <!--script type="text/javascript" src="script/proj4js.js"></script-->
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
@@ -345,20 +345,19 @@
                 });
             }
 			      		     
-			      /*var auth = 'Basic ' + Base64.encode('admin:admin');
+			/*var auth = 'Basic ' + Base64.encode('admin:admin');
 			      Ext.Ajax.defaultHeaders = {
                 'Authorization' : auth
             };*/
              
             app = new GeoExplorer.Composer({
                 modified: false,
-                //proxy: "proxy/?url=",
                 proxy: proxy,
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
+                xmlJsonTranslateService: "http://192.168.1.132:8080/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                printService:"http://demo1.geo-solutions.it/geoserver/pdf/",
-                mapTitle: GeoExplorer.prototype.viewTabTitle || 'View',
+                printService:"http://192.168.1.132:8080/geoserver/pdf/",
+                mapTitle: GeoExplorer.prototype.viewTabTitle || (code === 'en' ? 'View' : (code === 'fr' ? 'Veu' : 'Vista')),
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -443,16 +442,13 @@
                     }
                 }, 
                 'ready' : function(){
-                    //var m = app.modified;
-                    //var p;
                     app.modified = false;
                 }
             });
 			};			
 			
       Ext.Ajax.request({
-          //url: "/http_proxy/proxy?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          url: "urlConfig.js",
+          url: "/MapComposer/urlConfig.js",
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
