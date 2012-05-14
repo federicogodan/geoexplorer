@@ -248,8 +248,8 @@
                         title:  GeoExplorer.prototype.aboutThisMapText,
                         modal: true,
                         layout: "fit",
-                        width: 300,
-                        height: 300,
+                        width: 340,
+                        height: 260,
                         items: [appInfo]
                     });
                     
@@ -286,6 +286,12 @@
             // Parsing WMS servers Sources for getCapabilities operation
             //
             var sources = "{" + 
+                "\"demo1\": {" +
+                    "\"ptype\": \"gxp_wmssource\"," +
+                    "\"title\": \"Geo-Solutions server\"," +
+                    "\"projection\":\"EPSG:900913\"," +
+                    "\"url\": \"http://demo1.geo-solutions.it/geoserver/ows\"" +
+                "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -418,17 +424,17 @@
                         group: "background"
                     },{
                         source: "google",
-                        title: "Google Hybrid",
-                        name: "HYBRID",
-                        group: "background"
-                    },{
-                        source: "google",
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Hybrid",
+                        name: "HYBRID",
+                        group: "background"
                     }],
-                    center: [-1224514, 1291331],
-                    zoom: 6
+                    center: [1250000.000000, 5370000.000000],
+                    zoom: 5
                 }
             }, mapIdentifier, authorization, fullScreen);   
             

@@ -234,7 +234,7 @@ GeoExt.Lang.add("en", {
     
     "gxp.plugins.SaveDefaultContext.prototype": { 
 	    saveDefaultContextMenuText: "Save default context",
-	    saveDefaultContextActionTip: "Save current context as default one",
+	    saveDefaultContextActionTip: "Save Map context",
 	    contextSaveSuccessString: "Context saved succesfully",
 	    contextSaveFailString: "Context not saved succesfully"
     },
