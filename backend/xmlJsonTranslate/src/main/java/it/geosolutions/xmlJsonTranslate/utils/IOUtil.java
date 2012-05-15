@@ -1,4 +1,4 @@
-package webgis.utils;
+package it.geosolutions.xmlJsonTranslate.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -103,14 +103,12 @@ public class IOUtil {
 		}
 
 		File tempFile = File.createTempFile(name, suff);
-//		File newFile = new File(tempFile.getParent(), origname);
+
 
 		InputStream in = new BufferedInputStream(oin);
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
 
 		IOUtil.copy(in, out);
-//		tempFile.renameTo(newFile);
-
 		return tempFile;
     }
 
