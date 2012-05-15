@@ -110,13 +110,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				        needsAuthorization: true
-            },{
+            }/*,{
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'mapstore-print'},
                 printService: config.printService,
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
-            }
+            }*/
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);

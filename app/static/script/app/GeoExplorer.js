@@ -280,7 +280,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             //    config.modified = modified;
             //}
             
-            app = new GeoExplorer.Composer(config);
+            app = new GeoExplorer.Composer(config, this.mapId, this.auth, this.fScreen);
         }else{
             Ext.Msg.show({
                 title: this.userConfigLoadTitle,

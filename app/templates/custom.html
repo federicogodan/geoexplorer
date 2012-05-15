@@ -24,9 +24,9 @@
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
     <script type="text/javascript" src="script/ux.js"></script>
     
-    <!-- PrintPreview resources -->
+    <!-- PrintPreview resources 
     <link rel="stylesheet" type="text/css" href="externals/PrintPreview/resources/css/printpreview.css">
-    <script type="text/javascript" src="script/PrintPreview.js"></script>
+    <script type="text/javascript" src="script/PrintPreview.js"></script>-->
     
     <!-- csw resources -->
     <link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css">
@@ -170,6 +170,8 @@
                     beforeselect: function(cb, record, index){
                        if(curLang == record.get('code'))
                           return false; 
+					   else
+						  languageSelector.prevLang = curLang;
                     },                    
                     select: function(cb, record, index) {         
                         
@@ -198,10 +200,13 @@
                                 
                             }else{
                                 var code = record.get('code');
-                                if(code == 'fr'){
-                                    cb.setValue('English');
-                                }else{
+																
+                                if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
                                     cb.setValue('Français');
+                                }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
+									cb.setValue('Italiano');
+								}else{
+                                    cb.setValue('English');
                                 }
                             }
                         };
@@ -355,15 +360,15 @@
 			      Ext.Ajax.defaultHeaders = {
                 'Authorization' : auth
             };*/
-             
+             			
             app = new GeoExplorer.Composer({
                 modified: false,
                 proxy: proxy,
                 xmlJsonTranslateService: "http://192.168.1.132:8080/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                printService:"http://192.168.1.132:8080/geoserver/pdf/",
-                mapTitle: GeoExplorer.prototype.viewTabTitle || (code === 'en' ? 'View' : (code === 'fr' ? 'Veu' : 'Vista')),
+                //printService:"http://192.168.1.132:8080/geoserver/pdf/",
+                //mapTitle: (code === 'en' ? 'View' : (code === 'fr' ? 'Veu' : 'Vista')),
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -396,7 +401,7 @@
                     timeout: 60000
                 },
                 map: {
-					          projection: "EPSG:900913",
+					projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
                         -20037508.34, -20037508.34,
