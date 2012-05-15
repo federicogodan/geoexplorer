@@ -26,6 +26,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     backText: "Back",
     nextText: "Next",
     fullScreenText: "Full Screen",
+    /**
+    * Property: cswMsg
+    * {string} string to add in loading message
+    * 
+    */
+    cswMsg: 'Loading...',
     // End i18n.
 
     constructor: function(config) {        
@@ -202,7 +208,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                                       map.zoomToExtent(bbox);
                                   },
                                   viewMap: function(el){       
-                                      var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                                      var mask = new Ext.LoadMask(Ext.getBody(), {msg:this.cswMsg});
                                       mask.show();
                                                                   
                                       var mapInfo = el.layers;  

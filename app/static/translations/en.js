@@ -46,7 +46,8 @@ GeoExt.Lang.add("en", {
         loginErrorText: "Invalid username or password.",
         userFieldText: "User",
         passwordFieldText: "Password",
-        fullScreenText: "Full Screen"
+        fullScreenText: "Full Screen",
+        cswMsg: 'Chargement...'
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -236,7 +237,8 @@ GeoExt.Lang.add("en", {
 	    saveDefaultContextMenuText: "Save default context",
 	    saveDefaultContextActionTip: "Save Map context",
 	    contextSaveSuccessString: "Context saved succesfully",
-	    contextSaveFailString: "Context not saved succesfully"
+	    contextSaveFailString: "Context not saved succesfully",
+	    contextMsg: "Loading..."
     },
     "gxp.plugins.GeoReferences.prototype": {
         initialText: "Select an area",

@@ -47,7 +47,8 @@ GeoExt.Lang.add("fr", {
         loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
         userFieldText: "Utilisateur",
         passwordFieldText: "Mot de passe",
-        fullScreenText: "Plein écran"
+        fullScreenText: "Plein écran",
+        cswMsg: 'Chargement...'
     },  
 
     "gxp.menu.LayerMenu.prototype": {
@@ -236,7 +237,8 @@ GeoExt.Lang.add("fr", {
 	    saveDefaultContextMenuText: "Enregistrez le contexte par défaut.",
 	    saveDefaultContextActionTip: "Enregistrer contexte Carte.",
 	    contextSaveSuccessString: "Sauver le contexte est géré.",
-	    contextSaveFailString: "Sauver le contexte a échoué."
+	    contextSaveFailString: "Sauver le contexte a échoué.",
+	    contextMsg: "Chargement..."
     },
     "gxp.plugins.GeoReferences.prototype":{
         initialText: "Sélectionner une zone",

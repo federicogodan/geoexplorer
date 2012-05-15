@@ -40,7 +40,8 @@ GeoExt.Lang.add("it", {
         loginErrorText: "Username o password invalidi.",
         userFieldText: "Utente",
         passwordFieldText: "Password",
-        fullScreenText: "Schermo Intero"
+        fullScreenText: "Schermo Intero",
+        cswMsg: 'Caricamento...'
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -256,7 +257,8 @@ GeoExt.Lang.add("it", {
 	    saveDefaultContextMenuText: "Salva il contesto",
 	    saveDefaultContextActionTip: "Salva il contesto della Mappa",
 	    contextSaveSuccessString: "Contesto salvato con successo",
-	    contextSaveFailString: "Contesto non salvato con successo"
+	    contextSaveFailString: "Contesto non salvato con successo",
+	    contextMsg: "Caricamento..."
     },
 	
     "gxp.plugins.GeoReferences.prototype": {
