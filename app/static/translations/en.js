@@ -47,7 +47,13 @@ GeoExt.Lang.add("en", {
         userFieldText: "User",
         passwordFieldText: "Password",
         fullScreenText: "Full Screen",
-        cswMsg: 'Chargement...'
+        cswMsg: 'Loading...',
+		uploadWaitMsg: 'Uploading your context file...',
+		uploadErrorTitle: 'File Upload Error',
+		uploadEmptyText: 'Select a Map context file',
+		uploadWinTitle: 'File Upload Form',
+		cswFailureAddLayer: ' The layer cannot be added to the map',
+		uploadButtonText: 'Upload'
     },
 
     "gxp.menu.LayerMenu.prototype": {

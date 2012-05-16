@@ -67,8 +67,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
 	
-	viewTabTitle : "View",
-	
+	viewTabTitle : "View",	
     // End i18n.
     
     /**

@@ -26,6 +26,14 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     backText: "Back",
     nextText: "Next",
     fullScreenText: "Full Screen",
+	
+	uploadButtonText: 'Upload',
+	uploadWaitMsg: 'Uploading your context file...',
+    uploadErrorTitle: 'File Upload Error',
+    uploadEmptyText: 'Select a Map context file',
+    uploadWinTitle: 'File Upload Form',
+    cswFailureAddLayer: ' The layer cannot be added to the map',
+	
     /**
     * Property: cswMsg
     * {string} string to add in loading message
@@ -289,7 +297,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                                                   
                                                   Ext.Msg.show({
                                                       title: 'GetCapabilities',
-                                                      msg: msg + " The layer cant be added to the map",
+                                                      msg: msg + viewer.cswFailureAddLayer,
                                                       width: 300,
                                                       icon: Ext.MessageBox.ERROR
                                                   });  
@@ -437,7 +445,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     items: [{
                         xtype: 'fileuploadfield',
                         id: 'form-file',
-                        emptyText: 'Select a Map context file',
+                        emptyText: this.uploadEmptyText,
                         fieldLabel: 'File',
                         name: 'file-path',
                         buttonText: '',
@@ -446,13 +454,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }],
                     buttons: [{
-                        text: 'Upload',
+                        text: this.uploadButtonText,
                         handler: function(){
                             if(fp.getForm().isValid()){
                               fp.getForm().submit({
                                   //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
                                   url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  waitMsg: 'Uploading your context file...',
+                                  waitMsg: this.uploadWaitMsg,
                                   success: function(fp, o){
                                       win.hide();
                                       var json_str = unescape(o.result.result);
@@ -468,7 +476,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                                       win.destroy();
                                       
                                       Ext.Msg.show({
-                                         title:'File Upload Error',
+                                         title: this.uploadErrorTitle,
                                          msg: o.result.errorMessage,
                                          buttons: Ext.Msg.OK,
                                          icon: Ext.MessageBox.ERROR
@@ -481,7 +489,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 });
                 
                 win = new Ext.Window({
-                    title: 'File Upload Form',
+                    title: this.uploadWinTitle,
                     id: 'upload-win',
                     layout: 'form',
                     labelAlign: 'top',

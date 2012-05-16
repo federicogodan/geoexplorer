@@ -48,7 +48,13 @@ GeoExt.Lang.add("fr", {
         userFieldText: "Utilisateur",
         passwordFieldText: "Mot de passe",
         fullScreenText: "Plein écran",
-        cswMsg: 'Chargement...'
+        cswMsg: 'Chargement...',
+	    uploadWaitMsg: 'Chargement de le fichier de contexte...',
+		uploadErrorTitle: 'Erreur de téléchargement de fichiers',
+		uploadEmptyText: 'Sélectionnez un fichier de contexte',
+		uploadWinTitle: 'Formulaire de téléchargement',
+		cswFailureAddLayer: ' La couche ne peuvent pas être ajoutés à la carte',
+		uploadButtonText: 'Charger'
     },  
 
     "gxp.menu.LayerMenu.prototype": {

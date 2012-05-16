@@ -41,7 +41,13 @@ GeoExt.Lang.add("it", {
         userFieldText: "Utente",
         passwordFieldText: "Password",
         fullScreenText: "Schermo Intero",
-        cswMsg: 'Caricamento...'
+        cswMsg: 'Caricamento...',
+	    uploadWaitMsg: 'Caricamento del file di contesto...',
+		uploadErrorTitle: 'Errore di Caricamento',
+		uploadEmptyText: 'Seleziona un file di contesto',
+		uploadWinTitle: 'From di Caricamento',
+		cswFailureAddLayer: ' Il layer n on può essere aggiunto alla mappa',
+		uploadButtonText: 'Carica'
     },
 
     "gxp.menu.LayerMenu.prototype": {
