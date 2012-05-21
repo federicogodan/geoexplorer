@@ -397,7 +397,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
                           var viewWin = new Ext.Window({
                               width : 800,
-                              height: 560,
+                              height: 565,
                               id: 'csw-win',
                               renderTo: viewer.mapPanel.body,
                               modal: true,
