@@ -312,6 +312,12 @@ GeoExt.Lang.add("en", {
         typeLabel: "Type",
         featureLabel: "Max Features",
         spatialLabelText: "Without setting a ROI you query the entire set of data in the current Map extent.",
-	featureLabelText: "With an high number of features the server can take a long time to respond. Limit your search!"
+	    featureLabelText: "With an high number of features the server can take a long time to respond. Limit your search!"
+    },
+	
+	"gxp.plugins.GeoReferences.prototype": {
+        initialText: "Select an area",
+        menuText: "GeoReferences",
+        tooltip: "GeoReferences"
     }
 });

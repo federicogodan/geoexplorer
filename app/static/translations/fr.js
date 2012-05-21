@@ -317,5 +317,12 @@ GeoExt.Lang.add("fr", {
         featureLabel: "Max Features",
 		spatialLabelText: "Sans établir un ROI vous interrogez l'ensemble des données dans la mesure où la carte actuelle.",
 		featureLabelText: "Avec un nombre élevé de caractéristiques que le serveur peut prendre un certain temps à réagir. Limitez votre recherche!"
+    },
+	
+    "gxp.plugins.GeoReferences.prototype":{
+        initialText: "Sélectionner une zone",
+        menuText: "Codification Géographique",
+        tooltip: "Codification Géographique"
+	
     }
 });

@@ -39,7 +39,11 @@
     <script type="text/javascript" src="translations/fr.js"></script>
     <script type="text/javascript" src="translations/it.js"></script>
     
+	<!-- Authorization encoding -->
 	<script type="text/javascript" src="auth/base64.js"></script>
+	
+	<!-- georeferences data  -->
+    <script type="text/javascript" src="data/georeferences.js"></script>
 	
     <script>
         
@@ -302,11 +306,11 @@
                     "\"title\":\"IDA GeoServer\"," +
                     "\"version\":\"1.1.1\"" +
                 "}," +
-                "\"gwc\": {" + 
+                /*"\"gwc\": {" + 
                     "\"url\":\"http://localhost:8080/geowebcache/service/wms\"," +
                     "\"title\":\"IDA GeoWebCache\"," +
                     "\"version\":\"1.1.1\"" +
-                "}," +
+                "}," +*/
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -383,11 +387,7 @@
                     'abstract': "IDA Map",
                     contact: "<a href='#'>#</a>."
                 },
-                geocodingData: [
-                    ['WESTERN AFRICA', '5.778,3.425,-25.443,24.83'],
-                    ['AFRICA', '-17,-35,51,37'],
-                    ['GLOBAL', '-170,-80,170,80']
-                ],
+                georeferences: georeferences_data,
                 sources: sources,
                 map: {
 					projection: "EPSG:4326",
@@ -399,21 +399,21 @@
                        -0.52734, 36.68946, 20.69824, 46.53321
                     ],
 					layers: [{
-                        source: "gwc",
+                        source: "ida",
                         title: "NURC BG",
                         name: "geosolutions:nurcbg",
                         group: "background",
 						format: "image/jpeg",
 						transparent: false
                     }, {
-                        source: "gwc",
+                        source: "ida",
                         title: "Natural Earth",
                         name: "geosolutions:ne_shaded",
                         group: "background",
 						format: "image/jpeg",
 						transparent: false
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Bathymetry",
                         name: "nurc:gebco_sea",
 						format: "image/jpeg",
@@ -422,7 +422,7 @@
                         visibility: false,
                         group: "reference"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "DEM slope",
                         name: "nurc:slope",
 						format: "image/jpeg",
@@ -431,7 +431,7 @@
                         visibility: false,
                         group: "reference"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "DEM aspect",
                         name: "nurc:aspect",
 						format: "image/jpeg",
@@ -440,7 +440,7 @@
                         visibility: false,
                         group: "reference"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Distance 1000 m",
                         name: "nurc:eucdist_1000m",
 						format: "image/jpeg",
@@ -449,7 +449,7 @@
                         visibility: false,
                         group: "reference"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Chl spring 2007",
                         name: "nurc:spring2007",
 						format: "image/jpeg",
@@ -458,7 +458,7 @@
                         visibility: false,
                         group: "chl"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Chl spring 2008",
                         name: "nurc:spring2008",
 						format: "image/jpeg",
@@ -467,7 +467,7 @@
                         visibility: false,
                         group: "chl"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Chl spring 2009",
                         name: "nurc:spring2009",
 						format: "image/jpeg",
@@ -476,7 +476,7 @@
                         visibility: false,
                         group: "chl"
                     },{
-                        source: "gwc",
+                        source: "ida",
                         title: "Coastlines",
                         name: "nurc:gshs_coastline",
 						selected: false,

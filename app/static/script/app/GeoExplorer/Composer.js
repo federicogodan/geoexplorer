@@ -141,10 +141,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 printService: config.printService,
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
-            }/*, {
-                ptype: "gxp_mapstoregeocoder",
-                actionTarget: {target: "paneltbar", index: 60}
-            }*/
+            }, {
+                ptype: "gxp_georeferences",
+                actionTarget: {target: "paneltbar", index: 22}
+            }
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
