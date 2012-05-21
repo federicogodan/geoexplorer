@@ -27,6 +27,7 @@ GeoExt.Lang.add("it", {
     "GeoExplorer.Composer.prototype": {
         loadMapText: "Importazione Mappa",
         saveMapText: "Esportazione Mappa",
+        exportMapText: "Pubblicazione Mappa",
 	    loadMapEmptyText: "Selezionare un file di contesto",
 		loadMapUploadText: "Caricamento in corso",
 		uploadText: "Caricamento",
