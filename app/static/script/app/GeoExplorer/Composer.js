@@ -20,7 +20,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     // Begin i18n.
     saveMapText: "Export Map",
     loadMapText: "Import Map",
-    exportMapText: "Export Map",
+    exportMapText: "Publish Map",
     toolsTitle: "Choose tools to include in the toolbar:",
     previewText: "Preview",
     backText: "Back",
@@ -101,29 +101,40 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 15}
             }, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 7}
+                actionTarget: {target: "paneltbar", index: 16}
             }, {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 12}
+                actionTarget: {target: "paneltbar", index: 17}
             }, {
                 ptype: "gxp_zoom",
-                actionTarget: {target: "paneltbar", index: 20}
+                actionTarget: {target: "paneltbar", index: 18}
             }, {
                 ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 24}
+                actionTarget: {target: "paneltbar", index: 19}
             }, {
                 ptype: "gxp_navigationhistory",
-                actionTarget: {target: "paneltbar", index: 22}
+                actionTarget: {target: "paneltbar", index: 20}
             }, {
                 ptype: "gxp_zoomtoextent",
-                actionTarget: {target: "paneltbar", index: 26}
+                actionTarget: {target: "paneltbar", index: 21}
             }, {
                 ptype: "gxp_georeferences",
-                actionTarget: {target: "paneltbar", index: 27}
+                actionTarget: {target: "paneltbar", index: 22}
             },{
                 ptype: "gxp_saveDefaultContext",
-                actionTarget: {target: "paneltbar", index: 40},
+                actionTarget: {target: "paneltbar", index: 23},
 				        needsAuthorization: true
+            },/*{
+                ptype: "gxp_googleearth",
+                actionTarget: {target: "paneltbar", index: 24}
+            },*/{
+                ptype: "gxp_googlegeocoder",
+                //actionTarget: {target: "paneltbar", index: 28},
+                outputConfig:{
+                    emptyText:"Google GeoCoder"
+                },
+                outputTarget:"paneltbar",
+                index: 25
             }/*,{
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'mapstore-print'},
@@ -132,7 +143,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 4}
             }*/
         ];
-        
+        config.tools;
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
 
@@ -149,7 +160,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
-         
+
         if(!this.fScreen){
             var fullScreen = new Ext.Button({
                 text: this.fullScreenText,
@@ -414,7 +425,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             
             tools.push('-');
         }
-        
+
         tools.push(new Ext.Button({
             tooltip: this.saveMapText,
             handler: function() {
@@ -423,7 +434,16 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: "icon-save"
         }));        
-        
+/*
+        tools.push(new Ext.Button({
+            tooltip: this.exportMapText,
+            handler: function() {
+                this.saveAndExport(this.showEmbedWindow);
+            },
+            scope: this,
+            iconCls: 'icon-export'
+        }));
+*/
         tools.push(new Ext.Button({
             tooltip: this.loadMapText,
             handler: function() {    
@@ -504,8 +524,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: "icon-load"
         }));
-        
+        tools.push('-');
         return tools;
+
     },
     
     /** private: method[viewMetadata]
@@ -579,7 +600,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
        var embedMap = new gxp.EmbedMapDialog({
            id: 'geobuilder-1',
-           url: "viewer" + "#maps/" + this.id
+           //url: "viewer" + "#maps/" + this.id
+           //url: "../MapComposer/?mapId=" + app.mapId
+           //url: "../#maps/?mapId=" + app.mapId
+           //url: "../#maps/" + this.id// + "&mapId=" + app.mapId
+           url: "../?mapId=" + app.mapId
        });
 
        var wizard = {
