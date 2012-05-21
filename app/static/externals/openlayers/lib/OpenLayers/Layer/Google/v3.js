@@ -149,7 +149,7 @@ OpenLayers.Layer.Google.v3 = {
         var container = this.map.viewPortDiv;
         
         // move the Map Data popup to the container, if any
-        while (div.lastChild.style.display == "none") {
+        /*while (div.lastChild.style.display == "none") {
             container.appendChild(div.lastChild);
         }
 
@@ -168,8 +168,36 @@ OpenLayers.Layer.Google.v3 = {
         poweredBy.style.bottom = "";
         poweredBy.className = "olLayerGooglePoweredBy olLayerGoogleV3 gmnoprint";
         poweredBy.style.display = "";
-        cache.poweredBy = poweredBy;
+        cache.poweredBy = poweredBy;*/
 
+		// move the ToS and branding stuff up to the container div
+        // depends on value of zIndex, which is not robust
+        for (var i=div.children.length-1; i>=0; --i) {
+            if (div.children[i].style.zIndex == 1000001) {
+                var termsOfUse = div.children[i];
+                container.appendChild(termsOfUse);
+                termsOfUse.style.zIndex = "1100";
+                termsOfUse.style.bottom = "";
+                termsOfUse.className = "olLayerGoogleCopyright olLayerGoogleV3";
+                termsOfUse.style.display = "";
+                cache.termsOfUse = termsOfUse;
+            }
+            if (div.children[i].style.zIndex == 1000000) {
+                var poweredBy = div.children[i];
+                container.appendChild(poweredBy);
+                poweredBy.style.zIndex = "1100";
+                poweredBy.style.bottom = "";
+                poweredBy.className = "olLayerGooglePoweredBy olLayerGoogleV3 gmnoprint";
+                poweredBy.style.display = "";
+                cache.poweredBy = poweredBy;
+            }
+            if (div.children[i].style.zIndex == 10000002) {
+                container.appendChild(div.children[i]);
+            }
+        }
+		
+		
+		
         this.setGMapVisibility(this.visibility);
 
     },
