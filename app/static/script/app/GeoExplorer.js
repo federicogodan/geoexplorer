@@ -66,8 +66,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
-	
-	viewTabTitle : "View",	
+    
+    viewTabTitle : "View",    
     // End i18n.
     
     /**
@@ -112,7 +112,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         // First row in each object is needed to correctly render a tool in the treeview
         // of the embed map dialog. TODO: make this more flexible so this is not needed.
         config.viewerTools = [
-            /*{
+            {
                 leaf: true, 
                 text: gxp.plugins.Navigation.prototype.tooltip, 
                 checked: true, 
@@ -167,9 +167,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 actionTarget: {target: "paneltbar", index: 8}
             }, {
                 leaf: true, 
-                text: gxp.plugins.FDHGeoCoder.prototype.tooltip, 
+                text: gxp.plugins.GeoReferences.prototype.tooltip, 
                 checked: true, 
-                ptype: "gxp_fdhgeocoder",
+                ptype: "gxp_georeferences",
                 actionTarget: {target: "paneltbar", index: 9}
             }, {
                 leaf: true, 
@@ -186,7 +186,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 11}
         }
-        */];
+        ];
 
         GeoExplorer.superclass.constructor.apply(this, arguments);
     }, 
@@ -213,10 +213,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     }
                     
                     if(addConfig){
-                        if(addConfig.data){	
+                        if(addConfig.data){    
                             addConfig = Ext.util.JSON.decode(addConfig.data);
                             this.applyConfig(Ext.applyIf(addConfig, config));
-                        }else{		
+                        }else{        
                             this.applyConfig(Ext.applyIf(addConfig, config));
                         }
                     } else {
@@ -227,7 +227,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                failure: function(response, opts){
                   this.applyConfig(config);
                }
-            });		
+            });        
         }
 
         /*
@@ -389,7 +389,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         var configStr = Ext.util.JSON.encode(this.getState());        
         var method = "POST";
         var url = proxy + app.xmlJsonTranslateService + "HTTPWebGISSave";
-		//var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
+        //var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -422,6 +422,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     saveAndExport: function(callback, scope) {
         var configStr = Ext.util.JSON.encode(this.getState());
         var method, url;
+/*
         if (this.id) {
             method = "PUT";
             url = "maps/" + this.id;
@@ -429,6 +430,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             method = "POST";
             url = "maps";
         }
+*/
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -448,12 +450,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     handleSaveAndExport: function(request) {
         if (request.status == 200) {
-            var config = Ext.util.JSON.decode(request.responseText);
+            var config = Ext.util.JSON.decode(request.responseText);            
             var mapId = config.id;
             if (mapId) {
                 this.id = mapId;
-                //window.location.hash = "#maps/" + mapId;
+                window.location.hash = "#maps/" + mapId;
             }
+            
+            //this.xmlContext = request.responseText;
         } else {
             throw this.saveErrorText + request.responseText;
         }
@@ -467,9 +471,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             data: this.xmlContext,
             callback: function(request) {
 
-                if(request.status == 200){							
+                if(request.status == 200){                            
                     
-                    //		
+                    //        
                     //delete other iframes appended
                     //
                     if(document.getElementById("downloadIFrame")) {
@@ -551,6 +555,16 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 this.tools[tool].auth = auth;
             }
         }
+    },
+    
+    /** private: method[getState]
+     *  :returns: ``Òbject`` the state of the viewer
+     */
+    getState: function() {
+        var state = GeoExplorer.superclass.getState.apply(this, arguments);
+        // Don't persist tools
+        delete state.tools;
+        return state;
     }
 });
 
