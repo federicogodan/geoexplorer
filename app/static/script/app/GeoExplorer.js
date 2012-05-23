@@ -180,12 +180,19 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 actionTarget: {target: "paneltbar", index: 10}
             }, {
                 leaf: true,
+                text: "Google Geocoder",//gxp.plugins.GoogleGeocoder.prototype.tooltip,
+                checked: true,
+                iconCls: "gxp-icon-googleearth",
+                ptype: "gxp_googlegeocoder",
+                actionTarget: {target: "paneltbar", index: 11}
+            }/*, {
+                leaf: true,
                 text: gxp.plugins.GoogleEarth.prototype.tooltip,
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googleearth",
-                actionTarget: {target: "paneltbar", index: 11}
-        }
+                actionTarget: {target: "paneltbar", index: 12}
+            }*/
         ];
 
         GeoExplorer.superclass.constructor.apply(this, arguments);
@@ -422,7 +429,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     saveAndExport: function(callback, scope) {
         var configStr = Ext.util.JSON.encode(this.getState());
         var method, url;
-/*
+
         if (this.id) {
             method = "PUT";
             url = "maps/" + this.id;
@@ -430,7 +437,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             method = "POST";
             url = "maps";
         }
-*/
+
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -543,6 +550,93 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             items: [appInfo]
         });
         win.show();
+    },
+    
+    /** api: method[showMarkerGeoJSON]
+     *  :return: ``String``
+     *
+     *  Descrizione.
+     */
+    showMarkerGeoJSON: function(markerName,lineName,stringaGeoJSON,fileGeoJSON,lineString) {
+        var layers = app.mapPanel.map.getLayersByName(markerName);           
+        if (layers.length) {
+           for (var key in layers.features) {
+                layers.removeFeatures(layers.features[key]);
+                layers.addFeatures(layers.features[key]);
+            }
+        }else {
+            var geojson_format = new OpenLayers.Format.GeoJSON({
+                                                internalProjection: new OpenLayers.Projection("EPSG:900913"),
+                                                externalProjection: new OpenLayers.Projection("EPSG:4326")
+                                            });
+            var styleMap = new OpenLayers.StyleMap({pointRadius: 14, externalGraphic: 'theme/app/img/markers/information.png'});
+            
+            var styleLine = new OpenLayers.StyleMap({strokeColor: "green", strokeWidth: 7, strokeOpacity: 0.5});
+            
+            var vector_layer = new OpenLayers.Layer.Vector(markerName, {
+                                    styleMap: styleMap,
+                                    displayInLayerSwitcher: false
+                                    });
+                                    
+            var vector_line = new OpenLayers.Layer.Vector(lineName, {
+                                    styleMap: styleLine,
+                                    displayInLayerSwitcher: false
+                                    });
+           
+            function onFeatureSelect(feature) {
+                new GeoExt.Popup({
+                    title: "Marker Info",
+                    width: 400,
+                    height: 300,
+                    layout: "fit",
+                    map: app.mapPanel,
+                    location: feature.geometry.getBounds().getCenterLonLat(),
+                    items: [{   
+                        title: feature.fid,   
+                        layout: "fit",
+                        bodyStyle: 'padding:10px;background-color:#F5F5DC',
+                        html: feature.attributes.html,
+                        autoScroll: true,
+                        autoWidth: true,
+                        collapsible: false
+                    }],
+                    listeners: { 
+                      close : function() {
+                           selectControl.unselect(feature);
+                        }
+                    }
+                }).show();
+            }
+            
+            app.mapPanel.map.addLayer(vector_layer);
+            
+            vector_layer.addFeatures(geojson_format.read(stringaGeoJSON));
+
+            var selectControl = new OpenLayers.Control.SelectFeature(vector_layer,{
+                                    onSelect: onFeatureSelect,
+                                    clickout: false,
+                                    multiple: true
+                                });
+                                
+            app.mapPanel.map.addControl(selectControl);
+            selectControl.activate();
+            
+            if(lineString){
+                var coordinates = new Array;
+
+                for (i=0; i<fileGeoJSON.features.length; i++) {
+                    coordinates.push(
+                        new OpenLayers.Geometry.Point(
+                            fileGeoJSON.features[i].geometry.coordinates[0],
+                            fileGeoJSON.features[i].geometry.coordinates[1]
+                        )
+                    );  
+                }
+                app.mapPanel.map.addLayer(vector_line);
+
+                vector_line.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(coordinates).transform(new OpenLayers.Projection("EPSG:4326"), app.mapPanel.map.getProjectionObject()))]);
+            }
+        }
     },
     
     /** private: method[setAuthHeader]
