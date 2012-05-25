@@ -590,7 +590,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         var MARKER_Z_INDEX = 11;
 
         var context = { 
-            getColor : function (ft){
+            getMarkerIcon : function (ft){
                 if(ft.attributes.highlights=="true") 
                     return highlightsMarker; 
                 else 
@@ -600,7 +600,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         var templateA = {
             pointRadius: this.pointRadiusMarkers,
-            externalGraphic: "${getColor}",
+            externalGraphic: "${getMarkerIcon}",
             backgroundGraphic: this.backgroundGraphicMarkers,
             backgroundXOffset: this.backgroundXOffsetMarkers,
             backgroundYOffset: this.backgroundYOffsetMarkers,
