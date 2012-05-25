@@ -70,6 +70,28 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     viewTabTitle : "View",    
     // End i18n.
     
+    //properties for style markers
+    pointRadiusMarkers: 14,
+    
+    externalGraphicMarkers: 'theme/app/img/markers/information.png',
+    
+    externalGraphicMarkersHighlights: 'theme/app/img/markers/information_highlights.png',
+
+    externalGraphicMarkersSelect: 'theme/app/img/markers/information_select.png',
+    
+    backgroundGraphicMarkers: 'theme/app/img/markers/markers_shadow.png',
+    
+    backgroundXOffsetMarkers: -7,
+    
+    backgroundYOffsetMarkers: -7,
+    
+    //properties for style tracks
+    strokeColorTracks: "green",
+    
+    strokeWidthTracks: 7,
+    
+    strokeOpacityTracks: 0.5,
+            
     /**
      * private: property[mapPanel]
      * the :class:`GeoExt.MapPanel` instance for the main viewport
@@ -552,37 +574,99 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         win.show();
     },
     
+    /** api: method[setMarkersStyle]
+     *  :return: ``Object``
+     *
+     *  Dynamically sets the style of markers
+     */
+    setMarkersStyle: function() {
+        
+        var defaultMarker = this.externalGraphicMarkers;
+        var highlightsMarker = this.externalGraphicMarkersHighlights;
+        
+        // Set the z-indexes of both graphics to make sure the background
+        // graphics stay in the background
+        var SHADOW_Z_INDEX = 10;
+        var MARKER_Z_INDEX = 11;
+
+        var context = { 
+            getColor : function (ft){
+                if(ft.attributes.highlights=="true") 
+                    return highlightsMarker; 
+                else 
+                    return defaultMarker; 
+            } 
+        };
+        
+        var templateA = {
+            pointRadius: this.pointRadiusMarkers,
+            externalGraphic: "${getColor}",
+            backgroundGraphic: this.backgroundGraphicMarkers,
+            backgroundXOffset: this.backgroundXOffsetMarkers,
+            backgroundYOffset: this.backgroundYOffsetMarkers,
+            graphicZIndex: MARKER_Z_INDEX,
+            backgroundGraphicZIndex: SHADOW_Z_INDEX
+        };
+        
+        var templateB = {
+            pointRadius: this.pointRadiusMarkers,
+            externalGraphic: this.externalGraphicMarkersSelect,
+            backgroundGraphic: this.backgroundGraphicMarkers,
+            backgroundXOffset: this.backgroundXOffsetMarkers,
+            backgroundYOffset: this.backgroundYOffsetMarkers,
+            graphicZIndex: MARKER_Z_INDEX,
+            backgroundGraphicZIndex: SHADOW_Z_INDEX
+        };
+        
+        var styleMap = new OpenLayers.StyleMap({ 
+            "default" : new OpenLayers.Style(templateA, {context:context}),
+            "select" : new OpenLayers.Style(templateB, {context:context})
+            }); 
+            
+        return(styleMap); 
+    }, 
+    
     /** api: method[showMarkerGeoJSON]
      *  :return: ``String``
      *
-     *  Descrizione.
+     *  Add Markers and Tracks to map.
      */
-    showMarkerGeoJSON: function(markerName,lineName,stringaGeoJSON,fileGeoJSON,lineString) {
-        var layers = app.mapPanel.map.getLayersByName(markerName);           
-        if (layers.length) {
-           for (var key in layers.features) {
-                layers.removeFeatures(layers.features[key]);
-                layers.addFeatures(layers.features[key]);
+    showMarkerGeoJSON: function(markerName,trackName,geoJson,showLine) {
+        
+        // allow testing of specific renderers via "?renderer=Canvas", etc
+        var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
+        renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+        
+        // check if the marker layer exists
+        var markerLyr = app.mapPanel.map.getLayersByName(markerName);           
+        if (markerLyr.length) {
+           for (var key in markerLyr.features) {
+                markerLyr.removeFeatures(markerLyr.features[key]);
+                markerLyr.addFeatures(markerLyr.features[key]);
             }
         }else {
+            
+            // Create a new parser for GeoJSON
             var geojson_format = new OpenLayers.Format.GeoJSON({
-                                                internalProjection: new OpenLayers.Projection("EPSG:900913"),
+                                                internalProjection: app.mapPanel.map.getProjectionObject(),
                                                 externalProjection: new OpenLayers.Projection("EPSG:4326")
                                             });
-            var styleMap = new OpenLayers.StyleMap({pointRadius: 14, externalGraphic: 'theme/app/img/markers/information.png'});
             
-            var styleLine = new OpenLayers.StyleMap({strokeColor: "green", strokeWidth: 7, strokeOpacity: 0.5});
             
-            var vector_layer = new OpenLayers.Layer.Vector(markerName, {
-                                    styleMap: styleMap,
-                                    displayInLayerSwitcher: false
+            var fileGeoJSON = Ext.util.JSON.decode(geoJson);
+
+            // Sets the style for the markers            
+            var styleMarkers = this.setMarkersStyle();
+
+            // Create new vector layer for markers
+            var marker_layer = new OpenLayers.Layer.Vector(markerName, {
+                                        styleMap: styleMarkers,
+                                        displayInLayerSwitcher: false,
+                                        rendererOptions: {yOrdering: true},
+                                        renderers: renderer
                                     });
-                                    
-            var vector_line = new OpenLayers.Layer.Vector(lineName, {
-                                    styleMap: styleLine,
-                                    displayInLayerSwitcher: false
-                                    });
-           
+            
+            // Create the popups for markers
             function onFeatureSelect(feature) {
                 new GeoExt.Popup({
                     title: "Marker Info",
@@ -608,11 +692,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }).show();
             }
             
-            app.mapPanel.map.addLayer(vector_layer);
+            app.mapPanel.map.addLayer(marker_layer);
             
-            vector_layer.addFeatures(geojson_format.read(stringaGeoJSON));
+            marker_layer.addFeatures(geojson_format.read(geoJson));
 
-            var selectControl = new OpenLayers.Control.SelectFeature(vector_layer,{
+            var selectControl = new OpenLayers.Control.SelectFeature(marker_layer,{
                                     onSelect: onFeatureSelect,
                                     clickout: false,
                                     multiple: true
@@ -620,21 +704,55 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                 
             app.mapPanel.map.addControl(selectControl);
             selectControl.activate();
-            
-            if(lineString){
-                var coordinates = new Array;
-
+        }
+        
+        // check if the track layer exists
+        var trackLyr = app.mapPanel.map.getLayersByName(trackName);
+        if (trackLyr.length) {
+           for (var key in trackLyr.features) {
+                trackLyr.removeFeatures(trackLyr.features[key]);
+                trackLyr.addFeatures(trackLyr.features[key]);
+            }
+        }else {
+            if(showLine){
+                
+                // Sets the style for the tracks
+                var styleTracks = new OpenLayers.StyleMap({
+                                        strokeColor: this.strokeColorTracks,
+                                        strokeWidth: this.strokeWidthTracks,
+                                        strokeOpacity: this.strokeOpacityTracks
+                                    });
+                                    
+                // Create new vector layer for tracks
+                var track_layer = new OpenLayers.Layer.Vector(trackName, {
+                                            styleMap: styleTracks,
+                                            displayInLayerSwitcher: false
+                                        });
+                                    
+                var pointCoord = new Array;
+                
+                var fileGeoJSON = Ext.util.JSON.decode(geoJson);
+                
+                // Cycling the file GeoJSON to capture the coordinates of the markers
                 for (i=0; i<fileGeoJSON.features.length; i++) {
-                    coordinates.push(
+                    pointCoord.push(
                         new OpenLayers.Geometry.Point(
                             fileGeoJSON.features[i].geometry.coordinates[0],
                             fileGeoJSON.features[i].geometry.coordinates[1]
                         )
                     );  
                 }
-                app.mapPanel.map.addLayer(vector_line);
+                app.mapPanel.map.addLayer(track_layer);
 
-                vector_line.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(coordinates).transform(new OpenLayers.Projection("EPSG:4326"), app.mapPanel.map.getProjectionObject()))]);
+                
+                track_layer.addFeatures([
+                    new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.LineString(pointCoord).transform(
+                            new OpenLayers.Projection("EPSG:4326"),
+                            app.mapPanel.map.getProjectionObject()
+                        )
+                    )
+                ]);
             }
         }
     },
