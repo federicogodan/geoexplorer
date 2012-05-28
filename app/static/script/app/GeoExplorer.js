@@ -651,11 +651,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                                 internalProjection: app.mapPanel.map.getProjectionObject(),
                                                 externalProjection: new OpenLayers.Projection("EPSG:4326")
                                             });
-            
-            
-            var fileGeoJSON = Ext.util.JSON.decode(geoJson);
 
-            // Sets the style for the markers            
+            // Sets the style for the markers
             var styleMarkers = this.setMarkersStyle();
 
             // Create new vector layer for markers
@@ -730,15 +727,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                         });
                                     
                 var pointCoord = new Array;
-                
-                var fileGeoJSON = Ext.util.JSON.decode(geoJson);
+                //geoJsonoObj
+                var geoJsonoObj = Ext.util.JSON.decode(geoJson);
                 
                 // Cycling the file GeoJSON to capture the coordinates of the markers
-                for (i=0; i<fileGeoJSON.features.length; i++) {
+                for (i=0; i<geoJsonoObj.features.length; i++) {
                     pointCoord.push(
                         new OpenLayers.Geometry.Point(
-                            fileGeoJSON.features[i].geometry.coordinates[0],
-                            fileGeoJSON.features[i].geometry.coordinates[1]
+                            geoJsonoObj.features[i].geometry.coordinates[0],
+                            geoJsonoObj.features[i].geometry.coordinates[1]
                         )
                     );  
                 }
