@@ -5,9 +5,9 @@ var urls = [
     [(/^\/(index(.html)?)?/), require("./root/index").app],
     [(/^\/(login)/), require("./root/login").app],
     [(/^\/(proxy)/), require("./root/proxy").app],
-    [(/^\/(maps(\/\d+)?)/), require("./root/maps").app]
-    //[(/^\/(composer)/), require("./root/composer").app],
-    //[(/^\/(viewer(.html)?)/), require("./root/viewer").app]
+    [(/^\/(maps(\/\d+)?)/), require("./root/maps").app],
+    [(/^\/(composer)/), require("./root/composer").app],
+    [(/^\/(viewer(.html)?)/), require("./root/viewer").app]
 ];
 
 // debug mode loads unminified scripts
