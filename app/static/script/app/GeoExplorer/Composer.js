@@ -434,16 +434,17 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: "icon-save"
         }));        
-/*
+
         tools.push(new Ext.Button({
             tooltip: this.exportMapText,
             handler: function() {
-                this.saveAndExport(this.showEmbedWindow);
+                //this.saveAndExport(this.showEmbedWindow);
+                this.showEmbedWindow();
             },
             scope: this,
             iconCls: 'icon-export'
         }));
-*/
+
         tools.push(new Ext.Button({
             tooltip: this.loadMapText,
             handler: function() {    
@@ -600,11 +601,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
        var embedMap = new gxp.EmbedMapDialog({
            id: 'geobuilder-1',
-           //url: "viewer" + "#maps/" + this.id
-           //url: "../MapComposer/?mapId=" + app.mapId
-           //url: "../#maps/?mapId=" + app.mapId
-           //url: "../#maps/" + this.id// + "&mapId=" + app.mapId
-           url: "../?mapId=" + app.mapId
+           url: "viewer" + "?mapId=" + app.mapId
        });
 
        var wizard = {
@@ -613,6 +610,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
            layout: 'card',
            activeItem: 0,
            defaults: {border: false, hideMode: 'offsets'},
+           /*
            bbar: [{
                id: 'preview',
                text: this.previewText,
@@ -633,6 +631,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                scope: this
            }],
            items: [toolsArea, embedMap]
+           */
+           items: [embedMap]
        };
 
        new Ext.Window({
