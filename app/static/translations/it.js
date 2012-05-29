@@ -355,5 +355,15 @@ GeoExt.Lang.add("it", {
         searchType: "Impostazioni di base",
         typeLabel: "Tipo",
         featureLabel: "Max Features"
+    },
+    "gxp.EmbedMapDialog.prototype": {
+        publishMessage: "La mappa è pronta per essere pubblicata sul web! Basta copiare il seguente codice HTML per visualizzare la mappa nel proprio sito web:",
+        heightLabel: "Altezza",
+        widthLabel: "Larghezza",
+        mapSizeLabel: "Dimensione della Mappa",
+        miniSizeLabel: "Mini",
+        smallSizeLabel: "Piccola",
+        premiumSizeLabel: "Premium",
+        largeSizeLabel: "Grande"
     }
 });
