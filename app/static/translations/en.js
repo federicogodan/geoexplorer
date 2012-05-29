@@ -320,5 +320,15 @@ GeoExt.Lang.add("en", {
         searchType: "Base Settings",
         typeLabel: "Type",
         featureLabel: "Max Features"
+    },
+    "gxp.EmbedMapDialog.prototype": {
+        publishMessage: "Your map is ready to be published to the web! Simply copy the following HTML to embed the map in your website:",
+        heightLabel: "Height",
+        widthLabel: "Width",
+        mapSizeLabel: "Map Size",
+        miniSizeLabel: "Mini",
+        smallSizeLabel: "Small",
+        premiumSizeLabel: "Premium",
+        largeSizeLabel: "Large"
     }
 });
