@@ -14,8 +14,6 @@
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/all.css">
     <script type="text/javascript" src="script/gxp.js"></script> 
 
-    <!--script type="text/javascript" src="script/proj4js.js"></script-->
-
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
     <link rel="stylesheet" type="text/css" href="theme/app/fdh.css" />
@@ -23,15 +21,6 @@
 
     <script type="text/javascript" src="script/GeoExplorer.js"></script>
     <script type="text/javascript" src="script/ux.js"></script>
-    
-    <!-- PrintPreview resources -->
-    <link rel="stylesheet" type="text/css" href="externals/PrintPreview/resources/css/printpreview.css">
-    <script type="text/javascript" src="script/PrintPreview.js"></script>
-    
-    <!-- csw resources -->
-    <link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css">
-    <script type="text/javascript" src="auth/base64.js"></script>
-    <script type="text/javascript" src="script/CSWViewer.js"></script>
     
     <!-- geocoding data  -->
     <script type="text/javascript" src="data/georeferences.js"></script>
@@ -45,7 +34,7 @@
         
         var app;
         
-        var modified = false; var mapIdentifier; var authorization; var fullScreen;
+        var modified = false; var mapIdentifier; var authorization = false; var fullScreen = false; var bbox;
         //
         // Parsing the request to get the parameters
         //
@@ -61,22 +50,8 @@
                                 mapIdentifier = -1;
                             } 
                             break;
-            case "auth" : 
-                            if(param[1] == 'true') 
-                                authorization = true; 
-                            else 
-                                authorization = false; 
-                            break;
-            case "fullScreen" : 
-                            if(param[1] == 'true') 
-                                fullScreen = true; 
-                            else 
-                                fullScreen = false; 
-                            break;
             default : 
                             mapIdentifier = -1;
-                            authorization = false;
-                            fullScreen = false; 
           }
         }
 		            
@@ -96,7 +71,6 @@
             })();
 
             OpenLayers.ImgPath = "externals/openlayers/theme/default/img/";
-            //Proj4js.defs["EPSG:102113"]="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs";
 
             gxp.plugins.ZoomToExtent.prototype.closest = false;
 
@@ -110,11 +84,9 @@
                       });
                  }
             });
+
+            var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';
             
-			//            
-            // optionally set locale based on query string parameter
-            //
-            var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';            
             var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
             
             var query = location.search;        
@@ -124,16 +96,14 @@
             
             var url = Ext.urlDecode(query);        
             code = url.locale;   
-
+            bbox = url.bbox;
+            
             if(!code){
                 code = "en";
             }
             
             var initialLanguageString;
-            
-            //        
-            //check if code is valid
-            //
+
             if(code){
                 Ext.each(langData, function(rec){
                     if(rec[0] === code.toLowerCase()){
@@ -150,7 +120,89 @@
             if(!initialLanguageString){
                 initialLanguageString = "English";
             }
-			
+            
+            var languageSelector = new Ext.form.ComboBox({
+                store: new Ext.data.ArrayStore({
+                    fields: ['code', 'name'],
+                    data :  langData
+                }),
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: initialLanguageString,
+                selectOnFocus:false,
+                editable: false,
+                width: 100,
+                listeners: {
+                    beforeselect: function(cb, record, index){
+                       if(curLang == record.get('code'))
+                          return false; 
+					   else
+						  languageSelector.prevLang = curLang;
+                    },                    
+                    select: function(cb, record, index) {         
+                        
+                       var switchLang = function(buttonId, text, opt){
+                            if(buttonId === 'ok'){
+                                var code = record.get('code');
+                                
+                                var query = location.search;        
+                                if(query && query.substr(0,1) === "?"){
+                                    query = query.substring(1);
+                                }                                    
+                                var url = Ext.urlDecode(query);
+
+                                if(code){
+                                    if (url.auth == 'true'){
+                                        location.replace(
+                                            location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId + '&auth=true');
+                                    }else if (url.auth == 'false'){
+                                        location.replace(
+                                            location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId + '&auth=false&fullScreen=true');
+                                    }else{
+                                        location.replace(
+                                            location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId);                                    
+                                    }
+                                }
+                                
+                            }else{
+                                var code = record.get('code');
+																
+                                if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
+                                    cb.setValue('Français');
+                                }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
+									cb.setValue('Italiano');
+								}else{
+                                    cb.setValue('English');
+                                }
+                            }
+                        };
+                        
+                        var switchLangActionTip = "Switch Language";
+                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
+                        
+                        if(curLang === 'fr'){
+                            switchLangActionTip = "Changement de langue";
+                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
+                        }else if(curLang === 'it'){
+                            switchLangActionTip = "Cambiamento Lingua";
+                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
+                        }
+                        
+                        Ext.Msg.show({
+                           title: switchLangActionTip,
+                           msg: switchLangConfirmationText,
+                           buttons: Ext.Msg.OKCANCEL,
+                           fn: switchLang,
+                           icon: Ext.MessageBox.QUESTION
+                        });  
+                    }
+                }
+            });
+
+
             var appTabs = new Ext.TabPanel({
                 region: 'center',
                 border : false,
@@ -200,54 +252,21 @@
                     header : false,                    
                     items : [appTabs],                            
                     bbar : [
-                      poweredByGeoSol, ' ', aboutButton
+                      poweredByGeoSol, ' ', aboutButton, '->',languageSelector
                     ]
                 }]
             });
-            
-            //
-            // Parsing WMS servers Sources for getCapabilities operation
-            //
-            var sources = "{" + 
-                "\"demo1\": {" +
-                    "\"ptype\": \"gxp_wmssource\"," +
-                    "\"title\": \"Geo-Solutions server\"," +
-                    "\"projection\":\"EPSG:900913\"," +
-                    "\"url\": \"http://demo1.geo-solutions.it/geoserver/ows\"" +
-                "}," +
-                "\"mapquest\": {" +
-                    "\"ptype\": \"gxp_mapquestsource\"" +
-                "}," + 
-                "\"osm\": {" + 
-                    "\"ptype\": \"gxp_osmsource\"" +
-                "}," +
-                "\"google\": {" +
-                    "\"ptype\": \"gxp_googlesource\"" + 
-                "}," +
-                "\"bing\": {" +
-                    "\"ptype\": \"gxp_bingsource\"" + 
-                "}," + 
-                "\"ol\": {" + 
-                    "\"ptype\": \"gxp_olsource\"" + 
-                "}";
-            
-            if(customSources.length > 0)
-                sources += ",";
-                
-            for(var s=0; s<customSources.length; s++){ 
-                var src = Ext.util.JSON.encode(customSources[s]);
-                sources += "\"source" + s + "\":" + src;
-                 
-                 if(s + 1 < customSources.length)
-                    sources += ",";
-            }
-             
-            sources +="}";
 
-            try{
-                sources = Ext.util.JSON.decode(sources);
-            }catch(e){
-                sources = {
+            app = new GeoExplorer.Viewer({
+                proxy: proxy,
+                defaultSourceType: "gxp_wmssource",
+                renderToTab : 'appTabs',
+                about: {
+                    title: "Custom Map",
+                    'abstract': "Custom Map",
+                    contact: "<a href='#'>#</a>."
+                },
+                sources: {
                     mapquest: {
                         ptype: "gxp_mapquestsource"
                     },
@@ -263,60 +282,8 @@
                     ol: {
                         ptype: "gxp_olsource"
                     }
-                };
-          
-                Ext.Msg.show({
-                      title: "Startup",
-                      msg: "An error occurred while parsing the CUSTOM GeoServer sources",
-                      buttons: Ext.Msg.OK,
-                      icon: Ext.MessageBox.ERROR
-                });
-            }
-			      		     
-			/*var auth = 'Basic ' + Base64.encode('admin:admin');
-			      Ext.Ajax.defaultHeaders = {
-                'Authorization' : auth
-            };*/
-             
-            app = new GeoExplorer.Viewer({
-                modified: false,
-                proxy: proxy,
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
-                defaultSourceType: "gxp_wmssource",
-                renderToTab : 'appTabs',
-                //printService:"http://192.168.1.132:8080/geoserver/pdf/",
-                //mapTitle: GeoExplorer.prototype.viewTabTitle || (code === 'en' ? 'View' : (code === 'fr' ? 'Veu' : 'Vista')),
-                about: {
-                    title: "Custom Map",
-                    'abstract': "Custom Map",
-                    contact: "<a href='#'>#</a>."
                 },
-                sources: sources,
                 georeferences: georeferences_data,
-                cswconfig: {
-                    catalogs: [
-                        {"name": "Demo1GeoSolutions" , "url": "http://demo1.geo-solutions.it/geonetwork/srv/en/csw", "description": "Iternal GeoNetwork demo"},
-                        {"name": "Treviso", "url": "http://ows.provinciatreviso.it/geonetwork/srv/it/csw", "description": "Treviso Geonetwork"},
-                        {"name": "kscNet", "url": "http://geoportal.kscnet.ru/geonetwork/srv/ru/csw", "description": "kscNet"},
-                        {"name": "CSI-CGIAR", "url": "http://geonetwork.csi.cgiar.org/geonetwork/srv/en/csw", "description" : "CSI-CGIAR"},
-                        {"name": "EauFrance", "url": "http://sandre.eaufrance.fr/geonetwork/srv/fr/csw", "description" : "EauFrance"},
-                        {"name": "SOPAC", "url": "http://geonetwork.sopac.org/geonetwork/srv/en/csw", "description" : "SOPAC"},
-                        {"name": "SADC", "url": "http://www.sadc.int/geonetwork/srv/en/csw", "description" : "SADC"},
-                        {"name": "MAPAS", "url": "http://mapas.mma.gov.br/geonetwork/srv/en/csw", "description" : "MAPAS"}
-                    ],
-                    dcProperty: "title",
-                    initialBBox: {
-                        minx:-13,
-                        miny:10,
-                        maxx:-10,
-                        maxy:13
-                    }, 
-                    cswVersion: "2.0.2",
-                    filterVersion: "1.1.0",
-                    start: 1,
-                    limit: 10,
-                    timeout: 60000
-                },
                 map: {
 					projection: "EPSG:900913",
                     units: "m",
@@ -371,6 +338,7 @@
                 }, 
                 'ready' : function(){
                     app.modified = false;
+                    app.mapPanel.map.zoomToExtent(new OpenLayers.Bounds.fromString(bbox));
                 }
             });
 			};			
@@ -397,9 +365,6 @@
                   geoStoreBaseURL = serverConfig.geoStoreBase;                  
                   customSources = serverConfig.gsSources;
 
-                  //      
-                  // Run the application when browser is ready
-                  //
                   Ext.onReady(onReady);
               }
           },
