@@ -436,16 +436,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }));        
 
         tools.push(new Ext.Button({
-            tooltip: this.exportMapText,
-            handler: function() {
-                //this.saveAndExport(this.showEmbedWindow);
-                this.showEmbedWindow();
-            },
-            scope: this,
-            iconCls: 'icon-export'
-        }));
-
-        tools.push(new Ext.Button({
             tooltip: this.loadMapText,
             handler: function() {    
                 var composer = this; 
@@ -525,6 +515,17 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: "icon-load"
         }));
+
+        tools.push(new Ext.Button({
+            tooltip: this.exportMapText,
+            handler: function() {
+                //this.saveAndExport(this.showEmbedWindow);
+                this.showEmbedWindow();
+            },
+            scope: this,
+            iconCls: 'icon-export'
+        }));
+
         tools.push('-');
         return tools;
 
@@ -575,71 +576,81 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
     /** private: method[showEmbedWindow]
      */
-    showEmbedWindow: function() {
-       var toolsArea = new Ext.tree.TreePanel({title: this.toolsTitle, 
-           autoScroll: true,
-           root: {
-               nodeType: 'async', 
-               expanded: true, 
-               children: this.viewerTools
-           }, 
-           rootVisible: false,
-           id: 'geobuilder-0'
-       });
+    showEmbedWindow: function() {        
+        if (app.mapId == -1 || app.modified == true){
+            Ext.MessageBox.show({
+                title: "Salvare la mappa",
+                msg: "Prima di fare l'embed devi salvare la mappa",
+                buttons: Ext.MessageBox.OK,
+                animEl: 'mb4',
+                icon: Ext.MessageBox.WARNING,
+                scope: this
+            });
+        }else{
+           var toolsArea = new Ext.tree.TreePanel({title: this.toolsTitle, 
+               autoScroll: true,
+               root: {
+                   nodeType: 'async', 
+                   expanded: true, 
+                   children: this.viewerTools
+               }, 
+               rootVisible: false,
+               id: 'geobuilder-0'
+           });
 
-       var previousNext = function(incr){
-           var l = Ext.getCmp('geobuilder-wizard-panel').getLayout();
-           var i = l.activeItem.id.split('geobuilder-')[1];
-           var next = parseInt(i, 10) + incr;
-           l.setActiveItem(next);
-           Ext.getCmp('wizard-prev').setDisabled(next==0);
-           Ext.getCmp('wizard-next').setDisabled(next==1);
-           if (incr == 1) {
-               this.saveAndExport();
-           }
-       };
+           var previousNext = function(incr){
+               var l = Ext.getCmp('geobuilder-wizard-panel').getLayout();
+               var i = l.activeItem.id.split('geobuilder-')[1];
+               var next = parseInt(i, 10) + incr;
+               l.setActiveItem(next);
+               Ext.getCmp('wizard-prev').setDisabled(next==0);
+               Ext.getCmp('wizard-next').setDisabled(next==1);
+               if (incr == 1) {
+                   this.saveAndExport();
+               }
+           };
 
-       var embedMap = new gxp.EmbedMapDialog({
-           id: 'geobuilder-1',
-           url: "viewer" + "?mapId=" + app.mapId
-       });
+           var embedMap = new gxp.EmbedMapDialog({
+               id: 'geobuilder-1',
+               url: "viewer" + "?mapId=" + app.mapId
+           });
 
-       var wizard = {
-           id: 'geobuilder-wizard-panel',
-           border: false,
-           layout: 'card',
-           activeItem: 0,
-           defaults: {border: false, hideMode: 'offsets'},
-           /*
-           bbar: [{
-               id: 'preview',
-               text: this.previewText,
-               handler: function() {
-                   this.saveAndExport(this.openPreview.createDelegate(this, [embedMap]));
-               },
-               scope: this
-           }, '->', {
-               id: 'wizard-prev',
-               text: this.backText,
-               handler: previousNext.createDelegate(this, [-1]),
-               scope: this,
-               disabled: true
-           },{
-               id: 'wizard-next',
-               text: this.nextText,
-               handler: previousNext.createDelegate(this, [1]),
-               scope: this
-           }],
-           items: [toolsArea, embedMap]
-           */
-           items: [embedMap]
-       };
+           var wizard = {
+               id: 'geobuilder-wizard-panel',
+               border: false,
+               layout: 'card',
+               activeItem: 0,
+               defaults: {border: false, hideMode: 'offsets'},
+               bbar: [{
+                   id: 'preview',
+                   text: this.previewText,
+                   handler: function() {
+                       //this.saveAndExport(this.openPreview.createDelegate(this, [embedMap]));
+                       this.openPreview(embedMap);
+                   },
+                   scope: this
+               }/*, '->', {
+                   id: 'wizard-prev',
+                   text: this.backText,
+                   handler: previousNext.createDelegate(this, [-1]),
+                   scope: this,
+                   disabled: true
+               },{
+                   id: 'wizard-next',
+                   text: this.nextText,
+                   handler: previousNext.createDelegate(this, [1]),
+                   scope: this
+               }*/],
+               items: [embedMap]
+               //items: [toolsArea, embedMap]
+           };
 
-       new Ext.Window({
-            layout: 'fit',
-            width: 500, height: 300,
-            title: this.exportMapText,
-            items: [wizard]
-       }).show();
+           new Ext.Window({
+                layout: 'fit',
+                width: 500, height: 300,
+                title: this.exportMapText,
+                items: [wizard]
+           }).show();
+        }
     }
 });
