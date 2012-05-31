@@ -54,7 +54,9 @@ GeoExt.Lang.add("en", {
 		uploadEmptyText: 'Select a Map context file',
 		uploadWinTitle: 'File Upload Form',
 		cswFailureAddLayer: ' The layer cannot be added to the map',
-		uploadButtonText: 'Upload'
+		uploadButtonText: 'Upload',
+        alertEmbedTitle: 'Attention',
+        alertEmbedText: "Save the map before using the 'Publish Map' tool"
     },
 
     "gxp.menu.LayerMenu.prototype": {

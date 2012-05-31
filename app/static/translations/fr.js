@@ -55,7 +55,9 @@ GeoExt.Lang.add("fr", {
 		uploadEmptyText: 'Sélectionnez un fichier de contexte',
 		uploadWinTitle: 'Formulaire de téléchargement',
 		cswFailureAddLayer: ' La couche ne peuvent pas être ajoutés à la carte',
-		uploadButtonText: 'Charger'
+		uploadButtonText: 'Charger',
+        alertEmbedTitle: 'Attention',
+        alertEmbedText: "Enregistrer la carte avant d'utiliser l'outil 'Publier la carte'"
     },  
 
     "gxp.menu.LayerMenu.prototype": {

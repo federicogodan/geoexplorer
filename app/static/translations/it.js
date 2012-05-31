@@ -48,7 +48,9 @@ GeoExt.Lang.add("it", {
 		uploadEmptyText: 'Seleziona un file di contesto',
 		uploadWinTitle: 'From di Caricamento',
 		cswFailureAddLayer: ' Il layer n on può essere aggiunto alla mappa',
-		uploadButtonText: 'Carica'
+		uploadButtonText: 'Carica',
+        alertEmbedTitle: 'Attenzione',
+        alertEmbedText: "Salvare la mappa prima di utilizzare il tool 'Pubblicazione Mappa'"
     },
 
     "gxp.menu.LayerMenu.prototype": {
