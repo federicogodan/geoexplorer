@@ -33,6 +33,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     uploadEmptyText: 'Select a Map context file',
     uploadWinTitle: 'File Upload Form',
     cswFailureAddLayer: ' The layer cannot be added to the map',
+    alertEmbedTitle: "Attention",
+    alertEmbedText: "Save the map before using the 'Publish Map' tool",
 	
     /**
     * Property: cswMsg
@@ -518,6 +520,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
         tools.push(new Ext.Button({
             tooltip: this.exportMapText,
+            //disabled: true,
             handler: function() {
                 //this.saveAndExport(this.showEmbedWindow);
                 this.showEmbedWindow();
@@ -579,8 +582,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     showEmbedWindow: function() {        
         if (app.mapId == -1 || app.modified == true){
             Ext.MessageBox.show({
-                title: "Salvare la mappa",
-                msg: "Prima di fare l'embed devi salvare la mappa",
+                title: this.alertEmbedTitle,
+                msg: this.alertEmbedText,
                 buttons: Ext.MessageBox.OK,
                 animEl: 'mb4',
                 icon: Ext.MessageBox.WARNING,
@@ -609,10 +612,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                    this.saveAndExport();
                }
            };
-
+           
+            var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';            
+            
            var embedMap = new gxp.EmbedMapDialog({
                id: 'geobuilder-1',
-               url: "viewer" + "?mapId=" + app.mapId
+               url: "viewer" + "?locale=" + curLang + "&bbox=" + app.mapPanel.map.getExtent() + "&mapId=" + app.mapId
            });
 
            var wizard = {
@@ -621,6 +626,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                layout: 'card',
                activeItem: 0,
                defaults: {border: false, hideMode: 'offsets'},
+               
                bbar: [{
                    id: 'preview',
                    text: this.previewText,
@@ -640,7 +646,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                    text: this.nextText,
                    handler: previousNext.createDelegate(this, [1]),
                    scope: this
-               }*/],
+               } */],
+              
                items: [embedMap]
                //items: [toolsArea, embedMap]
            };
