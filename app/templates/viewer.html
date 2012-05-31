@@ -150,82 +150,6 @@
             if(!initialLanguageString){
                 initialLanguageString = "English";
             }
-            
-            var languageSelector = new Ext.form.ComboBox({
-                store: new Ext.data.ArrayStore({
-                    fields: ['code', 'name'],
-                    data :  langData
-                }),
-                displayField: 'name',
-                typeAhead: true,
-                mode: 'local',
-                forceSelection: true,
-                triggerAction: 'all',
-                emptyText: initialLanguageString,
-                selectOnFocus:false,
-                editable: false,
-                width: 100,
-                listeners: {
-                    beforeselect: function(cb, record, index){
-                       if(curLang == record.get('code'))
-                          return false; 
-                    },                    
-                    select: function(cb, record, index) {         
-                        
-                       var switchLang = function(buttonId, text, opt){
-                            if(buttonId === 'ok'){
-                                var code = record.get('code');
-                                
-                                var query = location.search;        
-                                if(query && query.substr(0,1) === "?"){
-                                    query = query.substring(1);
-                                }                                    
-                                var url = Ext.urlDecode(query);
-
-                                if(code){
-                                    if (url.auth == 'true'){
-                                        location.replace(
-                                            location.pathname + '?locale=' + code + '&mapId=' + url.mapId + '&auth=true');
-                                    }else if (url.auth == 'false'){
-                                        location.replace(
-                                            location.pathname + '?locale=' + code + '&mapId=' + url.mapId + '&auth=false&fullScreen=true');
-                                    }else{
-                                        location.replace(
-                                            location.pathname + '?locale=' + code);                                    
-                                    }
-                                }
-                                
-                            }else{
-                                var code = record.get('code');
-                                if(code == 'fr'){
-                                    cb.setValue('English');
-                                }else{
-                                    cb.setValue('Français');
-                                }
-                            }
-                        };
-                        
-                        var switchLangActionTip = "Switch Language";
-                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
-                        
-                        if(curLang === 'fr'){
-                            switchLangActionTip = "Changement de langue";
-                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
-                        }else if(curLang === 'it'){
-                            switchLangActionTip = "Cambiamento Lingua";
-                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
-                        }
-                        
-                        Ext.Msg.show({
-                           title: switchLangActionTip,
-                           msg: switchLangConfirmationText,
-                           buttons: Ext.Msg.OKCANCEL,
-                           fn: switchLang,
-                           icon: Ext.MessageBox.QUESTION
-                        });  
-                    }
-                }
-            });
 			
             var appTabs = new Ext.TabPanel({
                 region: 'center',
@@ -264,7 +188,7 @@
                     window.open('http://geo-solutions.it/contact/', '_blank');
                 }
             });    
-			
+            
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
@@ -276,7 +200,7 @@
                     header : false,                    
                     items : [appTabs],                            
                     bbar : [
-                      poweredByGeoSol, ' ', aboutButton, '->',languageSelector
+                      poweredByGeoSol, ' ', aboutButton
                     ]
                 }]
             });
@@ -313,7 +237,6 @@
             for(var s=0; s<customSources.length; s++){ 
                 var src = Ext.util.JSON.encode(customSources[s]);
                 sources += "\"source" + s + "\":" + src;
-                //sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
                  
                  if(s + 1 < customSources.length)
                     sources += ",";
@@ -355,7 +278,7 @@
                 'Authorization' : auth
             };*/
              
-            app = new GeoExplorer.Composer({
+            app = new GeoExplorer.Viewer({
                 modified: false,
                 proxy: proxy,
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
@@ -395,7 +318,7 @@
                     timeout: 60000
                 },
                 map: {
-					          projection: "EPSG:900913",
+					projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
                         -20037508.34, -20037508.34,
@@ -453,8 +376,8 @@
 			};			
 			
       Ext.Ajax.request({
-          url: "/MapComposer/urlConfig.js",
-          //url: "/urlConfig.js",
+          //url: "/MapComposer/urlConfig.js",
+          url: "/urlConfig.js",
           success: function(response, opts){      
               var serverConfig;    
               
