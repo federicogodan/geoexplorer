@@ -22,27 +22,23 @@ GeoExplorer.Viewer = Ext.extend(GeoExplorer, {
         var allTools = config.viewerTools || this.viewerTools;
         var tools = [];
         var toolConfig;
+        // we need to start counting at 2 since there is the Layer Switcher and a 
+        // split button already
+        var counter = 2;
         for (var i=0, len=allTools.length; i<len; i++) {
             var tool = allTools[i];
             if (tool.checked === true) {
-                toolConfig = {
-                    ptype: tool.ptype, 
-                    toggleGroup: tool.toggleGroup, 
-                    actionTarget: tool.actionTarget
-                };
-                // TODO: Remove this hack for getting the apiKey into the viewer
-                if (tool.ptype === "gxp_googleearth") {
-                    // look for apiKey and apiKeys in saved composer config
-                    var jj = config.tools ? config.tools.length : 0;
-                    var composerConfig;
-                    for (var j=0; j<jj; ++j) {
-                        composerConfig = config.tools[j];
-                        if (composerConfig.ptype === tool.ptype) {
-                            toolConfig.apiKey = composerConfig.apiKey;
-                            toolConfig.apiKeys = composerConfig.apiKeys;
-                            break;
-                        }
-                    }
+                var properties = ['checked', 'iconCls', 'id', 'leaf', 'loader', 'text'];
+                for (var key in properties) {
+                    delete tool[properties[key]];
+                }
+                toolConfig = Ext.applyIf({
+                    actionTarget: {target: "paneltbar", index: counter}
+                }, tool);
+                if (tool.numberOfButtons !== undefined) {
+                    counter += tool.numberOfButtons;
+                } else {
+                    counter++;
                 }
                 tools.push(toolConfig);
             }
@@ -111,9 +107,9 @@ GeoExplorer.Viewer = Ext.extend(GeoExplorer, {
             })
         });
 
-        tools.unshift("-");
+        //tools.unshift("-");
         tools.unshift(layerChooser);
-
+/*
         var aboutButton = new Ext.Button({
             tooltip: this.aboutText,
             iconCls: "icon-about",
@@ -123,7 +119,7 @@ GeoExplorer.Viewer = Ext.extend(GeoExplorer, {
 
         tools.push("->");
         tools.push(aboutButton);
-
+*/
         return tools;
     }
 });
