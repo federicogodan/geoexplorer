@@ -568,6 +568,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         var preview = new Ext.Window({
             title: this.previewText,
             layout: "fit",
+            resizable: false,
             items: [{border: false, html: embedMap.getIframeHTML()}]
         });
         preview.show();
@@ -627,7 +628,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                layout: 'card',
                activeItem: 0,
                defaults: {border: false, hideMode: 'offsets'},
-               /*
                bbar: [{
                    id: 'preview',
                    text: this.previewText,
@@ -636,7 +636,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                        this.openPreview(embedMap);
                    },
                    scope: this
-               }, '->', {
+               }/*, '->', {
                    id: 'wizard-prev',
                    text: this.backText,
                    handler: previousNext.createDelegate(this, [-1]),
@@ -647,8 +647,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                    text: this.nextText,
                    handler: previousNext.createDelegate(this, [1]),
                    scope: this
-               } ],
-               */
+               }*/],
+
                items: [embedMap]
                //items: [toolsArea, embedMap]
            };
