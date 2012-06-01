@@ -680,7 +680,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                         }
                     }).show();
                 } else {
-                    //selectControl.unselect(feature);
+                    // Use unselect to not highlight the marker. I could not delete the selection. This happens when I close the popup
                     selectControl.unselect(feature);
                 }
             }
