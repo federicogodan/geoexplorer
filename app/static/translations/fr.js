@@ -336,5 +336,8 @@ GeoExt.Lang.add("fr", {
         smallSizeLabel: "Petit",
         premiumSizeLabel: "Premium",
         largeSizeLabel: "Grand"
+    },
+    "gxp.plugins.GoogleGeocoder.prototype": {
+        addMarkerTooltip: "Rayer Marker"
     }
 });

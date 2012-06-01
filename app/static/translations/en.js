@@ -332,5 +332,8 @@ GeoExt.Lang.add("en", {
         smallSizeLabel: "Small",
         premiumSizeLabel: "Premium",
         largeSizeLabel: "Large"
+    },
+    "gxp.plugins.GoogleGeocoder.prototype": {
+        addMarkerTooltip: "Remove Marker"
     }
 });
