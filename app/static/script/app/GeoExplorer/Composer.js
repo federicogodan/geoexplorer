@@ -145,7 +145,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 4}
             }*/
         ];
-        config.tools;
+
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
 
