@@ -146,26 +146,11 @@
                 enableTabScroll: true
             });
         
-            //
-            //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
-            //
-            
-        models = "../json2_3KM00_uff.js";
-        //models = "../msg.js";
-/*
-        var storeModels = new Ext.data.SimpleStore({
-                            fields: ['modelValue', 'modelName'],
-                            data: [
-                                ['../json2_3KM00_uff.js', 'ARW 3km 00'],
-                                ['../json2_3KM12_uff.js', 'ARW 3km 12'],
-                                ['../json2_9KM00_uff.js', 'ARW 9km 00'],
-                                ['../json2_9KM12_uff.js', 'ARW 9km 12'],
-                                ['../json2_50KM00_uff.js', 'GFS 50km 00'],
-                                ['../json2_50KM12_uff.js', 'GFS 50km 12']
-                            ]
-                        });
-*/
+        //
+        //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
+        //
 
+        // proxy to search categories in geostore
         var proxyCategory =  new Ext.data.HttpProxy({
             url: "http://localhost:8080/geostore/rest/categories/",
             restful: true,
@@ -175,10 +160,17 @@
             success: function (result){
             },
             failure: function (result) {
+                Ext.Msg.show({
+                    title: "Error",
+                    msg: "An error occurred during the search of categories: " + response.status,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
             },
             defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
         });
-            
+        
+        // store to read categories in geostore
         var storeCategory = new Ext.data.Store({
             proxy: proxyCategory,
             reader: new Ext.data.XmlReader({
@@ -193,13 +185,14 @@
             }])
         });
         
+        // combo for select categories
         var comboModels = new Ext.form.ComboBox({
                                 id: 'comboModel',
                                 triggerAction: 'all',
                                 store: storeCategory,
                                 mode: 'remote',
                                 displayField: 'name',
-                                fieldLabel: 'Seleziona un Modello',
+                                //fieldLabel: 'Seleziona un Modello',
                                 valueField: 'name',
                                 listClass: 'x-combo-list-small',
                                 resizable: true,
@@ -213,7 +206,8 @@
                                     }
                                 }
                             });
-
+        
+        // proxy to search resources in geostore
         var proxyResource =  new Ext.data.HttpProxy({
             url: getUrl(comboModels.getValue()),
             restful: true,
@@ -223,10 +217,17 @@
             success: function (result){
             },
             failure: function (result) {
+                Ext.Msg.show({
+                    title: "Error",
+                    msg: "An error occurred during the search of resources: " + response.status,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
             },
             defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
         });
-            
+        
+        // store to read resources in geostore
         var storeResource = new Ext.data.Store({
             proxy: proxyResource,
             reader: new Ext.data.XmlReader({
@@ -267,18 +268,20 @@
             }
         });
         
+        // method to dinamically search resource in geostore
         function getUrl(srcStr) {
             var r = 'http://localhost:8080/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
             return r;
         };
-        
+
+        // combo for select resources and loadUserConfig
         var comboRuns = new Ext.form.ComboBox({
                                 id: 'comboRuns',
                                 triggerAction: 'all',
                                 store: storeResource,
                                 mode: 'remote',
                                 displayField: 'name',
-                                fieldLabel: 'Seleziona un Modello',
+                                //fieldLabel: 'Seleziona un Modello',
                                 valueField: 'id',
                                 listClass: 'x-combo-list-small',
                                 resizable: true,
@@ -297,50 +300,17 @@
                                               'Accept': "application/json"
                                            },
                                            success: function(response, opts){  
-                                                var addConfig;
                                                 app.loadUserConfig(response.responseText);
-                                                /*
-                                                try {
-                                                  addConfig = Ext.util.JSON.decode(response.responseText);
-                                                } catch (err) {
-                                                }
-                                                if(addConfig){
-                                                    if(addConfig.data){    
-                                                        addConfig = Ext.util.JSON.decode(addConfig.data);
-                                                        app.loadUserConfig(addConfig);
-                                                        //this.applyConfig(Ext.applyIf(addConfig, config));
-                                                    }else{        
-                                                        this.applyConfig(Ext.applyIf(addConfig, config));
-                                                    }
-                                                } else {
-                                                    this.applyConfig(config);
-                                                }
-                                                */
                                            },
                                            failure: function(response, opts){
-                                              this.applyConfig(config);
-                                           }
-                                        });  
-                                        //alert(mapId);
-                                        /*
-                                        Ext.Ajax.request({
-                                          url: combo.getValue(),
-                                          method: 'GET',
-                                          success: function(response, opts){
-                                                  models = combo.getValue();
-                                                  app.loadUserConfig(response.responseText);  
-                                                  modified = true;
-                                          },
-                                          failure:  function(response, opts){
                                               Ext.Msg.show({
                                                     title: "Startup",
-                                                    msg: "An error occurred while getting the json.js: " + response.status,
+                                                    msg: "An error occurred while try to update config: " + response.status,
                                                     buttons: Ext.Msg.OK,
                                                     icon: Ext.MessageBox.ERROR
                                               });
-                                          }
+                                           }
                                         });
-                                        */
                                     }
                                 }
                             });
