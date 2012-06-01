@@ -98,34 +98,34 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget:[
                    "layertree.contextMenu"
                 ]
-            },{
-                ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
+            }, {
+                ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 15}
             }, {
-                ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
+                ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 16}
             }, {
-                ptype: "gxp_measure", toggleGroup: this.toggleGroup,
+                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 17}
             }, {
                 ptype: "gxp_zoom",
                 actionTarget: {target: "paneltbar", index: 18}
             }, {
-                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
+                ptype: "gxp_navigationhistory",
                 actionTarget: {target: "paneltbar", index: 19}
             }, {
-                ptype: "gxp_navigationhistory",
+                ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 20}
             }, {
-                ptype: "gxp_zoomtoextent",
+                ptype: "gxp_measure", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 21}
             }, {
                 ptype: "gxp_georeferences",
                 actionTarget: {target: "paneltbar", index: 22}
-            },{
+            }, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 23},
-				        needsAuthorization: true
+				needsAuthorization: true
             },/*{
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 24}
@@ -530,6 +530,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }));
 
         tools.push('-');
+        
         return tools;
 
     },
@@ -626,7 +627,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                layout: 'card',
                activeItem: 0,
                defaults: {border: false, hideMode: 'offsets'},
-               
+               /*
                bbar: [{
                    id: 'preview',
                    text: this.previewText,
@@ -635,7 +636,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                        this.openPreview(embedMap);
                    },
                    scope: this
-               }/*, '->', {
+               }, '->', {
                    id: 'wizard-prev',
                    text: this.backText,
                    handler: previousNext.createDelegate(this, [-1]),
@@ -646,8 +647,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                    text: this.nextText,
                    handler: previousNext.createDelegate(this, [1]),
                    scope: this
-               } */],
-              
+               } ],
+               */
                items: [embedMap]
                //items: [toolsArea, embedMap]
            };
