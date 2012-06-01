@@ -20,8 +20,9 @@ GeoExt.Lang.add("fr", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "À propos de cette carte",
-        searchTabTitle : "Chercher",
-        viewTabTitle : "Vue"
+        searchTabTitle : "Métadonnées",
+        viewTabTitle : "Vue",
+        homeTabTitle : "Chercher"
     },  
 
     "GeoExplorer.Composer.prototype": {

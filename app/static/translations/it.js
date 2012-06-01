@@ -20,8 +20,9 @@ GeoExt.Lang.add("it", {
         descriptionText: "Descrizione",
         contactText: "Contatto",
         aboutThisMapText: "Approposito di questa Mappa",
-        searchTabTitle : "Portale",
-        viewTabTitle : "Vista"
+        searchTabTitle : "Metadati",
+        viewTabTitle : "Vista",
+        homeTabTitle : "Portale"
     },
     
     "GeoExplorer.Composer.prototype": {

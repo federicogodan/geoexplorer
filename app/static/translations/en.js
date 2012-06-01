@@ -20,8 +20,9 @@ GeoExt.Lang.add("en", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "About this Map",
-        searchTabTitle : "Search",
-        viewTabTitle : "View"
+        searchTabTitle : "Metadata",
+        viewTabTitle : "View",
+        homeTabTitle : "Portal"        
     },
     
     "GeoExplorer.Composer.prototype": {
@@ -198,7 +199,7 @@ GeoExt.Lang.add("en", {
 
     "gxp.ScaleOverlay.prototype": { 
         zoomLevelText: "Zoom level"
-    }
+    },
 
     "gxp.plugins.AddGroup.prototype": { 
 	    addGroupMenuText: "Add Group",
