@@ -134,13 +134,40 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         // First row in each object is needed to correctly render a tool in the treeview
         // of the embed map dialog. TODO: make this more flexible so this is not needed.
         config.viewerTools = [
-            {
+                {
+                leaf: true, 
+                text: gxp.plugins.ZoomToExtent.prototype.tooltip, 
+                checked: true, 
+                iconCls: gxp.plugins.ZoomToExtent.prototype.iconCls,
+                ptype: "gxp_zoomtoextent"
+            }, {
                 leaf: true, 
                 text: gxp.plugins.Navigation.prototype.tooltip, 
                 checked: true, 
                 iconCls: "gxp-icon-pan",
                 ptype: "gxp_navigation", 
                 toggleGroup: this.toggleGroup
+            }, {
+                leaf: true, 
+                text: gxp.plugins.ZoomBox.prototype.zoomInTooltip + " / " + gxp.plugins.ZoomBox.prototype.zoomOutTooltip, 
+                checked: true, 
+                iconCls: "gxp-icon-zoombox-in",
+                numberOfButtons: 2,
+                ptype: "gxp_zoombox"
+            }, {
+                leaf: true, 
+                text: gxp.plugins.Zoom.prototype.zoomInTooltip + " / " + gxp.plugins.Zoom.prototype.zoomOutTooltip, 
+                checked: true, 
+                iconCls: "gxp-icon-zoom-in",
+                numberOfButtons: 2,
+                ptype: "gxp_zoom"
+            }, {
+                leaf: true, 
+                text: gxp.plugins.NavigationHistory.prototype.previousTooltip + " / " + gxp.plugins.NavigationHistory.prototype.nextTooltip, 
+                checked: true, 
+                iconCls: "gxp-icon-zoom-previous",
+                numberOfButtons: 2,
+                ptype: "gxp_navigationhistory"
             }, {
                 leaf: true, 
                 text: gxp.plugins.WMSGetFeatureInfo.prototype.infoActionTip, 
@@ -156,33 +183,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 ptype: "gxp_measure", 
                 controlOptions: {immediate: true},
                 toggleGroup: this.toggleGroup
-            }, {
-                leaf: true, 
-                text: gxp.plugins.Zoom.prototype.zoomInTooltip + " / " + gxp.plugins.Zoom.prototype.zoomOutTooltip, 
-                checked: true, 
-                iconCls: "gxp-icon-zoom-in",
-                numberOfButtons: 2,
-                ptype: "gxp_zoom"
-            }, {
-                leaf: true, 
-                text: gxp.plugins.ZoomBox.prototype.zoomInTooltip + " / " + gxp.plugins.ZoomBox.prototype.zoomOutTooltip, 
-                checked: true, 
-                iconCls: "gxp-icon-zoombox-in",
-                numberOfButtons: 2,
-                ptype: "gxp_zoombox"
-            }, {
-                leaf: true, 
-                text: gxp.plugins.NavigationHistory.prototype.previousTooltip + " / " + gxp.plugins.NavigationHistory.prototype.nextTooltip, 
-                checked: true, 
-                iconCls: "gxp-icon-zoom-previous",
-                numberOfButtons: 2,
-                ptype: "gxp_navigationhistory"
-            }, {
-                leaf: true, 
-                text: gxp.plugins.ZoomToExtent.prototype.tooltip, 
-                checked: true, 
-                iconCls: gxp.plugins.ZoomToExtent.prototype.iconCls,
-                ptype: "gxp_zoomtoextent"
             }, {
                 leaf: true, 
                 text: gxp.plugins.GeoReferences.prototype.tooltip, 
@@ -656,28 +656,33 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             
             // Create the popups for markers
             function onFeatureSelect(feature) {
-                new GeoExt.Popup({
-                    title: "Marker Info",
-                    width: 400,
-                    height: 300,
-                    layout: "fit",
-                    map: app.mapPanel,
-                    location: feature.geometry.getBounds().getCenterLonLat(),
-                    items: [{   
-                        title: feature.fid,   
+                if (feature.attributes.html){
+                    new GeoExt.Popup({
+                        title: "Marker Info",
+                        width: 400,
+                        height: 300,
                         layout: "fit",
-                        bodyStyle: 'padding:10px;background-color:#F5F5DC',
-                        html: feature.attributes.html,
-                        autoScroll: true,
-                        autoWidth: true,
-                        collapsible: false
-                    }],
-                    listeners: { 
-                      close : function() {
-                           selectControl.unselect(feature);
+                        map: app.mapPanel,
+                        location: feature.geometry.getBounds().getCenterLonLat(),
+                        items: [{   
+                            title: feature.fid,   
+                            layout: "fit",
+                            bodyStyle: 'padding:10px;background-color:#F5F5DC',
+                            html: feature.attributes.html,
+                            autoScroll: true,
+                            autoWidth: true,
+                            collapsible: false
+                        }],
+                        listeners: { 
+                          close : function() {
+                               selectControl.unselect(feature);
+                            }
                         }
-                    }
-                }).show();
+                    }).show();
+                } else {
+                    //selectControl.unselect(feature);
+                    selectControl.unselect(feature);
+                }
             }
             
             app.mapPanel.map.addLayer(marker_layer);
