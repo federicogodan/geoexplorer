@@ -4,6 +4,11 @@
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/BaseTypes/Date.js
+ */
+
+/**
  * Class: OpenLayers.Control.TimeManager
  * Control to display and animate map layers across time.
  *
@@ -452,6 +457,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                             currentTime : this.currentTime
                         });
                         if(!this._stopped){
+                            this.clearTimer();
                             this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
                         }
                     }
@@ -906,3 +912,8 @@ OpenLayers.TimeUnit = {
 	MONTHS:'Month',
 	YEARS:'FullYear'
 };
+
+
+//Adjust the OpenLayers date parse regex to handle BCE dates & years longer than 4 digits
+OpenLayers.Date.dateRegEx = 
+    /^(?:(-?\d+)(?:-(\d{2})(?:-(\d{2}))?)?)?(?:(?:T(\d{1,2}):(\d{2}):(\d{2}(?:\.\d+)?)(Z|(?:[+-]\d{1,2}(?::(\d{2}))?)))|Z)?$/;
