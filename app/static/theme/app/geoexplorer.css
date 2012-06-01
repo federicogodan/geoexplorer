@@ -65,6 +65,10 @@ body {
     background-image: url(img/silk/wrench.png);
 }
 
+.x-btn .icon-removemarkers {
+    background-image: url(img/geosilk/vector_delete.png);
+}
+
 .x-btn .icon-getfeatureinfo {
     background-image: url(img/silk/information.png);
 }
