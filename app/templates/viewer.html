@@ -1,8 +1,9 @@
-<html>
+ï»¿<html>
     <head>
         <title>Map Viewer</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="shortcut icon" href="theme/app/img/favicon.ico">
+		
         <!-- Ext resources -->
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/ext-all.css">
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/xtheme-gray.css">
@@ -95,7 +96,7 @@
 
                 var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';
                 
-                var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
+                var langData = [['en', 'English'],['fr','FranÃ§ais'],['it','Italiano']];
                 
                 var query = location.search;        
                 if(query && query.substr(0,1) === "?"){
@@ -121,7 +122,7 @@
                     });
                 }            
                 
-                      if (GeoExt.Lang) {
+                if (GeoExt.Lang) {
                     GeoExt.Lang.set(code);
                 }
                 
@@ -150,62 +151,27 @@
                            else
                               languageSelector.prevLang = curLang;
                         },                    
-                        select: function(cb, record, index) {         
-                            
-                           var switchLang = function(buttonId, text, opt){
-                                if(buttonId === 'ok'){
-                                    var code = record.get('code');
-                                    
-                                    var query = location.search;        
-                                    if(query && query.substr(0,1) === "?"){
-                                        query = query.substring(1);
-                                    }                                    
-                                    var url = Ext.urlDecode(query);
-
-                                    if(code){
-                                        if (url.auth == 'true'){
-                                            location.replace(
-                                                location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId + '&auth=true');
-                                        }else if (url.auth == 'false'){
-                                            location.replace(
-                                                location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId + '&auth=false&fullScreen=true');
-                                        }else{
-                                            location.replace(
-                                                location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId);                                    
-                                        }
-                                    }
-                                    
-                                }else{
-                                    var code = record.get('code');
-                                                                    
-                                    if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
-                                        cb.setValue('Français');
-                                    }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
-                                        cb.setValue('Italiano');
-                                    }else{
-                                        cb.setValue('English');
-                                    }
-                                }
-                            };
-                            
-                            var switchLangActionTip = "Switch Language";
-                            var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
-                            
-                            if(curLang === 'fr'){
-                                switchLangActionTip = "Changement de langue";
-                                switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
-                            }else if(curLang === 'it'){
-                                switchLangActionTip = "Cambiamento Lingua";
-                                switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
-                            }
-                            
-                            Ext.Msg.show({
-                               title: switchLangActionTip,
-                               msg: switchLangConfirmationText,
-                               buttons: Ext.Msg.OKCANCEL,
-                               fn: switchLang,
-                               icon: Ext.MessageBox.QUESTION
-                            });  
+                        select: function(cb, record, index) {        
+							var code = record.get('code');
+							
+							var query = location.search;        
+							if(query && query.substr(0,1) === "?"){
+								query = query.substring(1);
+							}  
+							
+							var url = Ext.urlDecode(query);
+							if(code){
+								if (url.auth == 'true'){
+									location.replace(
+										location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId + '&auth=true');
+								}else if (url.auth == 'false'){
+									location.replace(
+										location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId + '&auth=false&fullScreen=true');
+								}else{
+									location.replace(
+										location.pathname + '?locale=' + code + '&bbox=' + url.bbox + '&mapId=' + url.mapId);                                    
+								}
+							}
                         }
                     }
                 });

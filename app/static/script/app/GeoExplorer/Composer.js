@@ -179,7 +179,17 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             });            
                             
             tools.unshift(fullScreen);
-        }
+        }else{
+			var layerChooser = new Ext.Button({
+				tooltip: 'Layer Switcher',
+				iconCls: 'icon-layer-switcher',
+				menu: new gxp.menu.LayerMenu({
+					layers: this.mapPanel.layers
+				})
+			});
+
+			tools.unshift(layerChooser);
+		}
         
         if(this.cswconfig){
             var extent = this.mapPanel.map.getExtent();
