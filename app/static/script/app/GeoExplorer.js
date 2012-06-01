@@ -153,7 +153,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 checked: true, 
                 iconCls: "gxp-icon-zoombox-in",
                 numberOfButtons: 2,
-                ptype: "gxp_zoombox"
+                ptype: "gxp_zoombox", 
+                toggleGroup: this.toggleGroup
             }, {
                 leaf: true, 
                 text: gxp.plugins.Zoom.prototype.zoomInTooltip + " / " + gxp.plugins.Zoom.prototype.zoomOutTooltip, 
