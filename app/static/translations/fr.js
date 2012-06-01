@@ -338,6 +338,6 @@ GeoExt.Lang.add("fr", {
         largeSizeLabel: "Grand"
     },
     "gxp.plugins.GoogleGeocoder.prototype": {
-        addMarkerTooltip: "Rayer Marker"
+        addMarkerTooltip: "Réinitialiser Marker"
     }
 });

@@ -334,6 +334,6 @@ GeoExt.Lang.add("en", {
         largeSizeLabel: "Large"
     },
     "gxp.plugins.GoogleGeocoder.prototype": {
-        addMarkerTooltip: "Remove Marker"
+        addMarkerTooltip: "Reset Marker"
     }
 });
