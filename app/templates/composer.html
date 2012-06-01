@@ -23,6 +23,8 @@
     
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/it.js"></script>
+    <script type="text/javascript" src="../translations/fr.js"></script>
+    <script type="text/javascript" src="../translations/en.js"></script>
 
     <script>
         
@@ -126,7 +128,7 @@
             //
             var geoportalPanel = new Ext.Panel({
                 id: 'geoportalPanel',
-                title: GeoExplorer.prototype.searchTabTitle || 'Geoportal',
+                title: GeoExplorer.prototype.homeTabTitle || 'Geoportal',
                 layout:'fit', 
                 items: [ 
                     new Ext.ux.IFrameComponent({ 
@@ -149,7 +151,8 @@
             //
             
         models = "../json2_3KM00_uff.js";
-
+        //models = "../msg.js";
+/*
         var storeModels = new Ext.data.SimpleStore({
                             fields: ['modelValue', 'modelName'],
                             data: [
@@ -161,21 +164,165 @@
                                 ['../json2_50KM12_uff.js', 'GFS 50km 12']
                             ]
                         });
-                        
+*/
+
+        var proxyCategory =  new Ext.data.HttpProxy({
+            url: "http://localhost:8080/geostore/rest/categories/",
+            restful: true,
+            method : 'POST',
+            disableCaching: true,
+            timeout: 30000,
+            success: function (result){
+            },
+            failure: function (result) {
+            },
+            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
+        });
+            
+        var storeCategory = new Ext.data.Store({
+            proxy: proxyCategory,
+            reader: new Ext.data.XmlReader({
+                id: 'storeCategory_id',
+                record: "Category", 
+            }, [{
+                name: 'id',
+                type: 'int'
+            }, {
+                name: 'name',
+                type: 'tring'
+            }])
+        });
+        
         var comboModels = new Ext.form.ComboBox({
                                 id: 'comboModel',
                                 triggerAction: 'all',
-                                store: storeModels,
-                                mode: 'local',
-                                displayField: 'modelName',
+                                store: storeCategory,
+                                mode: 'remote',
+                                displayField: 'name',
                                 fieldLabel: 'Seleziona un Modello',
-                                valueField: 'modelValue',
+                                valueField: 'name',
                                 listClass: 'x-combo-list-small',
                                 resizable: true,
-                                emptyText:'ARW 3km 00',
+                                typeAhead: true,
+                                emptyText:'Seleziona un Modello',
                                 selectOnFocus:true,
                                 listeners: { 
                                     select: function(combo, record, index) {
+                                        comboRuns.setValue('');
+                                        comboRuns.getStore().reload();
+                                    }
+                                }
+                            });
+
+        var proxyResource =  new Ext.data.HttpProxy({
+            url: getUrl(comboModels.getValue()),
+            restful: true,
+            method : 'POST',
+            disableCaching: true,
+            timeout: 30000,
+            success: function (result){
+            },
+            failure: function (result) {
+            },
+            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
+        });
+            
+        var storeResource = new Ext.data.Store({
+            proxy: proxyResource,
+            reader: new Ext.data.XmlReader({
+                id: 'storeResource_id',
+                record: "Resource", 
+            }, [{
+                name: "id",
+                type: "int"
+            },{
+                name: "name",
+                type: "string"
+            },{
+                name: "owner",
+                type: "string"
+            },{
+                name: "description",
+                type: "string"
+            },{
+                name: "creation",
+                type: "date",
+                dateFormat: 'c'
+            },{
+                name: "lastUpdate",
+                type: "date",
+                dateFormat: 'c'
+            },{
+                name: "canEdit",
+                type: "boolean"
+            },{
+                name: "canDelete",
+                type: "boolean"
+            }]),
+            listeners:{
+                beforeload:function(store, options){
+                    store.proxy.setUrl(getUrl(comboModels.getValue()));
+                },
+                scope: this
+            }
+        });
+        
+        function getUrl(srcStr) {
+            var r = 'http://localhost:8080/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
+            return r;
+        };
+        
+        var comboRuns = new Ext.form.ComboBox({
+                                id: 'comboRuns',
+                                triggerAction: 'all',
+                                store: storeResource,
+                                mode: 'remote',
+                                displayField: 'name',
+                                fieldLabel: 'Seleziona un Modello',
+                                valueField: 'id',
+                                listClass: 'x-combo-list-small',
+                                resizable: true,
+                                emptyText:'Seleziona un giorno',
+                                selectOnFocus:true,
+                                listeners: { 
+                                    select: function(combo, record, index) {
+                                        mapId = comboRuns.getValue();
+
+                                        Ext.Ajax.request({
+                                           url: proxy + geoStoreBaseURL + "data/" + mapId,
+                                           //url: geoStoreBaseURL + "data/" + this.mapId,
+                                           method: 'GET',
+                                           scope: this,
+                                           headers:{
+                                              'Accept': "application/json"
+                                           },
+                                           success: function(response, opts){  
+                                                var addConfig;
+                                                app.loadUserConfig(response.responseText);
+                                                /*
+                                                try {
+                                                  addConfig = Ext.util.JSON.decode(response.responseText);
+                                                } catch (err) {
+                                                }
+                                                if(addConfig){
+                                                    if(addConfig.data){    
+                                                        addConfig = Ext.util.JSON.decode(addConfig.data);
+                                                        app.loadUserConfig(addConfig);
+                                                        //this.applyConfig(Ext.applyIf(addConfig, config));
+                                                    }else{        
+                                                        this.applyConfig(Ext.applyIf(addConfig, config));
+                                                    }
+                                                } else {
+                                                    this.applyConfig(config);
+                                                }
+                                                */
+                                           },
+                                           failure: function(response, opts){
+                                              this.applyConfig(config);
+                                           }
+                                        });  
+                                        //alert(mapId);
+                                        /*
                                         Ext.Ajax.request({
                                           url: combo.getValue(),
                                           method: 'GET',
@@ -193,6 +340,7 @@
                                               });
                                           }
                                         });
+                                        */
                                     }
                                 }
                             });
@@ -274,7 +422,7 @@
                         split: true,
                         html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',
                         bodyStyle: 'padding:0px;background-color: #222b43;',
-                        tbar: [comboModels]
+                        tbar: [comboModels,comboRuns]
                     },{
                         region : 'center',
                         layout : 'border',
@@ -405,22 +553,6 @@
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
-                    },{
-                        format:"image/png",
-                        group:"Stazioni",
-                        name:"stazioni:Prec2012_02_17_12",
-                        opacity:1,
-                        selected:false,
-                        source:"LaMMA-StazioniTempAria",
-                        styles:[],
-                        title:"Prec 2012-02-17 12",
-                        transparent:true,
-                        uuid:"",
-                        tiled:false,
-                        visibility:false,
-                        ratio:1,
-                        srs:"EPSG:900913",
-                        transitionEffect:"resize"
                     }],
                     center: [-1224514, 1291331],
                     zoom: 6
@@ -442,7 +574,7 @@
             
       Ext.Ajax.request({
           //url: "proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          url: "/urlConfig.js", //TEST
+          url: "/geoexplorer/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
