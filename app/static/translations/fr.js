@@ -324,5 +324,37 @@ GeoExt.Lang.add("fr", {
         menuText: "Codification Géographique",
         tooltip: "Codification Géographique"
 	
+    },
+	
+	/*-------------------------------------------------------------*/
+	
+    "gxp.FilterBuilder.prototype": {
+        builderTypeNames: ["Tout", "tous", "aucun", "pas tout"],
+        preComboText: "Match",
+        postComboText: "de ce qui suit:",
+        addConditionText: "Ajouter la condition",
+        addGroupText: "Ajouter un groupe",
+        removeConditionText: "Supprimer la condition"
+    },
+	
+    "gxp.IDAFilterBuilder.prototype": {
+        builderTypeNames: ["Tout", "tous", "aucun", "pas tout"],
+        preComboText: "Match",
+        postComboText: "de ce qui suit:",
+        addConditionText: "Ajouter la condition",
+        addGroupText: "Ajouter un groupe",
+        removeConditionText: "Supprimer la condition"
+    },
+	
+	"gxp.plugins.IDAAttribute.prototype": {
+        title: "Attributes de niveau",
+		settingsTitle: "Réglages de base",
+		settingNameTitle: "Nom",
+		settingColorTitle: "Couleur",
+		settingClassificationTitle: "Classification",
+		filterTitle: "Filtrer",
+		reloadLayerText: "Recharger les niveaux",
+		applyFilterText: "Appliquer",
+		resetText: "Remettre"
     }
 });

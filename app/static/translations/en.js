@@ -319,5 +319,37 @@ GeoExt.Lang.add("en", {
         initialText: "Select an area",
         menuText: "GeoReferences",
         tooltip: "GeoReferences"
+    },
+	
+	/*-------------------------------------------------------------*/
+	
+	"gxp.FilterBuilder.prototype": {
+        builderTypeNames: ["any", "all", "none", "not all"],
+        preComboText: "Match",
+        postComboText: "of the following:",
+        addConditionText: "add condition",
+        addGroupText: "add group",
+        removeConditionText: "remove condition"
+    },
+	
+    "gxp.IDAFilterBuilder.prototype": {
+        builderTypeNames: ["any", "all", "none", "not all"],
+        preComboText: "Match",
+        postComboText: "of the following:",
+        addConditionText: "add condition",
+        addGroupText: "add group",
+        removeConditionText: "remove condition"
+    },
+	
+	"gxp.plugins.IDAAttribute.prototype": {
+        title: "Layer Attribute",
+		settingsTitle: "Base Settings",
+		settingNameTitle: "Name",
+		settingColorTitle: "Color",
+		settingClassificationTitle: "Classification",
+		filterTitle: "Filter",
+		reloadLayerText: "Reload Layers",
+		applyFilterText: "Apply",
+		resetText: "Reset"
     }
 });

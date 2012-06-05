@@ -354,5 +354,37 @@ GeoExt.Lang.add("it", {
         initialText: "Seleziona un'area",
         menuText: "Geo Referimenti",
         tooltip: "Geo Referimenti"
+    },
+	
+    /*-------------------------------------------------------------*/
+	
+	"gxp.FilterBuilder.prototype": {
+        builderTypeNames: ["qualsiasi", "tutte", "nessuna", "non tutti"],
+        preComboText: "Restituisci",
+        postComboText: "delle seguenti:",
+        addConditionText: "aggiungi condizione",
+        addGroupText: "aggiungi gruppo",
+        removeConditionText: "rimuovicondizione"
+    },
+	
+    "gxp.IDAFilterBuilder.prototype": {
+        builderTypeNames: ["qualsiasi", "tutte", "nessuna", "non tutti"],
+        preComboText: "Restituisci",
+        postComboText: "delle seguenti:",
+        addConditionText: "aggiungi condizione",
+        addGroupText: "aggiungi gruppo",
+        removeConditionText: "rimuovi condizione"
+    },
+	
+	"gxp.plugins.IDAAttribute.prototype": {
+        title: "Attributi di Livello",
+		settingsTitle: "Impostazioni di base",
+		settingNameTitle: "Nome",
+		settingColorTitle: "Colore",
+		settingClassificationTitle: "Classificazione",
+		filterTitle: "Filtro",
+		reloadLayerText: "Ricarica Livelli",
+		applyFilterText: "Applica",
+		resetText: "Reimposta"
     }
 });

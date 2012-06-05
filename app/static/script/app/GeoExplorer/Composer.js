@@ -122,26 +122,26 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
-				        needsAuthorization: true
+				needsAuthorization: true
             }, /*{
                 ptype: "gxp_idaspm",
                 outputConfig: {
                     id: "spmpanel"
                 },
                 outputTarget: "idacontrol"
-            }, {
+            },*/ {
                 ptype: "gxp_idaattribute",
                 outputConfig: {
                     id: "attributepanel"
                 },
                 outputTarget: "idacontrol"
-            },*/ {
+            }, /*{
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'ida-print'},
                 printService: config.printService,
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
-            }, {
+            },*/ {
                 ptype: "gxp_georeferences",
                 actionTarget: {target: "paneltbar", index: 22}
             }

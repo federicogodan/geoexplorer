@@ -4,6 +4,10 @@
     <link rel="stylesheet" type="text/css" href="externals/openlayers/theme/default/style.css">
     <script type="text/javascript" src="script/OpenLayers.js"></script>
 	
+	<!-- colorpicker resources -->
+    <link rel="stylesheet" type="text/css" href="externals/colorpicker/css/colorpicker.css">
+    <script type="text/javascript" src="script/colorpicker.js"></script> 
+	
     <!-- GeoExt resources -->
     <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/popup.css">
     <link rel="stylesheet" type="text/css" href="externals/GeoExt/resources/css/layerlegend.css">
@@ -13,7 +17,7 @@
     <!-- gxp resources -->
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/all.css">
     <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/gxpmapstore.css">
-    <script type="text/javascript" src="script/gxp.js"></script> 
+    <script type="text/javascript" src="script/gxp.js"></script>
 
     <!-- proj4js resources 
     <script type="text/javascript" src="script/proj4js.js"></script>-->
@@ -172,6 +176,8 @@
                     beforeselect: function(cb, record, index){
                        if(curLang == record.get('code'))
                           return false; 
+					   else
+						  languageSelector.prevLang = curLang;
                     },                    
                     select: function(cb, record, index) {         
                         
@@ -184,10 +190,13 @@
                                 }  
                             }else{
                                 var code = record.get('code');
-                                if(code == 'fr'){
-                                    cb.setValue('English');
-                                }else{
+
+								if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
                                     cb.setValue('Français');
+                                }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
+									cb.setValue('Italiano');
+								}else{
+                                    cb.setValue('English');
                                 }
                             }
                         };
@@ -304,13 +313,17 @@
                 "\"ida\": {" + 
                     "\"url\":\"http://localhost:8080/geoserver/ows\"," +
                     "\"title\":\"IDA GeoServer\"," +
-                    "\"version\":\"1.1.1\"" +
-                "}," +
+                    "\"version\":\"1.1.1\"," +
+				    "\"layerBaseParams\": {" +
+						"\"TILED\": true," +
+						"\"TILESORIGIN\": \"-180,-90\"" +
+					"}" +
+                "}"
                 /*"\"gwc\": {" + 
                     "\"url\":\"http://localhost:8080/geowebcache/service/wms\"," +
                     "\"title\":\"IDA GeoWebCache\"," +
                     "\"version\":\"1.1.1\"" +
-                "}," +*/
+                "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -325,7 +338,7 @@
                 "}," + 
                 "\"ol\": {" + 
                     "\"ptype\": \"gxp_olsource\"" + 
-                "}";
+                "}"*/;
             
             if(customSources.length > 0)
                 sources += ",";
