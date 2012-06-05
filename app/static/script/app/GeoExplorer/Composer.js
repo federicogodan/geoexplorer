@@ -592,7 +592,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     /** private: method[showEmbedWindow]
      */
     showEmbedWindow: function() {        
-        if (app.mapId == -1 || app.modified == true){
+	    if (app.mapId == -1 || (app.modified == true && authorization == true)){
             Ext.MessageBox.show({
                 title: this.alertEmbedTitle,
                 msg: this.alertEmbedText,

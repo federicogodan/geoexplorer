@@ -456,45 +456,45 @@
                     app.modified = false;
                 }
             });
-			};			
+	    };			
 			
-      Ext.Ajax.request({
-          //url: "/MapComposer/urlConfig.js",
-          url: "/urlConfig.js",
-          method: 'GET',
-          success: function(response, opts){      
-              var serverConfig;    
-              
-              try{
-                  serverConfig = Ext.util.JSON.decode(response.responseText);
-              }catch(e){
-                  Ext.Msg.show({
-                        title: "Startup",
-                        msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.ERROR
-                  });
-              }
-              
-              if(serverConfig){
-                  proxy = serverConfig.proxy; 
-                  geoStoreBaseURL = serverConfig.geoStoreBase;                  
-                  customSources = serverConfig.gsSources;
+	    Ext.Ajax.request({
+			  //url: "/MapComposer/urlConfig.js",
+			  url: "/urlConfig.js",
+			  method: 'GET',
+			  success: function(response, opts){      
+				  var serverConfig;    
+				  
+				  try{
+					  serverConfig = Ext.util.JSON.decode(response.responseText);
+				  }catch(e){
+					  Ext.Msg.show({
+							title: "Startup",
+							msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
+							buttons: Ext.Msg.OK,
+							icon: Ext.MessageBox.ERROR
+					  });
+				  }
+				  
+				  if(serverConfig){
+					  proxy = serverConfig.proxy; 
+					  geoStoreBaseURL = serverConfig.geoStoreBase;                  
+					  customSources = serverConfig.gsSources;
 
-                  //      
-                  // Run the application when browser is ready
-                  //
-                  Ext.onReady(onReady);
-              }
-          },
-          failure:  function(response, opts){
-              Ext.Msg.show({
-                    title: "Startup",
-                    msg: "An error occurred while getting the GeoStore URL config: " + response.status,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-              });
-          }
-      });
+					  //      
+					  // Run the application when browser is ready
+					  //
+					  Ext.onReady(onReady);
+				  }
+			  },
+			  failure:  function(response, opts){
+				  Ext.Msg.show({
+						title: "Startup",
+						msg: "An error occurred while getting the GeoStore URL config: " + response.status,
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.ERROR
+				  });
+		      }
+	    });
         
     </script>

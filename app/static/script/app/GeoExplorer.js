@@ -71,26 +71,42 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     // End i18n.
     
     //properties for style markers
-    pointRadiusMarkers: 14,
+	markerTemplateDefault: {
+		label: "${label}",
+		fontWeight: "bold",
+		fontColor: "#FFFFFF",
+		backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
+		backgroundXOffset: -7,
+		backgroundYOffset: -7,
+		// Set the z-indexes of both graphics to make sure the background
+        // graphics stay in the background
+        graphicZIndex: 11,
+        backgroundGraphicZIndex: 10
+	},
+		
+	markerTemplateSelected: {
+		label: "${label}",
+		fontWeight: "bold",
+		fontColor: "#FFFFFF",
+		externalGraphic: 'theme/app/img/markers/default_information_select.png',
+		backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
+		backgroundXOffset: -7,
+		backgroundYOffset: -7,
+		// Set the z-indexes of both graphics to make sure the background
+        // graphics stay in the background
+        graphicZIndex: 11,
+        backgroundGraphicZIndex: 10
+	},
     
-    externalGraphicMarkers: 'theme/app/img/markers/information.png',
-    
-    externalGraphicMarkersHighlights: 'theme/app/img/markers/information_highlights.png',
-
-    externalGraphicMarkersSelect: 'theme/app/img/markers/information_select.png',
-    
-    backgroundGraphicMarkers: 'theme/app/img/markers/markers_shadow.png',
-    
-    backgroundXOffsetMarkers: -7,
-    
-    backgroundYOffsetMarkers: -7,
+	externalGraphicMarkers: 'theme/app/img/markers/default_information.png',
+    externalGraphicMarkersHighlights: 'theme/app/img/markers/default_information_highlights.png',
     
     //properties for style tracks
-    strokeColorTracks: "green",
-    
-    strokeWidthTracks: 7,
-    
-    strokeOpacityTracks: 0.5,
+	trackStyle: {
+		strokeColorTracks: "green",
+		strokeWidthTracks: 7,
+		strokeOpacityTracks: 0.5
+	},
             
     /**
      * private: property[mapPanel]
@@ -575,11 +591,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         var defaultMarker = this.externalGraphicMarkers;
         var highlightsMarker = this.externalGraphicMarkersHighlights;
-        
-        // Set the z-indexes of both graphics to make sure the background
-        // graphics stay in the background
-        var SHADOW_Z_INDEX = 10;
-        var MARKER_Z_INDEX = 11;
 
         var context = {
             getMarkerIcon : function (ft){
@@ -587,33 +598,60 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     return highlightsMarker; 
                 else 
                     return defaultMarker; 
-            } 
+            },
+			
+			getMarkerLabel : function(ft){
+			    var label = ft.attributes.label;
+			    if(label) 
+                    return label; 
+                else 
+                    return null; 
+			},
+			
+			getRadius : function(ft){
+			    var label;
+				try{
+					label = parseInt(ft.attributes.label);
+				}catch(e){
+					return 15; 
+				} 
+				
+				var cluster = ft.attributes.cluster;
+				
+			    if(label && cluster){
+					if(label > 0 && label <= 10){
+						return 15;
+					}else if(label > 10 && label <= 25){
+						return 20;
+					}else if(label > 26 && label <= 50){
+						return 25;
+					}else if(label > 51 && label <= 100){
+						return 30;
+					}else if(label > 101 && label <= 200){
+						return 35;
+					}else if(label > 201 && label <= 400){
+						return 40;
+					}else if(label > 401 && label <= 800){
+						return 45;
+					}else if(label > 801 && label <= 1600){
+						return 50;
+					}else if(label > 1600){
+						return 55;
+					}
+				}else {
+					return 15; 
+				}
+			}
         };
         
-        var templateA = {
-            pointRadius: this.pointRadiusMarkers,
-            externalGraphic: "${getMarkerIcon}",
-            backgroundGraphic: this.backgroundGraphicMarkers,
-            backgroundXOffset: this.backgroundXOffsetMarkers,
-            backgroundYOffset: this.backgroundYOffsetMarkers,
-            graphicZIndex: MARKER_Z_INDEX,
-            backgroundGraphicZIndex: SHADOW_Z_INDEX
-        };
-        
-        var templateB = {
-            pointRadius: this.pointRadiusMarkers,
-            externalGraphic: this.externalGraphicMarkersSelect,
-            backgroundGraphic: this.backgroundGraphicMarkers,
-            backgroundXOffset: this.backgroundXOffsetMarkers,
-            backgroundYOffset: this.backgroundYOffsetMarkers,
-            graphicZIndex: MARKER_Z_INDEX,
-            backgroundGraphicZIndex: SHADOW_Z_INDEX
-        };
-        
+		this.markerTemplateDefault.externalGraphic = "${getMarkerIcon}";
+		this.markerTemplateDefault.pointRadius = "${getRadius}";
+		this.markerTemplateSelected.pointRadius = "${getRadius}";
+		
         var styleMap = new OpenLayers.StyleMap({ 
-            "default" : new OpenLayers.Style(templateA, {context:context}),
-            "select" : new OpenLayers.Style(templateB, {context:context})
-            }); 
+            "default" : new OpenLayers.Style(this.markerTemplateDefault, {context:context}),
+            "select" : new OpenLayers.Style(this.markerTemplateSelected, {context:context})
+        }); 
             
         return(styleMap); 
     }, 
@@ -623,7 +661,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      *
      *  Add Markers and Tracks to map.
      */
-    showMarkerGeoJSON: function(markerName,trackName,geoJson,showLine) {
+    showMarkerGeoJSON: function(markerName, geoJson, trackName, showLine) {
         
         // allow testing of specific renderers via "?renderer=Canvas", etc
         var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
@@ -640,20 +678,20 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             
             // Create a new parser for GeoJSON
             var geojson_format = new OpenLayers.Format.GeoJSON({
-                                                internalProjection: app.mapPanel.map.getProjectionObject(),
-                                                externalProjection: new OpenLayers.Projection("EPSG:4326")
-                                            });
+				internalProjection: app.mapPanel.map.getProjectionObject(),
+				externalProjection: new OpenLayers.Projection("EPSG:4326")
+			});
 
             // Sets the style for the markers
             var styleMarkers = this.setMarkersStyle();
-
+			
             // Create new vector layer for markers
             var marker_layer = new OpenLayers.Layer.Vector(markerName, {
-                                        styleMap: styleMarkers,
-                                        displayInLayerSwitcher: false,
-                                        rendererOptions: {yOrdering: true},
-                                        renderers: renderer
-                                    });
+				styleMap: styleMarkers,
+				displayInLayerSwitcher: false,
+				rendererOptions: {yOrdering: true},
+				renderers: renderer
+			});
             
             // Create the popups for markers
             function onFeatureSelect(feature) {
@@ -691,40 +729,40 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             marker_layer.addFeatures(geojson_format.read(geoJson));
 
             var selectControl = new OpenLayers.Control.SelectFeature(marker_layer,{
-                                    onSelect: onFeatureSelect,
-                                    clickout: false,
-                                    multiple: true
-                                });
+				onSelect: onFeatureSelect,
+				clickout: false,
+				multiple: true
+			});
                                 
             app.mapPanel.map.addControl(selectControl);
             selectControl.activate();
         }
         
-        // check if the track layer exists
-        var trackLyr = app.mapPanel.map.getLayersByName(trackName);
-        if (trackLyr.length) {
-           for (var key in trackLyr.features) {
-                trackLyr.removeFeatures(trackLyr.features[key]);
-                trackLyr.addFeatures(trackLyr.features[key]);
-            }
-        }else {
-            if(showLine){
-                
-                // Sets the style for the tracks
+		if(trackName){
+		    // Checks if the track layer exists
+			var trackLayer = app.mapPanel.map.getLayersByName(trackName)[0];
+			
+			if (trackLayer){ 
+				trackLayer.removeFeatures(trackLayer.features);
+			}else{
+			    // Sets the style for the tracks
                 var styleTracks = new OpenLayers.StyleMap({
-                                        strokeColor: this.strokeColorTracks,
-                                        strokeWidth: this.strokeWidthTracks,
-                                        strokeOpacity: this.strokeOpacityTracks
-                                    });
-                                    
-                // Create new vector layer for tracks
-                var track_layer = new OpenLayers.Layer.Vector(trackName, {
-                                            styleMap: styleTracks,
-                                            displayInLayerSwitcher: false
-                                        });
-                                    
+					strokeColor: this.trackStyle.strokeColorTracks,
+					strokeWidth: this.trackStyle.strokeWidthTracks,
+					strokeOpacity: this.trackStyle.strokeOpacityTracks
+				});
+				
+			    // Creates new vector layer for tracks
+                trackLayer = new OpenLayers.Layer.Vector(trackName, {
+					styleMap: styleTracks,
+					displayInLayerSwitcher: false
+				});
+				
+				app.mapPanel.map.addLayer(trackLayer);
+			}
+			
+			if(showLine){
                 var pointCoord = new Array;
-                //geoJsonoObj
                 var geoJsonoObj = Ext.util.JSON.decode(geoJson);
                 
                 // Cycling the file GeoJSON to capture the coordinates of the markers
@@ -736,10 +774,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                         )
                     );  
                 }
-                app.mapPanel.map.addLayer(track_layer);
 
-                
-                track_layer.addFeatures([
+                trackLayer.addFeatures([
                     new OpenLayers.Feature.Vector(
                         new OpenLayers.Geometry.LineString(pointCoord).transform(
                             new OpenLayers.Projection("EPSG:4326"),
@@ -748,7 +784,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     )
                 ]);
             }
-        }
+		}
     },
     
     /** private: method[setAuthHeader]
