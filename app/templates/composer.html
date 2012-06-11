@@ -43,48 +43,50 @@
     
     <script>
         
-        var app;
-        
+        var app;        
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
 
-        //
-        // Parsing the request to get the parameters
-        //
+		// //////////////////////////////////////////////////
+		// Parsing the request to get the parameters
+		// //////////////////////////////////////////////////
         var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
-        
         for (var j=0; j < params.length; j++) {
-          var param = params[j].split("=");
-          switch ( param[0] ) {
-            case "mapId"	: 
-                            try{
-                                mapIdentifier = parseInt(param[1]);
-                            }catch(e){
-                                mapIdentifier = -1;
-                            } 
-                            break;
-            case "auth" : 
-                            if(param[1] == 'true') 
-                                authorization = true; 
-                            else 
-                                authorization = false; 
-                            break;
-            case "fullScreen" : 
-                            if(param[1] == 'true') 
-                                fullScreen = true; 
-                            else 
-                                fullScreen = false; 
-                            break;
-            default : 
-                            mapIdentifier = -1;
-                            authorization = false;
-                            fullScreen = false; 
-          }
+			var param = params[j].split("=");
+			if(param[0]){
+				switch ( param[0] ) {
+					case "mapId": 
+									try{
+										mapIdentifier = parseInt(param[1]);
+									}catch(e){
+										mapIdentifier = -1;
+									} 
+									break;
+					case "auth" : 
+									if(param[1] == 'true') 
+										authorization = true; 
+									else 
+										authorization = false; 
+									break;
+					case "fullScreen" : 
+									if(param[1] == 'true') 
+										fullScreen = true; 
+									else 
+										fullScreen = false; 
+									break;
+					default :       
+									mapIdentifier = -1;
+									authorization = false;
+									fullScreen = false; 
+				}
+			}
         }
-		            
+		
+		// ///////////////////////////////////////////////////////////////
+		// Custom variables from the urlConfig user configuration file 
+		// ///////////////////////////////////////////////////////////////
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        var code;
 		
         var onReady = function(){
 
@@ -112,44 +114,36 @@
                  }
             });
             
-			//            
-            // optionally set locale based on query string parameter
-            //
-            var curLang = OpenLayers.Util.getParameters()["locale"] || 'en';            
-            var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
-            
-            var query = location.search;        
+			// //////////////////////////////////////////////////////            
+            // Setting the locale based on query string parameter
+            // //////////////////////////////////////////////////////
+			var query = location.search;        
             if(query && query.substr(0,1) === "?"){
                 query = query.substring(1);
             }
             
             var url = Ext.urlDecode(query);        
-            code = url.locale;   
-
-            if(!code){
-                code = "en";
-            }
+            var code = url.locale || 'en';			
+            var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
             
-            var initialLanguageString;
-            
-            //        
-            //check if code is valid
-            //
-            if(code){
-                Ext.each(langData, function(rec){
-                    if(rec[0] === code.toLowerCase()){
-                        initialLanguageString = rec[1];
-                        return;
-                    }
-                });
-            }            
+            // //////////////////////////////////////////////////        
+            // Setting the initial language for the selector
+            // //////////////////////////////////////////////////
+			var initialLanguageString;					
+			Ext.each(langData, function(rec){
+				if(rec[0] === code.toLowerCase()){
+					initialLanguageString = rec[1];
+					return;
+				}
+			});
 			
-			      if (GeoExt.Lang) {
+			initialLanguageString = !initialLanguageString ? "English" : initialLanguageString;	
+			
+			// ////////////////////////////////////////////////////
+			// Setting the language code for the GeoExt tools
+			// ////////////////////////////////////////////////////
+			if (GeoExt.Lang) {
                 GeoExt.Lang.set(code);
-            }
-			
-            if(!initialLanguageString){
-                initialLanguageString = "English";
             }
             
             var languageSelector = new Ext.form.ComboBox({
@@ -168,39 +162,30 @@
                 width: 100,
                 listeners: {
                     beforeselect: function(cb, record, index){
-                       if(curLang == record.get('code'))
+					   var c = record.get('code');
+                       if(c && c == code)
                           return false; 
 					   else
-						  languageSelector.prevLang = curLang;
+						  languageSelector.prevLang = code;
                     },                    
                     select: function(cb, record, index) {         
                         
-                       var switchLang = function(buttonId, text, opt){
+                        var switchLang = function(buttonId, text, opt){
                             if(buttonId === 'ok'){
-                                var code = record.get('code');
-                                
-                                var query = location.search;        
-                                if(query && query.substr(0,1) === "?"){
-                                    query = query.substring(1);
-                                }                                    
-                                var url = Ext.urlDecode(query);
-
-                                if(code){
-                                    if (url.auth == 'true'){
-                                        location.replace(
-                                            location.pathname + '?locale=' + code + '&mapId=' + url.mapId + '&auth=true');
-                                    }else if (url.auth == 'false'){
-                                        location.replace(
-                                            location.pathname + '?locale=' + code + '&mapId=' + url.mapId + '&auth=false&fullScreen=true');
-                                    }else{
-                                        location.replace(
-                                            location.pathname + '?locale=' + code);                                    
-                                    }
-                                }
-                                
-                            }else{
-                                var code = record.get('code');
-																
+                                var c = record.get('code');
+								var u = location.pathname + '?locale=' + c;
+								
+								if(url.auth){
+									u += '&auth=' + url.auth;
+									if(url.auth == 'false')
+										u += '&fullScreen=true';
+								}
+								
+								if(url.mapId)
+									u += '&mapId=' + url.mapId;
+								
+								location.replace(u);                                
+                            }else{																
                                 if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
                                     cb.setValue('Français');
                                 }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
@@ -214,10 +199,10 @@
                         var switchLangActionTip = "Switch Language";
                         var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
                         
-                        if(curLang === 'fr'){
+                        if(code === 'fr'){
                             switchLangActionTip = "Changement de langue";
                             switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
-                        }else if(curLang === 'it'){
+                        }else if(code === 'it'){
                             switchLangActionTip = "Cambiamento Lingua";
                             switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
                         }
@@ -287,9 +272,9 @@
                 }]
             });
             
-            //
+            // /////////////////////////////////////////////////////////////
             // Parsing WMS servers Sources for getCapabilities operation
-            //
+            // /////////////////////////////////////////////////////////////
             var sources = "{" + 
                 "\"demo1\": {" +
                     "\"ptype\": \"gxp_wmssource\"," +
@@ -319,9 +304,8 @@
             for(var s=0; s<customSources.length; s++){ 
                 var src = Ext.util.JSON.encode(customSources[s]);
                 sources += "\"source" + s + "\":" + src;
-                //sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
                  
-                 if(s + 1 < customSources.length)
+                if(s + 1 < customSources.length)
                     sources += ",";
             }
              
@@ -367,7 +351,7 @@
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                //printService:"http://192.168.1.132:8080/geoserver/pdf/",
+                //printService:"http://localhost:8080/geoserver/pdf/",
                 //mapTitle: (code === 'en' ? 'View' : (code === 'fr' ? 'Veu' : 'Vista')),
                 about: {
                     title: "Custom Map",
@@ -481,9 +465,9 @@
 					  geoStoreBaseURL = serverConfig.geoStoreBase;                  
 					  customSources = serverConfig.gsSources;
 
-					  //      
+					  // ///////////////////////////////////////////////  
 					  // Run the application when browser is ready
-					  //
+					  // ///////////////////////////////////////////////
 					  Ext.onReady(onReady);
 				  }
 			  },
