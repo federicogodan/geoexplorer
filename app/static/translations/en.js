@@ -27,7 +27,8 @@ GeoExt.Lang.add("en", {
 		helpButtonTooltip: "Help",
         searchTabTitle : "Search",
         viewTabTitle : "View",
-        portalTabTitle : "Portal"
+        portalTabTitle : "Portal",
+		markerPopupTitle: "Details"
     },
     
     "GeoExplorer.Composer.prototype": {
