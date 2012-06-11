@@ -71,10 +71,10 @@
 					}
 				}
             }
-                      
+                    
 			// ///////////////////////////////////////////////////////////////
 			// Custom variables from the urlConfig user configuration file 
-			// ///////////////////////////////////////////////////////////////					  
+			// ///////////////////////////////////////////////////////////////					
             var proxy; 
             var geoStoreBaseURL;        
             var customSources;
@@ -113,7 +113,7 @@
 				}
 				
 				var url = Ext.urlDecode(query);        
-				var code = url.locale || 'en';			
+				var code = url.locale || 'it';			
 				var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
 				
 				// //////////////////////////////////////////////////        
@@ -127,7 +127,7 @@
 					}
 				});
 			
-				initialLanguageString = !initialLanguageString ? "English" : initialLanguageString;	
+				initialLanguageString = !initialLanguageString ? "Italiano" : initialLanguageString;	
 				
 				// ////////////////////////////////////////////////////
 				// Setting the language code for the GeoExt tools
@@ -173,9 +173,10 @@
 					}
                 });
 
-                var appTabs = new Ext.TabPanel({
+                var appTabs = new Ext.Panel({
                     region: 'center',
                     border : false,
+					layout: 'fit',
                     id : 'appTabs',
                     enableTabScroll: true
                 });         
@@ -271,6 +272,12 @@
                     }, 
                     'ready' : function(){
                         app.modified = false;
+						
+						/*app.mapPanel.map.events.register('zoomend',this, function(){
+						    var box = app.mapPanel.map.getExtent();				
+							alert(box);
+						});*/
+						
 						if(bbox)
 							app.mapPanel.map.zoomToExtent(bbox);
                     }
@@ -278,8 +285,8 @@
             };			
                 
 			Ext.Ajax.request({
-				  //url: "/MapComposer/urlConfig.js",
-				  url: "/urlConfig.js",
+				  url: "/MapComposer/urlConfig.js",
+				  //url: "/urlConfig.js",
 				  method: 'GET',
 				  success: function(response, opts){      
 					  var serverConfig;    
