@@ -68,16 +68,19 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     userConfigLoadMsg: "Error reading user map context",
     
     viewTabTitle : "View",    
+	
+	markerPopupTitle: "Details",
     // End i18n.
     
     //properties for style markers
 	markerTemplateDefault: {
 		label: "${label}",
 		fontWeight: "bold",
+		fontSize: "10px",
 		fontColor: "#FFFFFF",
-		backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
-		backgroundXOffset: -7,
-		backgroundYOffset: -7,
+		//backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
+		//backgroundXOffset: -7,
+		//backgroundYOffset: -7,
 		// Set the z-indexes of both graphics to make sure the background
         // graphics stay in the background
         graphicZIndex: 11,
@@ -87,11 +90,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	markerTemplateSelected: {
 		label: "${label}",
 		fontWeight: "bold",
+		fontSize: "10px",
 		fontColor: "#FFFFFF",
-		externalGraphic: 'theme/app/img/markers/default_information_select.png',
-		backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
-		backgroundXOffset: -7,
-		backgroundYOffset: -7,
+		//backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
+		//backgroundXOffset: -7,
+		//backgroundYOffset: -7,
 		// Set the z-indexes of both graphics to make sure the background
         // graphics stay in the background
         graphicZIndex: 11,
@@ -100,6 +103,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     
 	externalGraphicMarkers: 'theme/app/img/markers/default_information.png',
     externalGraphicMarkersHighlights: 'theme/app/img/markers/default_information_highlights.png',
+	
+	externalGraphicClusterMarkers: 'theme/app/img/markers/marker-r.png',
+	externalGraphicClusterHighlights: 'theme/app/img/markers/marker-b.png',
+		
+	markerSelectionIcon: 'theme/app/img/markers/default_information_select.png',
+	markerSelectionClusterIcon: 'theme/app/img/markers/marker-y.png',
+	
+    markerClusterShadow: 'theme/app/img/markers/marker-c-shadow.png',
+	markerShadow: 'theme/app/img/markers/markers_shadow.png',
     
     //properties for style tracks
 	trackStyle: {
@@ -150,7 +162,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         // First row in each object is needed to correctly render a tool in the treeview
         // of the embed map dialog. TODO: make this more flexible so this is not needed.
         config.viewerTools = [
-                {
+            {
                 leaf: true, 
                 text: gxp.plugins.ZoomToExtent.prototype.tooltip, 
                 checked: true, 
@@ -207,7 +219,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 ptype: "gxp_georeferences"
             }, {
                 leaf: true,
-                text: "Google Geocoder",//gxp.plugins.GoogleGeocoder.prototype.tooltip,
+                text: "Google Geocoder",
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googlegeocoder",
@@ -591,13 +603,37 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         var defaultMarker = this.externalGraphicMarkers;
         var highlightsMarker = this.externalGraphicMarkersHighlights;
-
+		
+		var defaultClusterMarker = this.externalGraphicClusterMarkers;
+		var highlightsClusterMarker = this.externalGraphicClusterHighlights
+		
+		var defaultSelection = this.markerSelectionIcon;
+		var clusterSelection = this.markerSelectionClusterIcon;
+		
+		var defaultShadow = this.markerShadow;
+		var clusterShadow = this.markerClusterShadow;
+		
         var context = {
             getMarkerIcon : function (ft){
-                if(ft.attributes.highlights=="true") 
-                    return highlightsMarker; 
-                else 
-                    return defaultMarker; 
+                if(ft.attributes.highlights) 
+					if(ft.attributes.cluster)
+						return highlightsClusterMarker;
+					else	
+						return highlightsMarker; 
+                else{
+					if(ft.attributes.cluster)
+						return defaultClusterMarker; 
+					else 
+						return defaultMarker; 
+				} 
+                    
+            },
+			
+			getMarkerSelectionIcon : function (ft){
+				if(ft.attributes.cluster)
+					return clusterSelection;
+				else	
+					return defaultSelection;                     
             },
 			
 			getMarkerLabel : function(ft){
@@ -610,43 +646,101 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			
 			getRadius : function(ft){
 			    var label;
+				var radius;
+				
 				try{
 					label = parseInt(ft.attributes.label);
 				}catch(e){
-					return 15; 
+					radius = 12;
 				} 
-				
+		
 				var cluster = ft.attributes.cluster;
-				
-			    if(label && cluster){
-					if(label > 0 && label <= 10){
-						return 15;
-					}else if(label > 10 && label <= 25){
-						return 20;
-					}else if(label > 26 && label <= 50){
-						return 25;
-					}else if(label > 51 && label <= 100){
-						return 30;
-					}else if(label > 101 && label <= 200){
-						return 35;
-					}else if(label > 201 && label <= 400){
-						return 40;
-					}else if(label > 401 && label <= 800){
-						return 45;
-					}else if(label > 801 && label <= 1600){
-						return 50;
-					}else if(label > 1600){
-						return 55;
+									
+				radius = radius ? radius : 12;
+				if(label && cluster){
+					if(label > 0 && label <= 200){
+						radius = 12;
+					}else if(label > 201 && label <= 500){
+						radius = 16;
+					}else if(label > 501 && label <= 1000){
+						radius = 18;
+					}else if(label > 1001 && label <= 2000){
+						radius = 20;
+					}else if(label > 2001 && label <= 4000){
+						radius = 22;
+					}else if(label > 4001 && label <= 8000){
+						radius = 24;
+					}else if(label > 8001 && label <= 16000){
+						radius = 26;
+					}else if(label > 16001 && label <= 32000){
+						radius = 28;
+					}else if(label > 32001){
+						radius = 32;
 					}
-				}else {
-					return 15; 
 				}
-			}
+				
+				return radius;
+			},
+			
+			getBackgroundOffset : function(ft){
+			    var label;
+				var radius;
+				
+				try{
+					label = parseInt(ft.attributes.label);
+				}catch(e){
+					radius = 12;
+				} 
+		
+				var cluster = ft.attributes.cluster;
+									
+				radius = radius ? radius : 12;
+				if(label && cluster){
+					if(label > 0 && label <= 200){
+						radius = 12;
+					}else if(label > 201 && label <= 500){
+						radius = 16;
+					}else if(label > 501 && label <= 1000){
+						radius = 18;
+					}else if(label > 1001 && label <= 2000){
+						radius = 20;
+					}else if(label > 2001 && label <= 4000){
+						radius = 22;
+					}else if(label > 4001 && label <= 8000){
+						radius = 24;
+					}else if(label > 8001 && label <= 16000){
+						radius = 26;
+					}else if(label > 16001 && label <= 32000){
+						radius = 28;
+					}else if(label > 32001){
+						radius = 32;
+					}
+				}
+				
+				var offset = -1*(radius/2);
+				
+				return offset;
+			},
+			
+			getMarkerShadowIcon: function (ft){
+				if(ft.attributes.cluster)
+					return clusterShadow;
+				else				    
+					return defaultShadow;     			
+            }
         };
         
 		this.markerTemplateDefault.externalGraphic = "${getMarkerIcon}";
 		this.markerTemplateDefault.pointRadius = "${getRadius}";
-		this.markerTemplateSelected.pointRadius = "${getRadius}";
+		this.markerTemplateSelected.pointRadius = "${getRadius}";		
+		this.markerTemplateSelected.externalGraphic = "${getMarkerSelectionIcon}";
+		this.markerTemplateDefault.backgroundXOffset = "${getBackgroundOffset}";
+		this.markerTemplateDefault.backgroundYOffset = "${getBackgroundOffset}";
+		this.markerTemplateSelected.backgroundXOffset = "${getBackgroundOffset}";	
+		this.markerTemplateSelected.backgroundYOffset = "${getBackgroundOffset}";
+		
+		this.markerTemplateDefault.backgroundGraphic = "${getMarkerShadowIcon}";
+		this.markerTemplateSelected.backgroundGraphic = "${getMarkerShadowIcon}";
 		
         var styleMap = new OpenLayers.StyleMap({ 
             "default" : new OpenLayers.Style(this.markerTemplateDefault, {context:context}),
@@ -694,17 +788,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			});
             
             // Create the popups for markers
+			var popupTitle = this.markerPopupTitle;
             function onFeatureSelect(feature) {
                 if (feature.attributes.html){
                     new GeoExt.Popup({
-                        title: "Marker Info",
-                        width: 400,
-                        height: 300,
+                        title: popupTitle,
+                        width: 200,
+                        height: 100,
                         layout: "fit",
                         map: app.mapPanel,
                         location: feature.geometry.getBounds().getCenterLonLat(),
                         items: [{   
-                            title: feature.fid,   
+                            title: feature.fid,
                             layout: "fit",
                             bodyStyle: 'padding:10px;background-color:#F5F5DC',
                             html: feature.attributes.html,

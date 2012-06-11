@@ -28,7 +28,8 @@ GeoExt.Lang.add("fr", {
 		helpButtonTooltip: "Aide",
         searchTabTitle : "Chercher",
         viewTabTitle : "Vue",
-        portalTabTitle : "Portail"
+        portalTabTitle : "Portail",
+		markerPopupTitle: "Détails"
     },  
 
     "GeoExplorer.Composer.prototype": {
