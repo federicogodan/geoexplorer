@@ -46,59 +46,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 
     constructor: function(config) {        
         config.tools = [
-            {
-                ptype: "gxp_layertree",
-                outputConfig: {
-                    id: "layertree"
-                },
-                outputTarget: "tree"
-            }, {
-                ptype: "gxp_legend",
-                outputTarget: 'legend',
-                outputConfig: {
-                    autoScroll: true
-                },
-                legendConfig : {
-                    legendPanelId : 'legendPanel',
-                    defaults: {
-                        style: 'padding:5px',                  
-                        baseParams: {
-                            LEGEND_OPTIONS: 'forceLabels:on;fontSize:10',
-                            WIDTH: 12, HEIGHT: 12
-                        }
-                    }
-                }
-            }, {
-                ptype: "gxp_addlayers",
-                actionTarget: "tree.tbar",
-                upload: true
-            }, {
-                ptype: "gxp_removelayer",
-                actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
-                ptype: "gxp_removeoverlays",
-                actionTarget: "tree.tbar"
-            }, {
-                ptype: "gxp_addgroup",
-                actionTarget: "tree.tbar"
-            }, {
-                ptype: "gxp_removegroup",
-                actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
-                ptype: "gxp_groupproperties",
-                actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
-                ptype: "gxp_layerproperties",
-                actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
-                ptype: "gxp_zoomtolayerextent",
-                actionTarget: {target: "layertree.contextMenu", index: 0}
-            },{
-                ptype:"gxp_geonetworksearch",
-                actionTarget:[
-                   "layertree.contextMenu"
-                ]
-            }, {
+
+             {
                 ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 15}
             }, {
@@ -144,6 +93,26 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 legendPanelId: 'legendPanel',
                 actionTarget: {target: "paneltbar", index: 4}
             }*/
+			,{
+                ptype: "gxp_selectcountries",
+				toggleGroup: this.toggleGroup,
+				actionTarget:"countries.tbar"
+			},{
+				ptype: "gxp_removecountries",
+				actionTarget:"countries.tbar"
+			},{
+                ptype: "gxp_countrylist",
+				outputTarget:"countries"
+			},{
+				xtype: "fill",
+				actionTarget:"countries.tbar"
+			
+			},
+			{
+				ptype: "gxp_computestats",
+				actionTarget:"attributes.bbar"
+			}
+			
         ];
 
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
@@ -162,7 +131,15 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
+		var layerChooser = new Ext.Button({
+			tooltip: 'Layer Switcher',
+			iconCls: 'icon-layer-switcher',
+			menu: new gxp.menu.LayerMenu({
+				layers: this.mapPanel.layers
+			})
+		});
 
+		tools.unshift(layerChooser);
         if(!this.fScreen){
             var fullScreen = new Ext.Button({
                 text: this.fullScreenText,
@@ -171,24 +148,16 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 enableToggle: true,
                 handler: function(button, evt){
                     if(button.pressed){
-                        Ext.getCmp('tree').findParentByType('panel').collapse();
+                        Ext.getCmp('west').collapse();
                     } else {
-                        Ext.getCmp('tree').findParentByType('panel').expand();
+                        Ext.getCmp('west').expand();
                     }
                 }
             });            
                             
             tools.unshift(fullScreen);
         }else{
-			var layerChooser = new Ext.Button({
-				tooltip: 'Layer Switcher',
-				iconCls: 'icon-layer-switcher',
-				menu: new gxp.menu.LayerMenu({
-					layers: this.mapPanel.layers
-				})
-			});
 
-			tools.unshift(layerChooser);
 		}
         
         if(this.cswconfig){
@@ -437,7 +406,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             
             tools.push('-');
         }
-
+		/*
         tools.push(new Ext.Button({
             tooltip: this.saveMapText,
             handler: function() {
@@ -527,7 +496,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             scope: this,
             iconCls: "icon-load"
         }));
-
+	
         tools.push(new Ext.Button({
             tooltip: this.exportMapText,
             //disabled: true,
@@ -540,7 +509,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }));
 
         tools.push('-');
-        
+        */
         return tools;
 
     },

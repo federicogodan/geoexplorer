@@ -150,7 +150,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         // First row in each object is needed to correctly render a tool in the treeview
         // of the embed map dialog. TODO: make this more flexible so this is not needed.
         config.viewerTools = [
-                {
+			{
                 leaf: true, 
                 text: gxp.plugins.ZoomToExtent.prototype.tooltip, 
                 checked: true, 
@@ -339,11 +339,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      * Create the various parts that compose the layout.
      */
     initPortal: function() {
-        
+        var sm = new Ext.grid.CheckboxSelectionModel();
+		
+		
         var westPanel = new Ext.Panel({
             border: false,
             layout: "border",
             id:'west',
+			title:'FRA Statistics',
             region: "west",
             width: 250,
             split: true,
@@ -351,15 +354,53 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             collapseMode: "mini",
             header: false,
             items: [
-                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
                 {
-                    region: 'south', xtype: "panel", layout: "fit", 
+					id: 'countries',
+					region: 'center',
+					autoScroll: true,
+					tbar: [],
+					border: false,
+					layout:'fit',
+					title: 'Countries'
+				}, 
+                {
+					
+					bbar:['->'],
+                    region: 'south', 
+					xtype: "panel", 
+					layout: "fit", 
                     collapsible : true, collapseMode:  'mini',
                     split : true, hideCollapseTool: true,
-                    border: false, height: 200, id: 'legend'
-                }
+                    border: false, height: 400, id: 'attributes',
+					items:[
+						new Ext.grid.GridPanel({
+							enableHdMenu:false,
+							id:'attributeListStore',
+							viewConfig: {forceFit: true,},
+							store: new Ext.data.ArrayStore({
+								fields:Ext.data.Record.create([{name:'name',mapping:'name'},{name:'label',mapping:'label'}]),
+								data: gxp.data.VisibleAttributeModel
+							}),
+							sm:sm,
+							
+							cm:  new Ext.grid.ColumnModel({
+									defaults: {
+										width: 120,
+										sortable: true
+									},
+									columns: [
+										sm,
+										
+										{id: 'label', header: "Attribute"}
+										
+									]
+							})
+						})
+					]
+				}
             ]
         });
+		
         
         this.toolbar = new Ext.Toolbar({
             disabled: true,
