@@ -375,7 +375,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					items:[
 						new Ext.grid.GridPanel({
 							enableHdMenu:false,
-							id:'attributeListStore',
+							id:'attributeList',
 							viewConfig: {forceFit: true,},
 							store: new Ext.data.ArrayStore({
 								fields:Ext.data.Record.create([{name:'name',mapping:'name'},{name:'label',mapping:'label'}]),
