@@ -365,7 +365,48 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				}, 
                 {
 					
-					bbar:['->'],
+					bbar:[
+			
+				
+						new Ext.SplitButton({
+							text: 'Options',
+							
+							//handler: optionsHandler, // handle a click on the button itself
+							menu: new Ext.menu.Menu({
+								id: 'chartOptionMenu',
+								items: [
+									{
+										id:'stackCountriesOption',
+										text: 'Stack Countries',
+										checked: true,       // when checked has a boolean value, it is assumed to be a CheckItem
+										//checkHandler: onItemCheck
+									},
+									{
+										id:'groupByAttributeOption',
+										text: 'Group by Attribute', 
+										name: 'attributeLabel', 
+										checked: true, 
+										group: 'group'
+									},
+									{
+										id:'groupByYearOption',
+										text: 'Group by Year',
+										name: 'groupByYear', 
+										group: 'group', 
+										checked: false
+									}
+
+										
+									
+									
+								]
+							})
+						}),
+							
+							
+					
+					
+					'->'],
                     region: 'south', 
 					xtype: "panel", 
 					layout: "fit", 
