@@ -378,8 +378,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 									{
 										id:'stackCountriesOption',
 										text: 'Stack Countries',
-										checked: true,       // when checked has a boolean value, it is assumed to be a CheckItem
-										//checkHandler: onItemCheck
+										checked: true,
+										
 									},
 									{
 										id:'groupByAttributeOption',
@@ -417,7 +417,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 						new Ext.grid.GridPanel({
 							enableHdMenu:false,
 							id:'attributeList',
-							viewConfig: {forceFit: true,},
+							viewConfig: {forceFit: true},
 							store: new Ext.data.ArrayStore({
 								fields:Ext.data.Record.create([{name:'name',mapping:'name'},{name:'label',mapping:'label'}]),
 								data: gxp.data.VisibleAttributeModel
@@ -431,7 +431,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 									},
 									columns: [
 										sm,
-										
 										{id: 'label', header: "Attribute"}
 										
 									]
