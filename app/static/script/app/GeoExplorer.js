@@ -357,7 +357,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 {
 					id: 'countries',
 					region: 'center',
-					autoScroll: true,
 					tbar: [],
 					border: false,
 					layout:'fit',
