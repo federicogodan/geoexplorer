@@ -94,6 +94,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 4}
             }*/
 			,{
+                ptype: "gxp_countrylist",
+				outputTarget:"countries"
+			},{
                 ptype: "gxp_selectcountries",
 				toggleGroup: this.toggleGroup,
 				actionTarget:"countries.tbar"
@@ -101,14 +104,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				ptype: "gxp_removecountries",
 				actionTarget:"countries.tbar"
 			},{
-                ptype: "gxp_countrylist",
-				outputTarget:"countries"
-			},{
-				xtype: "fill",
-				actionTarget:"countries.tbar"
-			
-			},
-			{
 				ptype: "gxp_computestats",
 				actionTarget:"attributes.bbar"
 			}

@@ -366,8 +366,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					
 					bbar:[
 			
-				
 						new Ext.SplitButton({
+						iconCls: 'chart-edit-icon',
 							text: 'Options',
 							
 							//handler: optionsHandler, // handle a click on the button itself
@@ -377,7 +377,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 									{
 										id:'stackCountriesOption',
 										text: 'Stack Countries',
-										checked: true,
+										checked: true
 										
 									},
 									{
