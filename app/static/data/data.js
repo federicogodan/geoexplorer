@@ -1,3 +1,47 @@
+var risk_data = {
+	coveragesSettings:  [
+		{
+			  name: "gebco_sea",
+			  min: -8000,
+			  max: 0
+		},
+		{
+			  name: "slope",
+			  min: 0,
+			  max: 1
+		},
+		{
+			  name: "aspect",
+			  min: 0,
+			  max: 360
+		},
+		{
+			  name: "eucdist_1000m",
+			  min: 0,
+			  max: 1
+		},  
+		{
+			  name: "spring2007",
+			  min: 0,
+			  max: 63
+		},
+		{
+			  name: "spring2008",
+			  min: 0,
+			  max: 63
+		},
+		{
+			  name: "spring2009",
+			  min: 0,
+			  max: 63
+		}
+	],
+    urlParameters: {
+		capabilitiesURL: "http://localhost:8080/geoserver",
+		proxy: "/proxy/?url=" // If not defined the app proxy is used
+	}
+};
+
 var georeferences_data = [
     ["AFGHANISTAN" , "60.5054,29.612733,74.93195,38.538967"],
     ["ALBANIA" , "19.29795,39.713733,21.072,42.7006"],

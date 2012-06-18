@@ -134,6 +134,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputConfig: {
                     id: "attributepanel"
                 },
+				defaultBuilder: {
+					baseURL: config.geoserverURL,
+					proxy: config.proxy,
+					allowBlank: true,
+					allowGroups: true
+				},
                 outputTarget: "idacontrol"
             }, /*{
                 ptype: "gxp_print",
@@ -174,12 +180,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     if(button.pressed){
                         Ext.getCmp('west').collapse();
                         Ext.getCmp('east').collapse();
-                        Ext.getCmp('south').collapse();
+                        //Ext.getCmp('south').collapse();
                         Ext.getCmp('fdhHeader').collapse();
                     } else {
                         Ext.getCmp('west').expand();
                         Ext.getCmp('east').expand();
-                        Ext.getCmp('south').expand();
+                        //Ext.getCmp('south').expand();
                         Ext.getCmp('fdhHeader').expand();
                     }
                 }

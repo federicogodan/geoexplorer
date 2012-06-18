@@ -46,8 +46,8 @@
 	<!-- Authorization encoding -->
 	<script type="text/javascript" src="auth/base64.js"></script>
 	
-	<!-- georeferences data  -->
-    <script type="text/javascript" src="data/georeferences.js"></script>
+	<!-- data  -->
+	<script type="text/javascript" src="data/data.js"></script>
 	
     <script>
         
@@ -150,7 +150,7 @@
                 });
             }            
 			
-			      if (GeoExt.Lang) {
+		    if (GeoExt.Lang) {
                 GeoExt.Lang.set(code);
             }
 			
@@ -401,6 +401,7 @@
                     contact: "<a href='#'>#</a>."
                 },
                 georeferences: georeferences_data,
+				riskData: risk_data,
                 sources: sources,
                 map: {
 					projection: "EPSG:4326",
@@ -429,7 +430,7 @@
                         source: "ida",
                         title: "Bathymetry",
                         name: "nurc:gebco_sea",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -438,7 +439,7 @@
                         source: "ida",
                         title: "DEM slope",
                         name: "nurc:slope",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -447,7 +448,7 @@
                         source: "ida",
                         title: "DEM aspect",
                         name: "nurc:aspect",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -456,7 +457,7 @@
                         source: "ida",
                         title: "Distance 1000 m",
                         name: "nurc:eucdist_1000m",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -465,7 +466,7 @@
                         source: "ida",
                         title: "Chl spring 2007",
                         name: "nurc:spring2007",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -474,7 +475,7 @@
                         source: "ida",
                         title: "Chl spring 2008",
                         name: "nurc:spring2008",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -483,7 +484,7 @@
                         source: "ida",
                         title: "Chl spring 2009",
                         name: "nurc:spring2009",
-						format: "image/jpeg",
+						//format: "image/jpeg",
 						transparent: false,
                         selected: false,
                         visibility: false,
@@ -526,69 +527,8 @@
                     }
                 },
                 
-                'ready' : function(){                     
-                     /*var mousePositionControl = new OpenLayers.Control.MousePosition();
-                     
-                     // ////////////////////////////////////////////
-                     // Overridding mouse position redraw function
-                     // ////////////////////////////////////////////
-                     
-                     mousePositionControl.formatCoords = function (base) {
-                         var t, t2;
-                         var degrees = Math.floor(base);
-                         var minutes = Math.floor(t = ( base - degrees ) * 60);
-                         var seconds = Math.floor(t2 = ( t - minutes ) * 6000);
-                         seconds = seconds / 100.00;
-                         return ("" +degrees+ "\u00B0 "+minutes +"\u0027 "+seconds+"\u0022");
-                     };
-                     
-                     mousePositionControl.redraw = function(evt) {
-                        var lonLat;
-
-                        if (evt == null) {
-                            this.reset();
-                            return;
-                        } else {
-                            if (this.lastXy == null ||
-                                Math.abs(evt.xy.x - this.lastXy.x) > this.granularity ||
-                                Math.abs(evt.xy.y - this.lastXy.y) > this.granularity)
-                            {
-                                this.lastXy = evt.xy;
-                                return;
-                            }
-
-                            lonLat = this.map.getLonLatFromPixel(evt.xy);
-                            if (!lonLat) { 
-                                // map has not yet been properly initialized
-                                return;
-                            }    
-                            if (this.displayProjection) {
-                                lonLat.transform(this.map.getProjectionObject(), 
-                                                 this.displayProjection );
-                            }      
-                            this.lastXy = evt.xy;
-                        }
-                        
-                        var newHtml;
-                        if (this.map.units == "degrees") {
-                            newHtml =  this.formatCoords(lonLat.lon)  + this.separator +
-                            this.formatCoords(lonLat.lat);
-                        }else{
-                           var digits = parseInt(this.numdigits);
-                            newHtml =
-                                this.prefix +
-                                lonLat.lon.toFixed(digits) +
-                                this.separator +
-                                lonLat.lat.toFixed(digits) +
-                                this.suffix;
-                        }
-
-                        if (newHtml != this.element.innerHTML) {
-                            this.element.innerHTML = newHtml;
-                        }
-                     };
-                     
-                     app.mapPanel.map.addControl(mousePositionControl);*/
+                'ready' : function(){    
+                     			
                 }    
             });
 		};			

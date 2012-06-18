@@ -352,6 +352,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             disabled.each(function(item) {
                 item.disable();
             });
+			
+			Ext.getCmp('south').collapse(true);	
         });
         
         var c = this;
@@ -435,7 +437,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "border",
             id:'east',
             region: "east",
-            width: 450,
+            width: 455,
             split: true,
             collapsible: true,
             collapseMode: "mini",
