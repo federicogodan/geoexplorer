@@ -1,10 +1,6 @@
 {
-   "geoStoreBase":"http://localhost:8080/geostore/rest/",
-   "proxy":"/proxy/?url=",
+   "geoStoreBase":"http://159.213.57.108/geostore/rest/",
+   "proxy":"/http_proxy/proxy/?url=",
    "gsSources":[
-      {
-         "url":"http://159.213.57.104/geoserver_clima/ows?namespace=NDVI",
-         "title":"LaMMA NDVI"
-      }
    ]
 }

@@ -1,4 +1,4 @@
-    <!-- OpenLayers resources -->
+﻿    <!-- OpenLayers resources -->
     <link rel="stylesheet" type="text/css" href="../externals/openlayers/theme/default/style.css">
 
     <!-- GeoExt resources -->
@@ -34,45 +34,50 @@
         
         var modified = false; var mapIdentifier; var authorization; var fullScreen; var models;
 
-        //
-        // Parsing the request to get the parameters
-        //
+		// //////////////////////////////////////////////////
+		// Parsing the request to get the parameters
+		// //////////////////////////////////////////////////
         var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
-        
         for (var j=0; j < params.length; j++) {
-          var param = params[j].split("=");
-          switch ( param[0] ) {
-            case "mapId"    : 
-                            try{
-                                mapIdentifier = parseInt(param[1]);
-                            }catch(e){
-                                mapIdentifier = -1;
-                            } 
-                            break;
-            case "auth" : 
-                            if(param[1] == 'true') 
-                                authorization = true; 
-                            else 
-                                authorization = false; 
-                            break;
-            case "fullScreen" : 
-                            if(param[1] == 'true') 
-                                fullScreen = true; 
-                            else 
-                                fullScreen = false; 
-                            break;
-            default : 
-                            mapIdentifier = -1;
-                            authorization = false;
-                            fullScreen = false; 
-          }
+			var param = params[j].split("=");
+			if(param[0]){
+				switch ( param[0] ) {
+					case "mapId": 
+									try{
+										mapIdentifier = parseInt(param[1]);
+									}catch(e){
+										mapIdentifier = -1;
+									} 
+									break;
+					case "auth" : 
+									if(param[1] == 'true') 
+										authorization = true; 
+									else 
+										authorization = false; 
+									break;
+					case "fullScreen" : 
+									if(param[1] == 'true') 
+										fullScreen = true; 
+									else 
+										fullScreen = false; 
+									break;
+					default :       
+									mapIdentifier = -1;
+									authorization = false;
+									fullScreen = false; 
+				}
+			}
         }
-                    
+		
+		// ///////////////////////////////////////////////////////////////
+		// Custom variables from the urlConfig user configuration file 
+		// ///////////////////////////////////////////////////////////////
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
+		
         var onReady = function(){
-       // Ext.onReady(function(){
+
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
                         return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
@@ -96,14 +101,109 @@
                  }
             });
             
-        var curLang = OpenLayers.Util.getParameters()["locale"] || GeoExt.Lang.locale || 'it';
+			// //////////////////////////////////////////////////////            
+            // Setting the locale based on query string parameter
+            // //////////////////////////////////////////////////////
+            var query = location.search;        
+            if(query && query.substr(0,1) === "?"){
+                query = query.substring(1);
+            }
 
-        var availLanguages = ['it'];
-        var gnLangStr = curLang.substr(0,2);
-        
-        if(availLanguages.indexOf(gnLangStr) < 0){
-            gnLangStr = 'it';
-        }
+            var url = Ext.urlDecode(query);
+            var code = url.locale || 'en';
+            var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
+
+            // //////////////////////////////////////////////////        
+            // Setting the initial language for the selector
+            // //////////////////////////////////////////////////
+			var initialLanguageString;					
+			Ext.each(langData, function(rec){
+				if(rec[0] === code.toLowerCase()){
+					initialLanguageString = rec[1];
+					return;
+				}
+			});
+			
+			initialLanguageString = !initialLanguageString ? "English" : initialLanguageString;	
+			
+			// ////////////////////////////////////////////////////
+			// Setting the language code for the GeoExt tools
+			// ////////////////////////////////////////////////////
+			if (GeoExt.Lang) {
+                GeoExt.Lang.set(code);
+            }
+			
+            var languageSelector = new Ext.form.ComboBox({
+                store: new Ext.data.ArrayStore({
+                    fields: ['code', 'name'],
+                    data :  langData
+                }),
+                displayField: 'name',
+                typeAhead: true,
+                mode: 'local',
+                forceSelection: true,
+                triggerAction: 'all',
+                emptyText: initialLanguageString,
+                selectOnFocus:false,
+                editable: false,
+                width: 100,
+                listeners: {
+                    beforeselect: function(cb, record, index){
+					   var c = record.get('code');
+                       if(c && c == code)
+                          return false; 
+					   else
+						  languageSelector.prevLang = code;
+                    },                    
+                    select: function(cb, record, index) {         
+                        
+                        var switchLang = function(buttonId, text, opt){
+                            if(buttonId === 'ok'){
+                                var c = record.get('code');
+								var u = location.pathname + '?locale=' + c;
+								
+								if(url.auth){
+									u += '&auth=' + url.auth;
+									if(url.auth == 'false')
+										u += '&fullScreen=true';
+								}
+								
+								if(url.mapId)
+									u += '&mapId=' + url.mapId;
+								
+								location.replace(u);                                
+                            }else{																
+                                if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
+                                    cb.setValue('Français');
+                                }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
+									cb.setValue('Italiano');
+								}else{
+                                    cb.setValue('English');
+                                }
+                            }
+                        };
+                        
+                        var switchLangActionTip = "Switch Language";
+                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
+                        
+                        if(code === 'fr'){
+                            switchLangActionTip = "Changement de langue";
+                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
+                        }else if(code === 'it'){
+                            switchLangActionTip = "Cambiamento Lingua";
+                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
+                        }
+                        
+                        Ext.Msg.show({
+                           title: switchLangActionTip,
+                           msg: switchLangConfirmationText,
+                           buttons: Ext.Msg.OKCANCEL,
+                           fn: switchLang,
+                           icon: Ext.MessageBox.QUESTION
+                        });  
+                    }
+                }
+            });
 
         var gnURL = 'http://159.213.57.108/geonetwork/srv/en/main.home';
         var gpURL = 'http://geoportale.lamma.rete.toscana.it';
@@ -128,7 +228,7 @@
             //
             var geoportalPanel = new Ext.Panel({
                 id: 'geoportalPanel',
-                title: GeoExplorer.prototype.homeTabTitle || 'Geoportal',
+                title: GeoExplorer.prototype.portalTabTitle || 'Geoportal',
                 layout:'fit', 
                 items: [ 
                     new Ext.ux.IFrameComponent({ 
@@ -152,7 +252,7 @@
 
         // proxy to search categories in geostore
         var proxyCategory =  new Ext.data.HttpProxy({
-            url: "http://localhost:8080/geostore/rest/categories/",
+            url: "http://159.213.57.108/geostore/rest/categories/",
             restful: true,
             method : 'POST',
             disableCaching: true,
@@ -162,7 +262,7 @@
             failure: function (result) {
                 Ext.Msg.show({
                     title: "Error",
-                    msg: "An error occurred during the search of categories: " + response.status,
+                    msg: "An error occurred during the search of categories: " + result.status,
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
                 });
@@ -202,6 +302,7 @@
                                 listeners: { 
                                     select: function(combo, record, index) {
                                         comboRuns.setValue('');
+                                        comboRuns.enable();
                                         comboRuns.getStore().reload();
                                     }
                                 }
@@ -219,7 +320,7 @@
             failure: function (result) {
                 Ext.Msg.show({
                     title: "Error",
-                    msg: "An error occurred during the search of resources: " + response.status,
+                    msg: "An error occurred during the search of resources: " + result.status,
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
                 });
@@ -270,7 +371,7 @@
         
         // method to dinamically search resource in geostore
         function getUrl(srcStr) {
-            var r = 'http://localhost:8080/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
+            var r = 'http://159.213.57.108/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
             return r;
         };
 
@@ -284,6 +385,7 @@
                                 //fieldLabel: 'Seleziona un Modello',
                                 valueField: 'id',
                                 listClass: 'x-combo-list-small',
+                                disabled: true,
                                 resizable: true,
                                 emptyText:'Seleziona un giorno',
                                 selectOnFocus:true,
@@ -346,35 +448,7 @@
                 }
             });    
         
-            var langData = [['it', 'Italiano']];
 
-            var query = location.search;        
-            if(query && query.substr(0,1) === "?"){
-                query = query.substring(1);
-            }
-            
-            var url = Ext.urlDecode(query);     
-            var code = url.locale;   
-
-            if(!code){
-                code = "it";
-            }
-            
-            var initialLanguageString;
-                    
-            //check if code is valid
-            if(code){
-                Ext.each(langData, function(rec){
-                    if(rec[0] === code.toLowerCase()){
-                        initialLanguageString = rec[1];
-                        return;
-                    }
-                });
-            }            
-            
-        if (GeoExt.Lang) {
-                GeoExt.Lang.set(code);
-            }
     
 
             var appViewport = new Ext.Viewport({
@@ -400,7 +474,7 @@
                         header : false,                    
                         items : [appTabs],                            
                         bbar : [
-                          poweredByGeoSol, ' ', aboutButton
+                          poweredByGeoSol, ' ', aboutButton, '->',languageSelector
                         ]
                     }]
             });
@@ -409,6 +483,10 @@
             // Parsing WMS servers Sources for getCapabilities operation
             //
             var sources = "{" + 
+                "\"LaMMA Stazioni\": {" +
+                        "\"ptype\": \"gxp_wmssource\"," +
+                        "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"" +
+                "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -423,13 +501,15 @@
                 "}," + 
                 "\"ol\": {" + 
                     "\"ptype\": \"gxp_olsource\"" + 
-                "}";
+                "}"; 
             
             if(customSources.length > 0)
                 sources += ",";
                 
-            for(var s=0; s<customSources.length; s++){   
-                 sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
+            for(var s=0; s<customSources.length; s++){ 
+                var src = Ext.util.JSON.encode(customSources[s]);
+                sources += "\"source" + s + "\":" + src;
+                //sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
                  
                  if(s + 1 < customSources.length)
                     sources += ",";
@@ -440,7 +520,7 @@
             try{
                 sources = Ext.util.JSON.decode(sources);
             }catch(e){
-                var sources = {
+                sources = {
                     mapquest: {
                         ptype: "gxp_mapquestsource"
                     },
@@ -462,7 +542,7 @@
                             TILED:false,
                             TILESORIGIN: "-20037508.34,-20037508.34"
                         },
-                        url:"http://172.16.1.139:8080/geoserver/ows?namespace=stazioni"
+                        url:"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni"
                     }
                 };
           
@@ -515,17 +595,17 @@
                         group: "background"
                     },{
                         source: "google",
-                        title: "Google Hybrid",
-                        name: "HYBRID",
-                        group: "background"
-                    },{
-                        source: "google",
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
+                    },{
+                        source: "google",
+                        title: "Google Hybrid",
+                        name: "HYBRID",
+                        group: "background"
                     }],
-                    center: [-1224514, 1291331],
-                    zoom: 6
+                    center: [1250000.000000, 5370000.000000],
+                    zoom: 5
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
@@ -543,8 +623,7 @@
             };            
             
       Ext.Ajax.request({
-          //url: "proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-          url: "/geoexplorer/urlConfig.js", //TEST
+          url: "/MapStore/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    

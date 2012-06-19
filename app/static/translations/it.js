@@ -14,21 +14,27 @@ GeoExt.Lang.add("it", {
         saveErrorText: "Problemi di salvataggio: ",
         bookmarkText: "URL del Segnalibro",
         permakinkText: "Permalink",
-        appInfoText: "GeoExplorer",
+        appInfoText: "Crediti",
         aboutText: "Riguardo GeoExplorer",
         mapInfoText: "Informazioni Mappa",
         descriptionText: "Descrizione",
         contactText: "Contatto",
         aboutThisMapText: "Approposito di questa Mappa",
-        searchTabTitle : "Metadati",
+        searchTabTitle : "Ricerca",
         viewTabTitle : "Vista",
-        homeTabTitle : "Portale"
+        portalTabTitle : "Portale"
     },
     
     "GeoExplorer.Composer.prototype": {
         loadMapText: "Importazione Mappa",
         saveMapText: "Esportazione Mappa",
-        toolsTitle: "Scegliere gli strumenti da includere nelal barra:",
+        exportMapText: "Pubblicazione Mappa",
+	    loadMapEmptyText: "Selezionare un file di contesto",
+		loadMapUploadText: "Caricamento in corso",
+		uploadText: "Caricamento",
+		loadMapWindowTitle: 'Form di Caricamento File',
+		loadMapErrorText:'Errore nel caricamento del file',
+        toolsTitle: "Scegliere gli strumenti da includere nella barra:",
         previewText: "Anteprima",
         backText: "Precedente",
         nextText: "Prossimo",
@@ -36,7 +42,16 @@ GeoExt.Lang.add("it", {
         loginErrorText: "Username o password invalidi.",
         userFieldText: "Utente",
         passwordFieldText: "Password",
-        fullScreenText: "Schermo Intero"
+        fullScreenText: "Schermo Intero",
+        cswMsg: 'Caricamento...',
+	    uploadWaitMsg: 'Caricamento del file di contesto...',
+		uploadErrorTitle: 'Errore di Caricamento',
+		uploadEmptyText: 'Seleziona un file di contesto',
+		uploadWinTitle: 'From di Caricamento',
+		cswFailureAddLayer: ' Il layer n on può essere aggiunto alla mappa',
+		uploadButtonText: 'Carica',
+        alertEmbedTitle: 'Attenzione',
+        alertEmbedText: "Salvare la mappa prima di utilizzare il tool 'Pubblicazione Mappa'"
     },
 
     "gxp.menu.LayerMenu.prototype": {
@@ -250,15 +265,16 @@ GeoExt.Lang.add("it", {
     
     "gxp.plugins.SaveDefaultContext.prototype": { 
 	    saveDefaultContextMenuText: "Salva il contesto",
-	    saveDefaultContextActionTip: "Salva il contesto",
+	    saveDefaultContextActionTip: "Salva il contesto della Mappa",
 	    contextSaveSuccessString: "Contesto salvato con successo",
-	    contextSaveFailString: "Contesto non salvato con successo"
+	    contextSaveFailString: "Contesto non salvato con successo",
+	    contextMsg: "Caricamento..."
     },
-
-    "gxp.plugins.FDHGeoCoder.prototype": {
+	
+    "gxp.plugins.GeoReferences.prototype": {
         initialText: "Seleziona un'area",
-        menuText: "FDH Geo Coding",
-        tooltip: "FDH Geo Coding"
+        menuText: "Geo Referimenti",
+        tooltip: "Geo Referimenti"
     },
 
     "gxp.plugins.ZoomBox.prototype":{
@@ -296,9 +312,64 @@ GeoExt.Lang.add("it", {
     },
 
     "gxp.plugins.Login.prototype":{
-	loginText: "Login",
-	loginErrorText: "Username o password invalidi.",
-	userFieldText: "Utente",
-	passwordFieldText: "Password"
+        loginText: "Login",
+        loginErrorText: "Username o password invalidi.",
+        userFieldText: "Utente",
+        passwordFieldText: "Password"
+    },
+
+    "gxp.plugins.Login.prototype":{
+      loginText: "Se connecter",
+          loginErrorText: "Nom d`utilisateur ou mot de passe incorrect",
+          userFieldText: "Utilisateur",
+          passwordFieldText: "Mot de passe"
+    },
+	
+    "gxp.plugins.FeatureGrid.prototype": {
+        displayFeatureText: "Visualizza in mappa",
+        firstPageTip: "Prima pagina",
+        previousPageTip: "Pagina precedente",
+        zoomPageExtentTip: "Zoom all'estensione della pagina",
+        nextPageTip: "Prossima pagina",
+        nextPageTip: "Ultima pagina",
+        totalMsg: "Totale: {0} righe"
+    },
+	
+    "gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Interrogazione",
+        queryMenuText: "Interrogazione livello",
+        queryActionTip: "Interrogazione il livello selezionato",
+        queryByLocationText: "Regione di Interesse",
+        currentTextText: "Estensione corrente",
+        queryByAttributesText: "Interrogazione per attributo",
+        queryMsg: "Interrogazione in corso...",
+        cancelButtonText: "Reimposta",
+        noFeaturesTitle: "Nessun Risultato",
+        noFeaturesMessage: "La tua ricerca non ha prodotto risultati.",
+        title: "Ricerca",
+        northLabel:"Nord",
+        westLabel:"Ovest",
+        eastLabel:"Est",
+        southLabel:"Sud",
+        setAoiText: "ImpostaROI",
+        setAoiTooltip: "Abilita il controllo SetBox per disegnare una ROI (BBOX) sulla mappa",
+        attributeEnablement: "Interrogazione per Attributo",
+        attributeEnablementMsg: "Tipo di ricerca invalido! Si deve prima selezionare il tipo 'Feature' e il layer vettoriale.",
+        searchType: "Impostazioni di base",
+        typeLabel: "Tipo",
+        featureLabel: "Max Features"
+    },
+    "gxp.EmbedMapDialog.prototype": {
+        publishMessage: "La mappa è pronta per essere pubblicata sul web! Basta copiare il seguente codice HTML per visualizzare la mappa nel proprio sito web:",
+        heightLabel: "Altezza",
+        widthLabel: "Larghezza",
+        mapSizeLabel: "Dimensione della Mappa",
+        miniSizeLabel: "Mini",
+        smallSizeLabel: "Piccola",
+        premiumSizeLabel: "Premium",
+        largeSizeLabel: "Grande"
+    },
+    "gxp.plugins.GoogleGeocoder.prototype": {
+        addMarkerTooltip: "Resetta Marker"
     }
 });
