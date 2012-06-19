@@ -197,14 +197,14 @@
                         };
                         
                         var switchLangActionTip = "Switch Language";
-                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
+                        var switchLangConfirmationText = "You are sure to change language? All current settings and selections will be lost";
                         
                         if(code === 'fr'){
                             switchLangActionTip = "Changement de langue";
-                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
+                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? Tous les paramètres et les sélections actuels seront perdues.";
                         }else if(code === 'it'){
                             switchLangActionTip = "Cambiamento Lingua";
-                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
+                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? Le selezioni e le impostazioni correnti saranno persi.";
                         }
                         
                         Ext.Msg.show({
@@ -255,17 +255,46 @@
                     window.open('http://geo-solutions.it/contact/', '_blank');
                 }
             });    
-			
+			var headerContent = [
+					'<div id="header" style="background-image: url(theme/app/img/bgimg.jpg);background-repeat-x:repeat">',
+					'<img src="theme/app/img/eurogeos/banner.png"  border="0" />' ,
+					'<img src="theme/app/img/eurogeos/fao.png" usemap="#IM_right-banner"  height="86" border="0" style="float:right;margin-right:20px"/> ',
+					//'</div>',
+					//'<map name="IM_left-banner">',
+					//'<area shape="rect" coords="0,6,72,75" href="http://www.fouta-djallon-programme.org/index.php?lang=en" alt="Fouta Djallon HighLands Integrated Natural Resources Management Project" title="Fouta Djallon HighLands Integrated Natural Resources Management Project"    />',
+					//'</map>',
+					//'<map name="IM_right-banner">',
+					//'<area shape="rect" coords="183,3,240,78" href="http://www.unep.org/" alt="United Nations Environment Programme" title="United Nations Environment Programme"    />',
+					//'<area shape="rect" coords="246,4,303,79" href="http://www.gefweb.org/" alt="Global Environment Facility" title="Global Environment Facility"    />',
+					//'<area shape="rect" coords="306,6,373,79" href="http://www.fao.org/" alt="Food and Agriculture Organization of the United Nations" title="Food and Agriculture Organization of the United Nations"    />',
+					//'</map>',
+					'</div>'
+				];
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout:'fit',
                 border:false,
-                items: [{
+                items: [
+					{
                     region : 'center',
                     layout : 'border',
                     border : false,
                     header : false,                    
-                    items : [appTabs],                            
+                    items : [{
+							border: false,
+							header: false,
+							html:  headerContent,
+							region: 'north',
+							collapsible: true,
+							collapseMode:  'mini',
+							hideCollapseTool: true,
+							split: true,
+							animCollapse : false,
+							minHeight: 86,
+							maxHeight: 86,
+							height: 86,
+							id : 'euroGeosHeader'
+						},appTabs],                            
                     bbar : [
                       poweredByGeoSol, ' ', aboutButton, '->',languageSelector
                     ]
@@ -402,6 +431,7 @@
                         ovestPanel.setDisabled();
                         ovestPanel.hide();
                         ovestPanel.collapse();
+						Ext.getCmp('euroGeosHeader').collapse();
                     }
                 }, 
                 'ready' : function(){

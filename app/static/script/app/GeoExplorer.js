@@ -411,7 +411,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					layout: "fit", 
                     collapsible : true, collapseMode:  'mini',
                     split : true, hideCollapseTool: true,
-                    border: false, height: 400, id: 'attributes',
+                    border: false, height: 250, id: 'attributes',
 					items:[
 						new Ext.grid.GridPanel({
 							enableHdMenu:false,
