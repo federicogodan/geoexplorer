@@ -27,7 +27,16 @@ GeoExt.Lang.add("en", {
 		helpButtonTooltip: "Help",
         searchTabTitle : "Search",
         viewTabTitle : "View",
-        portalTabTitle : "Portal"
+        portalTabTitle : "Portal",
+		//Statistics
+		OptionsText:'Options',  
+		groupByAttributeText:'Group by Attribute', 
+		groupByYearText:'Group by Year',
+		stackCountriesText: 'Stack Countries',
+		attributeText: 'Attribute',
+		countriesText: 'Countries',
+	
+	
     },
     
     "GeoExplorer.Composer.prototype": {
@@ -335,5 +344,26 @@ GeoExt.Lang.add("en", {
     },
     "gxp.plugins.GoogleGeocoder.prototype": {
         addMarkerTooltip: "Reset Marker"
-    }
+    },
+	"gxp.plugins.ComputeStatsAction.prototype":{
+		computeStatisticsActionText: "Compute Statistics",
+		computeStatsActionDialogTitle: "Statistics"
+	},
+	"gxp.plugins.RemoveCountries.prototype":{
+		 removeMenuText: "Remove All",
+		removeActionTip: "Remove All Countries",
+		removeActionConfirmTitle : 'Remove All Countries?',
+		removeActionConfirmText : 'Do you want to remove all the selected countries?'
+	},
+	"gxp.plugins.SelectCountries.prototype":{
+		enableSelectionTip: "Enable Country Selection",
+		enableSelectionText: "Enable Selection",
+		popupTitle: "Enable Selection of countries"	,
+		loadingMaskText: "Loading data...",
+
+	},
+	"gxp.plugins.CountryList.prototype":{
+		countryText: "Country"
+	}
+	
 });

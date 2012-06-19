@@ -67,6 +67,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
     
+	//Statistics
+	OptionsText:'Options',  
+	groupByAttributeText:'Group by Attribute', 
+	groupByYearText:'Group by Year',
+	stackCountriesText: 'Stack Countries',
+	attributeText: 'Attribute',
+	countriesText: 'Countries',
+	
     viewTabTitle : "View",    
     // End i18n.
     
@@ -360,7 +368,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					tbar: [],
 					border: false,
 					layout:'fit',
-					title: 'Countries'
+					title: this.countriesText
 				}, 
                 {
 					
@@ -368,28 +376,27 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			
 						new Ext.SplitButton({
 						iconCls: 'chart-edit-icon',
-							text: 'Options',
-							
+							text: this.OptionsText,
 							//handler: optionsHandler, // handle a click on the button itself
 							menu: new Ext.menu.Menu({
 								id: 'chartOptionMenu',
 								items: [
 									{
 										id:'stackCountriesOption',
-										text: 'Stack Countries',
+										text: this.stackCountriesText ,
 										checked: true
 										
 									},
 									{
 										id:'groupByAttributeOption',
-										text: 'Group by Attribute', 
+										text: this.groupByAttributeText,
 										name: 'attributeLabel', 
 										checked: true, 
 										group: 'group'
 									},
 									{
 										id:'groupByYearOption',
-										text: 'Group by Year',
+										text: this.groupByYearText,
 										name: 'groupByYear', 
 										group: 'group', 
 										checked: false
@@ -430,7 +437,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 									},
 									columns: [
 										sm,
-										{id: 'label', header: "Attribute"}
+										{id: 'label', header: this.attributeText}
 										
 									]
 							})
