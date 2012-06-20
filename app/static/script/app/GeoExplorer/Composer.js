@@ -147,7 +147,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 						Ext.getCmp('euroGeosHeader').collapse();
                     } else {
                         Ext.getCmp('west').expand();
-						Ext.getCmp('euroGeosHeader ').expand();
+						Ext.getCmp('euroGeosHeader').expand();
                     }
                 }
             });            

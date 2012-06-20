@@ -34,7 +34,7 @@ GeoExt.Lang.add("en", {
 		groupByYearText:'Group by Year',
 		stackCountriesText: 'Stack Countries',
 		attributeText: 'Attribute',
-		countriesText: 'Countries',
+		countriesText: 'Countries'
 	
 	
     },
@@ -359,7 +359,7 @@ GeoExt.Lang.add("en", {
 		enableSelectionTip: "Enable Country Selection",
 		enableSelectionText: "Enable Selection",
 		popupTitle: "Enable Selection of countries"	,
-		loadingMaskText: "Loading data...",
+		loadingMaskText: "Loading data..."
 
 	},
 	"gxp.plugins.CountryList.prototype":{
