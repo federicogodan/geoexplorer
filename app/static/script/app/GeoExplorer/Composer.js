@@ -126,7 +126,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
      */
     createTools: function() {
         var tools = GeoExplorer.Composer.superclass.createTools.apply(this, arguments);
-		var layerChooser = new Ext.Button({
+		/*var layerChooser = new Ext.Button({
 			tooltip: 'Layer Switcher',
 			iconCls: 'icon-layer-switcher',
 			menu: new gxp.menu.LayerMenu({
@@ -135,6 +135,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 		});
 
 		tools.unshift(layerChooser);
+		*/
         if(!this.fScreen){
             var fullScreen = new Ext.Button({
                 text: this.fullScreenText,
