@@ -381,7 +381,10 @@ GeoExt.Lang.add("it", {
     },
 	"gxp.plugins.ComputeStatsAction.prototype":{
 		computeStatisticsActionText: "Computa Statistiche",
-		computeStatsActionDialogTitle: "Statistiche"
+		computeStatsActionDialogTitle: "Statistiche",
+		computeStatsNoDataWarnText : "Non ci sono dati sufficienti sui paesi selezionati per generare i grafici.",
+		computeStatsNoDataWarnTitle : "Dati non sufficienti."
+
 	},
 	"gxp.plugins.RemoveCountries.prototype":{
 		 removeMenuText: "Rimuovi tutti",
