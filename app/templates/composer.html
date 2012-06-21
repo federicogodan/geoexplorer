@@ -399,9 +399,11 @@
                     ],
                     layers: [{
                         source: "eurogeos",
-                        title: "World Blue Marble small",
-                        name: "gn:world",
-                        group: "background"
+                        title: "Background",
+                        name: "background",
+                        group: "background",
+						format: "image/jpeg",
+						transparent:false
                     },{
                         source: "eurogeos",
                         title: "Fra EuroGeos Data",
@@ -412,12 +414,12 @@
 						transparent: true,
                         group: "hidden",
 						displayInLayerSwitcher:false
-                    },{
+                    }/*,{
                         source: "eurogeos",
                         title: "Boundaries",
                         name: "gn:gboundaries",
 						transparent: true
-                    }],
+                    }*/],
                     center: [0, 0],
                     zoom: 3
 					
