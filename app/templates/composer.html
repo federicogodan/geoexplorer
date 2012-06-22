@@ -110,7 +110,7 @@
             }
 
             var url = Ext.urlDecode(query);
-            var code = url.locale || 'en';
+            var code = url.locale || 'it';
             var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
 
             // //////////////////////////////////////////////////        
@@ -124,7 +124,7 @@
 				}
 			});
 			
-			initialLanguageString = !initialLanguageString ? "English" : initialLanguageString;	
+			initialLanguageString = !initialLanguageString ? "Italiano" : initialLanguageString;	
 			
 			// ////////////////////////////////////////////////////
 			// Setting the language code for the GeoExt tools
@@ -205,7 +205,7 @@
                 }
             });
 
-        var gnURL = 'http://159.213.57.108/geonetwork/srv/en/main.home';
+        var gnURL = 'http://159.213.57.108/geonetwork/srv/' + code + '/main.home';
         var gpURL = 'http://geoportale.lamma.rete.toscana.it';
 
             //
@@ -275,7 +275,7 @@
             proxy: proxyCategory,
             reader: new Ext.data.XmlReader({
                 id: 'storeCategory_id',
-                record: "Category", 
+                record: "Category"
             }, [{
                 name: 'id',
                 type: 'int'
@@ -333,7 +333,7 @@
             proxy: proxyResource,
             reader: new Ext.data.XmlReader({
                 id: 'storeResource_id',
-                record: "Resource", 
+                record: "Resource"
             }, [{
                 name: "id",
                 type: "int"
@@ -485,6 +485,10 @@
             var sources = "{" + 
                 "\"LaMMA Stazioni\": {" +
                         "\"ptype\": \"gxp_wmssource\"," +
+                        "\"layerBaseParams\":{" +
+                            "\"TILED\":false," +
+                            "\"TILESORIGIN\": \"-20037508.34,-20037508.34\"" +
+                        "}," +
                         "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"" +
                 "}," +
                 "\"mapquest\": {" +
