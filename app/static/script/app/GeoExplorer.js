@@ -112,10 +112,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     auth: false,
     
     fScreen: false,
-    
-    models: null,
 
-    constructor: function(config, mapId, auth, fScreen, models) {
+    constructor: function(config, mapId, auth, fScreen) {
     //constructor: function(config, mapId, auth, fScreen) {
     
         if(mapId)

@@ -335,5 +335,22 @@ GeoExt.Lang.add("en", {
     },
     "gxp.plugins.GoogleGeocoder.prototype": {
         addMarkerTooltip: "Reset Marker"
+    },
+    "gxp.PlaybackToolbar.prototype": {
+        playLabel: "Play",
+        playTooltip: "Play",
+        stopLabel: "Stop",
+        stopTooltip: "Stop",
+        fastforwardLabel: "FFWD",
+        fastforwardTooltip: "Double Speed Playback",
+        nextLabel: "Next",
+        nextTooltip: "Advance One Frame",
+        resetLabel: "Reset",
+        resetTooltip: "Reset to the start",
+        loopLabel: "Loop",
+        loopTooltip: "Continously loop the animation",
+        normalTooltip: "Return to normal playback",
+        pauseLabel: "Pause",
+        pauseTooltip: "Pause"
     }
 });

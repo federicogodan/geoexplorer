@@ -371,5 +371,22 @@ GeoExt.Lang.add("it", {
     },
     "gxp.plugins.GoogleGeocoder.prototype": {
         addMarkerTooltip: "Resetta Marker"
+    },
+    "gxp.PlaybackToolbar.prototype": {
+        playLabel: "Play",
+        playTooltip: "Play",
+        stopLabel: "Stop",
+        stopTooltip: "Stop",
+        fastforwardLabel: "FFWD",
+        fastforwardTooltip: "Doppia velocità di riproduzione",
+        nextLabel: "Prossimo",
+        nextTooltip: "Avanzare di un fotogramma",
+        resetLabel: "Reset",
+        resetTooltip: "Ritorna all'inizio",
+        loopLabel: "Loop",
+        loopTooltip: "Ciclo continuo l'animazione",
+        normalTooltip: "Ritorno alla riproduzione normale",
+        pauseLabel: "Pausa",
+        pauseTooltip: "Pausa"
     }
 });
