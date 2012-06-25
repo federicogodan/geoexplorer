@@ -119,7 +119,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputTarget: "idacontrol",
                 toggleGroup: this.toggleGroup,
                 appendActions: false
-            }, {
+            },{
+				ptype: "gxp_idaspm",
+                toggleGroup: this.toggleGroup,
+				outputTarget: "idacontrol"
+			
+			}, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				needsAuthorization: true
