@@ -316,15 +316,84 @@ GeoExt.Lang.add("fr", {
         typeLabel: "Type",
         featureLabel: "Max Features",
 		spatialLabelText: "Sans établir un ROI vous interrogez l'ensemble des données dans la mesure où la carte actuelle.",
-		featureLabelText: "Avec un nombre élevé de caractéristiques que le serveur peut prendre un certain temps à réagir. Limitez votre recherche!"
+		featureLabelText: "Avec un nombre élevé de caractéristiques que le serveur peut prendre un certain temps à réagir. Limitez votre recherche!",
+		spmText:"SPM",
+		sourcedepthLabel : "Profondeur de la source (m)",
+		sourcefrequencyLabel : 'Fréquence de la source (kHz)',
+		sourcepressurelevelLabel : 'Niveau pression de la source (dB)',
+		modelnameLabel : 'Nom du modèle',
+		seasonLabelText: 'Saison',
+		securityLevelLabelText : 'Niveau de sécurité',
+		allText: 'Tous',
+		springText : "Le Printemps",
+		winterText : "L'Hiver",
+		fallText : "Automne",
+		summerText : "L'Été",
+		modelRunDateText:'Date d\'exécution du modèle',
+		modelEndDateText:'Date de fin du modèle'
     },
-	
     "gxp.plugins.GeoReferences.prototype":{
         initialText: "Sélectionner une zone",
         menuText: "Codification Géographique",
         tooltip: "Codification Géographique"
-	
     },
+	"gxp.plugins.IDASpm.prototype":{
+		title: "Création d'SPM",
+		pointSelectionButtonLabel: '',
+		springText : "Le Printemps",
+		winterText : "L'Hiver",
+		fallText : "Automne",
+		summerText : "L'Été",
+		soundPropagationModelParamText: 'Sound Propagation Model param...',
+		soundSourcePointText: 'Point source de son',
+		sourcedepthLabel : "Profondeur de la source (m)",
+		sourcefrequencyLabel : 'Fréquence de la source (kHz)',
+		sourcepressurelevelLabel : 'Niveau pression de la source(dB)',
+		modelnameLabel : 'Nom du modèle',
+		pointSelectionButtionTip: 'Activer la sélection du point',
+		seasonLabelText: 'Saison',
+		securityLevelLabelText : 'Niveau de sécurité',
+		applyText: 'Appliquer',
+		resetText: 'Reset'
+	},
+	"Ext.DatePicker.prototype":{
+		todayText         : "Aujourd'hui",
+        minText           : "Cette date est antérieure à la date minimum",
+        maxText           : "Cette date est postérieure à la date maximum",
+        disabledDaysText  : "",
+        disabledDatesText : "",
+        monthNames        : [
+							   "Janvier",
+							   "Février",
+							   "Mars",
+							   "Avril",
+							   "Mai",
+							   "Juin",
+							   "Juillet",
+							   "Août",
+							   "Septembre",
+							   "Octobre",
+							   "Novembre",
+							   "Décembre"
+							],
+        dayNames          : [
+							   "Dimanche",
+							   "Lundi",
+							   "Mardi",
+							   "Mercredi",
+							   "Jeudi",
+							   "Vendredi",
+							   "Samedi"
+							],
+        nextText          : 'Mois suivant (CTRL+Flèche droite)',
+        prevText          : "Mois précédent (CTRL+Flèche gauche)",
+        monthYearText     : "Choisissez un mois (CTRL+Flèche haut ou bas pour changer d'année.)",
+        todayTip          : "{0} (Barre d'espace)",
+        okText            : "&#160;OK&#160;",
+        cancelText        : "Annuler",
+        format            : "d/m/y",
+        startDay          : 1
+	},
 	
 	/*-------------------------------------------------------------*/
 	

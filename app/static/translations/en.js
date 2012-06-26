@@ -288,6 +288,45 @@ GeoExt.Lang.add("en", {
         nextPageTip: "Last page",
         totalMsg: "Total: {0} records"
     },
+	"Ext.DatePicker.prototype":{
+		todayText         : "Today",
+		minText           : "This date is before the minimum date",
+		maxText           : "This date is after the maximum date",
+		disabledDaysText  : "",
+		disabledDatesText : "",
+		monthNames : [
+		  "January",
+		  "February",
+		  "March",
+		  "April",
+		  "May",
+		  "June",
+		  "July",
+		  "August",
+		  "September",
+		  "October",
+		  "November",
+		  "December"
+		],
+		dayNames : [
+		  "Sunday",
+		  "Monday",
+		  "Tuesday",
+		  "Wednesday",
+		  "Thursday",
+		  "Friday",
+		  "Saturday"
+		],
+		nextText          : 'Next Month (Control+Right)',
+		prevText          : 'Previous Month (Control+Left)',
+		monthYearText     : 'Choose a month (Control+Up/Down to move years)',
+		todayTip          : "{0} (Spacebar)",
+		format            : "m/d/y",
+		okText            : "&#160;OK&#160;",
+		cancelText        : "Cancel",
+		startDay          : 0		
+	
+	},
     "gxp.plugins.QueryForm.prototype": {
         queryActionText: "Query",
         queryMenuText: "Query layer",
@@ -312,15 +351,47 @@ GeoExt.Lang.add("en", {
         typeLabel: "Type",
         featureLabel: "Max Features",
         spatialLabelText: "Without setting a ROI you query the entire set of data in the current Map extent.",
-	    featureLabelText: "With an high number of features the server can take a long time to respond. Limit your search!"
+	    featureLabelText: "With an high number of features the server can take a long time to respond. Limit your search!",
+		spmText:"SPM",
+		sourcedepthLabel : "Source Depth (m)",
+		sourcefrequencyLabel : 'Source Frequency (kHz)',
+		sourcepressurelevelLabel : 'Source Pressure Level (dB)',
+		modelnameLabel : 'Model Name',
+		seasonLabelText: 'Season',
+		securityLevelLabelText : 'Security Level',
+		allText: 'All',
+		springText : "Spring",
+		winterText : "Winter",
+		fallText : "Fall",
+		summerText : "Summer",
+		modelRunDateText:'Model Run Date',
+		modelEndDateText:'Model End Date'
     },
-	
 	"gxp.plugins.GeoReferences.prototype": {
         initialText: "Select an area",
         menuText: "GeoReferences",
         tooltip: "GeoReferences"
     },
+	"gxp.plugins.IDASpm.prototype":{
+		title: "SPM Create",
+		pointSelectionButtonLabel: '',
+		springText : "Spring",
+		winterText : "Winter",
+		fallText : "Fall",
+		summerText : "Summer",
+		soundPropagationModelParamText: 'Sound Propagation Model param...',
+		soundSourcePointText: 'Sound Source Point',
+		sourcedepthLabel : "Source Depth (m)",
+		sourcefrequencyLabel : 'Source Frequency (kHz)',
+		sourcepressurelevelLabel : 'Source Pressure Level (dB)',
+		modelnameLabel : 'Model Name',
+		pointSelectionButtionTip: 'Enable Point Selection',
+		seasonLabelText: 'Season',
+		securityLevelLabelText : 'Security Level',
+		applyText: 'Apply',
+		resetText: 'Reset'
 	
+	},
 	/*-------------------------------------------------------------*/
 	
 	"gxp.FilterBuilder.prototype": {

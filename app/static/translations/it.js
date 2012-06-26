@@ -347,15 +347,86 @@ GeoExt.Lang.add("it", {
         typeLabel: "Tipo",
         featureLabel: "Max Features",
        	spatialLabelText: "Non settando una ROI stai chiedendo l'intero insieme di dati nell'estenzione corrente della mappa.",
-	    featureLabelText: "Con un elevato numero di features il server può richiedere lungo tempo prima di rispondere. Limita la tua ricerca!"
+	    featureLabelText: "Con un elevato numero di features il server può richiedere lungo tempo prima di rispondere. Limita la tua ricerca!",
+		spmText:"SPM",
+		sourcedepthLabel : "Profondit&agrave; Sorgente (m)",
+		sourcefrequencyLabel : 'Frequenza Sorgente (kHz)',
+		sourcepressurelevelLabel : 'Livello Pressione Sorgente (dB)',
+		modelnameLabel : 'Nome del Modello',
+		seasonLabelText: 'Stagione',
+		securityLevelLabelText : 'Livello di Sicurezza',
+		allText: 'Tutti',
+		springText : "Primavera",
+		winterText : "Inverno",
+		fallText : "Autunno",
+		summerText : "Estate",
+		modelRunDateText:'Data Avvio Modello',
+		modelEndDateText:'Data Fine Modello'
     },
-		
 	"gxp.plugins.GeoReferences.prototype": {
         initialText: "Seleziona un'area",
         menuText: "Geo Referimenti",
         tooltip: "Geo Referimenti"
     },
+	"gxp.plugins.IDASpm.prototype":{
+		title: "Crea SPM",
+		pointSelectionButtonLabel: '',
+		springText : "Primavera",
+		winterText : "Inverno",
+		fallText : "Autunno",
+		summerText : "Estate",
+		soundPropagationModelParamText: 'Parametri del modello di propagazione del suono...',
+		soundSourcePointText: 'Sound Source Point',
+		sourcedepthLabel : "Profondit&agrave; Sorgente (m)",
+		sourcefrequencyLabel : 'Frequenza Sorgente (kHz)',
+		sourcepressurelevelLabel : 'Livello Pressione Sorgente (dB)',
+		modelnameLabel : 'Nome del Modello',
+		pointSelectionButtionTip: 'Abilita selezione punto',
+		seasonLabelText: 'Stagione',
+		securityLevelLabelText : 'Livello di Sicurezza',
+		applyText: 'Applica',
+		resetText: 'Resetta'
 	
+	},	
+	"Ext.DatePicker.prototype":{
+		todayText         : "Oggi",
+		minText           : "Data precedente alla data minima",
+		maxText           : "Data successiva alla data massima",
+		disabledDaysText  : "",
+		disabledDatesText : "",
+		monthNames        :  [
+							   "Gennaio",
+							   "Febbraio",
+							   "Marzo",
+							   "Aprile",
+							   "Maggio",
+							   "Giugno",
+							   "Luglio",
+							   "Agosto",
+							   "Settembre",
+							   "Ottobre",
+							   "Novembre",
+							   "Dicembre"
+							],
+		dayNames          : [
+							   "Domenica",
+							   "Luned\u00EC",
+							   "Marted\u00EC",
+							   "Mercoled\u00EC",
+							   "Gioved\u00EC",
+							   "Venerd\u00EC",
+							   "Sabato"
+							],
+		nextText          : 'Mese successivo (Ctrl+Destra)',
+		prevText          : 'Mese precedente (Ctrl+Sinistra)',
+		monthYearText     : 'Scegli un mese (Ctrl+Su/Giu per cambiare anno)',
+		todayTip          : "{0} (Barra spaziatrice)",
+		format            : "d/m/y",
+		cancelText        : "Annulla",
+		okText            : "&#160;OK&#160;",
+		startDay          : 1
+	},
+
     /*-------------------------------------------------------------*/
 	
 	"gxp.FilterBuilder.prototype": {
