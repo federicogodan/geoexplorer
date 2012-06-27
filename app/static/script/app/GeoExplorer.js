@@ -438,13 +438,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             id:'east',
             region: "east",
             width: 455,
+			//minWidth:455,
             split: true,
             collapsible: true,
             collapseMode: "mini",
             collapsed: false,
             header: false,
             items: [
-                {xtype: 'tabpanel', region: 'center', id: 'idacontrol', autoScroll: true, border: false}
+                {xtype: 'tabpanel', region: 'center', id: 'idacontrol', autoScroll: false, border: false}
             ]
         });
         
