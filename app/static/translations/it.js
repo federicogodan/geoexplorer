@@ -385,7 +385,9 @@ GeoExt.Lang.add("it", {
 		seasonLabelText: 'Stagione',
 		securityLevelLabelText : 'Livello di Sicurezza',
 		applyText: 'Applica',
-		resetText: 'Resetta'
+		resetText: 'Resetta',
+		settingColorTitle: 'Colore',
+		settingColorTitle: 'Colore'
 	
 	},	
 	"Ext.DatePicker.prototype":{

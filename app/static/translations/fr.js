@@ -354,7 +354,9 @@ GeoExt.Lang.add("fr", {
 		seasonLabelText: 'Saison',
 		securityLevelLabelText : 'Niveau de sécurité',
 		applyText: 'Appliquer',
-		resetText: 'Reset'
+		resetText: 'Reset',
+		settingColorTitle: 'Couleur',
+		settingColorTitle: 'Couleur'
 	},
 	"Ext.DatePicker.prototype":{
 		todayText         : "Aujourd'hui",

@@ -389,7 +389,9 @@ GeoExt.Lang.add("en", {
 		seasonLabelText: 'Season',
 		securityLevelLabelText : 'Security Level',
 		applyText: 'Apply',
-		resetText: 'Reset'
+		resetText: 'Reset',
+		settingColorTitle: 'Color',
+		settingColorTitle: 'Color'
 	
 	},
 	/*-------------------------------------------------------------*/
