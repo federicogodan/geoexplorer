@@ -93,7 +93,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     descriptionText: "Description",
     contactText: "Contact",
     aboutThisMapText: "About this Map",
-    viewTabTitle : "View",
+    //viewTabTitle : "View",
 
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
@@ -226,9 +226,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         if(config.isLoadedFromConfigFile){
           this.applyConfig(config);
         } else {
+            
+            var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+            var mHost=pattern.exec(geoStoreBaseURL);
+
+            var mUrl = geoStoreBaseURL + "data/" + this.mapId;
+
             Ext.Ajax.request({
-               url: proxy + geoStoreBaseURL + "data/" + this.mapId,
-               //url: geoStoreBaseURL + "data/" + this.mapId,
+               url: mHost[2] == location.host ? mUrl : proxy + mUrl,
                method: 'GET',
                scope: this,
                headers:{
@@ -357,28 +362,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }
             ]
         });
-
-        var eastPanel = new Ext.Panel({
-            border: false,
-            layout: "border",
-            id:'east',
-            region: "east",
-            width: 250,
-            split: true,
-            collapsible: true,
-            collapseMode: "mini",
-            header: false,
-            items: [
-                {region: 'center', autoScroll: true, tbar: [], border: false}, 
-                {
-                    region: 'south', xtype: "panel", layout: "fit", 
-                    collapsible : true, collapseMode:  'mini',
-                    split : true, hideCollapseTool: true,
-                    border: false, height: 200
-                }
-            ]
-        });
-
+        
         this.toolbar = new Ext.Toolbar({
             disabled: true,
             id: 'paneltbar',
@@ -417,7 +401,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "border",            
             items: [
                 this.mapPanelContainer,
-                //eastPanel,
                 westPanel
             ]
         }];
@@ -444,7 +427,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     save: function(callback, scope) {
         var configStr = Ext.util.JSON.encode(this.getState());        
         var method = "POST";
-        var url = app.xmlJsonTranslateService + "HTTPWebGISSave";
+        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+        var mHost=pattern.exec(app.xmlJsonTranslateService);
+
+        var mUrl = app.xmlJsonTranslateService + 'HTTPWebGISSave';
+        var url = mHost[2] == location.host ? mUrl : proxy + mUrl;
         OpenLayers.Request.issue({
             method: method,
             url: url,
@@ -517,13 +504,37 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     /** private: method[showUrl]
      */
     showUrl: function() {
+        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+        var mHost=pattern.exec(app.xmlJsonTranslateService);
+
+        var mUrl = app.xmlJsonTranslateService + 'HTTPWebGISFileDownload';
         OpenLayers.Request.POST({
-            url: app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+            url: mHost[2] == location.host ? mUrl : proxy + mUrl,
             data: this.xmlContext,
             callback: function(request) {
 
-                if(request.status == 200){
-                    window.open(request.responseText);
+                if(request.status == 200){                            
+                    
+                    //        
+                    //delete other iframes appended
+                    //
+                    if(document.getElementById("downloadIFrame")) {
+                      document.body.removeChild( document.getElementById("downloadIFrame") ); 
+                    }
+                    
+                    //
+                    //Create an hidden iframe for forced download
+                    //
+                    var elemIF = document.createElement("iframe"); 
+                    elemIF.setAttribute("id","downloadIFrame");
+                    var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+                    var mHost=pattern.exec(app.xmlJsonTranslateService);
+
+                    var mUrlEncoded = encodeURIComponent(app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText);
+                    var mUrl = app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText;
+                    elemIF.src = mHost[2] == location.host ? mUrl : proxy + mUrlEncoded; 
+                    elemIF.style.display = "none"; 
+                    document.body.appendChild(elemIF); 
                 }else{
                     Ext.Msg.show({
                        title:'File Download Error',
