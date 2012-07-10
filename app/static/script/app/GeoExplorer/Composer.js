@@ -67,16 +67,21 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: "tree.tbar"
             }, {
                 ptype: "gxp_removegroup",
-                actionTarget: "tree.tbar"
+                actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
                 ptype: "gxp_groupproperties",
-                actionTarget: ["tree.tbar"]
+                actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
+            },{
+                ptype:"gxp_geonetworksearch",
+                actionTarget:[
+                   "layertree.contextMenu"
+                ]
             }, {
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 15}
@@ -97,12 +102,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 22}
             }, {
                 ptype: "gxp_zoomtoextent",
-                extent: function(){
+                /*extent: function(){
                     var bbox = new OpenLayers.Bounds.fromString('-15,8,-7,15');
                     return bbox.transform(
                         new OpenLayers.Projection("EPSG:4326"),
                         new OpenLayers.Projection("EPSG:102113"));
-                },
+                },*/
                 actionTarget: {target: "paneltbar", index: 26}
             },{
                 ptype: "gxp_saveDefaultContext",
@@ -116,8 +121,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
                 outputConfig: {
                     dynamicRange: false
+                }
+            }, {
+                xtype:"gxp_timeslider",
+                initialConfig:{
+                    timeFormat: 'c'
+                }
             }
-        }
         ];
         
         
@@ -247,6 +257,34 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         }));*/
         
         return tools;
+    },
+    
+    /*
+     * private: method[openPreview]
+     */
+    viewMetadata: function(gnURL, uuid, title){
+        var tabPanel = Ext.getCmp(app.renderToTab);
+        
+        var tabs = tabPanel.find('title', title);
+        if(tabs && tabs.length > 0){
+            tabPanel.setActiveTab(tabs[0]); 
+        }else{
+            var metaURL = gnURL + "metadata.show?uuid=" + uuid; 
+            
+            var meta = new Ext.Panel({
+                title: title,
+                layout:'fit', 
+                tabTip: title,
+                closable: true,
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        url: metaURL 
+                    }) 
+                ]
+            });
+            
+            tabPanel.add(meta);
+        }
     },
 
     /** private: method[openPreview]
