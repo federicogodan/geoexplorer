@@ -93,6 +93,10 @@ OpenLayers.TimeAgent = OpenLayers.Class({
         this.events.destroy();
         //this.timeManager.events.unregister('tick', this, this.onTick);
         //this.timeManager = this.layers = this.range = this.intervals = null;
+	
+	//Commentati per problemi nell'aggiornamento dei layer da geostore
+        //this.timeManager.events.unregister('tick', this, this.onTick);
+        //this.timeManager = this.layers = this.range = this.intervals = null;
     },
 
     onTick : function() {

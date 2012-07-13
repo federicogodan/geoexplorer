@@ -143,10 +143,12 @@ OpenLayers.TimeAgent.WMS = OpenLayers.Class(OpenLayers.TimeAgent, {
         layer.mergeNewParams({
             time : isotime
         });
-		/*
+	
+    	/*
         if(!layer.visiblity) {
             layer.setVisibility(true);
-        }*/
+        }
+	*/
     },
 
     /**

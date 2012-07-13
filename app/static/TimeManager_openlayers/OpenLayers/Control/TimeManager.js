@@ -234,6 +234,8 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
 			this.timeAgents[i].destroy();
 		}
 		//this.layers=null;
+		//Commentato per problemi con il refresh dei layers da geostore
+		//this.layers=null;
 		OpenLayers.Control.prototype.destroy.call(this);
 	},
     /**
