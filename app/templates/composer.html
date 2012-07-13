@@ -409,9 +409,12 @@
                                 listeners: { 
                                     select: function(combo, record, index) {
                                         mapId = comboRuns.getValue();
+                                        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+                                        var mHost=pattern.exec(geoStoreBaseURL);
 
+                                        var mUrl = geoStoreBaseURL + "data/" + mapId;
                                         Ext.Ajax.request({
-                                           url: proxy + geoStoreBaseURL + "data/" + mapId,
+                                           url: mHost[2] == location.host ? mUrl : proxy + mUrl,
                                            //url: geoStoreBaseURL + "data/" + this.mapId,
                                            method: 'GET',
                                            scope: this,
