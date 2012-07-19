@@ -127,7 +127,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 initialConfig:{
                     timeFormat: 'c'
                 }
-            }
+            }, {
+				ptype:"gxp_import_kml",
+				actionTarget: {target: "paneltbar", index: 25}
+			}
         ];
         
         

@@ -8,7 +8,7 @@
     <property name="build" location="build"/>
     <property name="ringo" location="externals/ringojs-fork"/>
     <property name="app.proxy.geoserver" value=""/>
-    <property name="app.port" value="8080"/>
+    <property name="app.port" value="8081"/>
     <condition property="git" value="git.exe" else="git">
         <os family="windows"/>
     </condition>
