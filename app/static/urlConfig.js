@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
-   "proxy":"/proxy/?url=",
+   "proxy":"http://localhost:8080/http_proxy/proxy/",
    "gsSources":[
    ]
 }

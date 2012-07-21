@@ -114,7 +114,6 @@ function proxyPass(config) {
         response = responseForStatus(400, "The url parameter value must be absolute url with same scheme as request.");
     } else {
         // re-issue request
-		console.log('url ' + outgoing.url);
         var exchange = clientRequest({
             url: outgoing.url,
             method: outgoing.method,
