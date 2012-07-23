@@ -74,7 +74,7 @@ public class FileUploader extends HttpServlet {
 		// get file
 		File file = new File(tempDirectory + "/" + code);
 		BufferedReader br = new BufferedReader( new FileReader( file ));
-		response.setContentType("text/xml");
+		// response.setContentType("application/xml");
 	    PrintWriter writer = response.getWriter();
 	    String line = null;
 	    while( (line=br.readLine()) != null ){
@@ -109,10 +109,14 @@ public class FileUploader extends HttpServlet {
 		out.close();
 		in.close();
 		
+	    response.setContentType("text/html");	        
+	        
 		// return file name as response
-		response.setContentType("text/json");
+		// response.setContentType("application/json");
 	    PrintWriter writer = response.getWriter();
-	    writer.println("{ code:\""+ uuid +"\"}");
+	    writer.println("{ \"success\":true, \"result\":{ \"code\":\""+ uuid +"\"}}");
+	    writer.flush();
+	    writer.close();
 	}
 
 }
