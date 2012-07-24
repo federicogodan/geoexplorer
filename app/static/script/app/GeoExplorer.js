@@ -362,6 +362,24 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }
             ]
         });
+
+		var eastPanel = new Ext.Panel({
+            border: false,
+            layout: "border",
+            id:'east',
+            region: "east",
+            width: 250,
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
+            header: false,
+            items: [
+			   {
+                    region: 'center', xtype: "panel", layout: "fit", 
+                    border: false,  id: 'pilotnotes', title:'Pilot notes'
+                }
+            ]
+        });
         
         this.toolbar = new Ext.Toolbar({
             disabled: true,
@@ -401,7 +419,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "border",            
             items: [
                 this.mapPanelContainer,
-                westPanel
+                westPanel,
+				eastPanel
             ]
         }];
         

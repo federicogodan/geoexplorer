@@ -52,7 +52,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }
                 }
-            }, {
+            },{
+				ptype: "gxp_pilot_notes",
+				outputTarget: 'pilotnotes'
+			}, {
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
                 upload: true
@@ -130,7 +133,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
 				ptype:"gxp_import_kml",
 				actionTarget: {target: "paneltbar", index: 25}
-			}
+			}, {
+					ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
+					actionTarget: [ "paneltbar" ]
+				}
         ];
         
         
