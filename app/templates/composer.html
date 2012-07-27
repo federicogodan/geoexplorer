@@ -252,11 +252,11 @@
                     }) 
                 ]
             });
-*/
+			*/
 
             var appTabs = new Ext.TabPanel({
                 //items: [geoportalPanel,geonetworkPanel],
-                items: [geonetworkPanel],
+                // items: [geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
@@ -298,7 +298,7 @@
                 type: 'int'
             }, {
                 name: 'name',
-                type: 'tring'
+                type: 'string'
             }])
         });
         
@@ -468,8 +468,14 @@
                 }
             }); */   
         
-
-    
+       
+    		var mainPanel = new Ext.Panel({
+				id:"mainPanel",
+				layout:'fit', 
+                enableScroll: true,
+				region: 'center',
+	            border : false
+			});
 
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
@@ -484,18 +490,18 @@
                         collapsed: false,
                         collapseMode: 'mini',
                         split: true,
-                        html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',
+                        /*html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',*/
                         bodyStyle: 'padding:0px;background-color: #222b43;',
-                        tbar: [comboModels,comboRuns]
+                        // tbar: [comboModels,comboRuns]
                     },{
                         region : 'center',
                         layout : 'border',
                         border : false,
                         header : false,                    
-                        items : [appTabs],                            
+                        items : [mainPanel]/*,                            
                         bbar : [
-                          /*poweredByGeoSol, ' ',*/ aboutButton, '->',languageSelector
-                        ]
+                          poweredByGeoSol, ' ', aboutButton, '->',languageSelector
+                        ]*/
                     }]
             });
             
@@ -581,9 +587,10 @@
             app = new GeoExplorer.Composer({
                 modified: false,
                 proxy: proxy,
-                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/",
+                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
+				// xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
                 defaultSourceType: "gxp_wmssource",
-                renderToTab : 'appTabs',
+                renderTo : 'mainPanel',
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",

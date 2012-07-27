@@ -133,11 +133,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
 				ptype:"gxp_import_kml",
 				actionTarget: {target: "paneltbar", index: 25}
-			}, {
+			},{
+					ptype:"gxp_export_kml",
+					actionTarget: {target: "paneltbar", index: 25}
+			},{
 					ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
 					actionTarget: [ "paneltbar" ]
-				},
-				{
+			},{
 					ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
 					actionTarget: [ "paneltbar" ]
 				}
