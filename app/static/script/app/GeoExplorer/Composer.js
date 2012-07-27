@@ -136,6 +136,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 			}, {
 					ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
 					actionTarget: [ "paneltbar" ]
+				},
+				{
+					ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
+					actionTarget: [ "paneltbar" ]
 				}
         ];
         

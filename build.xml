@@ -45,7 +45,7 @@
 
     </target>
     
-    <target name="dist" depends="init, postcompile"/>
+    <target name="dist" depends="postcompile"/>
     
     <!-- this target is useful when init has already been run -->
     <target name="postcompile" depends="test, buildjs, redist"/>
