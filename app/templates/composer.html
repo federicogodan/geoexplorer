@@ -22,8 +22,6 @@
     <script type="text/javascript" src="../TimeManager_openlayers/OpenLayers/TimeAgent/WMS.js"></script>
     
     <!-- translation data  -->
-    <script type="text/javascript" src="../translations/it.js"></script>
-    <script type="text/javascript" src="../translations/fr.js"></script>
     <script type="text/javascript" src="../translations/en.js"></script>
 
     <script>
@@ -121,8 +119,8 @@
             }
 
             var url = Ext.urlDecode(query);
-            var code = url.locale || 'it';
-            var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
+            var code = url.locale || 'en';
+            var langData = [['en', 'English']];
 
             // //////////////////////////////////////////////////        
             // Setting the initial language for the selector
@@ -135,7 +133,7 @@
 				}
 			});
 			
-			initialLanguageString = !initialLanguageString ? "Italiano" : initialLanguageString;	
+			initialLanguageString = !initialLanguageString ? "English" : initialLanguageString;	
 			
 			// ////////////////////////////////////////////////////
 			// Setting the language code for the GeoExt tools
@@ -254,13 +252,13 @@
             });
 			*/
 
-            var appTabs = new Ext.TabPanel({
+            var appTabs = new Ext.Panel({
                 //items: [geoportalPanel,geonetworkPanel],
                 // items: [geonetworkPanel],
                 region: 'center',
                 border : false,
-                id : 'appTabs',
-                enableTabScroll: true
+				layout: 'fit',
+                id : 'appTabs'
             });
         
         //
@@ -468,14 +466,6 @@
                 }
             }); */   
         
-       
-    		var mainPanel = new Ext.Panel({
-				id:"mainPanel",
-				layout:'fit', 
-                enableScroll: true,
-				region: 'center',
-	            border : false
-			});
 
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
@@ -491,17 +481,18 @@
                         collapseMode: 'mini',
                         split: true,
                         /*html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',*/
-                        bodyStyle: 'padding:0px;background-color: #222b43;',
+					     html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/nurc.gif" height="100%"/>',
+                        bodyStyle: 'padding:0px;background-color: #DEF5FA;',
                         // tbar: [comboModels,comboRuns]
                     },{
                         region : 'center',
                         layout : 'border',
                         border : false,
                         header : false,                    
-                        items : [mainPanel]/*,                            
+                        items : [appTabs],                            
                         bbar : [
-                          poweredByGeoSol, ' ', aboutButton, '->',languageSelector
-                        ]*/
+                          /*poweredByGeoSol, ' ', aboutButton, '->',languageSelector*/
+                        ]
                     }]
             });
             
@@ -583,14 +574,18 @@
                       icon: Ext.MessageBox.ERROR
                 });
             }
+
+			// prepare layer where users draw custom features
+			var drawingLayer = new OpenLayers.Layer.Vector('Drawing Layer');
                                     
             app = new GeoExplorer.Composer({
+				drawingLayer: drawingLayer,
                 modified: false,
                 proxy: proxy,
-                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
-				// xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
+                // xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
+				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
                 defaultSourceType: "gxp_wmssource",
-                renderTo : 'mainPanel',
+                renderToTab : 'appTabs',
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -640,6 +635,9 @@
                     zoom: 5
                 }
             }, mapIdentifier, authorization, fullScreen);   
+
+			
+
             
             app.on({
                 'portalready' : function(){
@@ -650,6 +648,7 @@
                         ovestPanel.collapse();
                     }
 
+				
                     //
                     // Visualizing metadata tab and layer at startup
                     //
@@ -689,6 +688,8 @@
 					var layer = record.get('layer');
 					var extent = layer.restrictedExtent || layer.maxExtent || app.mapPanel.map.maxExtent;
 					var map = app.mapPanel.map;
+					
+					map.addLayer( drawingLayer );
 
 					// respect map properties
 					var restricted = map.restrictedExtent || map.maxExtent;

@@ -142,11 +142,14 @@ public class FileUploader extends HttpServlet {
 			String uuid = UUID.randomUUID().toString();
 			out = new BufferedWriter(new FileWriter( tempDirectory + "/" + uuid ));
 
-			// copy stream content to file
+			StringBuffer sb = new StringBuffer();
 			String line = null;
 			while ( (line=in.readLine()) != null ){
-				out.write( line );
+				sb.append( line );
 			}
+			String input = clean( sb.toString() );
+			
+			out.write( input );
 
 		    response.setContentType("text/html");	        
 			writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\""+ uuid +"\"}}");
@@ -168,6 +171,20 @@ public class FileUploader extends HttpServlet {
 			}
 		}
 
+	}
+	
+	/**
+	 *  trim multipart header and footer created by html form
+	 *
+	 *   -----------------------------20691717242189857501854012939Content-Disposition: form-data; name="file"; filename="Trentino.kml"Content-Type: application/vnd.google-earth.kml+xml
+	 *   -----------------------------206917172421... 
+	 *
+	 *
+	 */
+	private String clean(String input){
+		String start = "<?xml";
+		String end = "</kml>";
+		return input.substring( input.indexOf( start ), input.lastIndexOf(end)+end.length() );
 	}
 	
 	private void writeResponse(HttpServletResponse response, String text)

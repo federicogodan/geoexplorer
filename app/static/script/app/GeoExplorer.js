@@ -395,6 +395,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             
             this.toolbar.enable();
             
+			// add the layer for custom drawing to the map
+			this.mapPanel.map.addLayer(this.drawingLayer);
+
             disabled.each(function(item) {
                 item.disable();
             });

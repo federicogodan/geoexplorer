@@ -54,7 +54,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 }
             },{
 				ptype: "gxp_pilot_notes",
-				outputTarget: 'pilotnotes'
+				outputTarget: 'pilotnotes',
+				drawingLayer: config.drawingLayer
 			}, {
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
@@ -132,20 +133,24 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 }
             }, {
 				ptype:"gxp_import_kml",
-				actionTarget: {target: "paneltbar", index: 25}
+				actionTarget: {target: "paneltbar", index: 25},
+				drawingLayer: config.drawingLayer
 			},{
-					ptype:"gxp_export_kml",
-					actionTarget: {target: "paneltbar", index: 25}
+				ptype:"gxp_export_kml",
+				actionTarget: {target: "paneltbar", index: 25},
+				drawingLayer: config.drawingLayer
 			},{
 					ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
-					actionTarget: [ "paneltbar" ]
+					actionTarget: [ "paneltbar" ],
+					drawingLayer: config.drawingLayer
 			},{
 					ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
-					actionTarget: [ "paneltbar" ]
+					actionTarget: [ "paneltbar" ],
+					drawingLayer: config.drawingLayer
 				}
         ];
         
-        
+       
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
 
