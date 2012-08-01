@@ -500,14 +500,6 @@
             // Parsing WMS servers Sources for getCapabilities operation
             //
             var sources = "{" + 
-                "\"LaMMA Stazioni\": {" +
-                        "\"ptype\": \"gxp_wmssource\"," +
-                        "\"layerBaseParams\":{" +
-                            "\"TILED\":false," +
-                            "\"TILESORIGIN\": \"-20037508.34,-20037508.34\"" +
-                        "}," +
-                        "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"" +
-                "}," +
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -576,14 +568,16 @@
             }
 
 			// prepare layer where users draw custom features
-			var drawingLayer = new OpenLayers.Layer.Vector('Drawing Layer');
+			var drawingLayer = new OpenLayers.Layer.Vector('Drawing Layer', {
+				projection: new OpenLayers.Projection("EPSG:4326")
+			});
                                     
             app = new GeoExplorer.Composer({
 				drawingLayer: drawingLayer,
                 modified: false,
                 proxy: proxy,
-                // xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
-				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
+                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
+				// xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 about: {
@@ -808,8 +802,8 @@
       };			
 			
       Ext.Ajax.request({
-          // url: "/MapStore/urlConfig.js", //TEST
-          url: "/urlConfig.js", //TEST
+          url: "/MapStore/urlConfig.js", //TEST
+          // url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    

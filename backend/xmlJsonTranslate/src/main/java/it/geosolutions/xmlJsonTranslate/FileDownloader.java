@@ -1,3 +1,4 @@
+
 package it.geosolutions.xmlJsonTranslate;
 
 import java.io.BufferedReader;
@@ -20,21 +21,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.net.URLDecoder;
+
 /**
  * Servlet implementation class FileUploader
  */
-public class FileUploader extends HttpServlet {
+public class FileDownloader extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final static String PROPERTY_FILE_PARAM = "app.properties";
-	private final static Logger LOGGER = Logger.getLogger(FileUploader.class.getSimpleName());
+	private final static Logger LOGGER = Logger.getLogger(FileDownloader.class.getSimpleName());
 	private Properties properties = new Properties();
-	private String tempDirectory;
-       
+		private String tempDirectory;
+
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FileUploader() {
+    public FileDownloader() {
         super();
     }
     
@@ -72,17 +77,13 @@ public class FileUploader extends HttpServlet {
 			}
 				
 		}
-		
     }
 
-	/**
-	 * read the content of a file and delete it
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// get parameter name
 		String code = request.getParameter("code");
+		String filename = request.getParameter("filename");
 		
 		if (code != null){
 			
@@ -90,6 +91,10 @@ public class FileUploader extends HttpServlet {
 			BufferedReader br = null;
 			PrintWriter writer = null;
 			try{
+				// set reponse headers
+				response.setContentType("application/force-download");
+				response.setHeader("Content-Disposition","attachment; filename=\"" + filename + "\"");
+				
 				// get file
 				file = new File(tempDirectory + "/" + code);
 				br = new BufferedReader( new FileReader( file ));
@@ -100,6 +105,7 @@ public class FileUploader extends HttpServlet {
 			    }
 			    // delete file
 			    file.delete();
+				
 			} catch(IOException ex){
 				if (LOGGER.isLoggable(Level.SEVERE)){
 					LOGGER.log(Level.SEVERE,
@@ -123,6 +129,8 @@ public class FileUploader extends HttpServlet {
 
 	}
 
+
+
 	/**
 	 * read and save on file the content of post request
 	 * return a json where the name of the file is returned
@@ -130,63 +138,62 @@ public class FileUploader extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		BufferedReader in = null;
-		BufferedWriter out = null;
-		try{
-			// read the content data for this request
-			in = new BufferedReader(
-									new InputStreamReader( 
-											request.getInputStream()) );
-			// create a file with a random name
+			BufferedReader in = null;
+			BufferedWriter out = null;
+			try{
+				// read the content data for this request
+				in = new BufferedReader(
+										new InputStreamReader( 
+												request.getInputStream()) );
+				// create a file with a random name
 
-			String uuid = UUID.randomUUID().toString();
-			out = new BufferedWriter(new FileWriter( tempDirectory + "/" + uuid ));
+				String uuid = UUID.randomUUID().toString();
+				out = new BufferedWriter(new FileWriter( tempDirectory + "/" + uuid ));
 
-			StringBuffer sb = new StringBuffer();
-			String line = null;
-			while ( (line=in.readLine()) != null ){
-				sb.append( line );
+				StringBuffer sb = new StringBuffer();
+				String line = null;
+				while ( (line=in.readLine()) != null ){
+					sb.append( line );
+				}
+				
+				String input = URLDecoder.decode(sb.toString());
+				Map<String, String> fields = getFields(input);
+				String content = fields.get("content");
+
+				out.write( content );
+
+			    response.setContentType("text/html");	        
+				writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\""+ uuid +"\"}}");
+			} catch (IOException ex) {
+				if (LOGGER.isLoggable(Level.SEVERE))
+					LOGGER.log(Level.SEVERE,
+								"Error encountered while uploading file");
+
+				response.setContentType("text/html");
+				writeResponse( response, "{ \"success\":false, \"errorMessage\":\""+ ex.getLocalizedMessage() +"\"}" );
+
+
+			} finally {
+				if ( in != null ){
+					in.close();
+				}
+				if ( out != null ){
+					out.close();
+				}
 			}
-			
-			String input = clean( sb.toString() );
-			
-			
-			out.write( input );
-
-		    response.setContentType("text/html");	        
-			writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\""+ uuid +"\"}}");
-		} catch (IOException ex) {
-			if (LOGGER.isLoggable(Level.SEVERE))
-				LOGGER.log(Level.SEVERE,
-							"Error encountered while uploading file");
-
-			response.setContentType("text/html");
-			writeResponse( response, "{ \"success\":false, \"errorMessage\":\""+ ex.getLocalizedMessage() +"\"}" );
-		
-
-		} finally {
-			if ( in != null ){
-				in.close();
-			}
-			if ( out != null ){
-				out.close();
-			}
-		}
-
+	
 	}
 	
-	/**
-	 *  trim multipart header and footer created by html form
-	 *
-	 *   -----------------------------20691717242189857501854012939Content-Disposition: form-data; name="file"; filename="Trentino.kml"Content-Type: application/vnd.google-earth.kml+xml
-	 *   -----------------------------206917172421... 
-	 *
-	 *
-	 */
-	private String clean(String input){
-		String start = "<?xml";
-		String end = "</kml>";
-		return input.substring( input.indexOf( start ), input.lastIndexOf(end)+end.length() );
+	
+	private Map<String, String> getFields(String input){
+		String[] params = input.split("&");
+		HashMap<String, String> fields = new HashMap<String, String>();
+		for(String param: params){
+			String value = param.substring(param.indexOf("=")+1, param.length());
+			String key = param.substring(0, param.indexOf("="));
+			fields.put(key, value);
+		}
+		return fields;
 	}
 	
 	private void writeResponse(HttpServletResponse response, String text)

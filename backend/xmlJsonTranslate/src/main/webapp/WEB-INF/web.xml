@@ -14,6 +14,17 @@
     <url-pattern>/FileUploader/*</url-pattern>
   </servlet-mapping>
 
+  <!-- File downalod -->
+  <servlet>
+    <servlet-name>FileDownloader</servlet-name>
+    <servlet-class>it.geosolutions.xmlJsonTranslate.FileDownloader</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>FileDownloader</servlet-name>
+    <url-pattern>/FileDownloader/*</url-pattern>
+  </servlet-mapping>
+
   <!-- Save Servlet -->
   <servlet>
     <servlet-name>HTTPWebGISSave</servlet-name>

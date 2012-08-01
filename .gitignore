@@ -1,6 +1,7 @@
 build
 geoexplorer.db
 backend/.metadata
+backend/Prova
 backend/FileUploader/.classpath
 backend/FileUploader/.project
 backend/FileUploader/.settings
