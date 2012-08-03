@@ -568,16 +568,48 @@
             }
 
 			// prepare layer where users draw custom features
-			var drawingLayer = new OpenLayers.Layer.Vector('Drawing Layer', {
+			var drawingLayer = new OpenLayers.Layer.Vector('Custom feature layer', {
 				projection: new OpenLayers.Projection("EPSG:4326")
+			});
+			
+			var notesLayer = new OpenLayers.Layer.Vector('Pilot notes Layer', {
+				projection: new OpenLayers.Projection("EPSG:4326"),
+				styleMap: new OpenLayers.StyleMap({
+				        "default": new OpenLayers.Style({
+				            strokeColor: "red",
+				            strokeOpacity: .7,
+				            strokeWidth: 2,
+				            fillColor: "red",
+				            fillOpacity: 0,
+				            cursor: "pointer"
+				        }),
+				        "temporary": new OpenLayers.Style({
+				            strokeColor: "#ffff33",
+				            strokeOpacity: .9,
+				            strokeWidth: 2,
+				            fillColor: "#ffff33",
+				            fillOpacity: .3,
+				            cursor: "pointer"
+				        }),
+				        "select": new OpenLayers.Style({
+				            strokeColor: "#0033ff",
+				            strokeOpacity: .7,
+				            strokeWidth: 3,
+				            fillColor: "#0033ff",
+				            fillOpacity: 0,
+				            graphicZIndex: 2,
+				            cursor: "pointer"
+				        })
+				    })
 			});
                                     
             app = new GeoExplorer.Composer({
 				drawingLayer: drawingLayer,
+				notesLayer: notesLayer,
                 modified: false,
                 proxy: proxy,
-                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
-				// xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
+                // xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
+				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 about: {

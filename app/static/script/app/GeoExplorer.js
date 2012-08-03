@@ -348,6 +348,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             id:'west',
             region: "west",
             width: 250,
+			minWidth:250,
+			maxWidth:250,
             split: true,
             collapsible: true,
             collapseMode: "mini",
@@ -363,21 +365,32 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             ]
         });
 
-		var eastPanel = new Ext.Panel({
+		var eastPanel = new Ext.TabPanel({
             border: false,
-            layout: "border",
+            //layout: "border",
             id:'east',
             region: "east",
-            width: 250,
-            split: true,
-            collapsible: true,
-            collapseMode: "mini",
+            width: 300,
+			minWidth:300,
+			maxWidth:300,
+			activeTab:0,
+            // split: true,
+            // collapsible: true,
+            // collapseMode: "mini",
             header: false,
             items: [
 			   {
-                    region: 'center', xtype: "panel", layout: "fit", 
-                    border: false,  id: 'pilotnotes', title:'Pilot notes'
-                }
+                    // region: 'south', 
+					xtype: "panel", autoScroll:true, tbar:[], 
+                    border: false,  id: 'feature-details', title:'Custom features'
+                },
+				{
+	                // region: 'center', 
+					xtype: "panel",  autoScroll:true,  tbar:[],
+					// collapsible : true, collapseMode:  'mini',
+	                // split : true, hideCollapseTool: true,
+	                border: false,  id: 'pilot-notes', title:'Pilot notes'
+	            }
             ]
         });
         
@@ -397,6 +410,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             
 			// add the layer for custom drawing to the map
 			this.mapPanel.map.addLayer(this.drawingLayer);
+			this.mapPanel.map.addLayer(this.notesLayer);
 
             disabled.each(function(item) {
                 item.disable();

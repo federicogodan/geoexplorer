@@ -184,7 +184,7 @@ public class FileUploader extends HttpServlet {
 	 *
 	 */
 	private String clean(String input){
-		String start = "<?xml";
+		String start = "<kml";
 		String end = "</kml>";
 		return input.substring( input.indexOf( start ), input.lastIndexOf(end)+end.length() );
 	}

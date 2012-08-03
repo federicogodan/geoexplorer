@@ -27,8 +27,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     nextText: "Next",
     fullScreenText: "Full Screen",
     // End i18n.
-
-    constructor: function(config) {        
+    constructor: function(config) {      
+	  	var self = this;
         config.tools = [
             {
                 ptype: "gxp_layertree",
@@ -53,10 +53,14 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     }
                 }
             },{
-				ptype: "gxp_pilot_notes",
-				outputTarget: 'pilotnotes',
+				ptype: "gxp_feature_details",
+				outputTarget: 'feature-details',
 				drawingLayer: config.drawingLayer
 			}, {
+				ptype: "gxp_pilot_notes",
+				outputTarget: 'pilot-notes',
+				drawingLayer: config.notesLayer
+			},{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
                 upload: true
@@ -131,23 +135,51 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 initialConfig:{
                     timeFormat: 'c'
                 }
-            }, {
+            },{
+				ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
+				actionTarget: [ "feature-details.tbar" ],
+				layer: config.drawingLayer
+			},{
+				ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
+				actionTarget: [ "feature-details.tbar" ],
+				layer: config.drawingLayer,
+				onSelected: function( target, feature ){
+					self.fireEvent("featureselected", target, feature);
+				},
+				onUnselected: function( target ){
+					self.fireEvent("featureunselected", target);
+				}
+			},{
 				ptype:"gxp_import_kml",
-				actionTarget: {target: "paneltbar", index: 25},
-				drawingLayer: config.drawingLayer
+				actionTarget: {target: "feature-details.tbar", index: 25},
+				layer: config.drawingLayer
 			},{
 				ptype:"gxp_export_kml",
-				actionTarget: {target: "paneltbar", index: 25},
-				drawingLayer: config.drawingLayer
+				actionTarget: {target: "feature-details.tbar", index: 25},
+				layer: config.drawingLayer
 			},{
-					ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
-					actionTarget: [ "paneltbar" ],
-					drawingLayer: config.drawingLayer
+				ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
+				actionTarget: [ "pilot-notes.tbar" ],
+				layer: config.notesLayer
 			},{
-					ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
-					actionTarget: [ "paneltbar" ],
-					drawingLayer: config.drawingLayer
+				ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
+				actionTarget: [ "pilot-notes.tbar" ],
+				layer: config.notesLayer,
+				onSelected: function( target, feature ){
+					self.fireEvent("notefeatureselected", target, feature);
+				},
+				onUnselected: function( target ){
+					self.fireEvent("notefeatureunselected", target);
 				}
+			}/*,{
+				ptype:"gxp_import_kml",
+				actionTarget: {target: "pilot-notes.tbar", index: 25},
+				layer: config.notesLayer
+			},{
+				ptype:"gxp_export_kml",
+				actionTarget: {target: "pilot-notes.tbar", index: 25},
+				layer: config.notesLayer
+			}*/
         ];
         
        
