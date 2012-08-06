@@ -11,7 +11,7 @@ GeoExt.Lang.add("en", {
         loadConfigErrorText: "Trouble reading saved configuration: <br />",
         loadConfigErrorDefaultText: "Server Error.",
         xhrTroubleText: "Communication Trouble: Status ",
-        layersText: "Layers",
+        layersText: "Rep10",
         titleText: "Title",
         zoomLevelText: "Zoom level",
         saveErrorText: "Trouble saving: ",
