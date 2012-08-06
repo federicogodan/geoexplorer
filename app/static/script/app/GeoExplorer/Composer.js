@@ -171,7 +171,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				onUnselected: function( target ){
 					self.fireEvent("notefeatureunselected", target);
 				}
-			}/*,{
+			},{
 				ptype:"gxp_import_kml",
 				actionTarget: {target: "pilot-notes.tbar", index: 25},
 				layer: config.notesLayer
@@ -179,7 +179,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				ptype:"gxp_export_kml",
 				actionTarget: {target: "pilot-notes.tbar", index: 25},
 				layer: config.notesLayer
-			}*/
+			}
         ];
         
        
