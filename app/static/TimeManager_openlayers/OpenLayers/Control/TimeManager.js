@@ -910,7 +910,7 @@ OpenLayers.TimeUnit = {
 	SECONDS:'Seconds',
 	MINUTES:'Minutes',
 	HOURS:'Hours',
-	DAYS:'Date',
+	DAYS:'Days',
 	MONTHS:'Month',
 	YEARS:'FullYear'
 };
