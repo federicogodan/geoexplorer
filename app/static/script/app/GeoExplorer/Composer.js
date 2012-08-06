@@ -117,69 +117,65 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         new OpenLayers.Projection("EPSG:102113"));
                 },*/
                 actionTarget: {target: "paneltbar", index: 26}
-            },{
-                ptype: "gxp_saveDefaultContext",
-                actionTarget: {target: "paneltbar", index: 40},
-				        needsAuthorization: true
+            }, {
+                actions: ["-"], actionTarget: "paneltbar"
+            }, {
+                ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
+                actionTarget: [ "feature-details.tbar" ],
+                layer: config.drawingLayer
+            }, {
+                ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
+                actionTarget: [ "feature-details.tbar" ],
+                layer: config.drawingLayer,
+                onSelected: function( target, feature ){
+                    self.fireEvent("featureselected", target, feature);
+                },
+                onUnselected: function( target ){
+                    self.fireEvent("featureunselected", target);
+                }
+            }, {
+                ptype:"gxp_import_kml",
+                actionTarget: {target: "feature-details.tbar", index: 25},
+                layer: config.drawingLayer
+            }, {
+                ptype:"gxp_export_kml",
+                actionTarget: {target: "feature-details.tbar", index: 25},
+                layer: config.drawingLayer
+            }, {
+                ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
+                actionTarget: [ "pilot-notes.tbar" ],
+                layer: config.notesLayer
+            }, {
+                ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
+                actionTarget: [ "pilot-notes.tbar" ],
+                layer: config.notesLayer,
+                onSelected: function( target, feature ){
+                    self.fireEvent("notefeatureselected", target, feature);
+                },
+                onUnselected: function( target ){
+                    self.fireEvent("notefeatureunselected", target);
+                }
+            }, {
+                ptype:"gxp_import_kml",
+                actionTarget: {target: "pilot-notes.tbar", index: 25},
+                layer: config.notesLayer
+            }, {
+                ptype:"gxp_export_kml",
+                actionTarget: {target: "pilot-notes.tbar", index: 25},
+                layer: config.notesLayer
+            }, {
+                actions: ["->"], actionTarget: "paneltbar"
             }, {
                 ptype:"gxp_playback",
-                controlOptions:{
-                    units:OpenLayers.TimeUnit.HOURS,
-                    step:1
-                },
+                outputTarget: "paneltbar",
                 outputConfig: {
-                    dynamicRange: false
-                }
-            }, {
-                xtype:"gxp_timeslider",
-                initialConfig:{
-                    timeFormat: 'c'
-                }
-            },{
-				ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
-				actionTarget: [ "feature-details.tbar" ],
-				layer: config.drawingLayer
-			},{
-				ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
-				actionTarget: [ "feature-details.tbar" ],
-				layer: config.drawingLayer,
-				onSelected: function( target, feature ){
-					self.fireEvent("featureselected", target, feature);
-				},
-				onUnselected: function( target ){
-					self.fireEvent("featureunselected", target);
-				}
-			},{
-				ptype:"gxp_import_kml",
-				actionTarget: {target: "feature-details.tbar", index: 25},
-				layer: config.drawingLayer
-			},{
-				ptype:"gxp_export_kml",
-				actionTarget: {target: "feature-details.tbar", index: 25},
-				layer: config.drawingLayer
-			},{
-				ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
-				actionTarget: [ "pilot-notes.tbar" ],
-				layer: config.notesLayer
-			},{
-				ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
-				actionTarget: [ "pilot-notes.tbar" ],
-				layer: config.notesLayer,
-				onSelected: function( target, feature ){
-					self.fireEvent("notefeatureselected", target, feature);
-				},
-				onUnselected: function( target ){
-					self.fireEvent("notefeatureunselected", target);
-				}
-			},{
-				ptype:"gxp_import_kml",
-				actionTarget: {target: "pilot-notes.tbar", index: 25},
-				layer: config.notesLayer
-			},{
-				ptype:"gxp_export_kml",
-				actionTarget: {target: "pilot-notes.tbar", index: 25},
-				layer: config.notesLayer
-			}
+                    controlConfig:{
+                        units:'Seconds',
+                        range: config.range,
+                        timespans: config.timespans
+                    }
+	    	}
+            }
         ];
         
        
