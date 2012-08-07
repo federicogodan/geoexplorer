@@ -186,6 +186,8 @@ public class FileDownloader extends HttpServlet {
 	
 	
 	private Map<String, String> getFields(String input){
+			LOGGER.log(Level.INFO,
+						input);
 		String[] params = input.split("&");
 		HashMap<String, String> fields = new HashMap<String, String>();
 		for(String param: params){

@@ -117,7 +117,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         new OpenLayers.Projection("EPSG:102113"));
                 },*/
                 actionTarget: {target: "paneltbar", index: 26}
-            }, {
+            },{
+		       ptype:"gxp_embedded_link",
+		       actionTarget: {target: "paneltbar", index: 27}
+		    },{
                 actions: ["-"], actionTarget: "paneltbar"
             }, {
                 ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
@@ -174,7 +177,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         range: config.range,
                         timespans: config.timespans
                     }
-	    	}
+	    		}
             }
         ];
         
