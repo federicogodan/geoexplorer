@@ -97,6 +97,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
     userConfigLoadTitle: "Loading User Context",
     userConfigLoadMsg: "Error reading user map context",
+    combosModelsTitle: "Seleziona Dati Meteo",
     // End i18n.
     
     /**
@@ -341,7 +342,201 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      * Create the various parts that compose the layout.
      */
     initPortal: function() {
+
         
+        //
+        //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
+        //
+
+        // proxy to search categories in geostore
+        var proxyCategory =  new Ext.data.HttpProxy({
+            url: "http://159.213.57.108/geostore/rest/categories/",
+            restful: true,
+            method : 'POST',
+            disableCaching: true,
+            timeout: 30000,
+            success: function (result){
+            },
+            failure: function (result) {
+                Ext.Msg.show({
+                    title: "Error",
+                    msg: "An error occurred during the search of categories: " + result.status,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+            },
+            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
+        });
+        
+        // store to read categories in geostore
+        var storeCategory = new Ext.data.Store({
+            proxy: proxyCategory,
+            reader: new Ext.data.XmlReader({
+                id: 'storeCategory_id',
+                record: "Category"
+            }, [{
+                name: 'id',
+                type: 'int'
+            }, {
+                name: 'name',
+                type: 'tring'
+            }])
+        });
+        
+        // combo for select categories
+        var comboModels = new Ext.form.ComboBox({
+                                id: 'comboModel',
+                                triggerAction: 'all',
+                                store: storeCategory,
+                                mode: 'remote',
+                                xtype: 'combo',
+                                width: 160,
+                                displayField: 'name',
+                                fieldLabel: 'Seleziona RUN Modello',
+                                valueField: 'name',
+                                listClass: 'x-combo-list-small',
+                                resizable: true,
+                                typeAhead: true,
+                                emptyText:'Seleziona un Modello',
+                                selectOnFocus:true,
+                                listeners: { 
+                                    select: function(combo, record, index) {
+                                        comboRuns.setValue('');
+                                        comboRuns.enable();
+                                        comboRuns.getStore().reload();
+                                    }
+                                }
+                            });
+        
+        // proxy to search resources in geostore
+        var proxyResource =  new Ext.data.HttpProxy({
+            url: getUrl(comboModels.getValue()),
+            restful: true,
+            method : 'POST',
+            disableCaching: true,
+            timeout: 30000,
+            success: function (result){
+            },
+            failure: function (result) {
+                Ext.Msg.show({
+                    title: "Error",
+                    msg: "An error occurred during the search of resources: " + result.status,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+                });
+            },
+            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
+        });
+        
+        // store to read resources in geostore
+        var storeResource = new Ext.data.Store({
+            proxy: proxyResource,
+            reader: new Ext.data.XmlReader({
+                id: 'storeResource_id',
+                record: "Resource"
+            }, [{
+                name: "id",
+                type: "int"
+            },{
+                name: "name",
+                type: "string"
+            },{
+                name: "owner",
+                type: "string"
+            },{
+                name: "description",
+                type: "string"
+            },{
+                name: "creation",
+                type: "date",
+                dateFormat: 'c'
+            },{
+                name: "lastUpdate",
+                type: "date",
+                dateFormat: 'c'
+            },{
+                name: "canEdit",
+                type: "boolean"
+            },{
+                name: "canDelete",
+                type: "boolean"
+            }]),
+            listeners:{
+                beforeload:function(store, options){
+                    store.proxy.setUrl(getUrl(comboModels.getValue()));
+                },
+                scope: this
+            }
+        });
+        
+        // method to dinamically search resource in geostore
+        function getUrl(srcStr) {
+            var r = 'http://159.213.57.108/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
+            return r;
+        };
+
+        // combo for select resources and loadUserConfig
+        var comboRuns = new Ext.form.ComboBox({
+                                id: 'comboRuns',
+                                xtype: 'combo',
+                                triggerAction: 'all',
+                                store: storeResource,
+                                mode: 'remote',
+                                displayField: 'name',
+                                width: 160,
+                                fieldLabel: 'Seleziona giorno',
+                                valueField: 'id',
+                                listClass: 'x-combo-list-small',
+                                disabled: true,
+                                resizable: true,
+                                emptyText:'Seleziona giorno',
+                                selectOnFocus:true,
+                                listeners: { 
+                                    select: function(combo, record, index) {
+                                        mapId = comboRuns.getValue();
+                                        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+                                        var mHost=pattern.exec(geoStoreBaseURL);
+
+                                        var mUrl = geoStoreBaseURL + "data/" + mapId;
+                                        Ext.Ajax.request({
+                                           url: mHost[2] == location.host ? mUrl : proxy + mUrl,
+                                           //url: geoStoreBaseURL + "data/" + this.mapId,
+                                           method: 'GET',
+                                           scope: this,
+                                           headers:{
+                                              'Accept': "application/json"
+                                           },
+                                           success: function(response, opts){  
+                                                app.loadUserConfig(response.responseText);
+                                           },
+                                           failure: function(response, opts){
+                                              Ext.Msg.show({
+                                                    title: "Startup",
+                                                    msg: "An error occurred while try to update config: " + response.status,
+                                                    buttons: Ext.Msg.OK,
+                                                    icon: Ext.MessageBox.ERROR
+                                              });
+                                           }
+                                        });
+                                    }
+                                }
+                            });
+
+    var geoDatiLamma = {
+        xtype: 'fieldset',
+        flex: 1,
+        //iconCls: 'user_edit',
+        title: 'Geo Dati LaMMA',
+        bodyStyle: 'padding-right:5px; padding-left:20px;',
+        defaultType: 'textField', // each item will be a checkbox
+        layout: 'form',
+        defaults: {
+            anchor: '90%',
+            hideEmptyLabel: false
+        },
+        items: [comboModels,comboRuns]
+    };
+    
         var westPanel = new Ext.Panel({
             border: false,
             layout: "border",
@@ -353,13 +548,75 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             collapseMode: "mini",
             header: false,
             items: [
-                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
+                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}
+            ]
+        });
+
+        var datiFormPanel = new Ext.FormPanel({
+            //monitorValid: true,
+            xtype : 'form',
+            layout : {
+                type : 'table',
+                columns : 1
+            },
+            //frame: true,
+            buttonAlign: 'center',/*
+            fieldDefaults: {
+                labelWidth: 30
+            },*/
+            defaults : {
+                padding : 5,
+                width : 230,
+                cellCls : 'verticalAlignTop',
+                border : false
+            },
+            labelAlign : 'top',
+            width: 240,
+            border: false,
+            labelWidth: 130,
+            //id:'east',
+            region: "north",
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
+            header: false,
+            items: [{
+                layout: 'form',
+                items: [geoDatiLamma]
+            }]
+        });
+
+        var eastPanel = new Ext.Panel({
+            border: false,
+            layout: "border",
+            id:'east',
+            region: "east",
+            width: 240,
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
+            header: false,
+            items: [
                 {
-                    region: 'south', xtype: "panel", layout: "fit", 
-                    collapsible : true, collapseMode:  'mini',
-                    split : true, hideCollapseTool: true,
-                    border: false, height: 200, id: 'legend'
-                }
+                    region: 'center',
+                    autoScroll: true,
+                    border: false,
+                    id: 'selDati',
+                    title: this.combosModelsTitle,
+                    items: [datiFormPanel]
+                },
+                        {
+                            region: 'south',
+                            xtype: "panel",
+                            layout: "fit", 
+                            collapsible : true,
+                            collapseMode:  'mini',
+                            split : true,
+                            hideCollapseTool: true,
+                            border: false,
+                            height: 360,
+                            id: 'legend'
+                        }
             ]
         });
         
@@ -401,7 +658,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "border",            
             items: [
                 this.mapPanelContainer,
-                westPanel
+                westPanel,
+                eastPanel
             ]
         }];
         

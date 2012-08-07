@@ -11,7 +11,7 @@
 
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="../theme/app/geoexplorer.css" />
-    <link rel="stylesheet" type="text/css" href="../theme/app/composer.css" />
+    <!-- link rel="stylesheet" type="text/css" href="../theme/app/composer.css" / -->
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
     
     <script type="text/javascript" src="../script/GeoExplorer.js"></script>
@@ -25,7 +25,24 @@
     <script type="text/javascript" src="../translations/it.js"></script>
     <script type="text/javascript" src="../translations/fr.js"></script>
     <script type="text/javascript" src="../translations/en.js"></script>
-
+    
+    <script type="text/javascript">
+    <!--
+        Ext.onReady(function() {
+          setTimeout(function(){
+            Ext.get('loading').remove();
+            Ext.get('loading-mask').fadeOut({remove:true});
+          }, 1000);
+        });
+    //-->
+    </script>
+    
+    <div id="loading-mask"></div>
+    <div id="loading">
+      <div class="loading-indicator">
+      </div>
+    </div>
+    
     <script>
         
         var app;
@@ -262,180 +279,7 @@
                 id : 'appTabs',
                 enableTabScroll: true
             });
-        
-        //
-        //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
-        //
 
-        // proxy to search categories in geostore
-        var proxyCategory =  new Ext.data.HttpProxy({
-            url: "http://159.213.57.108/geostore/rest/categories/",
-            restful: true,
-            method : 'POST',
-            disableCaching: true,
-            timeout: 30000,
-            success: function (result){
-            },
-            failure: function (result) {
-                Ext.Msg.show({
-                    title: "Error",
-                    msg: "An error occurred during the search of categories: " + result.status,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            },
-            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
-        });
-        
-        // store to read categories in geostore
-        var storeCategory = new Ext.data.Store({
-            proxy: proxyCategory,
-            reader: new Ext.data.XmlReader({
-                id: 'storeCategory_id',
-                record: "Category"
-            }, [{
-                name: 'id',
-                type: 'int'
-            }, {
-                name: 'name',
-                type: 'tring'
-            }])
-        });
-        
-        // combo for select categories
-        var comboModels = new Ext.form.ComboBox({
-                                id: 'comboModel',
-                                triggerAction: 'all',
-                                store: storeCategory,
-                                mode: 'remote',
-                                displayField: 'name',
-                                //fieldLabel: 'Seleziona un Modello',
-                                valueField: 'name',
-                                listClass: 'x-combo-list-small',
-                                resizable: true,
-                                typeAhead: true,
-                                emptyText:'Seleziona un Modello',
-                                selectOnFocus:true,
-                                listeners: { 
-                                    select: function(combo, record, index) {
-                                        comboRuns.setValue('');
-                                        comboRuns.enable();
-                                        comboRuns.getStore().reload();
-                                    }
-                                }
-                            });
-        
-        // proxy to search resources in geostore
-        var proxyResource =  new Ext.data.HttpProxy({
-            url: getUrl(comboModels.getValue()),
-            restful: true,
-            method : 'POST',
-            disableCaching: true,
-            timeout: 30000,
-            success: function (result){
-            },
-            failure: function (result) {
-                Ext.Msg.show({
-                    title: "Error",
-                    msg: "An error occurred during the search of resources: " + result.status,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            },
-            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
-        });
-        
-        // store to read resources in geostore
-        var storeResource = new Ext.data.Store({
-            proxy: proxyResource,
-            reader: new Ext.data.XmlReader({
-                id: 'storeResource_id',
-                record: "Resource"
-            }, [{
-                name: "id",
-                type: "int"
-            },{
-                name: "name",
-                type: "string"
-            },{
-                name: "owner",
-                type: "string"
-            },{
-                name: "description",
-                type: "string"
-            },{
-                name: "creation",
-                type: "date",
-                dateFormat: 'c'
-            },{
-                name: "lastUpdate",
-                type: "date",
-                dateFormat: 'c'
-            },{
-                name: "canEdit",
-                type: "boolean"
-            },{
-                name: "canDelete",
-                type: "boolean"
-            }]),
-            listeners:{
-                beforeload:function(store, options){
-                    store.proxy.setUrl(getUrl(comboModels.getValue()));
-                },
-                scope: this
-            }
-        });
-        
-        // method to dinamically search resource in geostore
-        function getUrl(srcStr) {
-            var r = 'http://159.213.57.108/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
-            return r;
-        };
-
-        // combo for select resources and loadUserConfig
-        var comboRuns = new Ext.form.ComboBox({
-                                id: 'comboRuns',
-                                triggerAction: 'all',
-                                store: storeResource,
-                                mode: 'remote',
-                                displayField: 'name',
-                                //fieldLabel: 'Seleziona un Modello',
-                                valueField: 'id',
-                                listClass: 'x-combo-list-small',
-                                disabled: true,
-                                resizable: true,
-                                emptyText:'Seleziona un giorno',
-                                selectOnFocus:true,
-                                listeners: { 
-                                    select: function(combo, record, index) {
-                                        mapId = comboRuns.getValue();
-                                        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
-                                        var mHost=pattern.exec(geoStoreBaseURL);
-
-                                        var mUrl = geoStoreBaseURL + "data/" + mapId;
-                                        Ext.Ajax.request({
-                                           url: mHost[2] == location.host ? mUrl : proxy + mUrl,
-                                           //url: geoStoreBaseURL + "data/" + this.mapId,
-                                           method: 'GET',
-                                           scope: this,
-                                           headers:{
-                                              'Accept': "application/json"
-                                           },
-                                           success: function(response, opts){  
-                                                app.loadUserConfig(response.responseText);
-                                           },
-                                           failure: function(response, opts){
-                                              Ext.Msg.show({
-                                                    title: "Startup",
-                                                    msg: "An error occurred while try to update config: " + response.status,
-                                                    buttons: Ext.Msg.OK,
-                                                    icon: Ext.MessageBox.ERROR
-                                              });
-                                           }
-                                        });
-                                    }
-                                }
-                            });
 
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
@@ -480,13 +324,12 @@
                         border: false,
                         height: 75,
                         hideCollapseTool: true,
-                        collapsible : true,
+                        collapsible : false,
                         collapsed: false,
                         collapseMode: 'mini',
                         split: true,
                         html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',
-                        bodyStyle: 'padding:0px;background-color: #222b43;',
-                        tbar: [comboModels,comboRuns]
+                        bodyStyle: 'padding:0px;background-color: #222b43;'
                     },{
                         region : 'center',
                         layout : 'border',
@@ -505,10 +348,7 @@
             var sources = "{" + 
                 "\"LaMMA Stazioni\": {" +
                         "\"ptype\": \"gxp_wmssource\"," +
-                        "\"layerBaseParams\":{" +
-                            "\"TILED\":false," +
-                            "\"TILESORIGIN\": \"-20037508.34,-20037508.34\"" +
-                        "}," +
+                        "\"title\": \"LaMMA Stazioni\"," +
                         "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"" +
                 "}," +
                 "\"mapquest\": {" +
@@ -591,6 +431,15 @@
                 },
                 sources: sources,
                 map: {
+                    plugins: [
+                        {
+                            ptype: "gxp_loadingindicator",
+                            onlyShowOnFirstLoad: false
+                        }
+                    ],
+                    layoutConfig: {
+                        monitorResize: false
+                    },
                     projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
@@ -654,7 +503,7 @@
                         app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, lay);
                         appTabs.setActiveTab(2);	
                     }
-                }    
+                },             
             });
 
             addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl, enableViewTab){
@@ -800,8 +649,8 @@
       };			
 			
       Ext.Ajax.request({
-          url: "/MapStore/urlConfig.js", //TEST
-          //url: "/urlConfig.js", //TEST
+          //url: "/MapStore/urlConfig.js", //TEST
+          url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
