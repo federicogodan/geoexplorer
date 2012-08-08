@@ -29,7 +29,7 @@
         var app;
 
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl;
+        var uuid; var lay; var wmsurl; var bounds; var zoom; var center;
 
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
@@ -68,6 +68,15 @@
 		            case "uuid" : 
 		                            uuid = param[1]; 
 		                            break;
+					case "bounds":
+									bounds = param[1].split(',');
+									break;
+					case "zoom":
+									zoom = param[1];
+									break;
+					case "center":
+									center = param[1].split(',');
+									break;
 					default :       
 									mapIdentifier = -1;
 									authorization = false;
@@ -75,6 +84,17 @@
 				}
 			}
         }
+
+		// set default values for params
+		if (!bounds){
+			bounds = [ "-20037508.34", "-20037508.34", "20037508.34", "20037508.34" ];
+		} 
+		if (!zoom){
+			zoom = 5;
+		} 
+		if (!center){
+			center = [ "1406441.320251", "5523033.9150049"];
+		}
 		
 		// ///////////////////////////////////////////////////////////////
 		// Custom variables from the urlConfig user configuration file 
@@ -483,7 +503,7 @@
                         /*html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',*/
 					    /* html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/nurc.gif" height="100%"/>',*/
 	 				html:'<font color="white" size="16">Informational Page</font>',
-                        bodyStyle: 'padding:0px;background-color: #0055bb;',
+                        bodyStyle: 'padding:0px;background-color: #0055bb;'
                         // tbar: [comboModels,comboRuns]
                     },{
                         region : 'center',
@@ -629,9 +649,13 @@
                 map: {
                     projection: "EPSG:900913",
                     units: "m",
-                    maxExtent: [
+                    /*maxExtent: [
                         -20037508.34, -20037508.34,
                         20037508.34, 20037508.34
+                    ],*/
+					maxExtent: [
+                        parseFloat(bounds[0]), parseFloat(bounds[1]),
+                        parseFloat(bounds[2]), parseFloat(bounds[3])
                     ],
                     layers: [
                     {
@@ -1097,8 +1121,8 @@
                        ratio:1,
                        cql_filter: "cruise_name = 'Rep10' AND glider_name = 'elettra' AND type = 'Points'"
                     }],
-                    center: [1250000.000000, 5370000.000000],
-                    zoom: 5
+                    center: [parseFloat(center[0]), parseFloat(center[1])],
+                    zoom: parseInt(zoom)
                 }
             }, mapIdentifier, authorization, fullScreen);   
 
@@ -1274,7 +1298,8 @@
       };			
 			
       Ext.Ajax.request({
-          url: "/MapStore/urlConfig.js", //TEST
+		  // url: "/MapStore/urlConfig.js",
+          url: "/MapStore-gliders/urlConfig.js", //TEST
           // url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
@@ -1282,6 +1307,7 @@
               
               try{
                   serverConfig = Ext.util.JSON.decode(response.responseText);
+				  // console.log(serverConfig);
               }catch(e){
                   Ext.Msg.show({
                         title: "Startup",
