@@ -60,7 +60,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				ptype: "gxp_pilot_notes",
 				outputTarget: 'pilot-notes',
 				drawingLayer: config.notesLayer
-			},{
+			},/*{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
                 upload: true
@@ -90,7 +90,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget:[
                    "layertree.contextMenu"
                 ]
-            }, {
+            },*/ {
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 15}
             }, {

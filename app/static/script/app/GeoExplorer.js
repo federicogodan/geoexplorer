@@ -135,7 +135,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 plugins: new GeoExt.ZoomSliderTip({
                     template: this.zoomSliderText
                 })
-            }
+            },{
+	            xtype: "gxp_watermark", // definiscilo in config
+				url: config.config.watermark_url, // '../theme/app/img/nurc-logo.png',
+				text: config.config.watermark_title, // 'Powered by NURC',
+				position: config.config.watermark_position, // 'position:absolute;left:690px;top:100px'
+	        }
         ];
         
         // both the Composer and the Viewer need to know about the viewerTools
@@ -411,6 +416,19 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			// add the layer for custom drawing to the map
 			this.mapPanel.map.addLayer(this.drawingLayer);
 			this.mapPanel.map.addLayer(this.notesLayer);
+			
+			// add controls to map
+			this.mapPanel.map.addControl(new OpenLayers.Control.MousePosition());
+			/*var poweredByControl = new OpenLayers.Control();
+			OpenLayers.Util.extend(poweredByControl, {
+			        draw: function () {
+			          OpenLayers.Control.prototype.draw.apply(this, arguments);
+			          this.div.innerHTML = '<img src=\"../theme/app/img/nurc-logo.png\" width=\"60\" height=\"60\" class=\"olPoweredBy\" id=\"olPoweredBy\" title=\"Powered by NURC\" style=\"position:absolute;left:690px;top:285px\"/>';
+			          return this.div;
+			        }
+
+			    });
+			this.mapPanel.map.addControl(poweredByControl);*/
 
             disabled.each(function(item) {
                 item.disable();
