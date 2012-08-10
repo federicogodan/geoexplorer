@@ -126,9 +126,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         }
             
         this.mapItems = [
-            {
+			{
+           		xtype: "gxp_mouse_position"
+        	},{
                 xtype: "gxp_scaleoverlay"
-            }, {
+            },{
                 xtype: "gx_zoomslider",
                 vertical: true,
                 height: 100,
@@ -417,18 +419,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			this.mapPanel.map.addLayer(this.drawingLayer);
 			this.mapPanel.map.addLayer(this.notesLayer);
 			
-			// add controls to map
-			this.mapPanel.map.addControl(new OpenLayers.Control.MousePosition());
-			/*var poweredByControl = new OpenLayers.Control();
-			OpenLayers.Util.extend(poweredByControl, {
-			        draw: function () {
-			          OpenLayers.Control.prototype.draw.apply(this, arguments);
-			          this.div.innerHTML = '<img src=\"../theme/app/img/nurc-logo.png\" width=\"60\" height=\"60\" class=\"olPoweredBy\" id=\"olPoweredBy\" title=\"Powered by NURC\" style=\"position:absolute;left:690px;top:285px\"/>';
-			          return this.div;
-			        }
-
-			    });
-			this.mapPanel.map.addControl(poweredByControl);*/
 
             disabled.each(function(item) {
                 item.disable();
