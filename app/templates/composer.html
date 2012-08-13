@@ -661,8 +661,9 @@
 				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
+                units: OpenLayers.TimeUnit.MINUTES,
                 range: ['2010-08-20T10:02:29.000Z','2010-09-02T15:43:43.000Z'],
-                timespans: ['2010-08-20T10:02:29.000Z/2010-09-02T15:43:43.000Z/P1W6DT5H41M14S'],                
+                //timeSpans: ['2010-08-20T00:00:00.000Z/2010-08-30T00:00:00.000Z/P1W3D'],                
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -704,6 +705,17 @@
                         group: "background"
                     },{
                        format:"image/png8",
+                       group:"Watervel",
+                       name:"it.geosolutions:rep10_watervel_forecast",
+                       opacity:1.0,
+                       selected:false,
+                       source:"Gliders",
+                       title:"Watervel Forecast",
+                       transparent:true,
+                       visibility:true,
+                       ratio:1
+                    },{
+                       format:"image/png",
                        group:"Zoe",
                        name:"it.geosolutions:GlidersNextWpts",
                        opacity:1.0,
