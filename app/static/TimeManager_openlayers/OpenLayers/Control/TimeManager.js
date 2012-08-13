@@ -92,7 +92,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      *     Note: You can use an ISO 8601 formated string (see 
      *     http://tools.ietf.org/html/rfc3339) or Date objects.
      */
-    timespans:null,
+    timeSpans:null,
     
 	/**
 	 * APIProperty: frameRate
@@ -634,8 +634,13 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      incrementTime:function(step,stepUnit) {
         var step = step || this.step;
         var stepUnit = stepUnit || this.units;
-        var newTime = parseFloat(this.currentTime['getUTC'+stepUnit]()) + parseFloat(step);
-        this.currentTime['setUTC'+stepUnit](newTime);
+        if (stepUnit == "Days"){
+            var newTime = parseFloat(this.currentTime['getUTCDate']()) + parseFloat(step);
+            this.currentTime['setUTCDate'](newTime);
+        }else{
+            var newTime = parseFloat(this.currentTime['getUTC'+stepUnit]()) + parseFloat(step);
+            this.currentTime['setUTC'+stepUnit](newTime);    
+        }
     },
 
 	/**

@@ -109,7 +109,11 @@ OpenLayers.TimeAgent.WMS = OpenLayers.Class(OpenLayers.TimeAgent, {
             if(this.rangeMode == 'range') {
                 minTime = new Date(time.getTime());
                 if(this.timeManager.units) {
-                    minTime['setUTC'+this.timeManager.units](time['getUTC'+this.timeManager.units]() - this.rangeInterval);
+                    if (this.timeManager.units == "Days"){
+                        minTime['setUTCDate'](time['getUTCDate']() - this.rangeInterval);
+                    }else{
+                        minTime['setUTC'+this.timeManager.units](time['getUTC'+this.timeManager.units]() - this.rangeInterval);
+                    }
                 }
             }
             else {
