@@ -141,7 +141,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	            xtype: "gxp_watermark", // definiscilo in config
 				url: config.config.watermark_url, // '../theme/app/img/nurc-logo.png',
 				text: config.config.watermark_title, // 'Powered by NURC',
-				position: config.config.watermark_position, // 'position:absolute;left:690px;top:100px'
+				position: config.config.watermark_position // 'position:absolute;left:690px;top:100px'
 	        }
         ];
         

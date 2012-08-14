@@ -121,13 +121,15 @@
 
 		// set default values for params
 		if (!bounds){
-			bounds = [ "-20037508.34", "-20037508.34", "20037508.34", "20037508.34" ];
+			// bounds = [ "-20037508.34", "-20037508.34", "20037508.34", "20037508.34" ];
+			bounds = [ "7.3526000976563","42.599487304688","12.301940917969","44.598999023438"];
 		} 
 		if (!zoom){
-			zoom = 5;
+			zoom = 8;
 		} 
 		if (!center){
-			center = [ "1406441.320251", "5523033.9150049"];
+			// center = [ "1406441.320251", "5523033.9150049"];
+			center= ["9.8272705078125","43.599243164063"];
 		}
 		if (!startTime){
 			startTime = '2010-08-20T10:02:29.000Z';
@@ -570,29 +572,14 @@
                 "\"Gliders\": {" +
                         "\"ptype\": \"gxp_wmssource\"," +
                         "\"title\": \"Gliders\"," +
+						"\"version\":\"1.1.1\","+
                         "\"url\":\"http://84.33.199.62/geoserver-gliders/ows\"" +
                 "}," +      
                 "\"NURCBG\": {" +
-                        "\"ptype\": \"gxp_wmssource\"," +
                         "\"title\": \"Nurc BG\"," +
-						"\"version\":\"1.1.0\","+
-                        "\"url\":\"http://demo1.geo-solutions.it/geoserver-enterprise/wms\"" +
-                "}," +      
-                "\"mapquest\": {" +
-                    "\"ptype\": \"gxp_mapquestsource\"" +
-                "}," + 
-                "\"osm\": {" + 
-                    "\"ptype\": \"gxp_osmsource\"" +
-                "}," +
-                "\"google\": {" +
-                    "\"ptype\": \"gxp_googlesource\"" + 
-                "}," +
-                "\"bing\": {" +
-                    "\"ptype\": \"gxp_bingsource\"" + 
-                "}," + 
-                "\"ol\": {" + 
-                    "\"ptype\": \"gxp_olsource\"" + 
-                "}"; 
+						"\"version\":\"1.1.1\","+
+                        "\"url\":\"http://demo1.geo-solutions.it/geoserver-enterprise/ows\"" +
+                "}";
             
             if(customSources.length > 0)
                 sources += ",";
@@ -694,41 +681,19 @@
                 },
                 sources: sources,
                 map: {
-                    projection: "EPSG:900913",
-                    units: "m",
-					maxExtent: [
+                    // projection: "EPSG:900913",
+					projection: "EPSG:4326",
+                    units: "dd",
+				    maxExtent: [-180, -90, 180, 90],
+					// extent: [ 7.26, 44.44, 11.53, 41.60],
+					extent: [
                         parseFloat(bounds[0]), parseFloat(bounds[1]),
                         parseFloat(bounds[2]), parseFloat(bounds[3])
                     ],
                     layers: [
-                    {
-                        source: "bing",
-                        title: "Bing Aerial",
-                        name: "Aerial",
-                        group: "background"
-                    },{
-                        source: "osm",
-                        title: "Open Street Map",
-                        name: "mapnik",
-                        group: "background"
-                    },{
-                        source: "mapquest",
-                        title: "MapQuest OpenStreetMap",
-                        name: "osm",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Hybrid",
-                        name: "HYBRID",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Terrain",
-                        name: "TERRAIN",
-                        group: "background"
-                    },
 					{
                        format:"image/jpeg",
+					   transparent: false,
 					   source:"NURCBG",
                        group:"background",
                        name:"nurcbg",
@@ -1355,9 +1320,9 @@
       };			
 			
       Ext.Ajax.request({
-		  // url: "/MapStore/urlConfig.js",
+		  url: "/MapStore/urlConfig.js",
           // url: "/MapStore-gliders/urlConfig.js", //TEST
-          url: "/urlConfig.js", //TEST
+          // url: "/urlConfig.js", //TEST
           method: 'GET',
           success: function(response, opts){      
               var serverConfig;    
