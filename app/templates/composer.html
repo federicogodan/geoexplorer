@@ -51,6 +51,7 @@
 
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
         var uuid; var lay; var wmsurl; var bounds; var zoom; var center; var config;
+		var startTime; var endTime; var timeUnit; var currentTime;
 
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
@@ -98,6 +99,18 @@
 					case "center":
 									center = param[1].split(',');
 									break;
+					case "startTime":
+									startTime = param[1];
+									break;
+					case "endTime":
+									endTime = param[1];
+									break;
+					case "timeUnit":
+									timeUnit = param[1];
+									break;
+					case "currentTime":
+									currentTime = param[1];
+									break;
 					default :       
 									mapIdentifier = -1;
 									authorization = false;
@@ -115,6 +128,18 @@
 		} 
 		if (!center){
 			center = [ "1406441.320251", "5523033.9150049"];
+		}
+		if (!startTime){
+			startTime = '2010-08-20T10:02:29.000Z';
+		}
+		if (!endTime){
+			endTime = '2010-09-02T15:43:43.000Z';
+		}
+		if (!timeUnit){
+			timeUnit = OpenLayers.TimeUnit.MINUTES;
+		}
+		if (!currentTime){
+			currentTime='2010-08-20T10:02:29.000Z';
 		}
 		
 		// ///////////////////////////////////////////////////////////////
@@ -667,8 +692,8 @@
 				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                units: OpenLayers.TimeUnit.MINUTES,
-                range: ['2010-08-20T10:02:29.000Z','2010-09-02T15:43:43.000Z'],
+                units: timeUnit,
+                range: [startTime,endTime],
                 //timeSpans: ['2010-08-20T00:00:00.000Z/2010-08-30T00:00:00.000Z/P1W3D'],                
                 about: {
                     title: "Custom Map",
