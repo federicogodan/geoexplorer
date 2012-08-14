@@ -546,7 +546,13 @@
                         "\"ptype\": \"gxp_wmssource\"," +
                         "\"title\": \"Gliders\"," +
                         "\"url\":\"http://84.33.199.62/geoserver-gliders/ows\"" +
-                "}," +            
+                "}," +      
+                "\"NURCBG\": {" +
+                        "\"ptype\": \"gxp_wmssource\"," +
+                        "\"title\": \"Nurc BG\"," +
+						"\"version\":\"1.1.0\","+
+                        "\"url\":\"http://demo1.geo-solutions.it/geoserver-enterprise/wms\"" +
+                "}," +      
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -703,7 +709,15 @@
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
-                    },{
+                    },
+					{
+                       format:"image/jpeg",
+					   source:"NURCBG",
+                       group:"background",
+                       name:"nurcbg",
+                       title:"Nurc Background"
+                    },
+					{
                        format:"image/png8",
                        group:"Watervel",
                        name:"it.geosolutions:rep10_watervel_forecast",
