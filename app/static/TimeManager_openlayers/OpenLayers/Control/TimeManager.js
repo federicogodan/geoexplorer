@@ -773,7 +773,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
     guessPlaybackRate:function(){
         if(!this.timeAgents){return false;}
         var timeSpans=this.getValidTimeSpans();
-        if (timeSpans) {
+        if (timeSpans & !this.intervals) {
             timeSpans.sort(function(a, b){
                 //sort by most restrictive range
                 var arange = a.end - a.start, brange = b.end - b.start;
@@ -817,7 +817,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.step = timeSpans[0].resolution.step;
         }
         else if (this.intervals) {
-            this.snapToIntervals = true;
+            this.snapToIntervals = true
         }
         else {
             //guess based on range, keep step at 1
