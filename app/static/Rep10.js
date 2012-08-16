@@ -4,7 +4,11 @@
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:absolute;left:690px;top:5px",
-   
+   "bounds" :  [ "7.3526000976563","42.599487304688","12.301940917969","44.598999023438"],
+   "center" : ["9.8272705078125","43.599243164063"],
+   "zoom": "8",
+   "startTime":"2010-08-20T10:02:29.000Z",
+   "endTime":"2010-09-02T15:43:43.000Z",
    "gsSources":{
         "Gliders": {
             "ptype": "gxp_wmssource",
