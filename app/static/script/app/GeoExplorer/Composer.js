@@ -217,9 +217,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     if(button.pressed){
                         Ext.getCmp('tree').findParentByType('panel').collapse();
 						Ext.getCmp('feature-details').findParentByType('panel').collapse();
+					    Ext.getCmp('main-header').collapse();
                     } else {
                         Ext.getCmp('tree').findParentByType('panel').expand();
 						Ext.getCmp('feature-details').findParentByType('panel').expand();
+						Ext.getCmp('main-header').expand();
                     }
                 }
             });            

@@ -381,9 +381,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			minWidth:300,
 			maxWidth:300,
 			activeTab:0,
-            // split: true,
-            // collapsible: true,
-            // collapseMode: "mini",
+            split: true,
+            collapsible: true,
+            collapseMode: "mini",
             header: false,
             items: [
 			   {
