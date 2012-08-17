@@ -817,7 +817,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.step = timeSpans[0].resolution.step;
         }
         else if (this.intervals) {
-            this.snapToIntervals = true;
+            this.snapToIntervals = false
         }
         else {
             //guess based on range, keep step at 1
