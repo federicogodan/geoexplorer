@@ -7,8 +7,8 @@
    "bounds" : ["17.000","40.0000","16.0000","39.0000"],
    "center" : ["17.5","39.5"],
    "zoom": "8",
-   "startTime": "2011-08-16T10:00:00.000Z",
-   "endTime": "2011-10-12T10:23:59.000Z",
+   "startTime": "2011-09-30T10:00:00.000Z",
+   "endTime": "2011-10-12T8:00:00.000Z",
    "gsSources":{
         "Gliders": {
             "ptype": "gxp_wmssource",
@@ -30,18 +30,6 @@
             "group": "background",
             "name": "nurcbg",
             "title": "Nurc Background"
-        },
-        {
-            "format": "image/png8",
-            "group": "Watervel",
-            "name": "it.geosolutions:Rep11b_watervel_forecast",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Watervel Forecast",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1
         },
          {
             "format": "image/png8",
@@ -186,6 +174,70 @@
             "visibility": true,
             "ratio": 1,
             "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe' AND type = 'Points'"
+        },{
+            "format": "image/png8",
+            "group": "Noa",
+            "name": "it.geosolutions:GlidersErrorEllipseEnvelopes",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Envelope",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
+        },
+         {
+            "format": "image/png8",
+            "group": "Noa",
+            "name": "it.geosolutions:GlidersErrorEllipses",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Error Ellipses",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
+        },
+                 {
+            "format": "image/png8",
+            "group": "Noa",
+            "name": "it.geosolutions:GlidersPredictedTracks",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Predicted Track",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+             "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
+         },
+         {
+            "format": "image/png8",
+            "group": "Noa",
+            "name": "it.geosolutions:GlidersErrorEllipseCenters",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Error Centers",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
+        },
+        {
+            "format": "image/png8",
+            "group": "Noa",
+            "name": "it.geosolutions:GlidersPredictedCurrent",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Current Predicted",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
         },
         {
             "format": "image/png8",
