@@ -52,7 +52,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }
                 }
-            },{
+            },	
+			{
 				ptype: "gxp_feature_details",
 				outputTarget: 'feature-details',
 				drawingLayer: config.drawingLayer
@@ -186,7 +187,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         range: config.range
                     }
                 }
-            }
+            }, {
+					ptype: "gxp_synchronizer",
+					refreshTimeInterval: config.refreshTimeInterval
+				}
         ];
         
        

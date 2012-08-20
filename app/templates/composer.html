@@ -28,24 +28,13 @@
 	    .olControlMousePosition {
 	        top: 5px !important;
 	        right: 5px !important;
+			font-size: 3em;
+            color: lightgrey;
 	    }
 	</style>
 
     <script>
 	
-		// see http://stackoverflow.com/questions/462537/overriding-important-style-using-javascript
-	    function addNewStyle(newStyle) {
-		    var styleElement = document.getElementById('styles_js');
-		    if (!styleElement) {
-		        styleElement = document.createElement('style');
-		        styleElement.type = 'text/css';
-		        styleElement.id = 'styles_js';
-		        document.getElementsByTagName('head')[0].appendChild(styleElement);
-		    }
-		    styleElement.appendChild(document.createTextNode(newStyle));
-		}
-
-		// addNewStyle('div.olControlAttribution {font-size: 10px; top: 3px; right: 3px;}')
         
         var app;
         var serverConfig;
@@ -204,147 +193,6 @@
                  }
             });
             
-			// //////////////////////////////////////////////////////            
-            // Setting the locale based on query string parameter
-            // //////////////////////////////////////////////////////
-            var query = location.search;        
-            if(query && query.substr(0,1) === "?"){
-                query = query.substring(1);
-            }
-
-            var url = Ext.urlDecode(query);
-            var code = url.locale || 'en';
-            var langData = [['en', 'English']];
-
-            // //////////////////////////////////////////////////        
-            // Setting the initial language for the selector
-            // //////////////////////////////////////////////////
-			var initialLanguageString;					
-			Ext.each(langData, function(rec){
-				if(rec[0] === code.toLowerCase()){
-					initialLanguageString = rec[1];
-					return;
-				}
-			});
-			
-			initialLanguageString = !initialLanguageString ? "English" : initialLanguageString;	
-			
-			// ////////////////////////////////////////////////////
-			// Setting the language code for the GeoExt tools
-			// ////////////////////////////////////////////////////
-			if (GeoExt.Lang) {
-                GeoExt.Lang.set(code);
-            }
-			
-            var languageSelector = new Ext.form.ComboBox({
-                store: new Ext.data.ArrayStore({
-                    fields: ['code', 'name'],
-                    data :  langData
-                }),
-                displayField: 'name',
-                typeAhead: true,
-                mode: 'local',
-                forceSelection: true,
-                triggerAction: 'all',
-                emptyText: initialLanguageString,
-                selectOnFocus:false,
-                editable: false,
-                width: 100,
-                listeners: {
-                    beforeselect: function(cb, record, index){
-					   var c = record.get('code');
-                       if(c && c == code)
-                          return false; 
-					   else
-						  languageSelector.prevLang = code;
-                    },                    
-                    select: function(cb, record, index) {         
-                        
-                        var switchLang = function(buttonId, text, opt){
-                            if(buttonId === 'ok'){
-                                var c = record.get('code');
-								var u = location.pathname + '?locale=' + c;
-								
-								if(url.auth){
-									u += '&auth=' + url.auth;
-									if(url.auth == 'false')
-										u += '&fullScreen=true';
-								}
-								
-								if(url.mapId)
-									u += '&mapId=' + url.mapId;
-								
-								location.replace(u);                                
-                            }else{																
-                                if(languageSelector.prevLang && languageSelector.prevLang == 'fr'){
-                                    cb.setValue('Français');
-                                }else if(languageSelector.prevLang && languageSelector.prevLang == 'it'){
-									cb.setValue('Italiano');
-								}else{
-                                    cb.setValue('English');
-                                }
-                            }
-                        };
-                        
-                        var switchLangActionTip = "Switch Language";
-                        var switchLangConfirmationText = "You are sure to change language? All unsaved data will be lost";
-                        
-                        if(code === 'fr'){
-                            switchLangActionTip = "Changement de langue";
-                            switchLangConfirmationText = "Vous êtes certain que vous souhaitez modifier la langue ? toutes les données non enregistrées seront a perdu";
-                        }else if(code === 'it'){
-                            switchLangActionTip = "Cambiamento Lingua";
-                            switchLangConfirmationText = "Si è sicuri di voler cambiare lingua? I dati non salvati saranno persi";
-                        }
-                        
-                        Ext.Msg.show({
-                           title: switchLangActionTip,
-                           msg: switchLangConfirmationText,
-                           buttons: Ext.Msg.OKCANCEL,
-                           fn: switchLang,
-                           icon: Ext.MessageBox.QUESTION
-                        });  
-                    }
-                }
-            });
-
-        gnBaseUrl = 'http://159.213.57.108/geonetwork/';
-		gnLangStr = code;
-        var gnURL = gnBaseUrl + 'srv/' + gnLangStr + '/main.home';
-		
-        //var gpURL = 'http://geoportale.lamma.rete.toscana.it';
-
-            //
-            //Pannello per Geonetwork Consorzio LaMMA
-            //
-            var geonetworkPanel = new Ext.Panel({
-                id: 'geonetworkPanel',
-                title: GeoExplorer.prototype.searchTabTitle || 'Portale',
-                layout:'fit', 
-                items: [ 
-                    new Ext.ux.IFrameComponent({ 
-                        id: 'gn-panel',
-                        url: gnURL 
-                    }) 
-                ]
-            });
-
-            /*
-            //
-            //Pannello per Geoportale Consorzio LaMMA
-            //
-            var geoportalPanel = new Ext.Panel({
-                id: 'geoportalPanel',
-                title: GeoExplorer.prototype.portalTabTitle || 'Geoportal',
-                layout:'fit', 
-                items: [ 
-                    new Ext.ux.IFrameComponent({ 
-                        id: 'gp-panel',
-                        url: gpURL
-                    }) 
-                ]
-            });
-			*/
 
             var appTabs = new Ext.Panel({
                 //items: [geoportalPanel,geonetworkPanel],
@@ -355,212 +203,8 @@
                 id : 'appTabs'
             });
         
-        //
-        //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
-        //
-
-        // proxy to search categories in geostore
-        var proxyCategory =  new Ext.data.HttpProxy({
-            url: "http://159.213.57.108/geostore/rest/categories/",
-            restful: true,
-            method : 'POST',
-            disableCaching: true,
-            timeout: 30000,
-            success: function (result){
-            },
-            failure: function (result) {
-                Ext.Msg.show({
-                    title: "Error",
-                    msg: "An error occurred during the search of categories: " + result.status,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            },
-            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
-        });
-        
-        // store to read categories in geostore
-        var storeCategory = new Ext.data.Store({
-            proxy: proxyCategory,
-            reader: new Ext.data.XmlReader({
-                id: 'storeCategory_id',
-                record: "Category"
-            }, [{
-                name: 'id',
-                type: 'int'
-            }, {
-                name: 'name',
-                type: 'string'
-            }])
-        });
-        
-        // combo for select categories
-        var comboModels = new Ext.form.ComboBox({
-                                id: 'comboModel',
-                                triggerAction: 'all',
-                                store: storeCategory,
-                                mode: 'remote',
-                                displayField: 'name',
-                                //fieldLabel: 'Seleziona un Modello',
-                                valueField: 'name',
-                                listClass: 'x-combo-list-small',
-                                resizable: true,
-                                typeAhead: true,
-                                emptyText:'Seleziona un Modello',
-                                selectOnFocus:true,
-                                listeners: { 
-                                    select: function(combo, record, index) {
-                                        comboRuns.setValue('');
-                                        comboRuns.enable();
-                                        comboRuns.getStore().reload();
-                                    }
-                                }
-                            });
-        
-        // proxy to search resources in geostore
-        var proxyResource =  new Ext.data.HttpProxy({
-            url: getUrl(comboModels.getValue()),
-            restful: true,
-            method : 'POST',
-            disableCaching: true,
-            timeout: 30000,
-            success: function (result){
-            },
-            failure: function (result) {
-                Ext.Msg.show({
-                    title: "Error",
-                    msg: "An error occurred during the search of resources: " + result.status,
-                    buttons: Ext.Msg.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            },
-            defaultHeaders: {'Accept': 'text/xml', 'Content-Type': 'text/xml'}
-        });
-        
-        // store to read resources in geostore
-        var storeResource = new Ext.data.Store({
-            proxy: proxyResource,
-            reader: new Ext.data.XmlReader({
-                id: 'storeResource_id',
-                record: "Resource"
-            }, [{
-                name: "id",
-                type: "int"
-            },{
-                name: "name",
-                type: "string"
-            },{
-                name: "owner",
-                type: "string"
-            },{
-                name: "description",
-                type: "string"
-            },{
-                name: "creation",
-                type: "date",
-                dateFormat: 'c'
-            },{
-                name: "lastUpdate",
-                type: "date",
-                dateFormat: 'c'
-            },{
-                name: "canEdit",
-                type: "boolean"
-            },{
-                name: "canDelete",
-                type: "boolean"
-            }]),
-            listeners:{
-                beforeload:function(store, options){
-                    store.proxy.setUrl(getUrl(comboModels.getValue()));
-                },
-                scope: this
-            }
-        });
-        
-        // method to dinamically search resource in geostore
-        function getUrl(srcStr) {
-            var r = 'http://159.213.57.108/geostore/rest/misc/category/name/' + comboModels.getValue() + '/resources/';
-            return r;
-        };
-
-        // combo for select resources and loadUserConfig
-        var comboRuns = new Ext.form.ComboBox({
-                                id: 'comboRuns',
-                                triggerAction: 'all',
-                                store: storeResource,
-                                mode: 'remote',
-                                displayField: 'name',
-                                //fieldLabel: 'Seleziona un Modello',
-                                valueField: 'id',
-                                listClass: 'x-combo-list-small',
-                                disabled: true,
-                                resizable: true,
-                                emptyText:'Seleziona un giorno',
-                                selectOnFocus:true,
-                                listeners: { 
-                                    select: function(combo, record, index) {
-                                        mapId = comboRuns.getValue();
-                                        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
-                                        var mHost=pattern.exec(geoStoreBaseURL);
-
-                                        var mUrl = geoStoreBaseURL + "data/" + mapId;
-                                        Ext.Ajax.request({
-                                           url: mHost[2] == location.host ? mUrl : proxy + mUrl,
-                                           //url: geoStoreBaseURL + "data/" + this.mapId,
-                                           method: 'GET',
-                                           scope: this,
-                                           headers:{
-                                              'Accept': "application/json"
-                                           },
-                                           success: function(response, opts){  
-                                                app.loadUserConfig(response.responseText);
-                                           },
-                                           failure: function(response, opts){
-                                              Ext.Msg.show({
-                                                    title: "Startup",
-                                                    msg: "An error occurred while try to update config: " + response.status,
-                                                    buttons: Ext.Msg.OK,
-                                                    icon: Ext.MessageBox.ERROR
-                                              });
-                                           }
-                                        });
-                                    }
-                                }
-                            });
-
-            var aboutButton = new Ext.Button({
-                text: GeoExplorer.prototype.appInfoText,
-                iconCls: "icon-geoexplorer",
-                handler: function(){
-                    var appInfo = new Ext.Panel({
-                        header: false,
-                        html: "<iframe style='border: none; height: 100%; width: 100%' src='../about.html' frameborder='0' border='0'><a target='_blank' href='../about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
-                    });
-
-                    var win = new Ext.Window({
-                        title:  GeoExplorer.prototype.aboutThisMapText,
-                        modal: true,
-                        layout: "fit",
-                        width: 355,
-                        height: 368,
-                        items: [appInfo]
-                    });
-                    
-                    win.show();
-                }
-            });
-            
-            /*var poweredByGeoSol = new Ext.Button({
-                tooltip: 'Powered by GeoSolutions',
-                iconCls: "icon-geosol",
-                width : 150,
-                handler: function(btn){
-                    window.open('http://geo-solutions.it/contact/', '_blank');
-                }
-            }); */   
-        
-
+    
+ 
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout: 'border',
@@ -575,20 +219,14 @@
                         collapsed: false,
                         collapseMode: 'mini',
                         split: true,
-                        /*html: '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img style="position:absolute; left:0px; z-index:1000" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png" height="100%"/></a>',*/
 					    html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_InfoPage.png" height="100%"/><div style= "loat:right;text-align:right"><h1 style="color:white">'+/*cruiseName+*/'</h1></div>',
-						/*html:'<font color="white" size="16">Informational Page</font>',*/
                         bodyStyle: 'padding:0px;background-color: #0055bb;'
-                        // tbar: [comboModels,comboRuns]
                     },{
                         region : 'center',
                         layout : 'border',
                         border : false,
                         header : false,                    
-                        items : [appTabs],                            
-                        bbar : [
-                          /*poweredByGeoSol, ' ', aboutButton, '->',languageSelector*/
-                        ]
+                        items : [appTabs]
                     }]
             });
             
@@ -683,6 +321,7 @@
 			});
             
             app = new GeoExplorer.Composer({
+				refreshTimeInterval:10000, // msec
 				config:config,
 				drawingLayer: drawingLayer,
 				notesLayer: notesLayer,
