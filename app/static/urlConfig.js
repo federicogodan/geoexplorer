@@ -1,9 +1,9 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
-   "proxy":"/proxy?url=",
+   "proxy":"/http_proxy/proxy?url=",
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
-   "watermark_position": "position:absolute;left:50px;top:700px",
+   "watermark_position": "position:absolute;left:50px;top:500px",
    
    "gsSources":{
         "Gliders": {
@@ -12,10 +12,10 @@
             "version":"1.1.1",
             "url":"http://84.33.199.62/geoserver-gliders/ows"
         },    
-        "NURCBG": {
+      "NURCBG": {
             "title": "Nurc BG",
             "version":"1.1.1",
-            "url":"http://demo1.geo-solutions.it/geoserver-enterprise/ows"
+            "url":"http://demo.geo-solutions.it/geoserver"
         }
    
         
@@ -26,7 +26,7 @@
             "transparent": false,
             "source": "NURCBG",
             "group": "background",
-            "name": "nurcbg",
+			"name": "geosolutions:nurcbg",
             "title": "Nurc Background"
         },
         {
