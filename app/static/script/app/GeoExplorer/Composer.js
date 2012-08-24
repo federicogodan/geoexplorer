@@ -121,9 +121,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },{
 		       ptype:"gxp_embedded_link",
 		       actionTarget: {target: "paneltbar", index: 27}
-		    },{
-                actions: ["-"], actionTarget: "paneltbar"
-            }, {
+		    }, {
                 ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
                 actionTarget: [ "feature-details.tbar" ],
                 layer: config.drawingLayer
@@ -168,6 +166,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "pilot-notes.tbar", index: 25},
                 layer: config.notesLayer
             }, {
+				ptype: "gxp_synchronizer",
+				refreshTimeInterval: config.refreshTimeInterval,
+				actionTarget: {target: "paneltbar", index: 28},
+				range: config.range
+			},{
+	            actions: ["-"], actionTarget: "paneltbar"
+	        },{
                 actions: ["->"], actionTarget: "paneltbar"
             }, {
                 ptype:"gxp_playback",
@@ -187,10 +192,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         range: config.range
                     }
                 }
-            }, {
-					ptype: "gxp_synchronizer",
-					refreshTimeInterval: config.refreshTimeInterval
-				}
+            }
         ];
         
        

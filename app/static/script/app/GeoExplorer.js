@@ -404,7 +404,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         this.toolbar = new Ext.Toolbar({
             disabled: true,
-            id: 'paneltbar',
+            id: 'paneltbar', 
             items: this.createTools()
         });
         
@@ -428,7 +428,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         this.mapPanelContainer = new Ext.Panel({
             layout: "card",
-            region: "center",
+            region: "center", 
             defaults: {
                 border: false
             },

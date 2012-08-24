@@ -3,7 +3,7 @@
    "proxy":"/proxy?url=",
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
-   "watermark_position": "position:absolute;left:50px;top:700px",
+   "watermark_position": "position:absolute;left:5px;bottom:5px",
    "bounds" : ["17.000","40.0000","16.0000","39.0000"],
    "center" : ["17.5","39.5"],
    "zoom": "8",
