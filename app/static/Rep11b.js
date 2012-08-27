@@ -8,30 +8,38 @@
    "center" : ["17.5","39.5"],
    "zoom": "8",
    "startTime": "2011-09-30T10:00:00.000Z",
-   "endTime": "2011-10-12T8:00:00.000Z",
+   "endTime": "2011-10-30T8:00:00.000Z",
    "gsSources":{
         "Gliders": {
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
             "version":"1.1.1",
             "url":"http://84.33.199.62/geoserver-gliders/ows"
-        },    
-        "NURCBG": {
-            "title": "Nurc BG",
-            "version":"1.1.1",
-            "url":"http://demo1.geo-solutions.it/geoserver-enterprise/wfs"
         }
    },
     "layers":[
         {
             "format": "image/jpeg",
             "transparent": false,
-            "source": "NURCBG",
+            "source": "Gliders",
             "group": "background",
-            "name": "nurcbg",
+            "name": "it.geosolutions:nurcbg",
             "title": "Nurc Background"
         },
-         {
+        {
+            "format": "image/png8",
+            "group": "Watervel",
+            "name": "nurc:watvel",
+			"styles": "watervelocityCR",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Watervel Forecast",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1
+        },
+        {
             "format": "image/png8",
             "group": "Zoe",
             "name": "it.geosolutions:GlidersErrorEllipseEnvelopes",
@@ -68,7 +76,7 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-             "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
          },
          {
             "format": "image/png8",
@@ -211,7 +219,7 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-             "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
+            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
          },
          {
             "format": "image/png8",

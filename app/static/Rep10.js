@@ -7,7 +7,7 @@
    "bounds" :  [ "7.3526000976563","42.599487304688","12.301940917969","44.598999023438"],
    "center" : ["9.8272705078125","43.599243164063"],
    "zoom": "8",
-   "startTime":"2010-08-20T10:02:29.000Z",
+   "startTime":"2010-08-22T10:02:29.000Z",
    "endTime":"2010-09-02T15:43:43.000Z",
    "gsSources":{
         "Gliders": {
@@ -15,11 +15,6 @@
             "title": "Gliders", 
             "version":"1.1.1",
             "url":"http://84.33.199.62/geoserver-gliders/ows"
-        },    
-        "NURCBG": {
-            "title": "Nurc BG",
-            "version":"1.1.1",
-            "url":"http://demo1.geo-solutions.it/geoserver-enterprise/ows"
         }
    
         
@@ -28,15 +23,16 @@
         {
             "format": "image/jpeg",
             "transparent": false,
-            "source": "NURCBG",
+            "source": "Gliders",
             "group": "background",
-            "name": "nurcbg",
+            "name": "it.geosolutions:nurcbg",
             "title": "Nurc Background"
         },
         {
             "format": "image/png8",
             "group": "Watervel",
-            "name": "it.geosolutions:rep10_watervel_forecast",
+            "name": "nurc:watvel",
+			"styles": "watervelocityCR",
             "opacity": 1,
             "selected": false,
             "source": "Gliders",

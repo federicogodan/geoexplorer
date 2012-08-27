@@ -22,11 +22,11 @@
             "name": "it.geosolutions:nurcbg",
             "title": "Nurc Background"
         },
-
         {
             "format": "image/png8",
             "group": "Watervel",
-            "name": "it.geosolutions:rep10_watervel_forecast",
+            "name": "nurc:watvel",
+			"styles": "watervelocityCR",
             "opacity": 1,
             "selected": false,
             "source": "Gliders",
