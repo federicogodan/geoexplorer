@@ -120,9 +120,20 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype:"gxp_playback",
                 outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: false,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
                 outputConfig: {
                     controlConfig:{
-                        units:'Minutes'
+                        units: "Hours",
+                        //step: 1,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        //range: config.range
                     }
                 }
             }

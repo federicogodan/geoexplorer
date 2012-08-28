@@ -85,7 +85,8 @@ OpenLayers.TimeAgent.WMS = OpenLayers.Class(OpenLayers.TimeAgent, {
     onTick : function(evt) {
         this.currentTime = evt.currentTime || this.timeManager.currentTime;
         //console.debug('CurrentTime:' + this.currentTime.toString());
-        var inrange = this.currentTime <= this.range[1] && this.currentTime >= this.range[0];
+        var inrange=true;  //needed to allow incremental intervals TODO do it in a better way
+        //var inrange = this.currentTime <= this.range[1] && this.currentTime >= this.range[0];
         //this is an inrange flag for all the entire time range of layers managed by
         //this time agent and not a specific layer
         if(inrange) {
@@ -109,7 +110,11 @@ OpenLayers.TimeAgent.WMS = OpenLayers.Class(OpenLayers.TimeAgent, {
             if(this.rangeMode == 'range') {
                 minTime = new Date(time.getTime());
                 if(this.timeManager.units) {
-                    minTime['setUTC'+this.timeManager.units](time['getUTC'+this.timeManager.units]() - this.rangeInterval);
+                    if (this.timeManager.units == "Days"){
+                        minTime['setUTCDate'](time['getUTCDate']() - this.rangeInterval);
+                    }else{
+                        minTime['setUTC'+this.timeManager.units](time['getUTC'+this.timeManager.units]() - this.rangeInterval);
+                    }
                 }
             }
             else {
