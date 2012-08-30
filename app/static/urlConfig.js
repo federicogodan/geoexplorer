@@ -4,6 +4,7 @@
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
+   "vehicles":["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"],
    
    "gsSources":{
         "Gliders": {

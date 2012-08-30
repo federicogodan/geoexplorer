@@ -361,21 +361,23 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             split: true,
             collapsible: true,
             collapseMode: "mini",
-			activeTab:1,
+			activeTab:0,
             header: false,
             items: [
+                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
 				{
 					region:'north', xtype: "panel", title:'Vehicles', 
                     // collapsible : true, collapseMode:  'mini', collapsed:true,
-                    // split : true, hideCollapseTool: true, autoScroll:true,
-                    border: false, height: 200, id: 'vehicle-selector'				
+                    // split : true, hideCollapseTool: true, 
+					autoScroll:true,
+                    border: false, height: 200, id: 'vehicle-selector'	
 				},
-                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
                 {
                     region: 'south', xtype: "panel", 
 					// layout: "fit", 
                     // collapsible : true, collapseMode:  'mini',
                     // split : true, hideCollapseTool: true,
+					autoScroll:true,
                     border: false, height: 200, id: 'legend', title:'Legend'
                 }
             ]

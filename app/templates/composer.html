@@ -60,7 +60,7 @@
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
         var uuid; var lay; var wmsurl; var bounds; var zoom; var center; var config;
 		var startTime; var endTime; var timeUnit; var currentTime;
-        var cruiseName;
+        var cruiseName; var vehicles;
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
 		// //////////////////////////////////////////////////
@@ -69,6 +69,9 @@
 			var param = params[j].split("=");
 			if(param[0]){
 				switch ( param[0] ) {
+					case "vehicles":
+							vehicles = decodeURIComponent(param[1]).split(',');
+                    		break;
                     case "cruiseName":
                                     cruiseName = decodeURIComponent(param[1]);
                                     break;
@@ -192,6 +195,9 @@
                 cruiseName="Rep10";
 				// cruiseName = "ETAug2012";
             }
+			if (!vehicles){
+				vehicles = ["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"];
+			}
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
                         return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
@@ -347,7 +353,7 @@
 				config:config,
 				drawingLayer: drawingLayer,
 				notesLayer: notesLayer,
-				vehicles: ["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"],
+				vehicles: vehicles,
 				cruiseName: cruiseName,
                 modified: false,
                 proxy: proxy,
