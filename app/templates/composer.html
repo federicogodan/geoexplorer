@@ -166,6 +166,8 @@
                     center= ["9.8272705078125","43.599243164063"];
                 }
             }
+
+
             if (!startTime){
                 if(serverConfig.startTime){
                     startTime =serverConfig.startTime
@@ -187,7 +189,8 @@
                 currentTime='2010-08-20T10:02:29.000Z';
             }
             if(!cruiseName){
-                cruiseName="Rep10"
+                cruiseName="Rep10";
+				// cruiseName = "ETAug2012";
             }
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
@@ -344,6 +347,8 @@
 				config:config,
 				drawingLayer: drawingLayer,
 				notesLayer: notesLayer,
+				vehicles: ["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"],
+				cruiseName: cruiseName,
                 modified: false,
                 proxy: proxy,
                 // xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test

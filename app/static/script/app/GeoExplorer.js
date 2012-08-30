@@ -350,9 +350,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     initPortal: function() {
         
-        var westPanel = new Ext.Panel({
+        var westPanel = new Ext.TabPanel({
             border: false,
-            layout: "border",
+            // layout: "border",
             id:'west',
             region: "west",
             width: 250,
@@ -361,14 +361,22 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             split: true,
             collapsible: true,
             collapseMode: "mini",
+			activeTab:1,
             header: false,
             items: [
+				{
+					region:'north', xtype: "panel", title:'Vehicles', 
+                    // collapsible : true, collapseMode:  'mini', collapsed:true,
+                    // split : true, hideCollapseTool: true, autoScroll:true,
+                    border: false, height: 200, id: 'vehicle-selector'				
+				},
                 {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
                 {
-                    region: 'south', xtype: "panel", layout: "fit", 
-                    collapsible : true, collapseMode:  'mini',
-                    split : true, hideCollapseTool: true,
-                    border: false, height: 200, id: 'legend'
+                    region: 'south', xtype: "panel", 
+					// layout: "fit", 
+                    // collapsible : true, collapseMode:  'mini',
+                    // split : true, hideCollapseTool: true,
+                    border: false, height: 200, id: 'legend', title:'Legend'
                 }
             ]
         });

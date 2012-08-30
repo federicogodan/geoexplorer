@@ -61,6 +61,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				ptype: "gxp_pilot_notes",
 				outputTarget: 'pilot-notes',
 				drawingLayer: config.notesLayer
+			},{
+				ptype: "gxp_vehicle_selector",
+				outputTarget: 'vehicle-selector',
+				vehicles: config.vehicles,
+				cruiseName: config.cruiseName
 			},/*{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
