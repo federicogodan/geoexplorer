@@ -196,7 +196,11 @@
 				// cruiseName = "ETAug2012";
             }
 			if (!vehicles){
-				vehicles = ["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"];
+				if(serverConfig.vehicles){
+                    vehicles = serverConfig.vehicles
+                }else{
+                    vehicles = ["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"];
+                }
 			}
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {

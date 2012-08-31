@@ -9,28 +9,35 @@
    "zoom": "8",
    "startTime": "2011-09-30T10:00:00.000Z",
    "endTime": "2011-10-30T8:00:00.000Z",
+   "vehicles":["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"],
    "gsSources":{
         "Gliders": {
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
             "version":"1.1.1",
             "url":"http://84.33.199.62/geoserver-gliders/ows"
+        },
+        "GEOSIII": {
+            "ptype": "gxp_wmssource",
+            "title": "GEOSIII", 
+            "version":"1.1.1",
+            "url":"http://geos3.nurc.nato.int/geoserver/ows"
         }
    },
     "layers":[
         {
             "format": "image/jpeg",
             "transparent": false,
-            "source": "Gliders",
+            "source": "GEOSIII",
             "group": "background",
-            "name": "it.geosolutions:nurcbg",
+            "name": "nurcbg",
             "title": "Nurc Background"
         },
         {
             "format": "image/png8",
-            "group": "Watervel",
+            "group": "Gliders",
             "name": "nurc:watvel",
-			"styles": "watervelocityCR",
+            "styles": "watervelocityCR",
             "opacity": 1,
             "selected": false,
             "source": "Gliders",
@@ -39,9 +46,11 @@
             "visibility": true,
             "ratio": 1
         },
+
+    
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersErrorEllipseEnvelopes",
             "opacity": 1,
             "selected": false,
@@ -50,11 +59,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b' "
         },
          {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersErrorEllipses",
             "opacity": 1,
             "selected": false,
@@ -63,11 +72,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b' "
         },
                  {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPredictedTracks",
             "opacity": 1,
             "selected": false,
@@ -76,11 +85,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b' "
          },
          {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersErrorEllipseCenters",
             "opacity": 1,
             "selected": false,
@@ -89,11 +98,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b' "
         },
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPredictedCurrent",
             "opacity": 1,
             "selected": false,
@@ -102,11 +111,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b' "
         },
         {
             "format": "image/png",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersNextWpts",
             "opacity": 1,
             "selected": false,
@@ -115,11 +124,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe'"
+            "cql_filter": "cruise_name = 'Rep11b'"
         },
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -128,11 +137,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe' AND type = 'WaterCurrent'"
+            "cql_filter": "cruise_name = 'Rep11b'  AND type = 'WaterCurrent'"
         },
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersTracks",
             "opacity": 1,
             "selected": false,
@@ -141,11 +150,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe' AND type = 'CurrentTrack'"
+            "cql_filter": "cruise_name = 'Rep11b'  AND type = 'CurrentTrack'"
         },
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersTracks",
             "opacity": 1,
             "selected": false,
@@ -154,12 +163,12 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe' AND type = 'OldTracks'"
+            "cql_filter": "cruise_name = 'Rep11b'  AND type = 'OldTracks'"
         },
      
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -168,11 +177,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe' AND type = 'Abort'"
+            "cql_filter": "cruise_name = 'Rep11b'  AND type = 'Abort'"
         },
         {
             "format": "image/png8",
-            "group": "Zoe",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -181,305 +190,7 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'zoe' AND type = 'Points'"
-        },{
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersErrorEllipseEnvelopes",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Envelope",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
-        },
-         {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersErrorEllipses",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Error Ellipses",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
-        },
-                 {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersPredictedTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Predicted Track",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
-         },
-         {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersErrorEllipseCenters",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Error Centers",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersPredictedCurrent",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Current Predicted",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersNextWpts",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "NextWPT",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "WaterCurrent",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa' AND type = 'WaterCurrent'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "CurrentTrack",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa' AND type = 'CurrentTrack'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "OldTrack",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa' AND type = 'OldTracks'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Abort",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa' AND type = 'Abort'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Noa",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Points",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'noa' AND type = 'Points'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Natalie",
-            "name": "it.geosolutions:GlidersNextWpts",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "NextWPT",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'natalie'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Natalie",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "WaterCurrent",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'natalie' AND type = 'WaterCurrent'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Natalie",
-            "name": "it.geosolutions:GlidersTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "CurrentTrack",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'natalie' AND type = 'CurrentTrack'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Natalie",
-            "name": "it.geosolutions:GlidersTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "OldTrack",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'natalie' AND type = 'OldTracks'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Natalie",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Abort",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'natalie' AND type = 'Abort'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Natalie",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Points",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'natalie' AND type = 'Points'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Elettra",
-            "name": "it.geosolutions:GlidersNextWpts",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "NextWPT",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'elettra'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Elettra",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "WaterCurrent",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'elettra' AND type = 'WaterCurrent'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Elettra",
-            "name": "it.geosolutions:GlidersTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "CurrentTrack",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'elettra' AND type = 'CurrentTrack'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Elettra",
-            "name": "it.geosolutions:GlidersTracks",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "OldTrack",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'elettra' AND type = 'OldTracks'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Elettra",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Abort",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'elettra' AND type = 'Abort'"
-        },
-        {
-            "format": "image/png8",
-            "group": "Elettra",
-            "name": "it.geosolutions:GlidersPoints",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Points",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "cql_filter": "cruise_name = 'Rep11b' AND glider_name = 'elettra' AND type = 'Points'"
+            "cql_filter": "cruise_name = 'Rep11b'  AND type = 'Points'"
         }
     ]
 }
