@@ -36,10 +36,21 @@ Ext.onReady(function(){
     // manually load local data
     store.loadData(myData);
 
-    var ds = new Ext.data.ArrayStore({
-        data: [[123,'One Hundred Twenty Three'],
-            ['1', 'One'], ['2', 'Two'], ['3', 'Three'], ['4', 'Four'], ['5', 'Five'],
-            ['6', 'Six'], ['7', 'Seven'], ['8', 'Eight'], ['9', 'Nine']],
+    var vehicles = new Ext.data.ArrayStore({
+        data: [
+            ['zoe', 'Zoe'], ['laura', 'Laura'], ['noa', 'Noa'], ['jane', 'Jane'] 
+		],
+        fields: ['value','text'],
+        sortInfo: {
+            field: 'value',
+            direction: 'ASC'
+        }
+    });
+
+    var models = new Ext.data.ArrayStore({
+        data: [
+            ['m1', 'Model 1'], ['m2', 'Model 2']
+		],
         fields: ['value','text'],
         sortInfo: {
             field: 'value',
@@ -52,25 +63,29 @@ Ext.onReady(function(){
 	    store: store,
 		hideHeaders:true,
 		border:false,
-	    multiSelect: true,
+	    singleSelect : true,
 	    emptyText: 'No cruise to display',
-		region:'center',
 	    reserveScrollOffset: true,
 	    columns: [{
+			header:'Name',
 	        width: .5,
 	        dataIndex: 'name'
 	    }]
 	});
 
+   var saveButton = 	  new Ext.Button({
+			text:'Save',
+			ref:'../saveButton',
+			disabled:true
+		});
 
 
 	var cruiseViewPanel = new Ext.Panel({
 		border: false,
 		items:[
 			new Ext.FormPanel({
-				frame: true,
 				border:false,
-			    autoHeight: true,
+			    // autoHeight: true,
 				bodyStyle: 'padding: 10px 10px 0 10px;',
 				fileUpload: true,
 				bodyBorder: false,
@@ -81,15 +96,15 @@ Ext.onReady(function(){
 				     msgTarget: 'side'
 				},							
 				buttons:[
-					{
-						text:'Save'
-					}
+				   saveButton
 				],
 				items:[
 				{
 					xtype:'textfield',
 					allowBlank:false,
 					fieldLabel:'Name',
+					disabled:true,
+					ref:'../name',
 					width: 500
 				},
 				{
@@ -99,6 +114,8 @@ Ext.onReady(function(){
 					editable: false,
 					format:"d/m/Y",
 		            fieldLabel: 'Start time',
+					disabled:true,
+					ref:'../startTime',
 					width: 500
 		        },		
 				{
@@ -108,6 +125,8 @@ Ext.onReady(function(){
 					editable: false,
 					format:"d/m/Y",
 		            fieldLabel: 'End time',
+					ref:'../endTime',
+					disabled:true,
 					width: 500
 		        },
 				{
@@ -116,6 +135,8 @@ Ext.onReady(function(){
 					emptyText: 'Browse for PNG files',
 					fieldLabel: 'Watermark picture',
 					name: "file",
+					disabled:true,
+					ref:'../watermarkLogo',
 					width: 500
 				},
 				{
@@ -135,8 +156,10 @@ Ext.onReady(function(){
 					mode: 'local',
 					typeAhead: true,
 					editable: false,
+					disabled:true,
 					triggerAction: 'all',
 					value: 'South-West',
+					ref:'../watermarkPosition',
 					width: 500
 				},
 				{
@@ -144,21 +167,26 @@ Ext.onReady(function(){
 				  name: 'itemselector',
 				  fieldLabel: 'Models',
 				  imagePath: './theme/app/img/ext',
+				  // disabled:true,
+				  ref:'../modelSelector',
 				  multiselects: [
 							{
 				                width: 250,
 				                height: 200,
-				                store: ds,
+				                store: models,
 				                displayField: 'text',
 				                valueField: 'value'
 				            },{
 				                width: 250,
 				                height: 200,
-				                store: [['10','Ten']],
+								displayField: 'text',
+								valueField: 'value',
+				                store: [],
 				                tbar:[{
 				                    text: 'clear',
 				                    handler:function(){
 					                    // isForm.getForm().findField('itemselector').reset();
+										cruiseViewPanel.modelSelector.reset();
 					                }
 				                }]
 				            }]
@@ -168,21 +196,23 @@ Ext.onReady(function(){
 				  name: 'itemselector',
 				  fieldLabel: 'Vehicles',
 				  imagePath: './theme/app/img/ext',
+				  // disabled:true,
+				  ref:'../vehicleSelector',
 				  multiselects: [
 							{
 				                width: 250,
 				                height: 200,
-				                store: ds,
+				                store: vehicles,
 				                displayField: 'text',
 				                valueField: 'value'
 				            },{
 				                width: 250,
 				                height: 200,
-				                store: [['10','Ten']],
+				                store: [],
 				                tbar:[{
 				                    text: 'clear',
 				                    handler:function(){
-					                    // isForm.getForm().findField('itemselector').reset();
+					 					cruiseViewPanel.vehicleSelector.reset();
 					                }
 				                }]
 				            }]
@@ -192,14 +222,35 @@ Ext.onReady(function(){
 	  ] // cruise panel 		
 	});
 	
+	cruiseListView.on('click', function(list, index, node, evt){
+		var data = store.getAt(index).data;
+		
+		cruiseViewPanel.name.setValue( data.name );
+		cruiseViewPanel.startTime.setValue( data.startTime );
+		cruiseViewPanel.endTime.setValue( data.endTime );
+		
+		var record = cruiseViewPanel.vehicleSelector.fromMultiselect.view.store.getAt(0); 
+		
+		cruiseViewPanel.vehicleSelector.fromMultiselect.view.store.remove(record);
+		cruiseViewPanel.vehicleSelector.toMultiselect.store.add(record);
+		
+		cruiseViewPanel.vehicleSelector.toMultiselect.view.refresh();
+        cruiseViewPanel.vehicleSelector.fromMultiselect.view.refresh();
+
+        cruiseViewPanel.vehicleSelector.toMultiselect.view.select(
+				[ cruiseViewPanel.vehicleSelector.toMultiselect.view.store.getCount() - 1 ]);
+		
+	});
+	
 	var contentPanel = {
 		id: 'content-panel',
 		region: 'center', 
 		width:700,
-		layout: 'card',
+		layout: 'fit',
 		margins: '2 5 5 0',
 		activeItem: 0,
 		border: false,
+		frame:true,
 		items: cruiseViewPanel
 	};
 
@@ -209,16 +260,36 @@ Ext.onReady(function(){
 			items: [{
 				xtype: 'box',
 				region: 'north',
-				html:'<h1>Nurc - Control Panel</h1>',
+				border: false,
+                height: 75,
+				split: true,
+				margins:"5 5 5 5",
+				html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/nurc-logo.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:black"></h1></div>',
+                bodyStyle: 'padding:0px;background-color: #0055bb;',
 				height: 30
 			},{
-				layout: 'border',
+				// layout: 'border',
 		    	id: 'cruise-browser',
+				title:"Cruise List",
+				tbar: [ { 
+					icon:'../theme/app/img/silk/add.png', 
+					text:"New cruise",
+					handler: function(){
+						cruiseViewPanel.name.enable();
+						cruiseViewPanel.startTime.enable();
+						cruiseViewPanel.endTime.enable();
+						cruiseViewPanel.watermarkLogo.enable();
+						cruiseViewPanel.watermarkPosition.enable();
+						cruiseViewPanel.modelSelector.enable();
+						cruiseViewPanel.vehicleSelector.enable();
+						saveButton.enable();
+					}
+					} ],
 		        region:'west',
 		        border: false,
 		        split:true,
 				margins: '2 0 5 5',
-		        width: 275,
+		        width: 150,
 		        minSize: 100,
 		        maxSize: 500,
 				items: cruiseListView
