@@ -4,6 +4,8 @@
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
+   "bounds": [ "5.93","41.93","8.97","43.93"],
+   "center": ["7.66","42.87"],
    "zoom": "9",
    "startTime": "2012-09-01T06:00:00.000Z",
    "endTime":   "2012-10-09T06:00:00.000Z",
@@ -13,13 +15,21 @@
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
             "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver-gliders/ows"
+            "url":"http://geos3.nurc.nato.int/geoserver-gliders/ows",
+			"layerBaseParams": {
+				"TILED": true,
+				"TILESORIGIN": "-180,-90" 
+			}
         },
         "GEOSIII": {
             "ptype": "gxp_wmssource",
             "title": "GEOSIII", 
             "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver/ows"
+            "url":"http://geos3.nurc.nato.int/geoserver/ows",
+			"layerBaseParams": {
+				"TILED": true,
+				"TILESORIGIN": "-180,-90" 
+			}
         }
    },
    "layers":[
@@ -46,7 +56,7 @@
         },    
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPredictedTracks",
             "opacity": 1,
             "selected": false,
@@ -59,7 +69,7 @@
         },
         {
 			 "format": "image/png8",
-			 "group": "natalie",
+			 "group": "Gliders",
 			 "name": "it.geosolutions:GlidersErrorEllipseEnvelopes",
 			 "opacity": 1,
 			 "selected": false,
@@ -72,7 +82,7 @@
         },
         {
 			 "format": "image/png8",
-			 "group": "natalie",
+			 "group": "Gliders",
 			 "name": "it.geosolutions:GlidersErrorEllipses",
 			 "opacity": 1,
 			 "selected": false,
@@ -85,7 +95,7 @@
 		 },
          {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersErrorEllipseCenters",
             "opacity": 1,
             "selected": false,
@@ -98,7 +108,7 @@
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPredictedCurrent",
             "opacity": 1,
             "selected": false,
@@ -112,7 +122,7 @@
         
         {
             "format": "image/png",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersNextWpts",
             "opacity": 1,
             "selected": false,
@@ -120,12 +130,13 @@
             "title": "NextWPT",
             "transparent": true,
             "visibility": true,
+			"tiled": false,
             "ratio": 1,
             "cql_filter": "cruise_name = 'NOMR12'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -138,7 +149,7 @@
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersTracks",
             "opacity": 1,
             "selected": false,
@@ -151,7 +162,7 @@
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersTracks",
             "opacity": 1,
             "selected": false,
@@ -164,7 +175,7 @@
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -177,7 +188,7 @@
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,

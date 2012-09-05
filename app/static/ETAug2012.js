@@ -5,8 +5,8 @@
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
    "zoom": "9",
-   "startTime": "2012-09-01T06:00:00.000Z",
-   "endTime":   "2012-10-09T06:00:00.000Z",
+   "startTime": "2012-08-28T06:00:00.000Z",
+   "endTime":   "2012-09-29T06:00:00.000Z",
    
    "gsSources":{
         "Gliders": {
@@ -46,7 +46,7 @@
         },    
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPredictedTracks",
             "opacity": 1,
             "selected": false,
@@ -55,11 +55,11 @@
             "transparent": true,
             "visibility": false,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12'"
+            "cql_filter": "cruise_name = 'ETAug2012'"
         },
         {
 			 "format": "image/png8",
-			 "group": "natalie",
+			 "group": "Gliders",
 			 "name": "it.geosolutions:GlidersErrorEllipseEnvelopes",
 			 "opacity": 1,
 			 "selected": false,
@@ -68,11 +68,11 @@
 			 "transparent": true,
 			 "visibility": false,
 			 "ratio": 1,
-			 "cql_filter": "cruise_name = 'NOMR12'"
+			 "cql_filter": "cruise_name = 'ETAug2012'"
         },
         {
 			 "format": "image/png8",
-			 "group": "natalie",
+			 "group": "Gliders",
 			 "name": "it.geosolutions:GlidersErrorEllipses",
 			 "opacity": 1,
 			 "selected": false,
@@ -81,11 +81,11 @@
 			 "transparent": true,
 			 "visibility": false,
 			 "ratio": 1,
-			 "cql_filter": "cruise_name = 'NOMR12'"
+			 "cql_filter": "cruise_name = 'ETAug2012'"
 		 },
          {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersErrorEllipseCenters",
             "opacity": 1,
             "selected": false,
@@ -94,11 +94,11 @@
             "transparent": true,
             "visibility": false,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12'"
+            "cql_filter": "cruise_name = 'ETAug2012'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPredictedCurrent",
             "opacity": 1,
             "selected": false,
@@ -107,12 +107,12 @@
             "transparent": true,
             "visibility": false,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12'"
+            "cql_filter": "cruise_name = 'ETAug2012'"
         },
         
         {
             "format": "image/png",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersNextWpts",
             "opacity": 1,
             "selected": false,
@@ -121,11 +121,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12'"
+            "cql_filter": "cruise_name = 'ETAug2012'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -134,11 +134,11 @@
             "transparent": true,
             "visibility": false,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12' AND type = 'WaterCurrent'"
+            "cql_filter": "cruise_name = 'ETAug2012' AND type = 'WaterCurrent'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersTracks",
             "opacity": 1,
             "selected": false,
@@ -147,11 +147,11 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12' AND type = 'CurrentTrack'"
+            "cql_filter": "cruise_name = 'ETAug2012' AND type = 'CurrentTrack'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersTracks",
             "opacity": 1,
             "selected": false,
@@ -160,11 +160,11 @@
             "transparent": true,
             "visibility": false,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12' AND type = 'OldTracks'"
+            "cql_filter": "cruise_name = 'ETAug2012' AND type = 'OldTracks'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -173,11 +173,11 @@
             "transparent": true,
             "visibility": false,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12' AND type = 'Abort'"
+            "cql_filter": "cruise_name = 'ETAug2012' AND type = 'Abort'"
         },
         {
             "format": "image/png8",
-            "group": "natalie",
+            "group": "Gliders",
             "name": "it.geosolutions:GlidersPoints",
             "opacity": 1,
             "selected": false,
@@ -186,7 +186,7 @@
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-            "cql_filter": "cruise_name = 'NOMR12' AND type = 'Points'"
+            "cql_filter": "cruise_name = 'ETAug2012' AND type = 'Points'"
         }
     ]
 }
