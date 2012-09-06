@@ -73,15 +73,41 @@ Ext.onReady(function(){
 	    }]
 	});
 
-   var saveButton = 	  new Ext.Button({
+   var saveButton = new Ext.Button({
 			text:'Save',
 			ref:'../saveButton',
-			disabled:true
+			disabled:true,
+			handler: function(){
+				var conf = new Object;
+					conf.name = 'name';
+					conf.description = 'description';
+					conf.blob = 'blob';
+					conf.owner = 'admin';
+				// send a request to the geostore
+				var Request = Ext.Ajax.request({
+				       url: 'http://localhost:8081/proxy?url=' + Ext.encode('http://localhost:8080/geostore/rest/resources/'),
+				       method: 'POST',
+				       headers:{
+				          'Content-Type' : 'text/xml',
+				          'Accept' : 'application/json, text/plain, text/xml',
+				          'Authorization' : 'Basic ' + btoa('admin:admin')
+				       },
+				       params: conf,
+				       scope: this,
+				       success: function(response, opts){
+							console.log(response);
+				       },
+				       failure:  function(response, opts){
+				       		console.log(response);
+				       }
+				});
+			}
 		});
 
 
 	var cruiseViewPanel = new Ext.Panel({
 		border: false,
+		autoScroll:true,
 		items:[
 			new Ext.FormPanel({
 				border:false,
@@ -264,7 +290,7 @@ Ext.onReady(function(){
                 height: 75,
 				split: true,
 				margins:"5 5 5 5",
-				html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/nurc-logo.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:black"></h1></div>',
+				html: '<img style="position:absolute; left:0px; z-index:1000" src="./theme/app/img/nurc-logo.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:black"></h1></div>',
                 bodyStyle: 'padding:0px;background-color: #0055bb;',
 				height: 30
 			},{
@@ -272,7 +298,7 @@ Ext.onReady(function(){
 		    	id: 'cruise-browser',
 				title:"Cruise List",
 				tbar: [ { 
-					icon:'../theme/app/img/silk/add.png', 
+					icon:'./theme/app/img/silk/add.png', 
 					text:"New cruise",
 					handler: function(){
 						cruiseViewPanel.name.enable();

@@ -1,12 +1,12 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
-   "proxy":"/proxy?url=",
+   "proxy":"/http_proxy/proxy?url=",
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
-   "bounds": [ "5.93","41.93","8.97","43.93"],
-   "center": ["7.66","42.87"],
-   "zoom": "9",
+   "bounds": [ "4.80","40.96","10.70","45.37"],
+   "center": ["7.97","43.02"],
+   "zoom": "8",
    "startTime": "2012-09-01T06:00:00.000Z",
    "endTime":   "2012-10-09T06:00:00.000Z",
    
@@ -15,7 +15,7 @@
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
             "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver-gliders/ows",
+            "url":"http://84.33.199.62/geoserver-gliders/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -40,20 +40,7 @@
             "group": "background",
             "name": "nurcbg",
             "title": "Nurc Background"
-        },
-        {
-            "format": "image/png8",
-            "group": "Gliders",
-            "name": "nurc:watvel",
-            "styles": "watervelocityCR",
-            "opacity": 1,
-            "selected": false,
-            "source": "Gliders",
-            "title": "Watervel Forecast",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1
-        },    
+        }, 
         {
             "format": "image/png8",
             "group": "Gliders",
