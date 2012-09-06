@@ -113,9 +113,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     
     fScreen: false,
 
-    constructor: function(config, mapId, auth, fScreen) {
-    //constructor: function(config, mapId, auth, fScreen) {
-    
+    constructor: function(config, mapId, auth, fScreen) {    
         if(mapId)
             this.mapId = mapId;
         if(auth)
@@ -223,8 +221,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 11}
-        }
-        */];
+        }*/];
 
         GeoExplorer.superclass.constructor.apply(this, arguments);
     }, 
@@ -272,8 +269,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                }
             });        
         }
-        /*
-        var success = function(request) {                                
+		
+        /*var success = function(request) {                                
                   var addConfig;
                   try {
                     addConfig = Ext.util.JSON.decode(request.responseText);
@@ -300,9 +297,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
           success: success,
           failure: failure,
           scope: this
-        });
-        */
-        
+        });*/
     },
     
     loadUserConfig: function(json){
@@ -317,15 +312,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         app.destroy();
 
         var config = Ext.util.JSON.decode(json);
-        //if(config && config.result.map){
+		
         if(config && config.map){
             config.isLoadedFromConfigFile = true;
-            
-            //if(modified){
-            //    config.modified = modified;
-            //}
-            
-            //app = new GeoExplorer.Composer(config);
             app = new GeoExplorer.Composer(config, this.mapId, this.auth, this.fScreen);
         }else{
             Ext.Msg.show({
@@ -364,7 +353,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			activeTab:0,
             header: false,
             items: [
-                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
+                {
+					region: 'center', 
+					autoScroll: true, 
+					tbar: [], 
+					border: false, 
+					id: 'tree', 
+					title: this.layersText
+				}, 
 				{
 					region:'north', xtype: "panel", title:'Vehicles', 
                     // collapsible : true, collapseMode:  'mini', collapsed:true,
@@ -419,18 +415,21 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         });
         
         this.on("ready", function() {
+		    //
             // enable only those items that were not specifically disabled
-            var disabled = this.toolbar.items.filterBy(function(item) {
+            //
+			var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;
             });
             
             this.toolbar.enable();
             
+			//
 			// add the layer for custom drawing to the map
+			//
 			this.mapPanel.map.addLayer(this.drawingLayer);
 			this.mapPanel.map.addLayer(this.notesLayer);
 			
-
             disabled.each(function(item) {
                 item.disable();
             });

@@ -26,6 +26,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     backText: "Back",
     nextText: "Next",
     fullScreenText: "Full Screen",
+	
     // End i18n.
     constructor: function(config) {      
 	  	var self = this;
@@ -116,12 +117,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: {target: "paneltbar", index: 22}
             }, {
                 ptype: "gxp_zoomtoextent",
-                /*extent: function(){
-                    var bbox = new OpenLayers.Bounds.fromString('-15,8,-7,15');
-                    return bbox.transform(
-                        new OpenLayers.Projection("EPSG:4326"),
-                        new OpenLayers.Projection("EPSG:102113"));
-                },*/
                 actionTarget: {target: "paneltbar", index: 26}
             },{
 		       ptype:"gxp_embedded_link",
@@ -198,8 +193,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     }
                 }
             }
-        ];
-        
+        ];        
        
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },

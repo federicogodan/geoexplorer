@@ -16,11 +16,6 @@
     
     <script type="text/javascript" src="../script/GeoExplorer.js"></script>
     
-    <!-- TimeManager OpenLayers -->
-    <script type="text/javascript" src="../TimeManager_openlayers/OpenLayers/Control/TimeManager.js"></script>
-    <script type="text/javascript" src="../TimeManager_openlayers/OpenLayers/TimeAgent.js"></script>
-    <script type="text/javascript" src="../TimeManager_openlayers/OpenLayers/TimeAgent/WMS.js"></script>
-    
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/en.js"></script>
 
@@ -42,8 +37,9 @@
 	</style>
 
     <script>
-
+	    //
 		// fix for IE7 and IE8
+		//
 		if (!Date.prototype.toISOString) {
 		    Date.prototype.toISOString = function() {
 		        function pad(n) { return n < 10 ? '0' + n : n }
@@ -59,12 +55,14 @@
         var app;
         var serverConfig;
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl; var bounds; var zoom; var center; var config;
+        var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config;
 		var startTime; var endTime; var timeUnit; var currentTime;
         var cruiseName; var vehicles;
+		
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
 		// //////////////////////////////////////////////////
+		
         var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
         for (var j=0; j < params.length; j++) {
 			var param = params[j].split("=");
@@ -132,9 +130,7 @@
 									fullScreen = false; 
 				}
 			}
-        }
-
-		
+        }		
 		
 		// ///////////////////////////////////////////////////////////////
 		// Custom variables from the urlConfig user configuration file 
@@ -142,19 +138,28 @@
         var proxy; 
         var geoStoreBaseURL;        
         var customSources;
-        //var gnLangStr;
         var gnBaseUrl;
         
         var onReady = function(){
+		    //
             // set default values for params
-            if (!bounds){
-                // bounds = [ "-20037508.34", "-20037508.34", "20037508.34", "20037508.34" ];
+            //
+			if (!bounds){
                 if(serverConfig.bounds){
-                    bounds =serverConfig.bounds;
+                    bounds = serverConfig.bounds;
                 }else{
-                    bounds = [ "7.3526000976563","42.599487304688","12.301940917969","44.598999023438"];
+                    bounds = [ "-180","-90","180","90"];
                 }
             } 
+			
+			if (!maxExtent){
+                if(serverConfig.maxExtent){
+                    maxExtent = serverConfig.maxExtent;
+                }else{
+                    maxExtent = [ "-180","-90","180","90"];
+                }
+            } 
+			
             if (!zoom){
                 if(serverConfig.zoom){
                     zoom =serverConfig.zoom;
@@ -162,15 +167,14 @@
                     zoom = 8;
                 }
             } 
+			
             if (!center){
                 if(serverConfig.center){
                     center =serverConfig.center;
                 }else{
-                // center = [ "1406441.320251", "5523033.9150049"];
                     center= ["9.8272705078125","43.599243164063"];
                 }
             }
-
 
             if (!startTime){
                 if(serverConfig.startTime){
@@ -179,6 +183,7 @@
                     startTime = '2010-08-20T10:02:29.000Z';
                 }
             }
+			
             if (!endTime){
                 if(serverConfig.endTime){
                     endTime =serverConfig.endTime
@@ -186,16 +191,19 @@
                     endTime = '2010-09-02T15:43:43.000Z';
                 }
             }
+			
             if (!timeUnit){
                 timeUnit = OpenLayers.TimeUnit.MINUTES;
             }
+			
             if (!currentTime){
                 currentTime='2010-08-20T10:02:29.000Z';
             }
+			
             if(!cruiseName){
-                cruiseName="NOMR12";
-				// cruiseName = "ETAug2012";
+                cruiseName = "NOMR12";
             }
+			
 			if (!vehicles){
 				if(serverConfig.vehicles){
                     vehicles = serverConfig.vehicles
@@ -203,13 +211,14 @@
                     vehicles = ["greta", "elettra", "zoe", "laura", "sophie", "natalie", "noa"];
                 }
 			}
-            Ext.BLANK_IMAGE_URL = (function() {
+			
+            /*Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
                         return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
                     } else {
                         return "theme/app/img/blank.gif";
                     }
-            })();
+            })();*/
 
             OpenLayers.ImgPath = "../externals/openlayers/theme/default/img/";
 
@@ -226,10 +235,7 @@
                  }
             });
             
-
             var appTabs = new Ext.Panel({
-                //items: [geoportalPanel,geonetworkPanel],
-                // items: [geonetworkPanel],
                 region: 'center',
                 border : false,
 				layout: 'fit',
@@ -263,67 +269,18 @@
                     }]
             });
             
-            
-            //
-            // Parsing WMS servers Sources for getCapabilities operation
-            //
-            /*
-            var sources = "{" ;
-                
-            
-            if(customSources.length > 0)
-                sources += ",";
-                
-            for(var s=0; s<customSources.length; s++){ 
-                var src = Ext.util.JSON.encode(customSources[s]);
-                //sources += "\"source" + s + "\":" + src;
-                sources += "\"source" + s + "\":" + JSON.stringify(customSources[s]);
-                 
-                 if(s + 1 < customSources.length)
-                    sources += ",";
-            }
-             
-            sources +="}";
-            */
+     
             var sources = customSources;
-            /*
-            try{
-                sources = Ext.util.JSON.decode(sources);
-            }catch(e){
-                sources = {
-                    mapquest: {
-                        ptype: "gxp_mapquestsource"
-                    },
-                    osm: {
-                        ptype: "gxp_osmsource"
-                    },
-                    google: {
-                        ptype: "gxp_googlesource"
-                    },
-                    bing: {
-                        ptype: "gxp_bingsource"
-                    },
-                    ol: {
-                        ptype: "gxp_olsource"
-                    }
-                };
-          
-                Ext.Msg.show({
-                      title: "Startup",
-                      msg: "An error occurred while parsing the CUSTOM GeoServer sources",
-                      buttons: Ext.Msg.OK,
-                      icon: Ext.MessageBox.ERROR
-                });
-            }
-            */
+
+			//
 			// prepare layer where users draw custom features
+			//
 			var drawingLayer = new OpenLayers.Layer.Vector('Custom feature layer', {
 				projection: new OpenLayers.Projection("EPSG:4326")
 			});
 			
 			var notesLayer = new OpenLayers.Layer.Vector('Pilot notes Layer', {
 				projection: new OpenLayers.Projection("EPSG:4326"),
-				// attribution:"watermark",
 				styleMap: new OpenLayers.StyleMap({
 				        "default": new OpenLayers.Style({
 				            strokeColor: "red",
@@ -354,7 +311,7 @@
 			});
             
             app = new GeoExplorer.Composer({
-				refreshTimeInterval:10000, // msec
+				refreshTimeInterval: 10000, // msec
 				config:config,
 				drawingLayer: drawingLayer,
 				notesLayer: notesLayer,
@@ -368,7 +325,6 @@
                 renderToTab : 'appTabs',
                 units: timeUnit,
                 range: [startTime,endTime],
-                //timeSpans: ['2010-08-20T00:00:00.000Z/2010-08-30T00:00:00.000Z/P1W3D'],                
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -376,25 +332,21 @@
                 },
                 sources: sources,
                 map: {
-                    // projection: "EPSG:900913",
 					projection: "EPSG:4326",
                     units: "dd",
-				    maxExtent: [-180, -90, 180, 90],
-					// extent: [ 7.26, 44.44, 11.53, 41.60],
 					extent: [
                         parseFloat(bounds[0]), parseFloat(bounds[1]),
                         parseFloat(bounds[2]), parseFloat(bounds[3])
                     ],
-                    layers: 
-                        customLayers
-					,
+					maxExtent: [
+                        parseFloat(maxExtent[0]), parseFloat(maxExtent[1]),
+                        parseFloat(maxExtent[2]), parseFloat(maxExtent[3])
+                    ],
+                    layers: customLayers,
                     center: [parseFloat(center[0]), parseFloat(center[1])],
                     zoom: parseInt(zoom)
                 }
             }, mapIdentifier, authorization, fullScreen);   
-
-			
-
             
             app.on({
                 'portalready' : function(){
@@ -407,12 +359,10 @@
                     if(cruiseName){
                         Ext.getCmp('tree').setTitle(cruiseName);
                     }
-
-				
+	
                     //
                     // Visualizing metadata tab and layer at startup
-                    //
-                    
+                    //                    
                     if(lay && wmsurl && gnBaseUrl && uuid)
                     addMSLayer(lay, uuid, gnBaseUrl, wmsurl, false);
                 
@@ -451,7 +401,9 @@
 					
 					map.addLayer( drawingLayer );
 
+					//
 					// respect map properties
+					//
 					var restricted = map.restrictedExtent || map.maxExtent;
 					if (restricted) {
 						extent = new OpenLayers.Bounds(
@@ -569,17 +521,14 @@
 			
       var cfgFile = cruiseName ? "../"+cruiseName+".js" : "../NOMR12.js";
       Ext.Ajax.request({
-		  //url: "/urlConfig.js",
           url: cfgFile,
-          // url: "/MapStore-gliders/urlConfig.js", //TEST
-          // url: "/urlConfig.js", //TEST
           method: 'GET',
-          success: function(response, opts){      
+          success: function(response, opts){      		  
+		      //
               //set serverconfig as global   
-              
+              //			  
               try{
                   serverConfig = Ext.util.JSON.decode(response.responseText);
-				  // console.log(serverConfig);
               }catch(e){
                   Ext.Msg.show({
                         title: "Startup",
