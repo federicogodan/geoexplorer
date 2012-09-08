@@ -67,7 +67,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				outputTarget: 'vehicle-selector',
 				vehicles: config.vehicles,
 				cruiseName: config.cruiseName
-			},/*{
+			},	
+			/*{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
                 upload: true

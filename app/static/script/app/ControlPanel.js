@@ -1,9 +1,36 @@
 var ControlPanel =  Ext.extend(Ext.Panel, {
 	
+	/**
+	 *  the id of the current configuration
+	 *  if mapId = -1, the configuration is brand new
+	 */
+	mapId: -1,
 	cruiseListView: null,
 	cruisePanelView: null,
+	// TODO implement authentication
+	token: 'Basic ' +  'admin:admin' /*btoa('admin:admin')*/,
+	// TODO externalize
+	url: 'http://localhost:8080/geostore/rest/resources/',
 	
 	constructor: function(config){
+		
+		var geostore = new GeoStore.Maps(
+							{ authorization: 'Basic ' + 'admin:admin' /*btoa('admin:admin')*/,
+							   url: 'http://localhost:8080/geostore/rest/resources/'
+							}).failure( function(response){ 
+									console.error(response); 
+									Ext.Msg.show({
+	                                       title: 'Cannot upload configurations',
+	                                       msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
+	                                       buttons: Ext.Msg.OK,
+	                                       icon: Ext.MessageBox.ERROR
+	                                });	
+							});
+		
+		geostore.find(function(data){
+				console.log(data);
+		}, {full:true});
+		
 		this.cruiseListView = new Ext.list.ListView({
 		    store: config.store,
 			hideHeaders:true,
@@ -18,39 +45,12 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 		    }]
 		});
 
-	   var saveButton = new Ext.Button({
-				text:'Save',
+	   this.saveButton = new Ext.Button({
+				text: this.mapId === -1 ? 'Save' : 'Update',
 				ref:'../saveButton',
 				disabled:true,
-				handler: function(){
-					// create a configuration with data from the form
-					var conf = new Object;
-					conf.name = 'name';
-					conf.description = 'description';
-					conf.blob = 'blob';
-					conf.owner = 'admin';
-					// send a request to the geostore
-					var geostore = new GeoStore.Maps(
-									{ authorization: 'Basic ' + btoa('admin:admin'),
-									   url: 'http://localhost:8080/geostore/rest/resources/'
-									}).failure( function(response){ 
-											console.error(response); 
-											Ext.Msg.show({
-			                                       title: 'Cannot save this configuration',
-			                                       msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-			                                       buttons: Ext.Msg.OK,
-			                                       icon: Ext.MessageBox.ERROR
-			                                });	
-									});
-					geostore.create(conf, function(data){
-							Ext.Msg.show({
-	                               title: 'Configuration saved',
-	                               msg: 'configuration saved successfully',
-	                               buttons: Ext.Msg.OK,
-	                               icon: Ext.MessageBox.INFO
-	                        });
-					});
-				}
+				handler: this.saveOrUpdate,
+				scope: this
 			});
 
 
@@ -62,7 +62,7 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 					border:false,
 				    // autoHeight: true,
 					bodyStyle: 'padding: 10px 10px 0 10px;',
-					fileUpload: true,
+					// fileUpload: true,
 					bodyBorder: false,
 					// width: 880,
 					defaults: {
@@ -71,7 +71,7 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 					     msgTarget: 'side'
 					},							
 					buttons:[
-					   saveButton
+					   this.saveButton
 					],
 					items:[
 					{
@@ -105,13 +105,12 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 						width: 500
 			        },
 					{
-						xtype: "fileuploadfield",
-						id: "file",
-						emptyText: 'Browse for PNG files',
-						fieldLabel: 'Watermark picture',
-						name: "file",
+						xtype: "textfield",
+						id: "fileUrl",
+						fieldLabel: 'Watermark picture url',
+						name: "fileUrl",
 						disabled:true,
-						ref:'../watermarkLogo',
+						ref:'../watermarkUrl',
 						width: 500
 					},
 					{
@@ -142,7 +141,7 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 					  name: 'itemselector',
 					  fieldLabel: 'Models',
 					  imagePath: './theme/app/img/ext',
-					  // disabled:true,
+					  disabled:true,
 					  ref:'../modelSelector',
 					  multiselects: [
 								{
@@ -160,9 +159,9 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 					                tbar:[{
 					                    text: 'clear',
 					                    handler:function(){
-						                    // isForm.getForm().findField('itemselector').reset();
-											cruiseViewPanel.modelSelector.reset();
-						                }
+											this.cruisePanelView.modelSelector.reset();
+						                },
+										scope:this
 					                }]
 					            }]
 				    },
@@ -171,7 +170,7 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 					  name: 'itemselector',
 					  fieldLabel: 'Vehicles',
 					  imagePath: './theme/app/img/ext',
-					  // disabled:true,
+					  disabled:true,
 					  ref:'../vehicleSelector',
 					  multiselects: [
 								{
@@ -187,8 +186,9 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 					                tbar:[{
 					                    text: 'clear',
 					                    handler:function(){
-						 					cruiseViewPanel.vehicleSelector.reset();
-						                }
+						 					this.cruisePanelView.vehicleSelector.reset();
+						                },
+										scope:this
 					                }]
 					            }]
 					}
@@ -197,23 +197,58 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 		  ] // cruise panel 		
 		});
 
+		var self = this;
 		this.cruiseListView.on('click', function(list, index, node, evt){
-			var data = store.getAt(index).data;
+			var data = config.store.getAt(index).data;
+			
+			
+			// reset original values
+			self.clean();
 
-			cruiseViewPanel.name.setValue( data.name );
-			cruiseViewPanel.startTime.setValue( data.startTime );
-			cruiseViewPanel.endTime.setValue( data.endTime );
+			// populate fields
+			self.cruisePanelView.name.setValue( data.name );
+			self.cruisePanelView.startTime.setValue( data.startTime );
+			self.cruisePanelView.endTime.setValue( data.endTime );
+			self.mapId = data.id;
 
-			var record = cruiseViewPanel.vehicleSelector.fromMultiselect.view.store.getAt(0); 
+			// TODO refactor
+			var availableVehicles = self.cruisePanelView.vehicleSelector.fromMultiselect.view.store.data.items;
+			for (var i=0; i<availableVehicles.length; i++){
+				var vehicle = availableVehicles[i];
+				var selectedVehicles = data.vehicleList.split(', ');
+				for (var j=0; j<selectedVehicles.length; j++){
+					if ( selectedVehicles[j] === vehicle.data.value ){
+						self.cruisePanelView.vehicleSelector.fromMultiselect.view.store.remove( vehicle );
+						self.cruisePanelView.vehicleSelector.toMultiselect.store.add( vehicle );
+					}
+				}
+			}
+			
+			var availableModels = self.cruisePanelView.modelSelector.fromMultiselect.view.store.data.items;
+			for (var i=0; i<availableModels.length; i++){
+				var model = availableModels[i];
+				var selectedModels = data.modelList.split(', ');
+				for (var j=0; j<selectedModels.length; j++){
+					if ( selectedModels[j] === model.data.value ){
+						self.cruisePanelView.modelSelector.fromMultiselect.view.store.remove( model );
+						self.cruisePanelView.modelSelector.toMultiselect.store.add( model );
+					}
+				}
+			}
+			// end refactor
 
-			cruiseViewPanel.vehicleSelector.fromMultiselect.view.store.remove(record);
-			cruiseViewPanel.vehicleSelector.toMultiselect.store.add(record);
+			/*var record = self.cruisePanelView.vehicleSelector.fromMultiselect.view.store.getAt(0); 
+			self.cruisePanelView.vehicleSelector.fromMultiselect.view.store.remove(record);
+			self.cruisePanelView.vehicleSelector.toMultiselect.store.add(record);*/
 
-			cruiseViewPanel.vehicleSelector.toMultiselect.view.refresh();
-	        cruiseViewPanel.vehicleSelector.fromMultiselect.view.refresh();
-
-	        cruiseViewPanel.vehicleSelector.toMultiselect.view.select(
-					[ cruiseViewPanel.vehicleSelector.toMultiselect.view.store.getCount() - 1 ]);
+			// tricky: it seems necessary to refresh the content of toMultiselect
+			self.cruisePanelView.vehicleSelector.toMultiselect.view.refresh();
+	        self.cruisePanelView.vehicleSelector.fromMultiselect.view.refresh();
+	        self.cruisePanelView.vehicleSelector.toMultiselect.view.select(
+					[ self.cruisePanelView.vehicleSelector.toMultiselect.view.store.getCount() - 1 ]);
+					
+			// enable editing
+			self.enable();
 
 		});
 
@@ -227,8 +262,109 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 		return this.cruisePanelView;
 	},
 	
-	save: function(){
+	saveOrUpdate: function(){
+		// create a configuration with data from the form
 		
+		/// TODO refactor
+		var vehicles = '';
+		var selectedVehicles =  this.cruisePanelView.vehicleSelector.toMultiselect.store.data.items;
+		for (var i=0; i<selectedVehicles.length; i++){
+			vehicles += '"'+ selectedVehicles[i].data.value +'"';
+			if ( i < selectedVehicles.length - 1){
+				vehicles += ', ';
+			}
+		}
+		
+		var models = '';
+		var selectedModels =  this.cruisePanelView.modelSelector.toMultiselect.store.data.items;
+		for (var i=0; i<selectedModels.length; i++){
+			models += '"'+ selectedModels[i].data.value +'"';
+			if ( i < selectedModels.length - 1){
+				models += ', ';
+			}
+		}
+		
+		/// end refactor
+		
+		
+		var conf = new Object;
+		conf.name = this.cruisePanelView.name.getValue();
+		conf.description = this.cruisePanelView.name.getValue();
+		conf.blob = '{ '
+					+ '"cruiseName":"'+ this.cruisePanelView.name.getValue() + '",'
+					+ '"startTime":"'+ this.cruisePanelView.startTime.getValue().toISOString() + '",'
+					+ '"endTime":"'+ this.cruisePanelView.endTime.getValue().toISOString() + '",'
+					+ '"vehicles":['+ vehicles + '],'
+					+ '"models":['+ models + '],'
+					+ '"watermark_url":"'+ this.cruisePanelView.watermarkUrl.getValue() + '",'
+					+ '"watermark_position":"'+ this.cruisePanelView.watermarkPosition.getValue() + '"'
+					+'" }';					
+		conf.owner = 'admin';
+		
+		console.log(conf);
+		// send a request to the geostore
+		var geostore = new GeoStore.Maps(
+							{ authorization: this.token,
+							   url: this.url
+							}).failure( function(response){ 
+									console.error(response); 
+									Ext.Msg.show({
+	                                       title: 'Cannot save this configuration',
+	                                       msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
+	                                       buttons: Ext.Msg.OK,
+	                                       icon: Ext.MessageBox.ERROR
+	                                });	
+							});
+		if ( this.mapId === -1 ){
+			geostore.create(conf, function(data){
+						Ext.Msg.show({
+	                           title: 'Configuration saved',
+	                           msg: 'configuration saved successfully',
+	                           buttons: Ext.Msg.OK,
+	                           icon: Ext.MessageBox.INFO
+	                    });
+				});			
+		} else {
+			geostore.update(
+					this.mapId, 
+					conf,
+					function(data){ // callback
+                          Ext.Msg.show({
+                               title: 'Configuration updated',
+                               msg: 'configuration updated successfully',
+                               buttons: Ext.Msg.OK,
+                               icon: Ext.MessageBox.OK
+                          });
+				   });
+		}
+	
+	},
+	
+	enable: function(){
+		this.cruisePanelView.name.enable();
+		this.cruisePanelView.startTime.enable();
+	    this.cruisePanelView.endTime.enable();
+		this.cruisePanelView.watermarkUrl.enable();
+		this.cruisePanelView.watermarkPosition.enable();
+		this.cruisePanelView.modelSelector.enable();
+		this.cruisePanelView.vehicleSelector.enable();
+		
+		this.saveButton.setText( this.mapId===-1 ? 'Save' : 'Update');
+		this.saveButton.enable();	
+		
+	},
+	
+	disable: function(){
+		
+	},
+	
+	clean: function(){
+		this.cruisePanelView.name.setValue( '' );
+		this.cruisePanelView.startTime.setValue( '' );
+		this.cruisePanelView.endTime.setValue( '' );
+		this.mapId = -1;
+		this.cruisePanelView.vehicleSelector.reset();
+		this.cruisePanelView.modelSelector.reset();
 	}
 	
 });

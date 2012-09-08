@@ -266,8 +266,17 @@
 	 * Return:
 	 * 
 	 */
-	ContentProvider.prototype.find = function(callback){
+	ContentProvider.prototype.find = function(callback, params_opt){
+		this.beforeFind();
+		
+		// build the uri to invoke
 		var uri = new Uri({'url':this.baseUrl_});
+		if (params_opt){
+			for( name in params_opt ){
+				uri.addParam( name, params_opt[name] );
+			}
+		}
+		
 		// build a request
 		var self = this;
 		var Request = Ext.Ajax.request({
@@ -463,6 +472,7 @@
 	},
 	afterFind: function(json){
 		
+		console.log(json);
 		if ( json.Resource ){
 			var data = new Object;
 			data.owner = json.Resource.Attributes.attribute.value;
@@ -471,7 +481,14 @@
 			data.blob = json.Resource.data.data;
 			data.id = json.Resource.id;
 			data.creation = json.Resource.creation;		
-			return data;			
+			return data;	
+		} else if ( json.ResourceList ){
+			var array = new Array;
+			for ( var i=0; i< json.ResourceList.Resource; i++){
+				var obj = json.ResourceList.Resource[i];
+				array.push( obj );
+			}
+			return array;		
 		} else {
 			this.onFailure_('cannot parse response');
 		}

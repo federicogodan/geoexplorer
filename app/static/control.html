@@ -22,20 +22,38 @@
 	<body>
 	    <script type="text/javascript">
 		Ext.onReady(function(){
+			
+			//
+			// fix for IE7 and IE8
+			//
+			if (!Date.prototype.toISOString) {
+			    Date.prototype.toISOString = function() {
+			        function pad(n) { return n < 10 ? '0' + n : n }
+			        return this.getUTCFullYear() + '-'
+			            + pad(this.getUTCMonth() + 1) + '-'
+			            + pad(this.getUTCDate()) + 'T'
+			            + pad(this.getUTCHours()) + ':'
+			            + pad(this.getUTCMinutes()) + ':'
+			            + pad(this.getUTCSeconds()) + 'Z';
+			    };
+			}
+			
 		    Ext.QuickTips.init();
 
 			// Fake data used for development
 
+
 		    // sample static data for the store
 		    var myData = [
-		        ['Rep10', 'model1, model2', 'zoe, laura, giovanna',  '8/20 12:00am', '9/2 12:00am', '<img width="20px" src="./theme/app/img/nurc-logo.png"/> top', '8/20 12:00am'],
-		        ['Rep11b','model1, model2', 'zoe, laura, giovanna',  '8/20 12:00am', '9/2 12:00am', '<img width="20px" src="./theme/app/img/nurc-logo.png"/>', '8/20 12:00am']
+		        ['xyz', 'Rep10', 'model1, model2', 'zoe, laura',  '8/20 12:00am', '9/2 12:00am', '<img width="20px" src="./theme/app/img/nurc-logo.png"/> top', '8/20 12:00am'],
+		        ['whz', 'Rep11b','', 'jane',  '8/20 12:00am', '9/2 12:00am', '<img width="20px" src="./theme/app/img/nurc-logo.png"/>', '8/20 12:00am']
 		    ];
 
 
 		    // create the data store
 		    var store = new Ext.data.ArrayStore({
 		        fields: [
+				   {name: 'id'},
 		           {name: 'name'},
 		           {name: 'modelList' },
 				   {name: 'vehicleList' },
@@ -51,7 +69,7 @@
 
 		    var vehicles = new Ext.data.ArrayStore({
 		        data: [
-		            ['zoe', 'Zoe'], ['laura', 'Laura'], ['noa', 'Noa'], ['jane', 'Jane'] 
+		            ['zoe', 'zoe'], ['laura', 'laura'], ['noa', 'noa'], ['jane', 'jane'] 
 				],
 		        fields: ['value','text'],
 		        sortInfo: {
@@ -62,7 +80,7 @@
 
 		    var models = new Ext.data.ArrayStore({
 		        data: [
-		            ['m1', 'Model 1'], ['m2', 'Model 2']
+		            ['model1', 'model1'], ['model2', 'model2']
 				],
 		        fields: ['value','text'],
 		        sortInfo: {
@@ -99,16 +117,8 @@
 						tbar: [ { 
 							icon:'./theme/app/img/silk/add.png', 
 							text:"New cruise",
-							handler: function(){
-								cruiseViewPanel.name.enable();
-								cruiseViewPanel.startTime.enable();
-								cruiseViewPanel.endTime.enable();
-								cruiseViewPanel.watermarkLogo.enable();
-								cruiseViewPanel.watermarkPosition.enable();
-								cruiseViewPanel.modelSelector.enable();
-								cruiseViewPanel.vehicleSelector.enable();
-								saveButton.enable();
-							}
+							handler: control.enable,
+							scope: control
 							} ],
 				        region:'west',
 				        border: false,
