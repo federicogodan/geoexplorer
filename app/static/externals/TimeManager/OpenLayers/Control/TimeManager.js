@@ -812,7 +812,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                     return a.resolution.step - b.resolution.step;
                 }
             });
-            // Commentato perchè sovrascrive le impostazioni date in configurazione
+            // Commentato perchè sovrascrive le impostazioni della configurazione
             //this.setRange([timeSpans[0].start, timeSpans[0].end]);
             //this.units = timeSpans[0].resolution.units;
             //this.step = timeSpans[0].resolution.step;
