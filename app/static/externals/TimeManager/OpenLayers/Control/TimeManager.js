@@ -458,10 +458,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                         });
                         if(!this._stopped){
                             this.clearTimer();
-                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
                         }
                     }
-                }, this), 1000 / (this.frameRate * 4));
+                }, this), 1000 * (this.frameRate * 4));
             }
         }
     },
@@ -478,7 +478,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             delete this._stopped;
             this.tick();
             this.clearTimer(); //no seriously we really really only want 1 timer
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
         }
     },
 	/**
@@ -603,7 +603,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         this.frameRate = rate;
         if(playing){
             //this.tick();
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
         }
     },
     /**
