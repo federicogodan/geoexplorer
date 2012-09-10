@@ -88,7 +88,7 @@
         var serverConfig;
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
         var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config;
-		var startTime; var endTime; var timeUnit; var currentTime;
+		var startTime; var endTime; var timeUnit; var currentTime; var timeStep; var timeFrameRate;
         var cruiseName; var vehicles;
 		
 		// //////////////////////////////////////////////////
@@ -156,6 +156,9 @@
 					case "currentTime":
 									currentTime = param[1];
 									break;
+					case "timeStep":
+									timeStep = param[1];
+									break;                                    
 					default :       
 									mapIdentifier = -1;
 									authorization = false;
@@ -231,6 +234,24 @@
             if (!currentTime){
                 currentTime='2010-08-20T10:02:29.000Z';
             }
+            
+            //set timeManager step
+            if (!timeStep){
+				if(serverConfig.timeStep){
+					timeStep = serverConfig.timeStep
+				}else{
+					timeStep = 30;
+				}
+			}
+            
+            //set timeManager frameRate
+            if (!timeFrameRate){
+				if(serverConfig.timeFrameRate){
+					timeFrameRate = serverConfig.timeFrameRate
+				}else{
+                	timeFrameRate=1;				
+				}
+			}
 			
             if(!cruiseName){
                 cruiseName = "NOMR12";
@@ -357,6 +378,8 @@
                 renderToTab : 'appTabs',
                 units: timeUnit,
                 range: [startTime,endTime],
+                step: timeStep,
+                frameRate: timeFrameRate,
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
