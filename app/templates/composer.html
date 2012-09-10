@@ -19,6 +19,29 @@
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/en.js"></script>
 
+	<style>
+        /* style rows on mouseover */
+        .x-grid3-row-over .x-grid3-cell-inner {
+            font-weight: bold;
+        }
+
+		.x-action-col-cell img.not-available-col{
+            height: 16px;
+            width: 16px;
+            background-image: url(../theme/app/img/silk/error.png);
+        }
+		
+		.x-action-col-cell img.available-col{
+            height: 16px;
+            width: 16px;
+            background-image: url(../theme/app/img/silk/accept.png);
+        }
+		
+		.vehicle-refresh-icon{
+			background-image: url(../theme/app/img/silk/arrow_refresh.png);
+		}
+    </style>
+	
 
 	<style>
 	    .olControlMousePosition {
@@ -87,7 +110,7 @@
         var app;
         var serverConfig;
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config;
+        var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config; var vehicleSelector;
 		var startTime; var endTime; var timeUnit; var currentTime; var timeStep; var timeFrameRate;
         var cruiseName; var vehicles;
 		
@@ -176,6 +199,7 @@
         var gnBaseUrl;
         
         var onReady = function(){
+		
 		    //
             // set default values for params
             //
@@ -385,6 +409,7 @@
                     'abstract': "Custom Map",
                     contact: "<a href='#'>#</a>."
                 },
+				vehicleSelector: vehicleSelector,
                 sources: sources,
                 map: {
 					projection: "EPSG:4326",
@@ -599,6 +624,7 @@
                   customSources = serverConfig.gsSources;
 				  config = serverConfig;
                   customLayers = serverConfig.layers;
+				  vehicleSelector = serverConfig.vehicleSelector
 
                   //      
                   // Run the application when browser is ready
