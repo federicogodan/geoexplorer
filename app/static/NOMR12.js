@@ -11,7 +11,7 @@
    "startTime": "2012-09-01T06:00:00.000Z",
    "endTime":   "2012-10-09T06:00:00.000Z",
    "timeStep": 30,
-   "timeFrameRate": 10,
+   "timeFrameRate": 5,
    
    "vehicleSelector": {
 		"data":[
