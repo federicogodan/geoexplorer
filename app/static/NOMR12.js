@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
-   "proxy":"/http_proxy/proxy?url=",
+   "proxy":"/proxy?url=",
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
@@ -10,6 +10,8 @@
    "zoom": "8",
    "startTime": "2012-09-01T06:00:00.000Z",
    "endTime":   "2012-10-09T06:00:00.000Z",
+   "timeStep": 30,
+   "timeFrameRate": 1,
    
    "gsSources":{
         "Gliders": {
