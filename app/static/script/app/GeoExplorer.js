@@ -396,7 +396,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			   {
                     // region: 'south', 
 					xtype: "panel", autoScroll:true, tbar:[], 
-                    border: false,  id: 'feature-details', title:'Custom features'
+                    border: false,  id: 'feature-details', title:'Custom notes'
                 },
 				{
 	                // region: 'center', 
