@@ -642,11 +642,11 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         var d = new Date();        
         var UTC = d.getUTCFullYear() + '-'
 		            + this.pad(d.getUTCMonth() + 1) + '-'
-		            + this.pad(d.getUTCDate()) + 'T00:00:00Z';
+		            + this.pad(d.getUTCDate()) + 'T'
                     
-		            /*+ this.pad(d.getUTCHours()) + ':'
+		            + this.pad(d.getUTCHours()) + ':'
 		            + this.pad(d.getUTCMinutes()) + ':'
-		            + this.pad(d.getUTCSeconds()) + 'Z';*/
+		            + this.pad(d.getUTCSeconds()) + 'Z';
 
         currentTimeUTC = Date.fromISO( UTC ); 
         
