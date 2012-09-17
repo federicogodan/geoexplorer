@@ -42,7 +42,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      *      property indicating the control reset due to running in looped mode
      *      (true) or the reset function call (false)
      */
-    EVENT_TYPES: ["beforetick","tick","play","stop","reset","rangemodified"],
+    EVENT_TYPES: ["beforetick","tick","play","stop","reset","currenttime","rangemodified"],
 
 
     /**
@@ -565,7 +565,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      * time - {Date|String} UTC current animantion time/date using either a
      *     Date object or ISO 8601 formatted string.
      */ 
-     setTime:function(time) {
+     setTime:function(time,curTime) {
         if(!( time instanceof Date)) {
             time = OpenLayers.Date.parse(time);
         }
@@ -590,9 +590,11 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         }
         else {
             this.currentTime = time;
+            this.curTime = curTime;
         }
         this.events.triggerEvent('tick', {
-            'currentTime' : this.currentTime
+            'currentTime' : this.currentTime,
+            'curTime' : this.curTime
         });
     },
     /**
@@ -626,6 +628,38 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         });
         return this.currentTime;
     },
+    /**
+     * APIMethod:currenttime
+     * Set the time to the animation current UTC time. Fires the 'currenttime' event.
+     * 
+     * Parameters: {Boolean} looped - trigger reset event with looped = true
+     * Returns:
+     * {Date} the control's currentTime
+     */ 
+     currenttime:function(looped) {
+        this.clearTimer();
+        
+        var d = new Date();        
+        var UTC = d.getUTCFullYear() + '-'
+		            + this.pad(d.getUTCMonth() + 1) + '-'
+		            + this.pad(d.getUTCDate()) + 'T'
+                    
+		            + this.pad(d.getUTCHours()) + ':'
+		            + this.pad(d.getUTCMinutes()) + ':'
+		            + this.pad(d.getUTCSeconds()) + 'Z';
+
+        currentTimeUTC = Date.fromISO( UTC ); 
+        
+        var newTime = new Date(currentTimeUTC.getTime());
+        this.setTime(newTime,"curTime");
+        this.events.triggerEvent('reset', {
+            'looped' : !!looped
+        });
+        return this.currentTime;
+    },
+    pad: function (n){
+        return n < 10 ? '0' + n : n 
+    },      
     /**
      * APIMethod: incrementTime
      * Moves the current animation time forward by the specified step & stepUnit
