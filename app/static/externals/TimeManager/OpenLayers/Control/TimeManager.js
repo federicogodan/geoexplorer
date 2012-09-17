@@ -458,10 +458,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                         });
                         if(!this._stopped){
                             this.clearTimer();
-                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
                         }
                     }
-                }, this), 1000 / (this.frameRate * 4));
+                }, this), 1000 * (this.frameRate * 4));
             }
         }
     },
@@ -478,7 +478,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             delete this._stopped;
             this.tick();
             this.clearTimer(); //no seriously we really really only want 1 timer
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
         }
     },
 	/**
@@ -516,9 +516,12 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             var newTime = new Date(this.range[(this.step > 0) ? 0 : 1].getTime());
             this.setTime(newTime);
         }
-        if(this.range[0].getTime() != oldRange[0] || this.range[1].getTime() != oldRange[1]) {
+        //#######
+        //commentato l'if per consentire il settaggio dei valori dello slide cambiando lo step e le unità anche se i valore di range non sono cambiati
+        //#######
+        //if(this.range[0].getTime() != oldRange[0] || this.range[1].getTime() != oldRange[1]) {
             this.events.triggerEvent("rangemodified");
-        }
+        //}
     },
 	/**
 	 * APIMethod:setStart
@@ -603,7 +606,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         this.frameRate = rate;
         if(playing){
             //this.tick();
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
         }
     },
     /**
@@ -812,9 +815,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                     return a.resolution.step - b.resolution.step;
                 }
             });
-            this.setRange([timeSpans[0].start, timeSpans[0].end]);
-            this.units = timeSpans[0].resolution.units;
-            this.step = timeSpans[0].resolution.step;
+            // Commentato perchè sovrascrive le impostazioni della configurazione
+            //this.setRange([timeSpans[0].start, timeSpans[0].end]);
+            //this.units = timeSpans[0].resolution.units;
+            //this.step = timeSpans[0].resolution.step;
         }
         else if (this.intervals) {
             this.snapToIntervals = false

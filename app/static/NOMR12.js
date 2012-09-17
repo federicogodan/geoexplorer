@@ -10,6 +10,28 @@
    "zoom": "8",
    "startTime": "2012-09-01T06:00:00.000Z",
    "endTime":   "2012-10-09T06:00:00.000Z",
+   "timeStep": 30,
+   "timeFrameRate": 5,
+   
+   "vehicleSelector": {
+		"data":[
+			[true, "greta", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_greta.png", false],
+			[true, "elettra", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_elettra.png", false],
+			[true, "jade", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_jade.png", false],
+			[true, "zoe", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_zoe.png", false],
+			[true, "laura", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_laura.png", false],
+			[true, "sophie", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_sophie.png", false],
+			[true, "natalie", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_natalie.png", false],
+			[true, "noa", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_noa.png", false]
+		],
+		"refreshIconPath": "../theme/app/img/silk/arrow_refresh.png",  
+		"geoserverBaseURL": "http://84.33.199.62/geoserver-gliders/",		
+		"gliderPropertyName": "glider_name",	
+		"cruisePropertyName": "cruise_name",	
+		"glidersFeatureType": "GlidersTracks",	
+		"glidersPrefix": "it.geosolutions",
+		"wfsVersion": "1.1.0"
+   },
    
    "gsSources":{
         "Gliders": {

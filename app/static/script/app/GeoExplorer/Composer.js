@@ -187,10 +187,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 timeFormat: 'l, F d, Y g:i:s A',
                 outputConfig: {
                     controlConfig:{
-                        step: 1,
+                        step: config.step,
                         units:config.units,
                         //timeSpans: config.timeSpans,
-                        range: config.range
+                        range: config.range,
+                        frameRate: config.frameRate
                     }
                 }
             }

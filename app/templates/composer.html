@@ -19,6 +19,86 @@
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/en.js"></script>
 
+    <style type="text/css">
+        #main {
+            text-align:center;
+        }
+        table.featureInfo, table.featureInfo td, table.featureInfo th {
+                border:1px solid #03084B;
+                border-collapse:collapse;
+                margin:0;
+                padding:0;
+                font-size: 90%;
+                padding:.2em .1em;
+        }
+         table.featureInfo caption.featureInfo{
+                  padding:.2em .2em; 
+                  text-transform:uppercase;
+                  color:#FFFFFF;
+                  text-shadow: 2px 2px 3px #000;
+                  filter:DropShadow(Color=#000000, OffX=2, OffY=2);                  
+                  font-weight:bold; 
+                  font-size: 12px; 
+                  /*background:#CEDFF5; */
+          }           
+          table.featureInfo th{
+                  border:1px solid #03084B;
+                  padding:.2em .2em; 
+                  text-transform:uppercase;
+                  color:#0055BB; 
+                  font-weight:bold; 
+                  font-size: 10px; 
+                  background:#CEDFF5; 
+          }
+        table.featureInfo th.title{
+                padding:.2em .2em;
+                text-transform:uppercase;
+                text-shadow: 2px 2px 3px #FFF;
+                filter:DropShadow(Color=#FFFFFF, OffX=2, OffY=2);
+                font-weight:bold;
+                color:#030F1C;
+                background:#A5A7AA;
+        
+        }
+        table.featureInfo tr.odd td{
+                text-align:left;
+                font-size:10px;
+                font-weight:bold;
+                text-transform:lowercase;
+                padding:.2em .2em;    
+        }
+        table.featureInfo td{
+                text-align:left;
+                font-size:10px;
+                font-weight:bold;
+                text-transform:lowercase;
+                padding:.2em .2em;              
+        }        
+    </style>
+
+	<style>
+        /* style rows on mouseover */
+        .x-grid3-row-over .x-grid3-cell-inner {
+            font-weight: bold;
+        }
+
+		.x-action-col-cell img.not-available-col{
+            height: 16px;
+            width: 16px;
+            background-image: url(../theme/app/img/silk/error.png);
+        }
+		
+		.x-action-col-cell img.available-col{
+            height: 16px;
+            width: 16px;
+            background-image: url(../theme/app/img/silk/accept.png);
+        }
+		
+		.vehicle-refresh-icon{
+			background-image: url(../theme/app/img/silk/arrow_refresh.png);
+		}
+    </style>
+	
 
 	<style>
 	    .olControlMousePosition {
@@ -87,8 +167,8 @@
         var app;
         var serverConfig;
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config;
-		var startTime; var endTime; var timeUnit; var currentTime;
+        var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config; var vehicleSelector;
+		var startTime; var endTime; var timeUnit; var currentTime; var timeStep; var timeFrameRate;
         var cruiseName; var vehicles;
 		
 		// //////////////////////////////////////////////////
@@ -156,6 +236,9 @@
 					case "currentTime":
 									currentTime = param[1];
 									break;
+					case "timeStep":
+									timeStep = param[1];
+									break;                                    
 					default :       
 									mapIdentifier = -1;
 									authorization = false;
@@ -173,6 +256,7 @@
         var gnBaseUrl;
         
         var onReady = function(){
+		
 		    //
             // set default values for params
             //
@@ -231,6 +315,24 @@
             if (!currentTime){
                 currentTime='2010-08-20T10:02:29.000Z';
             }
+            
+            //set timeManager step
+            if (!timeStep){
+				if(serverConfig.timeStep){
+					timeStep = serverConfig.timeStep
+				}else{
+					timeStep = 30;
+				}
+			}
+            
+            //set timeManager frameRate
+            if (!timeFrameRate){
+				if(serverConfig.timeFrameRate){
+					timeFrameRate = serverConfig.timeFrameRate
+				}else{
+                	timeFrameRate=1;				
+				}
+			}
 			
             if(!cruiseName){
                 cruiseName = "NOMR12";
@@ -357,11 +459,14 @@
                 renderToTab : 'appTabs',
                 units: timeUnit,
                 range: [startTime,endTime],
+                step: timeStep,
+                frameRate: timeFrameRate,
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
                     contact: "<a href='#'>#</a>."
                 },
+				vehicleSelector: vehicleSelector,
                 sources: sources,
                 map: {
 					projection: "EPSG:4326",
@@ -576,6 +681,7 @@
                   customSources = serverConfig.gsSources;
 				  config = serverConfig;
                   customLayers = serverConfig.layers;
+				  vehicleSelector = serverConfig.vehicleSelector
 
                   //      
                   // Run the application when browser is ready
