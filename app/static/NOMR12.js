@@ -35,8 +35,8 @@
         "Gliders": {
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
-            "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver-gliders/ows",
+            "version": "1.1.1",
+            "url": "http://geos3.nurc.nato.int/geoserver-gliders/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -45,8 +45,8 @@
         "GEOSIII": {
             "ptype": "gxp_wmssource",
             "title": "GEOSIII", 
-            "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver/ows",
+            "version": "1.1.1",
+            "url": "http://geos3.nurc.nato.int/geoserver/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
