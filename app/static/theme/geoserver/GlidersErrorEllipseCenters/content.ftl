@@ -20,7 +20,12 @@
                 <tr>
                 </#if>
                 <#assign odd = !odd>
-                    <th >${attribute.name}</th><td>${attribute.value}</td>
+					<th >${attribute.name}</th>
+				<#if attribute.name == 'description' &&  type.name == 'GlidersErrorEllipseCenters'>
+					<td>${attribute.value?replace(";","<br/>")}</td>
+				<#else>
+                    <td>${attribute.value}</td>
+				</#if>
                 </tr>
         </#if>
     </#list>
