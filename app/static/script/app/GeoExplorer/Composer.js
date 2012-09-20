@@ -135,6 +135,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
                 onUnselected: function( target ){
                     self.fireEvent("featureunselected", target);
+                },
+				onSave: function( target, feature ){
+                    self.fireEvent("featuresaved", target, feature);
                 }
             }, {
                 ptype:"gxp_import_kml",
@@ -157,6 +160,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
                 onUnselected: function( target ){
                     self.fireEvent("notefeatureunselected", target);
+                },
+				onSave: function( target, feature ){
+                    self.fireEvent("notefeaturesaved", target, feature);
                 }
             }, {
                 ptype:"gxp_import_kml",

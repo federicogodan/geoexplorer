@@ -16,10 +16,8 @@
    "vehicleSelector": {
 		"data":[
 			[true, "greta", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_greta.png", false],
-			[true, "elettra", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_elettra.png", false],
 			[true, "jade", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_jade.png", false],
 			[true, "zoe", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_zoe.png", false],
-			[true, "laura", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_laura.png", false],
 			[true, "sophie", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_sophie.png", false],
 			[true, "natalie", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_natalie.png", false],
 			[true, "noa", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_noa.png", false]
@@ -53,6 +51,16 @@
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
 			}
+        },
+        "GeosGliders": {
+            "ptype": "gxp_wmssource",
+            "title": "GeosGliders", 
+            "version":"1.1.1",
+            "url":"http://geos3.nurc.nato.int/geoserver-gliders/ows",
+			"layerBaseParams": {
+				"TILED": true,
+				"TILESORIGIN": "-180,-90" 
+			}
         }
    },
    "layers":[
@@ -64,6 +72,21 @@
             "name": "nurcbg",
             "title": "Nurc Background"
         }, 
+		{
+		            "format": "image/png8",
+		            "group": "Gliders",
+		            "name": "nurc:watvel",
+		            "opacity": 1,
+		            "selected": false,
+		            "source": "GeosGliders",
+		            "title": "Watervel Forecast",
+		            "transparent": true,
+		            "elevation":10,
+		            "visibility": true,
+		            "ratio": 1,
+		            "styles": "watvel_marker_ramp_180",
+					"style": "watvel_raster"
+		},
         {
             "format": "image/png8",
             "group": "Gliders",
