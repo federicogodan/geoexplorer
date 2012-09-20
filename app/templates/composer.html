@@ -106,6 +106,7 @@
 	        right: 5px !important;
 			font-size: 3em;
             color: lightgrey;
+			height: 20px;
 	    }
 	
 	    .olControl{
@@ -118,7 +119,7 @@
 
     <script>
 	    //
-		// fix for IE7 and IE8
+		// Fix for IE7 and IE8
 		//
 		if (!Date.prototype.toISOString) {
 		    Date.prototype.toISOString = function() {
@@ -342,20 +343,11 @@
 				if(serverConfig.vehicles){
                     vehicles = serverConfig.vehicles
                 }else{
-                    vehicles = ["greta", "zoe", "sophie", "natalie", "noa"];
+                    vehicles = ["greta", "jade", "zoe", "sophie", "natalie", "noa", "laura", "elettra"];
                 }
 			}
-			
-            /*Ext.BLANK_IMAGE_URL = (function() {
-                    if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
-                        return "data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-                    } else {
-                        return "theme/app/img/blank.gif";
-                    }
-            })();*/
 
             OpenLayers.ImgPath = "../externals/openlayers/theme/default/img/";
-
             gxp.plugins.ZoomToExtent.prototype.closest = false;
                         
             Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
@@ -376,8 +368,6 @@
                 id : 'appTabs'
             });
         
-    
- 
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout: 'border',
@@ -402,8 +392,7 @@
                         items : [appTabs]
                     }]
             });
-            
-     
+                 
             var sources = customSources;
 
 			//
@@ -416,54 +405,55 @@
 			var notesLayer = new OpenLayers.Layer.Vector('Pilot notes Layer', {
 				projection: new OpenLayers.Projection("EPSG:4326"),
 				styleMap: new OpenLayers.StyleMap({
-				        "default": new OpenLayers.Style({
-				            strokeColor: "red",
-				            strokeOpacity: .7,
-				            strokeWidth: 2,
-				            fillColor: "red",
-				            fillOpacity: 0,
-				            cursor: "pointer"
-				        }),
-				        "temporary": new OpenLayers.Style({
-				            strokeColor: "#ffff33",
-				            strokeOpacity: .9,
-				            strokeWidth: 2,
-				            fillColor: "#ffff33",
-				            fillOpacity: .3,
-				            cursor: "pointer"
-				        }),
-				        "select": new OpenLayers.Style({
-				            strokeColor: "#0033ff",
-				            strokeOpacity: .7,
-				            strokeWidth: 3,
-				            fillColor: "#0033ff",
-				            fillOpacity: 0,
-				            graphicZIndex: 2,
-				            cursor: "pointer"
-				        })
-				    })
+					"default": new OpenLayers.Style({
+						strokeColor: "red",
+						strokeOpacity: .7,
+						strokeWidth: 2,
+						fillColor: "red",
+						fillOpacity: 0,
+						cursor: "pointer"
+					}),
+					"temporary": new OpenLayers.Style({
+						strokeColor: "#ffff33",
+						strokeOpacity: .9,
+						strokeWidth: 2,
+						fillColor: "#ffff33",
+						fillOpacity: .3,
+						cursor: "pointer"
+					}),
+					"select": new OpenLayers.Style({
+						strokeColor: "#0033ff",
+						strokeOpacity: .7,
+						strokeWidth: 3,
+						fillColor: "#0033ff",
+						fillOpacity: 0,
+						graphicZIndex: 2,
+						cursor: "pointer"
+					})
+				})
 			});
             
             app = new GeoExplorer.Composer({
-				refreshTimeInterval: 10000, // msec
+				modified: false,
 				config:config,
 				drawingLayer: drawingLayer,
 				notesLayer: notesLayer,
-				vehicles: vehicles,
+				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
 				cruiseName: cruiseName,
-                modified: false,
                 proxy: proxy,
-                // xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/", // test
-				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',  // prod
+				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
+				// Time Animator //
                 units: timeUnit,
                 range: [startTime,endTime],
                 step: timeStep,
                 frameRate: timeFrameRate,
+				// Real Time Synch //
+				refreshTimeInterval: 10000, // msec
                 about: {
-                    title: "Custom Map",
-                    'abstract': "Custom Map",
+                    title: "NOMR12 Cruise Gliders Map",
+                    'abstract': "NOMR12 Cruise Gliders Map",
                     contact: "<a href='#'>#</a>."
                 },
 				vehicleSelector: vehicleSelector,
@@ -493,170 +483,15 @@
                         ovestPanel.hide();
                         ovestPanel.collapse();
                     }
+					
                     if(cruiseName){
                         Ext.getCmp('tree').setTitle(cruiseName);
                     }
-	
-                    //
-                    // Visualizing metadata tab and layer at startup
-                    //                    
-                    if(lay && wmsurl && gnBaseUrl && uuid)
-                    addMSLayer(lay, uuid, gnBaseUrl, wmsurl, false);
-                
-                    if(lay && gnBaseUrl && uuid){
-                        app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, lay);
-                        appTabs.setActiveTab(2);	
-                    }
                 }    
             });
-
-            addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl, enableViewTab){
-				  var record = source.createLayerRecord({
-					name: msLayerName,
-					title: msLayerName,
-					uuid : msLayerUUID,
-					gnURL: gnUrl + "srv/" + gnLangStr + "/",
-					source: sourceId
-				  });   
-						  
-				  if (record) {
-					var layerStore = app.mapPanel.layers;  
-					layerStore.add([record]);
-
-					modified = true;
-                                        
-                    if(enableViewTab){
-                        appTabs.setActiveTab(1);
-                    }
-					
-					//
-					// Zoom To Layer extent
-					//
-					var layer = record.get('layer');
-					var extent = layer.restrictedExtent || layer.maxExtent || app.mapPanel.map.maxExtent;
-					var map = app.mapPanel.map;
-					
-					map.addLayer( drawingLayer );
-
-					//
-					// respect map properties
-					//
-					var restricted = map.restrictedExtent || map.maxExtent;
-					if (restricted) {
-						extent = new OpenLayers.Bounds(
-							Math.max(extent.left, restricted.left),
-							Math.max(extent.bottom, restricted.bottom),
-							Math.min(extent.right, restricted.right),
-							Math.min(extent.top, restricted.top)
-						);
-					}
-
-					map.zoomToExtent(extent, true);
-				  }
-            };
-
-            checkLayerSource = function(wmsURL){
-
-                var source;
-				for (var id in app.layerSources) {
-					  var src = app.layerSources[id];    
-					  var url  = src.initialConfig.url; 
-					  //
-					  // Checking if source URL aldready exists
-					  //
-					  if(url && url.indexOf(wmsURL) != -1){
-						  source = src;
-						  break;
-					  }
-				} 
-
-                return source;
-            };
-            
-            addMSLayer = function(msLayerName, msLayerUUID, gnUrl, wmsURL, enableViewTab){		
-
-                var source = checkLayerSource(wmsURL);
-
-				if(source){
-					addMSLayerRecord(source, source.id, msLayerName, msLayerUUID, gnUrl, enableViewTab);
-				}else{
-					var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Attendere prego..."});
-					mask.show();
-
-					var sourceOpt = {
-						config: {
-						  url: wmsURL
-						}
-					};
-				  
-					source = app.addLayerSource(sourceOpt);
-				  
-					//
-					// Waiting GetCapabilities response from the server.
-					//
-					source.on('ready', function(){ 
-						mask.hide();
-						addMSLayerRecord(source, source.id, msLayerName, msLayerUUID, gnUrl, enableViewTab);
-					});
-				  
-					//
-					// To manage failure in GetCapabilities request (invalid request url in 
-					// GeoNetwork configuration or server error).
-					//
-					source.on('failure', function(src, msg){		          
-						 mask.hide();
-						 
-						 Ext.Msg.show({
-							 title: 'GetCapabilities',
-							 msg: msg + " Il layer non può essere aggiunto alla mappa",
-							 width: 300,
-							 icon: Ext.MessageBox.ERROR
-						 });  
-					 });
-				}
-            }; 
-
-	        addMSSource = function(wmsURL){		  
-                var source = checkLayerSource(wmsURL);
-
-				if(!source){
-                      var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Attendere prego..."});
-                      mask.show();
-
-					  var sourceOpt = {
-						  config: {
-							  url: wmsURL
-						  }
-					  };
-					  
-					  source = app.addLayerSource(sourceOpt);
-					  
-					  //
-					  // Waiting GetCapabilities response from the server.
-					  //
-					  source.on('ready', function(){ 
-						  mask.hide();
-					  });
-					  
-					  //
-					  // To manage failure in GetCapabilities request (invalid request url in 
-					  // GeoNetwork configuration or server error).
-					  //
-					  source.on('failure', function(src, msg){		          
-						  mask.hide();
-						  
-						  Ext.Msg.show({
-							  title: 'GetCapabilities',
-							  msg: msg + " Il layer non può essere aggiunto alla mappa",
-							  width: 300,
-							  icon: Ext.MessageBox.ERROR
-						  });  
-					  });
-				}
-			}
       };			
 			
-      var cfgFile = cruiseName ? "../"+cruiseName+".js" : "../NOMR12.js";
+      var cfgFile = cruiseName ? "../" + cruiseName  +".js" : "../NOMR12.js";
       Ext.Ajax.request({
           url: cfgFile,
           method: 'GET',

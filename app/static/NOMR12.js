@@ -4,10 +4,10 @@
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
-   "maxExtent": ["4.80","40.96","10.70","45.37"],
-   "bounds": ["4.80","40.96","10.70","45.37"],
+   "maxExtent": ["3.29817","40.266369","11.08748","45.93263"],
+   "bounds": ["3.29817","40.266369","11.08748","45.93263"],
    "center": ["7.97","43.02"],
-   "zoom": "8",
+   "zoom": "7",
    "startTime": "2012-09-01T06:00:00.000Z",
    "endTime":   "2012-10-09T06:00:00.000Z",
    "timeStep": 30,
@@ -23,7 +23,7 @@
 			[true, "noa", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_noa.png", false]
 		],
 		"refreshIconPath": "../theme/app/img/silk/arrow_refresh.png",  
-		"geoserverBaseURL": "http://84.33.199.62/geoserver-gliders/",		
+		"geoserverBaseURL": "http://geos3.nurc.nato.int/geoserver-gliders/",		
 		"gliderPropertyName": "glider_name",	
 		"cruisePropertyName": "cruise_name",	
 		"glidersFeatureType": "GlidersTracks",	
@@ -35,8 +35,8 @@
         "Gliders": {
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
-            "version":"1.1.1",
-            "url":"http://84.33.199.62/geoserver-gliders/ows",
+            "version": "1.1.1",
+            "url": "http://geos3.nurc.nato.int/geoserver-gliders/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -45,8 +45,8 @@
         "GEOSIII": {
             "ptype": "gxp_wmssource",
             "title": "GEOSIII", 
-            "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver/ows",
+            "version": "1.1.1",
+            "url": "http://geos3.nurc.nato.int/geoserver/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -87,6 +87,21 @@
 		            "styles": "watvel_marker_ramp_180",
 					"style": "watvel_raster"
 		},
+        {
+            "format": "image/png8",
+            "group": "Gliders",
+            "name": "nurc:watvel",
+            "opacity": 1,
+            "selected": false,
+            "source": "Gliders",
+            "title": "Sea Water Velocity Forecast",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+			"elevation": 10,
+            "styles": "watvel_marker_ramp_180",
+			"style": "watvel_raster"
+        }, 
         {
             "format": "image/png8",
             "group": "Gliders",
@@ -234,4 +249,3 @@
         }
     ]
 }
-
