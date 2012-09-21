@@ -64,6 +64,15 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      *     Default : 1.
      */
 	step:1,
+    
+    /**
+     * APIProperty: stepType
+     * {Number} The type of step. 
+     *     Must be one of:
+     *     "next" - call incrementTime function
+     *     "back" - call decrementTime function
+     */
+    stepType: "next",
 	
     /**
      * APIProperty: range
@@ -419,7 +428,44 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             }
         }
         else {
-            this.incrementTime();
+           if(this.stepType == "next"){
+                if(this.currentTime >= this.range[1] && !this.loop) {
+                    this.clearTimer();
+                    this.reset(true);
+                    this.play();                  
+                }else if(this.currentTime >= this.range[1] && this.loop){
+                    this.incrementTime();                                
+                }else{
+                    this.incrementTime();                
+                }
+            }else if(this.stepType == "back"){
+                if(this.currentTime <= this.range[0] && !this.loop) {
+                    Ext.MessageBox.show({
+                        title: "Attention",
+                        msg: "Has reached the beginning of the cruise",
+                        buttons: Ext.MessageBox.CANCEL,
+                        animEl: 'mb4',
+                        icon: Ext.MessageBox.WARNING,
+                        scope: this
+                    });
+                }else if(this.currentTime <= this.range[0] && this.loop){
+                    Ext.MessageBox.show({
+                        title: "Attention",
+                        msg: "Has reached the beginning of the cruise",
+                        buttons: Ext.MessageBox.CANCEL,
+                        animEl: 'mb4',
+                        icon: Ext.MessageBox.WARNING,
+                        scope: this
+                    });
+                    this.clearTimer();
+                    this.reset(true);                    
+                }else{
+                    this.decrementTime();                
+                }
+            }else{
+                this.incrementTime();
+            }
+            
         }
         //test that we have reached the end of our range
         if(this.currentTime > this.range[1] || this.currentTime < this.range[0]) {
@@ -431,10 +477,29 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             }
             //stop in normal mode
             else {
-                this.clearTimer();
-                this.events.triggerEvent('stop', {
-                    'rangeExceeded' : true
-                });
+                if(this.stepType !== "back"){
+                    Ext.MessageBox.show({
+                        title: "Attention",
+                        msg: "Has reached the end of the cruise",
+                        buttons: Ext.MessageBox.CANCEL,
+                        animEl: 'mb4',
+                        icon: Ext.MessageBox.WARNING,
+                        scope: this
+                    });                    
+                    this.clearTimer();
+                    this.events.triggerEvent('stop', {
+                        'rangeExceeded' : true
+                    });
+                }else{
+                    Ext.MessageBox.show({
+                        title: "Attention",
+                        msg: "Has reached the beginning of the cruise",
+                        buttons: Ext.MessageBox.CANCEL,
+                        animEl: 'mb4',
+                        icon: Ext.MessageBox.WARNING,
+                        scope: this
+                    });
+                }
             }
         }
         else {
@@ -679,7 +744,27 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.currentTime['setUTC'+stepUnit](newTime);    
         }
     },
-
+    
+    /**
+     * APIMethod: decrementTime
+     * Moves the current animation time backward by the specified step & stepUnit
+     *
+     * Parameters:
+     * step - {Number}
+     * stepUnit - {<OpenLayers.TimeUnit>}
+     */ 
+     decrementTime:function(step,stepUnit) {
+        var step = step || this.step;
+        var stepUnit = stepUnit || this.units;
+        if (stepUnit == "Days"){
+            var newTime = parseFloat(this.currentTime['getUTCDate']()) - parseFloat(step);
+            this.currentTime['setUTCDate'](newTime);
+        }else{
+            var newTime = parseFloat(this.currentTime['getUTC'+stepUnit]()) - parseFloat(step);
+            this.currentTime['setUTC'+stepUnit](newTime);    
+        }
+    },
+    
 	/**
 	 * Method: buildTimeAgents
 	 * Creates the controls "managed" by this control.
