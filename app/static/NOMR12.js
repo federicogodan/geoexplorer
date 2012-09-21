@@ -1,6 +1,8 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
    "proxy":"/proxy?url=",
+   "xmlJsonTranslateService":"http://84.33.199.62/xmlJsonTranslate-gliders/",
+   "refreshTimeInterval": 10000,
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
