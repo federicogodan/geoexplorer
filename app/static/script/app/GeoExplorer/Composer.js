@@ -138,7 +138,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
 				onSave: function( target, feature ){
                     self.fireEvent("featuresaved", target, feature);
-                }
+                },
+				onChanged: function(target, feature){
+					self.fireEvent("featurechanged", target, feature);
+				}
             }, {
                 ptype:"gxp_import_kml",
                 actionTarget: {target: "feature-details.tbar", index: 25},
@@ -163,7 +166,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 },
 				onSave: function( target, feature ){
                     self.fireEvent("notefeaturesaved", target, feature);
-                }
+                },
+				onChanged: function(target, feature){
+					self.fireEvent("notefeaturechanged", target, feature);
+				}
             }, {
                 ptype:"gxp_import_kml",
                 actionTarget: {target: "pilot-notes.tbar", index: 25},

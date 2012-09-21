@@ -38,7 +38,7 @@
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
             "version": "1.1.1",
-            "url": "http://geos3.nurc.nato.int/geoserver-gliders/ows",
+            "url": "http://84.33.199.62/geoserver-gliders/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -54,11 +54,11 @@
 				"TILESORIGIN": "-180,-90" 
 			}
         },
-        "GeosGliders": {
+		"demo": {
             "ptype": "gxp_wmssource",
-            "title": "GeosGliders", 
-            "version":"1.1.1",
-            "url":"http://geos3.nurc.nato.int/geoserver-gliders/ows",
+            "title": "demo",
+            "version": "1.1.1",
+            "url": "http://demo.geo-solutions.it/geoserver-gliders/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -74,35 +74,33 @@
             "name": "nurcbg",
             "title": "Nurc Background"
         }, 
-		{
-		            "format": "image/png8",
-		            "group": "Gliders",
-		            "name": "nurc:watvel",
-		            "opacity": 1,
-		            "selected": false,
-		            "source": "GeosGliders",
-		            "title": "Watervel Forecast",
-		            "transparent": true,
-		            "elevation":10,
-		            "visibility": true,
-		            "ratio": 1,
-		            "styles": "watvel_marker_ramp_180",
-					"style": "watvel_raster"
-		},
         {
             "format": "image/png8",
             "group": "Gliders",
-            "name": "nurc:watvel",
+            "name": "nurc:watvelingv",
             "opacity": 1,
             "selected": false,
-            "source": "Gliders",
-            "title": "Sea Water Velocity Forecast",
+            "source": "demo",
+            "title": "Watvel Forecast Model INGV",
             "transparent": true,
             "visibility": true,
             "ratio": 1,
-			"elevation": 10,
-            "styles": "watvel_marker_ramp_180",
-			"style": "watvel_raster"
+            "elevation": 1.472,
+            "styles":"watvel_marker_ramp"
+        },        
+		{
+            "format": "image/png8",
+            "group": "Gliders",
+            "name": "nurc:watvelroms",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model ROMS",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 10,
+            "styles":"watvel_marker_ramp"
         }, 
         {
             "format": "image/png8",
