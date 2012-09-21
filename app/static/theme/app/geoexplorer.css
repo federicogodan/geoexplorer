@@ -270,4 +270,10 @@ table.featureInfo caption{
     text-transform: uppercase;
     padding: .2em .2em;
 }
+.olControlLoadingPanel {
+     background-image: url(img/loader5.gif);
+     background-position: center;
+     background-repeat: no-repeat;
+	
+}
 
