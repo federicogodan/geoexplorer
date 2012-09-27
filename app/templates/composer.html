@@ -169,7 +169,7 @@
         var serverConfig;
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
         var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config; var vehicleSelector;
-		var startTime; var endTime; var timeUnit; var currentTime; var timeStep; var timeFrameRate;
+		var startTime; var endTime; var timeUnit; var currentTime; var timeStep; var timeFrameRate; var xmlJsonTranslateService; var refreshTimeInterval;
         var cruiseName; var vehicles;
 		
 		// //////////////////////////////////////////////////
@@ -347,6 +347,23 @@
                 }
 			}
 
+            //set xmlJsonTranslateService
+            if (!xmlJsonTranslateService){
+				if(serverConfig.xmlJsonTranslateService){
+					xmlJsonTranslateService = serverConfig.xmlJsonTranslateService
+				}else{
+                	xmlJsonTranslateService="http://84.33.199.62/xmlJsonTranslate-gliders/";				
+				}
+			}
+
+            //set refreshTimeInterval
+            if (!refreshTimeInterval){
+				if(serverConfig.refreshTimeInterval){
+					refreshTimeInterval = serverConfig.refreshTimeInterval
+				}else{
+                	refreshTimeInterval=10000;				
+				}
+			}            
             OpenLayers.ImgPath = "../externals/openlayers/theme/default/img/";
             gxp.plugins.ZoomToExtent.prototype.closest = false;
                         
@@ -441,7 +458,7 @@
 				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
 				cruiseName: cruiseName,
                 proxy: proxy,
-				xmlJsonTranslateService: 'http://84.33.199.62/xmlJsonTranslate-gliders/',
+				xmlJsonTranslateService: xmlJsonTranslateService,
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
 				// Time Animator //
@@ -450,7 +467,7 @@
                 step: timeStep,
                 frameRate: timeFrameRate,
 				// Real Time Synch //
-				refreshTimeInterval: 10000, // msec
+				refreshTimeInterval: refreshTimeInterval, // msec
                 about: {
                     title: "NOMR12 Cruise Gliders Map",
                     'abstract': "NOMR12 Cruise Gliders Map",
