@@ -450,7 +450,13 @@
 				})
 			});
             
+			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
+			appMask.show();
             app = new GeoExplorer.Composer({
+			    editableLayerPrefix: "it.geosolutions",
+			    editableLayerName: "aoi",
+				editableLayerSource: "local",
+				notEditableAttributes: ["glider_name", "cruise_name"],
 				modified: false,
 				config:config,
 				drawingLayer: drawingLayer,
@@ -504,7 +510,10 @@
                     if(cruiseName){
                         Ext.getCmp('tree').setTitle(cruiseName);
                     }
-                }    
+                },
+				'ready': function(){
+					appMask.hide();
+				}
             });
       };			
 			

@@ -53,8 +53,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }
                 }
-            },	
-			{
+            }, {
 				ptype: "gxp_feature_details",
 				outputTarget: 'feature-details',
 				drawingLayer: config.drawingLayer
@@ -62,10 +61,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				ptype: "gxp_pilot_notes",
 				outputTarget: 'pilot-notes',
 				drawingLayer: config.notesLayer
-			},{
+			}, {
 				ptype: "gxp_vehicle_selector",
 				outputTarget: 'vehicle-selector',
 				vehicles: config.vehicles,
+				enableAoi: true,
 				cruiseName: config.cruiseName
 			},	
 			/*{
@@ -95,7 +95,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },*/{
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
-            },{
+            }, {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
@@ -119,7 +119,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 26}
-            },{
+            }, {
 		       ptype:"gxp_embedded_link",
 		       actionTarget: {target: "paneltbar", index: 27}
 		    }, {
@@ -183,9 +183,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				refreshTimeInterval: config.refreshTimeInterval,
 				actionTarget: {target: "paneltbar", index: 28},
 				range: config.range
-			},{
+			}, {
 	            actions: ["-"], actionTarget: "paneltbar"
-	        },{
+	        }, {
                 actions: ["->"], actionTarget: "paneltbar"
             }, {
                 ptype:"gxp_playback",
@@ -206,7 +206,26 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         frameRate: config.frameRate
                     }
                 }
-            }
+            }, {
+                actions: ["->"], actionTarget: "vselector.tbar"
+            }, {
+                // shared FeatureManager for feature editing, grid and querying
+                ptype: "gxp_nurcfeaturemanager",
+                id: "featuremanager",
+				autoActivate: false, 
+				autoLoadFeatures: true,
+				layer: {
+					source: config.editableLayerSource,
+					name: config.editableLayerPrefix + ":" + config.editableLayerName
+				}
+            }, {
+				ptype: "gxp_nurcfeatureeditor",
+				featureManager: "featuremanager",
+				gliderPropertyName: "glider_name",
+				cruisePropertyName: "cruise_name",
+				excludeFields: config.notEditableAttributes,
+				actionTarget: "vselector.tbar"
+			}
         ];        
        
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);

@@ -1,8 +1,6 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
    "proxy":"/proxy?url=",
-   "xmlJsonTranslateService":"http://84.33.199.62/xmlJsonTranslate-gliders/",
-   "refreshTimeInterval": 10000,
    "watermark_url":"../theme/app/img/nurc-logo.png",
    "watermark_title":"Powered by NURC",
    "watermark_position": "position:relative;left:5px;bottom:5px",
@@ -25,7 +23,7 @@
 			[true, "noa", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_noa.png", false]
 		],
 		"refreshIconPath": "../theme/app/img/silk/arrow_refresh.png",  
-		"geoserverBaseURL": "http://geos3.nurc.nato.int/geoserver-gliders/",		
+		"geoserverBaseURL": "http://84.33.199.62/geoserver-gliders/",		
 		"gliderPropertyName": "glider_name",	
 		"cruisePropertyName": "cruise_name",	
 		"glidersFeatureType": "GlidersTracks",	
@@ -44,21 +42,31 @@
 				"TILESORIGIN": "-180,-90" 
 			}
         },
-        "GEOSIII": {
-            "ptype": "gxp_wmssource",
-            "title": "GEOSIII", 
-            "version": "1.1.1",
-            "url": "http://geos3.nurc.nato.int/geoserver/ows",
-			"layerBaseParams": {
-				"TILED": true,
-				"TILESORIGIN": "-180,-90" 
-			}
-        },
 		"demo": {
             "ptype": "gxp_wmssource",
             "title": "demo",
             "version": "1.1.1",
             "url": "http://demo.geo-solutions.it/geoserver-gliders/ows",
+			"layerBaseParams": {
+				"TILED": true,
+				"TILESORIGIN": "-180,-90" 
+			}
+        },
+	    "local": {
+            "ptype": "gxp_wmssource",
+            "title": "local",
+            "version": "1.1.1",
+            "url": "http://localhost:8080/geoserver-gliders/ows",
+			"layerBaseParams": {
+				"TILED": true,
+				"TILESORIGIN": "-180,-90" 
+			}
+        },
+        "GEOSIII": {
+            "ptype": "gxp_wmssource",
+            "title": "GEOSIII", 
+            "version": "1.1.1",
+            "url": "http://geos3.nurc.nato.int/geoserver/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -73,6 +81,16 @@
             "group": "background",
             "name": "nurcbg",
             "title": "Nurc Background"
+        }, 
+		{
+            "format": "image/png8",
+            "transparent": true,
+			"visibility": true,
+			"displayInLayerSwitcher": true,
+            "source": "local",
+            "group": "default",
+            "name": "it.geosolutions:aoi",
+            "title": "Gliders AOI"
         }, 
         {
             "format": "image/png8",
@@ -101,7 +119,7 @@
             "ratio": 1,
             "elevation": 10,
             "styles":"watvel_marker_ramp"
-        }, 
+        },
         {
             "format": "image/png8",
             "group": "Gliders",
