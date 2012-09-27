@@ -45,6 +45,7 @@
 		    
 		    //var proxy = "/proxy/?url=";
 		    var proxy = "/http_proxy/proxy/?url=";
+			var server = 'http://demo1.geo-solutions.it/';
 
         Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
@@ -209,10 +210,8 @@
 				];
 			};
 			
-		    //var gnURL = 'http://localhost:8080/geonetwork/srv/' + gnLangStr + '/main.home' ;
 			var gnURL = 'http://demo1.geo-solutions.it/geonetwork/srv/' + gnLangStr + '/main.home' ;
 			var fdhPortal =  'http://demo1.geo-solutions.it/geoserver/www/portal/' + gnLangStr + '/index.htm';
-			//var fdhPortal =  'http://localhost:8080/geoserver/www/portal/' + gnLangStr + '/index.htm';
 			
 			var portalPanel = new Ext.Panel({
                 id: 'portalPanel',

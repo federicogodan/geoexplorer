@@ -9,7 +9,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Properties;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +34,43 @@ public class HTTPWebGISXmlUpload extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 2097550601489338403L;
 	private final static Logger LOGGER = Logger
-			.getLogger(HTTPWebGISFileDownload.class.toString());
+			.getLogger(HTTPWebGISXmlUpload.class.toString());
+	
+	private Properties props;
 
+	/**
+	 * Initialize the <code>ProxyServlet</code>
+	 * 
+	 * @param servletConfig
+	 *            The Servlet configuration passed in by the servlet conatiner
+	 */
+	public void init(ServletConfig servletConfig) throws ServletException {
+		super.init(servletConfig);
+
+		InputStream inputStream = getServletContext().getResourceAsStream(
+				"/WEB-INF/classes/app.properties");
+		Properties props = new Properties();
+
+		try {
+			props.load(inputStream);
+			this.props = props;
+		} catch (IOException e) {
+			if (LOGGER.isLoggable(Level.SEVERE))
+				LOGGER.log(Level.SEVERE,
+						"Error encountered while processing properties file", e);
+		} finally {
+			try {
+				if (inputStream != null)
+					inputStream.close();
+			} catch (IOException e) {
+				if (LOGGER.isLoggable(Level.SEVERE))
+					LOGGER.log(Level.SEVERE,
+							"Error building the proxy configuration ", e);
+				throw new ServletException(e.getMessage());
+			}
+		}
+	}
+	
 	/**
 	 * Performs an HTTP POST request
 	 * 
@@ -53,8 +90,9 @@ public class HTTPWebGISXmlUpload extends HttpServlet {
 		try {
 			StringBuilder stringBuilder = new StringBuilder();
 
+			String server = this.props.getProperty("server");
 			URL xmlData = new URL(
-					"http://demo1.geo-solutions.it/exist/rest/mapadmin/context.xml");
+					server + "exist/rest/mapadmin/context.xml");
 			URLConnection yc = xmlData.openConnection();
 
 			inputStream = request.getInputStream();
