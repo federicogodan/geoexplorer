@@ -86,8 +86,7 @@
             "visibility": true,
             "ratio": 1,
             "elevation": 1.472,
-            "styles":"watvel_marker_ramp",
-			"style":"watvel_raster"
+            "styles":"watvel_marker_ramp"
         },        
 		{
             "format": "image/png8",

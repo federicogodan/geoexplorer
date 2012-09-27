@@ -140,7 +140,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     self.fireEvent("featuresaved", target, feature);
                 },
 <<<<<<< HEAD
+<<<<<<< HEAD
 				
+=======
+>>>>>>> origin/nurc
 =======
 >>>>>>> origin/nurc
 				onChanged: function(target, feature){
