@@ -8,14 +8,14 @@ var ControlPanel =  Ext.extend(Ext.Panel, {
 	cruiseListView: null,
 	cruisePanelView: null,
 	// TODO implement authentication
-	token: 'Basic ' +  'admin:admin' /*btoa('admin:admin')*/,
+	token: 'Basic ' +  Base64.encode('admin:admin'),
 	// TODO externalize
 	url: 'http://localhost:8080/geostore/rest/resources/',
 	
 	constructor: function(config){
 		
 		var geostore = new GeoStore.Maps(
-							{ authorization: 'Basic ' + 'admin:admin' /*btoa('admin:admin')*/,
+							{ authorization: 'Basic ' +  Base64.encode('admin:admin'),
 							   url: 'http://localhost:8080/geostore/rest/resources/'
 							}).failure( function(response){ 
 									console.error(response); 

@@ -415,11 +415,11 @@
 			//
 			// prepare layer where users draw custom features
 			//
-			var drawingLayer = new OpenLayers.Layer.Vector('Custom feature layer', {
+			/*var drawingLayer = new OpenLayers.Layer.Vector('Custom feature layer', {
 				projection: new OpenLayers.Projection("EPSG:4326")
-			});
+			});*/
 			
-			var notesLayer = new OpenLayers.Layer.Vector('Pilot notes Layer', {
+			/*var notesLayer = new OpenLayers.Layer.Vector('Pilot notes Layer', {
 				projection: new OpenLayers.Projection("EPSG:4326"),
 				styleMap: new OpenLayers.StyleMap({
 					"default": new OpenLayers.Style({
@@ -448,13 +448,13 @@
 						cursor: "pointer"
 					})
 				})
-			});
+			});*/
             
             app = new GeoExplorer.Composer({
 				modified: false,
 				config:config,
-				drawingLayer: drawingLayer,
-				notesLayer: notesLayer,
+				// drawingLayer: drawingLayer,
+				// notesLayer: notesLayer,
 				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
 				cruiseName: cruiseName,
                 proxy: proxy,

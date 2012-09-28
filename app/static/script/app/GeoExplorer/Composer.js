@@ -56,12 +56,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },	
 			{
 				ptype: "gxp_feature_details",
-				outputTarget: 'feature-details',
-				drawingLayer: config.drawingLayer
+				outputTarget: 'feature-details' // ,
+				// drawingLayer: config.drawingLayer
 			}, {
 				ptype: "gxp_pilot_notes",
-				outputTarget: 'pilot-notes',
-				drawingLayer: config.notesLayer
+				outputTarget: 'pilot-notes' // ,
+				// drawingLayer: config.notesLayer
 			},{
 				ptype: "gxp_vehicle_selector",
 				outputTarget: 'vehicle-selector',
@@ -125,66 +125,58 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 		    }, {
                 ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
                 actionTarget: [ "feature-details.tbar" ],
-                layer: config.drawingLayer
+                // layer: config.drawingLayer
+				layerName: 'Custom feature layer',
+				srs:  "EPSG:4326"
             }, {
-                ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
+                ptype: "gxp_feature_selector", 
+				toggleGroup: this.toggleGroup, 
                 actionTarget: [ "feature-details.tbar" ],
-                layer: config.drawingLayer,
-                onSelected: function( target, feature ){
-                    self.fireEvent("featureselected", target, feature);
-                },
-                onUnselected: function( target ){
-                    self.fireEvent("featureunselected", target);
-                },
-				onSave: function( target, feature ){
-                    self.fireEvent("featuresaved", target, feature);
-                },
-<<<<<<< HEAD
-<<<<<<< HEAD
-				
-=======
->>>>>>> origin/nurc
-=======
->>>>>>> origin/nurc
-				onChanged: function(target, feature){
-					self.fireEvent("featurechanged", target, feature);
-				}
+                // layer: config.drawingLayer,
+				layerName: 'Custom feature layer',
+				prefix: 'feature',
+				srs:  "EPSG:4326"
             }, {
                 ptype:"gxp_import_kml",
                 actionTarget: {target: "feature-details.tbar", index: 25},
-                layer: config.drawingLayer
+                // layer: config.drawingLayer
+				layerName: 'Custom feature layer',
+				srs:  "EPSG:4326"
             }, {
                 ptype:"gxp_export_kml",
                 actionTarget: {target: "feature-details.tbar", index: 25},
-                layer: config.drawingLayer
+                // layer: config.drawingLayer
+				layerName: 'Custom feature layer',
+				srs:  "EPSG:4326"
             }, {
                 ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
                 actionTarget: [ "pilot-notes.tbar" ],
-                layer: config.notesLayer
+                // layer: config.notesLayer
+				layerName: 'Pilot notes Layer',
+				srs:  "EPSG:4326",
+				alternativeStyle: true
             }, {
                 ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
                 actionTarget: [ "pilot-notes.tbar" ],
-                layer: config.notesLayer,
-                onSelected: function( target, feature ){
-                    self.fireEvent("notefeatureselected", target, feature);
-                },
-                onUnselected: function( target ){
-                    self.fireEvent("notefeatureunselected", target);
-                },
-				onSave: function( target, feature ){
-                    self.fireEvent("notefeaturesaved", target, feature);
-                },
-				onChanged: function(target, feature){
-					self.fireEvent("notefeaturechanged", target, feature);
-				}
+                // layer: config.notesLayer,
+				layerName:'Pilot notes Layer',
+				alternativeStyle: true,
+				srs:  "EPSG:4326",
+				prefix: 'notefeature'
             }, {
                 ptype:"gxp_import_kml",
                 actionTarget: {target: "pilot-notes.tbar", index: 25},
-                layer: config.notesLayer
+                // layer: config.notesLayer
+				alternativeStyle: true,
+				srs:  "EPSG:4326",
+				layerName: 'Pilot notes Layer'
             }, {
                 ptype:"gxp_export_kml",
                 actionTarget: {target: "pilot-notes.tbar", index: 25},
-                layer: config.notesLayer
+                // layer: config.notesLayer
+				alternativeStyle: true,
+				srs:  "EPSG:4326",
+				layerName: 'Pilot notes Layer'
             }, {
 				ptype: "gxp_synchronizer",
 				refreshTimeInterval: config.refreshTimeInterval,

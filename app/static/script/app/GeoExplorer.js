@@ -427,8 +427,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			//
 			// add the layer for custom drawing to the map
 			//
-			this.mapPanel.map.addLayer(this.drawingLayer);
-			this.mapPanel.map.addLayer(this.notesLayer);
+			// this.mapPanel.map.addLayer(this.drawingLayer);
+			// this.mapPanel.map.addLayer(this.notesLayer);
 			
             disabled.each(function(item) {
                 item.disable();
