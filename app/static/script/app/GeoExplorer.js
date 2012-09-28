@@ -122,7 +122,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             this.fScreen = fScreen;
             this.auth = false;
         }
-            
+		
         this.mapItems = [
 			{
            		xtype: "gxp_mouse_position"
@@ -136,13 +136,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     template: this.zoomSliderText
                 })
             },{
-	            xtype: "gxp_watermark", // definiscilo in config
-				url: config.config.watermark_url, // '../theme/app/img/nurc-logo.png',
-				text: config.config.watermark_title, // 'Powered by NURC',
-				position: config.config.watermark_position // 'position:absolute;left:690px;top:100px'
+	            xtype: "gxp_watermark", 
+				url: config.watermarkUrl, 
+				text: config.watermarkTitle, 
+				position: config.watermarkPosition 
 	        }
         ];
-
 
         // both the Composer and the Viewer need to know about the viewerTools
         // First row in each object is needed to correctly render a tool in the treeview
@@ -269,35 +268,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                }
             });        
         }
-		
-        /*var success = function(request) {                                
-                  var addConfig;
-                  try {
-                    addConfig = Ext.util.JSON.decode(request.responseText);
-                  } catch (err) {
-                    // pass
-                  }
-
-                  if(addConfig && addConfig.success && addConfig.success==true){                               
-                    this.applyConfig(Ext.applyIf(addConfig.result, config));
-                    //this.applyConfig(Ext.applyIf(addConfig.result));
-                  } else {
-                    //this.applyConfig(config);
-                  }
-        };
-                       
-        var failure = function(request) {                                                 
-          alert("ERROR: " + request.statusText);
-        };
-
-        OpenLayers.Request.GET({
-          //url: "../json2_ORIGINALE.js",
-          url: models,
-          params: '',
-          success: success,
-          failure: failure,
-          scope: this
-        });*/
     },
     
     loadUserConfig: function(json){
@@ -341,7 +311,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         var westPanel = new Ext.TabPanel({
             border: false,
-            // layout: "border",
             id:'west',
             region: "west",
             width: 250,
@@ -363,26 +332,21 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				}, 
 				{
 					region:'north', xtype: "panel", title:'Vehicles', 
-                    // collapsible : true, collapseMode:  'mini', collapsed:true,
-                    // split : true, hideCollapseTool: true, 
 					autoScroll:true,
                     border: false, height: 200, id: 'vehicle-selector'	
 				},
                 {
                     region: 'south', xtype: "panel", 
-					// layout: "fit", 
-                    // collapsible : true, collapseMode:  'mini',
-                    // split : true, hideCollapseTool: true,
 					autoScroll:true,
                     border: false, height: 200, id: 'legend', title:'Legend'
                 }
             ]
         });
 
-		var eastPanel = new Ext.TabPanel({
+		var eastPanel = new Ext.Panel({
             border: false,
             //layout: "border",
-            id:'east',
+            id: 'east',
             region: "east",
             width: 300,
 			minWidth:300,
@@ -391,21 +355,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             split: true,
             collapsible: true,
             collapseMode: "mini",
-            header: false,
-            items: [
-			   {
-                    // region: 'south', 
-					xtype: "panel", autoScroll:true, tbar:[], 
-                    border: false,  id: 'feature-details', title:'Custom notes'
-                },
-				{
-	                // region: 'center', 
-					xtype: "panel",  autoScroll:true,  tbar:[],
-					// collapsible : true, collapseMode:  'mini',
-	                // split : true, hideCollapseTool: true,
-	                border: false,  id: 'pilot-notes', title:'Pilot notes'
-	            }
-            ]
+            header: false,					
+			autoScroll: true
         });
         
         this.toolbar = new Ext.Toolbar({
@@ -423,12 +374,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             });
             
             this.toolbar.enable();
-            
-			//
-			// add the layer for custom drawing to the map
-			//
-			// this.mapPanel.map.addLayer(this.drawingLayer);
-			// this.mapPanel.map.addLayer(this.notesLayer);
 			
             disabled.each(function(item) {
                 item.disable();

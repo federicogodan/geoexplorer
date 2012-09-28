@@ -8,7 +8,7 @@ app.mount("/", function(request) {
     if (request.pathInfo.length > 1) {
         throw {notfound: true};
     }
-    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/composer/";
+    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/informational/";
     return {
         status: 303,
         headers: {"Location": target},
@@ -23,6 +23,9 @@ app.mount("/proxy", require("./root/proxy").app);
 app.mount("/viewer/proxy", require("./root/proxy").app);
 app.mount("/composer/proxy", require("./root/proxy").app);
 app.mount("/viewer", require("./root/viewer").app);
+
+app.mount("/informational", require("./root/informational").app);
+app.mount("/interactive", require("./root/interactive").app);
 
 
 // debug mode loads unminified scripts

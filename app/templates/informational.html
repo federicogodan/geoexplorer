@@ -12,110 +12,13 @@
     <!-- GeoExplorer resources -->
     <link rel="stylesheet" type="text/css" href="../theme/app/geoexplorer.css" />
     <link rel="stylesheet" type="text/css" href="../theme/app/composer.css" />
+	<link rel="stylesheet" type="text/css" href="../theme/app/nurc.css" />
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
     
     <script type="text/javascript" src="../script/GeoExplorer.js"></script>
     
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/en.js"></script>
-
-    <style type="text/css">
-        #main {
-            text-align:center;
-        }
-        table.featureInfo, table.featureInfo td, table.featureInfo th {
-                border:1px solid #03084B;
-                border-collapse:collapse;
-                margin:0;
-                padding:0;
-                font-size: 90%;
-                padding:.2em .1em;
-        }
-         table.featureInfo caption.featureInfo{
-                  padding:.2em .2em; 
-                  text-transform:uppercase;
-                  color:#FFFFFF;
-                  text-shadow: 2px 2px 3px #000;
-                  filter:DropShadow(Color=#000000, OffX=2, OffY=2);                  
-                  font-weight:bold; 
-                  font-size: 12px; 
-                  /*background:#CEDFF5; */
-          }           
-          table.featureInfo th{
-                  border:1px solid #03084B;
-                  padding:.2em .2em; 
-                  text-transform:uppercase;
-                  color:#0055BB; 
-                  font-weight:bold; 
-                  font-size: 10px; 
-                  background:#CEDFF5; 
-          }
-        table.featureInfo th.title{
-                padding:.2em .2em;
-                text-transform:uppercase;
-                text-shadow: 2px 2px 3px #FFF;
-                filter:DropShadow(Color=#FFFFFF, OffX=2, OffY=2);
-                font-weight:bold;
-                color:#030F1C;
-                background:#A5A7AA;
-        
-        }
-        table.featureInfo tr.odd td{
-                text-align:left;
-                font-size:10px;
-                font-weight:bold;
-                text-transform:lowercase;
-                padding:.2em .2em;    
-        }
-        table.featureInfo td{
-                text-align:left;
-                font-size:10px;
-                font-weight:bold;
-                text-transform:lowercase;
-                padding:.2em .2em;              
-        }        
-    </style>
-
-	<style>
-        /* style rows on mouseover */
-        .x-grid3-row-over .x-grid3-cell-inner {
-            font-weight: bold;
-        }
-
-		.x-action-col-cell img.not-available-col{
-            height: 16px;
-            width: 16px;
-            background-image: url(../theme/app/img/silk/error.png);
-        }
-		
-		.x-action-col-cell img.available-col{
-            height: 16px;
-            width: 16px;
-            background-image: url(../theme/app/img/silk/accept.png);
-        }
-		
-		.vehicle-refresh-icon{
-			background-image: url(../theme/app/img/silk/arrow_refresh.png);
-		}
-    </style>
-	
-
-	<style>
-	    .olControlMousePosition {
-	        top: 5px !important;
-	        right: 5px !important;
-			font-size: 3em;
-            color: lightgrey;
-			height: 20px;
-	    }
-	
-	    .olControl{
-			bottom:0px;
-			left:0px;
-		}
-	
-
-	</style>
 
     <script>
 	    //
@@ -160,17 +63,26 @@
 	        }
 	    }
 	    else{
-	        Date.fromISO= function(s){
+	        Date.fromISO = function(s){
 	            return new Date(s);
 	        }
 	    }
         
         var app;
         var serverConfig;
-        var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl; var bounds; var maxExtent; var zoom; var center; var config; var vehicleSelector;
-		var startTime; var endTime; var timeUnit; var currentTime; var timeStep; var timeFrameRate; var xmlJsonTranslateService; var refreshTimeInterval;
-        var cruiseName; var vehicles;
+		var mapIdentifier; 
+		var authorization; 
+		var fullScreen;
+		var lay; 
+		var bounds; 
+		var maxExtent; 
+		var zoom; 
+		var center; 
+		var startTime; 
+		var endTime; 
+        var cruiseName; 
+		var vehicles;
+		var timeUnit;
 		
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
@@ -209,13 +121,6 @@
 		            case "layer" : 
 		                            lay = param[1]; 
 		                            break;
-		            case "wmsurl" : 
-		                            wmsurl = param[1]; 
-		                            wmsurl = decodeURIComponent(wmsurl);
-		                            break;
-		            case "uuid" : 
-		                            uuid = param[1]; 
-		                            break;
 					case "bounds":
 									bounds = param[1].split(',');
 									break;
@@ -231,15 +136,6 @@
 					case "endTime":
 									endTime = param[1];
 									break;
-					case "timeUnit":
-									timeUnit = param[1];
-									break;
-					case "currentTime":
-									currentTime = param[1];
-									break;
-					case "timeStep":
-									timeStep = param[1];
-									break;                                    
 					default :       
 									mapIdentifier = -1;
 									authorization = false;
@@ -253,8 +149,6 @@
 		// ///////////////////////////////////////////////////////////////
         var proxy; 
         var geoStoreBaseURL;        
-        var customSources;
-        var gnBaseUrl;
         
         var onReady = function(){
 		
@@ -262,108 +156,41 @@
             // set default values for params
             //
 			if (!bounds){
-                if(serverConfig.bounds){
-                    bounds = serverConfig.bounds;
-                }else{
-                    bounds = [ "-180","-90","180","90"];
-                }
+				bounds = serverConfig.bounds;
             } 
 			
 			if (!maxExtent){
-                if(serverConfig.maxExtent){
-                    maxExtent = serverConfig.maxExtent;
-                }else{
-                    maxExtent = [ "-180","-90","180","90"];
-                }
+				maxExtent = serverConfig.maxExtent;
             } 
 			
             if (!zoom){
-                if(serverConfig.zoom){
-                    zoom =serverConfig.zoom;
-                }else{
-                    zoom = 8;
-                }
+				zoom = serverConfig.zoom;
             } 
 			
             if (!center){
-                if(serverConfig.center){
-                    center =serverConfig.center;
-                }else{
-                    center= ["9.8272705078125","43.599243164063"];
-                }
+				center = serverConfig.center;
             }
 
             if (!startTime){
-                if(serverConfig.startTime){
-                    startTime =serverConfig.startTime
-                }else{
-                    startTime = '2010-08-20T10:02:29.000Z';
-                }
+				startTime = serverConfig.startTime
             }
 			
             if (!endTime){
-                if(serverConfig.endTime){
-                    endTime =serverConfig.endTime
-                }else{
-                    endTime = '2010-09-02T15:43:43.000Z';
-                }
+				endTime = serverConfig.endTime
             }
 			
-            if (!timeUnit){
+			if (!timeUnit){
                 timeUnit = OpenLayers.TimeUnit.MINUTES;
             }
-			
-            if (!currentTime){
-                currentTime='2010-08-20T10:02:29.000Z';
-            }
-            
-            //set timeManager step
-            if (!timeStep){
-				if(serverConfig.timeStep){
-					timeStep = serverConfig.timeStep
-				}else{
-					timeStep = 30;
-				}
-			}
-            
-            //set timeManager frameRate
-            if (!timeFrameRate){
-				if(serverConfig.timeFrameRate){
-					timeFrameRate = serverConfig.timeFrameRate
-				}else{
-                	timeFrameRate=1;				
-				}
-			}
-			
+						
             if(!cruiseName){
                 cruiseName = "NOMR12";
             }
 			
 			if (!vehicles){
-				if(serverConfig.vehicles){
-                    vehicles = serverConfig.vehicles
-                }else{
-                    vehicles = ["greta", "jade", "zoe", "sophie", "natalie", "noa", "laura", "elettra"];
-                }
+				vehicles = serverConfig.vehicles
 			}
 
-            //set xmlJsonTranslateService
-            if (!xmlJsonTranslateService){
-				if(serverConfig.xmlJsonTranslateService){
-					xmlJsonTranslateService = serverConfig.xmlJsonTranslateService
-				}else{
-                	xmlJsonTranslateService="http://84.33.199.62/xmlJsonTranslate-gliders/";				
-				}
-			}
-
-            //set refreshTimeInterval
-            if (!refreshTimeInterval){
-				if(serverConfig.refreshTimeInterval){
-					refreshTimeInterval = serverConfig.refreshTimeInterval
-				}else{
-                	refreshTimeInterval=10000;				
-				}
-			}            
             OpenLayers.ImgPath = "../externals/openlayers/theme/default/img/";
             gxp.plugins.ZoomToExtent.prototype.closest = false;
                         
@@ -399,7 +226,7 @@
                         collapsed: false,
                         collapseMode: 'mini',
                         split: true,
-					    html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_InfoPage.png" height="100%"/><div style= "loat:right;text-align:right"><h1 style="color:white">'+/*cruiseName+*/'</h1></div>',
+					    html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_InfoPage.png" height="100%"/><div style= "loat:right;text-align:right"><h1 style="color:white"></h1></div>',
                         bodyStyle: 'padding:0px;background-color: #0055bb;'
                     },{
                         region : 'center',
@@ -409,92 +236,50 @@
                         items : [appTabs]
                     }]
             });
-                 
-            var sources = customSources;
-
-			//
-			// prepare layer where users draw custom features
-			//
-			/*var drawingLayer = new OpenLayers.Layer.Vector('Custom feature layer', {
-				projection: new OpenLayers.Projection("EPSG:4326")
-			});*/
-			
-			/*var notesLayer = new OpenLayers.Layer.Vector('Pilot notes Layer', {
-				projection: new OpenLayers.Projection("EPSG:4326"),
-				styleMap: new OpenLayers.StyleMap({
-					"default": new OpenLayers.Style({
-						strokeColor: "red",
-						strokeOpacity: .7,
-						strokeWidth: 2,
-						fillColor: "red",
-						fillOpacity: 0,
-						cursor: "pointer"
-					}),
-					"temporary": new OpenLayers.Style({
-						strokeColor: "#ffff33",
-						strokeOpacity: .9,
-						strokeWidth: 2,
-						fillColor: "#ffff33",
-						fillOpacity: .3,
-						cursor: "pointer"
-					}),
-					"select": new OpenLayers.Style({
-						strokeColor: "#0033ff",
-						strokeOpacity: .7,
-						strokeWidth: 3,
-						fillColor: "#0033ff",
-						fillOpacity: 0,
-						graphicZIndex: 2,
-						cursor: "pointer"
-					})
-				})
-			});*/
-            
+                 			
 			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
 			appMask.show();
+			
             app = new GeoExplorer.Composer({
-			    editableLayerPrefix: "it.geosolutions",
-			    editableLayerName: "aoi",
-				editableLayerSource: "local",
-				notEditableAttributes: ["glider_name", "cruise_name"],
-				modified: false,
-				config:config,
-				// drawingLayer: drawingLayer,
-				// notesLayer: notesLayer,
+			    modified: false,
+				watermarkUrl: serverConfig.watermarkUrl, 
+				watermarkTitle: serverConfig.watermarkTitle, 
+				watermarkPosition: serverConfig.watermarkPosition,
+				customTools: serverConfig.customTools,
 				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
 				cruiseName: cruiseName,
                 proxy: proxy,
-				xmlJsonTranslateService: xmlJsonTranslateService,
+				xmlJsonTranslateService: serverConfig.refreshTimeInterval,
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
 				// Time Animator //
                 units: timeUnit,
-                range: [startTime,endTime],
-                step: timeStep,
-                frameRate: timeFrameRate,
+                range: [startTime, endTime],
+                step: serverConfig.timeStep,
+                frameRate: serverConfig.timeFrameRate,
 				// Real Time Synch //
-				refreshTimeInterval: refreshTimeInterval, // msec
+				refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
                 about: {
                     title: "NOMR12 Cruise Gliders Map",
                     'abstract': "NOMR12 Cruise Gliders Map",
                     contact: "<a href='#'>#</a>."
                 },
-				vehicleSelector: vehicleSelector,
-                sources: sources,
+				vehicleSelector: serverConfig.vehicleSelector,
+                sources: serverConfig.gsSources,
                 map: {
 					projection: "EPSG:4326",
                     units: "dd",
 					extent: [
-                        parseFloat(bounds[0]), parseFloat(bounds[1]),
-                        parseFloat(bounds[2]), parseFloat(bounds[3])
+                        bounds[0], bounds[1],
+                        bounds[2], bounds[3]
                     ],
 					maxExtent: [
-                        parseFloat(maxExtent[0]), parseFloat(maxExtent[1]),
-                        parseFloat(maxExtent[2]), parseFloat(maxExtent[3])
+                        maxExtent[0], maxExtent[1],
+                        maxExtent[2], maxExtent[3]
                     ],
-                    layers: customLayers,
-                    center: [parseFloat(center[0]), parseFloat(center[1])],
-                    zoom: parseInt(zoom)
+                    layers: serverConfig.layers,
+                    center: [center[0], center[1]],
+                    zoom: zoom
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
@@ -517,7 +302,7 @@
             });
       };			
 			
-      var cfgFile = cruiseName ? "../" + cruiseName  +".js" : "../NOMR12.js";
+      var cfgFile = cruiseName ? "../configs/" + cruiseName  +"Inf.js" : "../configs/NOMR12Inf.js";
       Ext.Ajax.request({
           url: cfgFile,
           method: 'GET',
@@ -539,11 +324,7 @@
               if(serverConfig){
                   proxy = serverConfig.proxy; 
                   geoStoreBaseURL = serverConfig.geoStoreBase;                  
-                  customSources = serverConfig.gsSources;
-				  config = serverConfig;
-                  customLayers = serverConfig.layers;
-				  vehicleSelector = serverConfig.vehicleSelector
-
+				  
                   //      
                   // Run the application when browser is ready
                   //
