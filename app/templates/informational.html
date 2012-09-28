@@ -1,0 +1,344 @@
+﻿    <!-- OpenLayers resources -->
+    <link rel="stylesheet" type="text/css" href="../externals/openlayers/theme/default/style.css">
+
+    <!-- GeoExt resources -->
+    <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/popup.css">
+    <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/layerlegend.css">
+    <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/gxtheme-gray.css">
+
+    <!-- gxp resources -->
+    <link rel="stylesheet" type="text/css" href="../externals/gxp/src/theme/all.css">
+
+    <!-- GeoExplorer resources -->
+    <link rel="stylesheet" type="text/css" href="../theme/app/geoexplorer.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/app/composer.css" />
+	<link rel="stylesheet" type="text/css" href="../theme/app/nurc.css" />
+    <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
+    
+    <script type="text/javascript" src="../script/GeoExplorer.js"></script>
+    
+    <!-- translation data  -->
+    <script type="text/javascript" src="../translations/en.js"></script>
+
+    <script>
+	    //
+		// Fix for IE7 and IE8
+		//
+		if (!Date.prototype.toISOString) {
+		    Date.prototype.toISOString = function() {
+		        function pad(n) { return n < 10 ? '0' + n : n }
+		        return this.getUTCFullYear() + '-'
+		            + pad(this.getUTCMonth() + 1) + '-'
+		            + pad(this.getUTCDate()) + 'T'
+		            + pad(this.getUTCHours()) + ':'
+		            + pad(this.getUTCMinutes()) + ':'
+		            + pad(this.getUTCSeconds()) + 'Z';
+		    };
+		}
+		
+		// see http://stackoverflow.com/questions/11020658/javascript-json-date-parse-in-ie7-ie8-returns-nan
+		var D= new Date('2011-06-02T09:34:29+02:00');
+	    if(!D || +D!== 1307000069000){
+	        Date.fromISO= function(s){
+	            var day, tz,
+	            rx=/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):(\d\d))?$/,
+	            p= rx.exec(s) || [];
+	            if(p[1]){
+	                day= p[1].split(/\D/);
+	                for(var i= 0, L= day.length; i<L; i++){
+	                    day[i]= parseInt(day[i], 10) || 0;
+	                };
+	                day[1]-= 1;
+	                day= new Date(Date.UTC.apply(Date, day));
+	                if(!day.getDate()) return NaN;
+	                if(p[5]){
+	                    tz= (parseInt(p[5], 10)*60);
+	                    if(p[6]) tz+= parseInt(p[6], 10);
+	                    if(p[4]== '+') tz*= -1;
+	                    if(tz) day.setUTCMinutes(day.getUTCMinutes()+ tz);
+	                }
+	                return day;
+	            }
+	            return NaN;
+	        }
+	    }
+	    else{
+	        Date.fromISO = function(s){
+	            return new Date(s);
+	        }
+	    }
+        
+        var app;
+        var serverConfig;
+		var mapIdentifier; 
+		var authorization; 
+		var fullScreen;
+		var lay; 
+		var bounds; 
+		var maxExtent; 
+		var zoom; 
+		var center; 
+		var startTime; 
+		var endTime; 
+        var cruiseName; 
+		var vehicles;
+		var timeUnit;
+		
+		// //////////////////////////////////////////////////
+		// Parsing the request to get the parameters
+		// //////////////////////////////////////////////////
+		
+        var params = location.search.replace(/^\?/,'').replace(/&amp;/g,'&').split("&");
+        for (var j=0; j < params.length; j++) {
+			var param = params[j].split("=");
+			if(param[0]){
+				switch ( param[0] ) {
+					case "vehicles":
+							vehicles = decodeURIComponent(param[1]).split(',');
+                    		break;
+                    case "cruiseName":
+                                    cruiseName = decodeURIComponent(param[1]);
+                                    break;
+					case "mapId": 
+									try{
+										mapIdentifier = parseInt(param[1]);
+									}catch(e){
+										mapIdentifier = -1;
+									} 
+									break;
+					case "auth" : 
+									if(param[1] == 'true') 
+										authorization = true; 
+									else 
+										authorization = false; 
+									break;
+					case "fullScreen" : 
+									if(param[1] == 'true') 
+										fullScreen = true; 
+									else 
+										fullScreen = false; 
+									break;
+		            case "layer" : 
+		                            lay = param[1]; 
+		                            break;
+					case "bounds":
+									bounds = param[1].split(',');
+									break;
+					case "zoom":
+									zoom = param[1];
+									break;
+					case "center":
+									center = param[1].split(',');
+									break;
+					case "startTime":
+									startTime = param[1];
+									break;
+					case "endTime":
+									endTime = param[1];
+									break;
+					default :       
+									mapIdentifier = -1;
+									authorization = false;
+									fullScreen = false; 
+				}
+			}
+        }		
+		
+		// ///////////////////////////////////////////////////////////////
+		// Custom variables from the urlConfig user configuration file 
+		// ///////////////////////////////////////////////////////////////
+        var proxy; 
+        var geoStoreBaseURL;        
+        
+        var onReady = function(){
+		
+		    //
+            // set default values for params
+            //
+			if (!bounds){
+				bounds = serverConfig.bounds;
+            } 
+			
+			if (!maxExtent){
+				maxExtent = serverConfig.maxExtent;
+            } 
+			
+            if (!zoom){
+				zoom = serverConfig.zoom;
+            } 
+			
+            if (!center){
+				center = serverConfig.center;
+            }
+
+            if (!startTime){
+				startTime = serverConfig.startTime
+            }
+			
+            if (!endTime){
+				endTime = serverConfig.endTime
+            }
+			
+			if (!timeUnit){
+                timeUnit = OpenLayers.TimeUnit.MINUTES;
+            }
+						
+            if(!cruiseName){
+                cruiseName = "NOMR12";
+            }
+			
+			if (!vehicles){
+				vehicles = serverConfig.vehicles
+			}
+
+            OpenLayers.ImgPath = "../externals/openlayers/theme/default/img/";
+            gxp.plugins.ZoomToExtent.prototype.closest = false;
+                        
+            Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+                 onRender : function(ct, position){
+                      this.el = ct.createChild({
+                        tag: 'iframe',
+                        id: 'iframe-'+ this.id,
+                        frameBorder: 0, 
+                        src: this.url
+                      });
+                 }
+            });
+            
+            var appTabs = new Ext.Panel({
+                region: 'center',
+                border : false,
+				layout: 'fit',
+                id : 'appTabs'
+            });
+        
+            var appViewport = new Ext.Viewport({
+                id: 'appVieport',
+                layout: 'border',
+                margins: '0 0 0 0 ',
+                items: [{
+	                    id:'main-header',
+                        region: 'north',
+                        border: false,
+                        height: 75,
+                        hideCollapseTool: true,
+                        collapsible : true,
+                        collapsed: false,
+                        collapseMode: 'mini',
+                        split: true,
+					    html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_InfoPage.png" height="100%"/><div style= "loat:right;text-align:right"><h1 style="color:white"></h1></div>',
+                        bodyStyle: 'padding:0px;background-color: #0055bb;'
+                    },{
+                        region : 'center',
+                        layout : 'border',
+                        border : false,
+                        header : false,                    
+                        items : [appTabs]
+                    }]
+            });
+                 			
+			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
+			appMask.show();
+			
+            app = new GeoExplorer.Composer({
+			    modified: false,
+				watermarkUrl: serverConfig.watermarkUrl, 
+				watermarkTitle: serverConfig.watermarkTitle, 
+				watermarkPosition: serverConfig.watermarkPosition,
+				customTools: serverConfig.customTools,
+				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
+				cruiseName: cruiseName,
+                proxy: proxy,
+				xmlJsonTranslateService: serverConfig.refreshTimeInterval,
+                defaultSourceType: "gxp_wmssource",
+                renderToTab : 'appTabs',
+				// Time Animator //
+                units: timeUnit,
+                range: [startTime, endTime],
+                step: serverConfig.timeStep,
+                frameRate: serverConfig.timeFrameRate,
+				// Real Time Synch //
+				refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
+                about: {
+                    title: "NOMR12 Cruise Gliders Map",
+                    'abstract': "NOMR12 Cruise Gliders Map",
+                    contact: "<a href='#'>#</a>."
+                },
+				vehicleSelector: serverConfig.vehicleSelector,
+                sources: serverConfig.gsSources,
+                map: {
+					projection: "EPSG:4326",
+                    units: "dd",
+					extent: [
+                        bounds[0], bounds[1],
+                        bounds[2], bounds[3]
+                    ],
+					maxExtent: [
+                        maxExtent[0], maxExtent[1],
+                        maxExtent[2], maxExtent[3]
+                    ],
+                    layers: serverConfig.layers,
+                    center: [center[0], center[1]],
+                    zoom: zoom
+                }
+            }, mapIdentifier, authorization, fullScreen);   
+            
+            app.on({
+                'portalready' : function(){
+                    if(fullScreen){
+                        var ovestPanel = Ext.getCmp('tree').findParentByType('panel');
+                        ovestPanel.setDisabled();
+                        ovestPanel.hide();
+                        ovestPanel.collapse();
+                    }
+					
+                    if(cruiseName){
+                        Ext.getCmp('tree').setTitle(cruiseName);
+                    }
+                },
+				'ready': function(){
+					appMask.hide();
+				}
+            });
+      };			
+			
+      var cfgFile = cruiseName ? "../configs/" + cruiseName  +"Inf.js" : "../configs/NOMR12Inf.js";
+      Ext.Ajax.request({
+          url: cfgFile,
+          method: 'GET',
+          success: function(response, opts){      		  
+		      //
+              //set serverconfig as global   
+              //			  
+              try{
+                  serverConfig = Ext.util.JSON.decode(response.responseText);
+              }catch(e){
+                  Ext.Msg.show({
+                        title: "Startup",
+                        msg: "An error occurred while parsing the GeoStore URL config: " + response.status,
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.ERROR
+                  });
+              }
+              
+              if(serverConfig){
+                  proxy = serverConfig.proxy; 
+                  geoStoreBaseURL = serverConfig.geoStoreBase;                  
+				  
+                  //      
+                  // Run the application when browser is ready
+                  //
+                  Ext.onReady(onReady);
+              }
+          },
+          failure:  function(response, opts){
+              Ext.Msg.show({
+                    title: "Startup",
+                    msg: "An error occurred while getting the GeoStore URL config: " + response.status,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.ERROR
+              });
+          }
+      });
+        
+    </script>

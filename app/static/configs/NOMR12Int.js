@@ -1,20 +1,24 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
    "proxy":"/proxy?url=",
-   "watermark_url":"../theme/app/img/nurc-logo.png",
-   "watermark_title":"Powered by NURC",
-   "watermark_position": "position:relative;left:5px;bottom:5px",
-   "maxExtent": ["3.29817","40.266369","11.08748","45.93263"],
-   "bounds": ["3.29817","40.266369","11.08748","45.93263"],
-   "center": ["7.97","43.02"],
-   "zoom": "7",
+   "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
+   "refreshTimeInterval": 10000,
+   "watermarkUrl": "../theme/app/img/nurc-logo.png",
+   "watermarkTitle": "Powered by NURC",
+   "watermarkPosition": "position:relative;left:5px;bottom:5px",
+   "maxExtent": [3.29817,40.266369,11.08748,45.93263],
+   "bounds": [3.29817,40.266369,11.08748,45.93263],
+   "center": [7.97,43.02],
+   "zoom": 7,
    "startTime": "2012-09-01T06:00:00.000Z",
-   "endTime":   "2012-10-09T06:00:00.000Z",
+   "endTime":   "2012-09-23T08:00:00.000Z",
    "timeStep": 30,
-   "timeFrameRate": 5,
+   "timeFrameRate": 10,
    
    "vehicleSelector": {
 		"data":[
+		    [true, "elettra", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_elettra.png", false],
+            [true, "laura", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_laura.png", false],
 			[true, "greta", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_greta.png", false],
 			[true, "jade", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_jade.png", false],
 			[true, "zoe", "http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_zoe.png", false],
@@ -265,5 +269,61 @@
             "ratio": 1,
             "cql_filter": "cruise_name = 'NOMR12' AND type = 'Points'"
         }
-    ]
+    ],
+	
+	"customTools":[
+	    {
+		   "ptype": "gxp_vehicle_selector",
+		   "outputTarget": "vehicle-selector",
+		   "enableAoi": true
+	    }, {
+			"actions": ["->"], 
+			"actionTarget": "vselector.tbar"
+		}, {
+			"ptype": "gxp_nurcfeaturemanager",
+			"id": "featuremanager",
+			"autoActivate": false, 
+			"autoLoadFeatures": true,
+			"layer": {
+				"source": "local",
+				"name": "it.geosolutions:aoi"
+			}
+		}, {
+			"ptype": "gxp_nurcfeatureeditor",
+			"featureManager": "featuremanager",
+			"gliderPropertyName": "glider_name",
+			"cruisePropertyName": "cruise_name",
+			"excludeFields": ["glider_name", "cruise_name"],
+			"actionTarget": "vselector.tbar"
+		}, {
+			"ptype": "gxp_pilot_notes",
+			"id": "notes",
+			"outputTarget": "east"
+		}, {
+			"ptype": "gxp_add_geometry", "toggleGroup": "toolGroup", 
+			"actionTarget": [ "notes.tbar" ],
+			"layerName": "Pilot notes Layer",
+			"srs":  "EPSG:4326",
+			"alternativeStyle": true
+		}, {
+			"ptype": "gxp_feature_selector", "toggleGroup": "toolGroup", 
+			"actionTarget": ["notes.tbar"],
+			"layerName": "Pilot notes Layer",
+			"alternativeStyle": true,
+			"srs":  "EPSG:4326",
+			"prefix": "notefeature"
+		}, {
+			"ptype": "gxp_import_kml",
+			"actionTarget": {"target": "notes.tbar", "index": 25},
+			"alternativeStyle": true,
+			"srs":  "EPSG:4326",
+			"layerName": "Pilot notes Layer"
+		}, {
+			"ptype": "gxp_export_kml",
+			"actionTarget": {"target": "notes.tbar", "index": 25},
+			"alternativeStyle": true,
+			"srs":  "EPSG:4326",
+			"layerName": "Pilot notes Layer"
+		}
+	]
 }

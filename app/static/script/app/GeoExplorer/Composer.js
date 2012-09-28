@@ -25,12 +25,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     previewText: "Preview",
     backText: "Back",
     nextText: "Next",
-    fullScreenText: "Full Screen",
-	
+    fullScreenText: "Full Screen",	
     // End i18n.
-    constructor: function(config) {      
-	  	var self = this;
-        config.tools = [
+	
+    constructor: function(config) {              
+		config.tools = [
             {
                 ptype: "gxp_layertree",
                 outputConfig: {
@@ -48,26 +47,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     defaults: {
                         style: 'padding:5px',                  
                         baseParams: {
-                            LEGEND_OPTIONS: 'forceLabels:on;fontSize:10',
+                            LEGEND_OPTIONS: 'forceLabels:on; fontSize:10',
                             WIDTH: 12, HEIGHT: 12
                         }
                     }
                 }
-            }, {
-				ptype: "gxp_feature_details",
-				outputTarget: 'feature-details',
-				drawingLayer: config.drawingLayer
-			}, {
-				ptype: "gxp_pilot_notes",
-				outputTarget: 'pilot-notes',
-				drawingLayer: config.notesLayer
-			}, {
-				ptype: "gxp_vehicle_selector",
-				outputTarget: 'vehicle-selector',
-				vehicles: config.vehicles,
-				enableAoi: true,
-				cruiseName: config.cruiseName
-			},	
+            },
 			/*{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
@@ -92,7 +77,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget:[
                    "layertree.contextMenu"
                 ]
-            },*/{
+            },*/
+			{
                 ptype: "gxp_zoomtolayerextent",
                 actionTarget: {target: "layertree.contextMenu", index: 0}
             }, {
@@ -120,65 +106,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 26}
             }, {
-		       ptype:"gxp_embedded_link",
-		       actionTarget: {target: "paneltbar", index: 27}
+		        ptype:"gxp_embedded_link",
+		        actionTarget: {target: "paneltbar", index: 27}
 		    }, {
-                ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
-                actionTarget: [ "feature-details.tbar" ],
-                layer: config.drawingLayer
-            }, {
-                ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
-                actionTarget: [ "feature-details.tbar" ],
-                layer: config.drawingLayer,
-                onSelected: function( target, feature ){
-                    self.fireEvent("featureselected", target, feature);
-                },
-                onUnselected: function( target ){
-                    self.fireEvent("featureunselected", target);
-                },
-				onSave: function( target, feature ){
-                    self.fireEvent("featuresaved", target, feature);
-                },
-				onChanged: function(target, feature){
-					self.fireEvent("featurechanged", target, feature);
-				}
-            }, {
-                ptype:"gxp_import_kml",
-                actionTarget: {target: "feature-details.tbar", index: 25},
-                layer: config.drawingLayer
-            }, {
-                ptype:"gxp_export_kml",
-                actionTarget: {target: "feature-details.tbar", index: 25},
-                layer: config.drawingLayer
-            }, {
-                ptype: "gxp_add_geometry", toggleGroup: this.toggleGroup, 
-                actionTarget: [ "pilot-notes.tbar" ],
-                layer: config.notesLayer
-            }, {
-                ptype: "gxp_feature_selector", toggleGroup: this.toggleGroup, 
-                actionTarget: [ "pilot-notes.tbar" ],
-                layer: config.notesLayer,
-                onSelected: function( target, feature ){
-                    self.fireEvent("notefeatureselected", target, feature);
-                },
-                onUnselected: function( target ){
-                    self.fireEvent("notefeatureunselected", target);
-                },
-				onSave: function( target, feature ){
-                    self.fireEvent("notefeaturesaved", target, feature);
-                },
-				onChanged: function(target, feature){
-					self.fireEvent("notefeaturechanged", target, feature);
-				}
-            }, {
-                ptype:"gxp_import_kml",
-                actionTarget: {target: "pilot-notes.tbar", index: 25},
-                layer: config.notesLayer
-            }, {
-                ptype:"gxp_export_kml",
-                actionTarget: {target: "pilot-notes.tbar", index: 25},
-                layer: config.notesLayer
-            }, {
 				ptype: "gxp_synchronizer",
 				refreshTimeInterval: config.refreshTimeInterval,
 				actionTarget: {target: "paneltbar", index: 28},
@@ -200,33 +130,23 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputConfig: {
                     controlConfig:{
                         step: config.step,
-                        units:config.units,
-                        //timeSpans: config.timeSpans,
+                        units: config.units,
                         range: config.range,
                         frameRate: config.frameRate
                     }
                 }
-            }, {
-                actions: ["->"], actionTarget: "vselector.tbar"
-            }, {
-                // shared FeatureManager for feature editing, grid and querying
-                ptype: "gxp_nurcfeaturemanager",
-                id: "featuremanager",
-				autoActivate: false, 
-				autoLoadFeatures: true,
-				layer: {
-					source: config.editableLayerSource,
-					name: config.editableLayerPrefix + ":" + config.editableLayerName
-				}
-            }, {
-				ptype: "gxp_nurcfeatureeditor",
-				featureManager: "featuremanager",
-				gliderPropertyName: "glider_name",
-				cruisePropertyName: "cruise_name",
-				excludeFields: config.notEditableAttributes,
-				actionTarget: "vselector.tbar"
-			}
-        ];        
+            }
+        ]; 
+
+		//
+		// Add custom tools if defined.
+		//
+		if(config.customTools){
+		    var toolSize = config.customTools.length;
+		    for(var i=0; i<toolSize; i++){
+				config.tools.push(config.customTools[i]);
+			}			
+		}		
        
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
