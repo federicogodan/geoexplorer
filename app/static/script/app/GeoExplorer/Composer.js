@@ -52,6 +52,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }
                 }
+
             },
 			/*{
                 ptype: "gxp_addlayers",
