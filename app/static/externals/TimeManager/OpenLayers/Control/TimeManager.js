@@ -186,6 +186,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         else if(this.range) {
             if(!(this.range[0] instanceof Date)) {
                 this.range[0] = OpenLayers.Date.parse(this.range[0]);
+                OpenLayers.Util.getElement('olTime').innerHTML = this.range[0];
             }
             if(!(this.range[1] instanceof Date)) {
                 this.range[1] = OpenLayers.Date.parse(this.range[1]);
@@ -429,39 +430,24 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         }
         else {
            if(this.stepType == "next"){
-                if(this.currentTime >= this.range[1] && !this.loop) {
-                    this.clearTimer();
-                    this.reset(true);
-                    this.play();                  
-                }else if(this.currentTime >= this.range[1] && this.loop){
-                    this.incrementTime();                                
-                }else{
-                    this.incrementTime();                
-                }
+            
+                this.incrementTime();
+                
             }else if(this.stepType == "back"){
-                if(this.currentTime <= this.range[0] && !this.loop) {
+                
+                if(this.currentTime <= this.range[0]) {
+                    
                     Ext.MessageBox.show({
                         title: "Attention",
                         msg: "Has reached the beginning of the cruise",
-                        buttons: Ext.MessageBox.CANCEL,
-                        animEl: 'mb4',
-                        icon: Ext.MessageBox.WARNING,
-                        scope: this
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.WARNING
                     });
-                }else if(this.currentTime <= this.range[0] && this.loop){
-                    Ext.MessageBox.show({
-                        title: "Attention",
-                        msg: "Has reached the beginning of the cruise",
-                        buttons: Ext.MessageBox.CANCEL,
-                        animEl: 'mb4',
-                        icon: Ext.MessageBox.WARNING,
-                        scope: this
-                    });
-                    this.clearTimer();
-                    this.reset(true);                    
+                  
                 }else{
                     this.decrementTime();                
                 }
+                
             }else{
                 this.incrementTime();
             }
@@ -472,33 +458,31 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             //loop in looping mode
             if(this.loop) {
                 this.clearTimer();
-                this.reset(true);
-                this.play();
+                this.clearTooltipTimer();
+                this.reset(true);                
+                //this.play();
             }
             //stop in normal mode
             else {
-                if(this.stepType !== "back"){
-                    Ext.MessageBox.show({
-                        title: "Attention",
-                        msg: "Has reached the end of the cruise",
-                        buttons: Ext.MessageBox.CANCEL,
-                        animEl: 'mb4',
-                        icon: Ext.MessageBox.WARNING,
-                        scope: this
-                    });                    
+                if(this.stepType !== "back"){                    
                     this.clearTimer();
-                    this.events.triggerEvent('stop', {
-                        'rangeExceeded' : true
-                    });
+                    this.clearTooltipTimer();
+                    this.reset(true);                
                 }else{
-                    Ext.MessageBox.show({
+                    /*Ext.MessageBox.show({
                         title: "Attention",
                         msg: "Has reached the beginning of the cruise",
                         buttons: Ext.MessageBox.CANCEL,
                         animEl: 'mb4',
                         icon: Ext.MessageBox.WARNING,
                         scope: this
-                    });
+                    });*/
+                    this.clearTimer();
+                    this.clearTooltipTimer();
+                    this.reset(true);   
+                    /*this.events.triggerEvent('stop', {
+                        'rangeExceeded' : true
+                    });*/                    
                 }
             }
         }
@@ -511,7 +495,11 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             else {
                 var intervalId, checkCount = 0, maxDelays = this.maxFrameDelay * 4;
                 this.clearTimer();
-                intervalId = setInterval(OpenLayers.Function.bind(function() {
+                this.clearTooltipTimer();
+                if (this.toolbar.tooltip){
+                    this.toolbar.tooltip.body.dom.innerHTML = "Please Wait, loading...";
+                }    
+                intervalId = setInterval(OpenLayers.Function.bind(function() {                  
                     var doTick = this.canTickCheck() || checkCount++ >= maxDelays;
                     if(checkCount > maxDelays) {
                         //console.debug('ADVANCED DUE TO TIME LIMIT');
@@ -523,10 +511,31 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                         });
                         if(!this._stopped){
                             this.clearTimer();
-                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
+                            this.clearTooltipTimer();
+                            this.timeInterval = this.frameRate*1000;
+
+                            if (this.frameRate == 1){
+                                this.timeToRefresh = this.timeInterval;
+                            }else{
+                                this.timeToRefresh = this.timeInterval-1000;    
+                            }
+                            
+                            if (this.toolbar.tooltip){
+                                this.toolbar.tooltip.body.dom.innerHTML = 'next refresh in ' + this.timeInterval/1000 + ' seconds';
+                            }                                  
+
+                            var pressed = this.toolbar.btnFastforward.pressed;
+                            if(pressed){
+                                this.tooltipTimer = setInterval(OpenLayers.Function.bind(function(){this.countDown()}, this), 1000/2);  
+                                this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), (1000/2) * this.frameRate);                                                              
+                            }else{
+                                this.tooltipTimer = setInterval(OpenLayers.Function.bind(function(){this.countDown()}, this), 1000);
+                                this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);  
+                            }
+                            
                         }
                     }
-                }, this), 1000 * (this.frameRate * 4));
+                }, this), 1000 * (this.frameRate / 4)); //setta il tempo di attesa se il layer non si è ancora caricato prima di riaggiornare il tempo e fare una nuova MergeNewParameter
             }
         }
     },
@@ -538,22 +547,77 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
 	 play:function() {
         //ensure that we don't have multiple timers running
         this.clearTimer();
+        this.clearTooltipTimer();
         //start playing
         if(this.events.triggerEvent('play') !== false) {
             delete this._stopped;
             this.tick();
             this.clearTimer(); //no seriously we really really only want 1 timer
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
+            this.clearTooltipTimer();
+            
+            //countdown for Time Animator
+            var pressed = this.toolbar.btnFastforward.pressed;
+
+            this.timeInterval = this.frameRate*1000;
+            
+            if (this.frameRate == 1){
+                this.timeToRefresh = this.timeInterval;
+            }else{
+                this.timeToRefresh = this.timeInterval-1000;    
+            }
+            
+            this.toolbar.tooltip = new Ext.ToolTip({
+                                target: 'sync-button',
+                                html:  'next refresh in ' + this.timeInterval/1000 + ' seconds',
+                                title: 'Working interval: ' + Ext.util.Format.date(this.range[0], "d/m/Y") + ' to ' 
+                                            + Ext.util.Format.date(this.range[1], "d/m/Y" ),
+                                autoHide: false,
+                                draggable:true,
+                                width: 350,
+                                height: 50,
+                                anchor: 'bottom',
+                                closable: true
+                            });
+                            
+            this.toolbar.tooltip.showAt( [ this.toolbar.getEl().getX()-50,  this.toolbar.getEl().getY()+50 ]);
+            
+            if(pressed){
+                this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), (1000/2) * this.frameRate);
+                this.tooltipTimer = setInterval(OpenLayers.Function.bind(function(){this.countDown(pressed)}, this), 1000/2);                        
+            }else{
+                this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
+                this.tooltipTimer = setInterval(OpenLayers.Function.bind(function(){this.countDown(pressed)}, this), 1000);                    
+            }                   
         }
     },
+	/**
+	 * APIMethod: countDown
+	 * CountDown for the Time Animator
+	 */    
+    countDown:function(pressed){        
+        if (this.toolbar.tooltip && this.toolbar.tooltip.getEl()){
+            this.toolbar.tooltip.update(  'next refresh in ' +this.timeToRefresh/1000 + ' seconds' );
+        }
+
+        this.timeToRefresh -= 1000;
+
+        if ( this.timeToRefresh === 0){
+            this.timeToRefresh = this.timeInterval;
+        }        
+    },    
 	/**
 	 * APIMethod: stop
 	 * Stops the time-series animation. Fires the 'stop' event.
 	 */
 	stop:function(){
 		this.clearTimer();
+        this.clearTooltipTimer();
 		this.events.triggerEvent('stop',{'rangeExceeded':false});
 		this._stopped=true;
+        if (this.toolbar.tooltip){
+            this.toolbar.tooltip.destroy();
+            this.toolbar.tooltip = null;
+        }        
 	},
 	/**
 	 * APIMethod: setRange
@@ -656,6 +720,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         else {
             this.currentTime = time;
             this.curTime = curTime;
+            OpenLayers.Util.getElement('olTime').innerHTML = time;
         }
         this.events.triggerEvent('tick', {
             'currentTime' : this.currentTime,
@@ -667,13 +732,49 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      * Sets the control's playback frameRate (ticks/second)
      * Parameters: {Number} rate - the ticks/second rate
      */
-    setFrameRate: function(rate){
+    setFrameRate: function(rate,pressed){
         var playing = !!this.timer;
         this.clearTimer();
+        this.clearTooltipTimer();        
         this.frameRate = rate;
+
+        
         if(playing){
             //this.tick();
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
+            if (this.toolbar.tooltip){
+                this.toolbar.tooltip.destroy();
+                this.toolbar.tooltip = null;
+            }    
+            this.timeInterval = this.frameRate*1000;
+            
+            if (this.frameRate == 1){
+                this.timeToRefresh = this.timeInterval;
+            }else{
+                this.timeToRefresh = this.timeInterval-1000;    
+            }
+            
+            this.toolbar.tooltip = new Ext.ToolTip({
+                                target: 'sync-button',
+                                html:  'next refresh in ' + this.timeInterval/1000 + ' seconds',
+                                title: 'Working interval: ' + Ext.util.Format.date(this.range[0], "d/m/Y") + ' to ' 
+                                            + Ext.util.Format.date(this.range[1], "d/m/Y" ),
+                                autoHide: false,
+                                draggable:true,
+                                width: 350,
+                                height: 50,
+                                anchor: 'bottom',
+                                closable: true
+                            });
+            this.toolbar.tooltip.showAt( [ this.toolbar.getEl().getX()-50,  this.toolbar.getEl().getY()+50 ]);
+            
+            if(pressed){
+                this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), (1000/2) * this.frameRate);
+                this.tooltipTimer = setInterval(OpenLayers.Function.bind(function(){this.countDown(pressed)}, this), 1000/2);                        
+            }else{
+                this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
+                this.tooltipTimer = setInterval(OpenLayers.Function.bind(function(){this.countDown(pressed)}, this), 1000);                    
+            }
+      
         }
     },
     /**
@@ -686,6 +787,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      */ 
      reset:function(looped) {
         this.clearTimer();
+        this.clearTooltipTimer();
         var newTime = new Date(this.range[(this.step > 0) ? 0 : 1].getTime());
         this.setTime(newTime);
         this.events.triggerEvent('reset', {
@@ -703,6 +805,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      */ 
      currenttime:function(looped) {
         this.clearTimer();
+        this.clearTooltipTimer();
         
         var d = new Date();        
         var UTC = d.getUTCFullYear() + '-'
@@ -1028,6 +1131,12 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.timer = null;
         }
     },
+    clearTooltipTimer: function() {
+        if(this.tooltipTimer) {
+            clearInterval(this.tooltipTimer);
+            this.tooltipTimer = null;
+        }
+    },    
 	
 	CLASS_NAME:'OpenLayers.Control.TimeManager'
 });

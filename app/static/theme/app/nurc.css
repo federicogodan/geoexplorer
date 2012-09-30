@@ -76,14 +76,19 @@ table.featureInfo td{
 		
 /* Additional OL Styles */
 .olControlMousePosition {
-	top: 5px !important;
-	right: 5px !important;
-	font-size: 3em;
-	color: lightgrey;
-	height: 20px;
+    top: 5px !important;
+    right: 5px !important;
+    font-size: 3em;
+    color: lightgrey;
+    height: 20px;
 }
 
-.olControl{
-	bottom:0px;
-	left:0px;
+.olControl_Watermark {
+    bottom:0px;
+    left:0px;
+}
+
+.olControl_TimeVisualization {
+    top:0px;
+    left:0px;
 }

@@ -180,10 +180,6 @@
 				endTime = serverConfig.endTime
             }
 			
-			if (!timeUnit){
-                timeUnit = OpenLayers.TimeUnit.MINUTES;
-            }
-						
             if(!cruiseName){
                 cruiseName = "NOMR12";
             }
@@ -212,7 +208,39 @@
 				layout: 'fit',
                 id : 'appTabs'
             });
-        
+
+            var aboutButton = new Ext.Button({
+                text: GeoExplorer.prototype.appInfoText,
+                tooltip: 'Credits',
+                iconCls: "icon-geoexplorer",
+                handler: function(){
+                    var appInfo = new Ext.Panel({
+                        header: false,
+                        html: "<iframe style='border: none; height: 100%; width: 100%' src='../about.html' frameborder='0' border='0'><a target='_blank' href='../about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
+                    });
+
+                    var win = new Ext.Window({
+                        title:  GeoExplorer.prototype.aboutThisMapText,
+                        modal: true,
+                        layout: "fit",
+                        width: 370,
+                        height: 380,
+                        items: [appInfo]
+                    });
+                    
+                    win.show();
+                }
+            });            
+            
+            var poweredByGeoSol = new Ext.Button({
+                tooltip: 'Powered by GeoSolutions',
+                iconCls: "icon-geosol",
+                width : 150,
+                handler: function(btn){
+                    window.open('http://geo-solutions.it/', '_blank');
+                }
+            });    
+            
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
                 layout: 'border',
@@ -234,7 +262,10 @@
                         layout : 'border',
                         border : false,
                         header : false,                    
-                        items : [appTabs]
+                        items : [appTabs],
+                        bbar : [
+                            poweredByGeoSol,"-",aboutButton
+                        ]
                     }]
             });
                  
@@ -246,6 +277,7 @@
 				watermarkUrl: serverConfig.watermarkUrl, 
 				watermarkTitle: serverConfig.watermarkTitle, 
 				watermarkPosition: serverConfig.watermarkPosition,
+                timeVisualizationPosition: serverConfig.timeVisualizationPosition,                
 				customTools: serverConfig.customTools,
 				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
 				cruiseName: cruiseName,
@@ -254,10 +286,10 @@
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
 				// Time Animator //
-                units: timeUnit,
-                range: [startTime, endTime],
-                step: serverConfig.timeStep,
-                frameRate: serverConfig.timeFrameRate,
+                timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES,
+                timeRange: [startTime, endTime],
+                timeStep: serverConfig.timeStep,
+                timeFrameRate: serverConfig.timeFrameRate,
 				// Real Time Synch //
 				refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
                 about: {

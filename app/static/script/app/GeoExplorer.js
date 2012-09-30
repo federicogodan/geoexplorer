@@ -87,7 +87,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     bookmarkText: "XML Map Context",
     permakinkText: 'XML',
     
-    appInfoText: "GeoExplorer",
+    appInfoText: "Credits",
     aboutText: "About GeoExplorer",
     mapInfoText: "Map Info",
     descriptionText: "Description",
@@ -140,6 +140,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				url: config.watermarkUrl, 
 				text: config.watermarkTitle, 
 				position: config.watermarkPosition 
+	        },{
+	            xtype: "gxp_timevisualization",
+				position: config.timeVisualizationPosition
 	        }
         ];
 
