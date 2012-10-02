@@ -287,7 +287,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         var navigation = this.mapPanel.map.getControlsByClass('OpenLayers.Control.Navigation');
         var panPanel = this.mapPanel.map.getControlsByClass('OpenLayers.Control.PanPanel');
         var zoomPanel = this.mapPanel.map.getControlsByClass('OpenLayers.Control.ZoomPanel');
-        
+     
         navigation[0].deactivate();
         navigation[1].deactivate();
         panPanel[0].deactivate();
@@ -358,7 +358,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         var navigation = this.mapPanel.map.getControlsByClass('OpenLayers.Control.Navigation');
         var panPanel = this.mapPanel.map.getControlsByClass('OpenLayers.Control.PanPanel');
         var zoomPanel = this.mapPanel.map.getControlsByClass('OpenLayers.Control.ZoomPanel');
-        
+ 
         navigation[0].activate();
         navigation[1].activate();
         panPanel[0].activate();

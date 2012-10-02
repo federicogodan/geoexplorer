@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://localhost/geostore/rest/",
-   "proxy":"/http_proxy/proxy?url=",
+   "proxy":"/proxy?url=",
    "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
@@ -12,7 +12,7 @@
    "center": [7.97,43.02],
    "zoom": 7,
    "startTime": "2012-09-01T06:00:00.000Z",
-   "endTime":   "2012-09-23T08:00:00.000Z",
+   "endTime":   "2012-09-27T08:00:00.000Z",
    "timeUnits": "Minutes",
    "timeStep": 30,
    "timeFrameRate": 10,
