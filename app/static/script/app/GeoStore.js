@@ -356,12 +356,12 @@
 	       },
 	       scope: this,
 	       success: function(response, opts){
-				var json = Ext.util.JSON.decode(response.responseText);
+				// var json = Ext.util.JSON.decode(response.responseText);
 				callback( response );
 	       },
 	       failure:  function(response, opts){
-	       		var json = Ext.util.JSON.decode(response.responseText);
-				console.log(Ext.util.JSON.decode(json));
+	       		// var json = Ext.util.JSON.decode(response.responseText);
+				console.error( response );
 	       }
 	    });		
 	};
@@ -468,12 +468,14 @@
 			'</store>';
 			
 		xml += '</Resource>';
+		console.log(xml);
 		return xml;
 	},
 	afterFind: function(json){
 		
 		console.log(json);
-		if ( json.Resource ){
+		
+		if ( json.Resource){
 			var data = new Object;
 			data.owner = json.Resource.Attributes.attribute.value;
 			data.description = json.Resource.description;
@@ -482,19 +484,54 @@
 			data.id = json.Resource.id;
 			data.creation = json.Resource.creation;		
 			return data;	
-		} else if ( json.ResourceList ){
+		} else if ( json.ResourceList ||  json.ResourceList===''){
 			var array = new Array;
-			for ( var i=0; i< json.ResourceList.Resource; i++){
-				var obj = json.ResourceList.Resource[i];
-				array.push( obj );
+			if ( json.ResourceList.Resource ){
+				if ( json.ResourceList.Resource.length ){
+					for ( var i=0; i< json.ResourceList.Resource.length ; i++){
+						var obj = json.ResourceList.Resource[i];
+						array.push( obj );
+					}	
+				} else {
+					array.push( json.ResourceList.Resource );
+				}
 			}
-			return array;		
+			return array;	
 		} else {
 			this.onFailure_('cannot parse response');
 		}
 
 	}
    } );
+
+   var Datastore = GeoStore.Datastore = ContentProvider.extend({
+	initialize: function(){
+		this.resourceNamePrefix_ = '';
+	},
+	update: function(pk, item, callback){
+		var data = this.beforeSave(item);
+		var uri = new Uri({'url':this.baseUrl_});
+		uri.appendId( pk );
+		var Request = Ext.Ajax.request({
+	       url: uri.toString(),
+	       method: 'PUT',
+	       headers:{
+	          'Content-Type' : 'application/json',
+	          'Accept' : this.acceptTypes_,
+	          'Authorization' : this.authorization_
+	       },
+	       scope: this,
+		   // params: Ext.util.JSON.encode(data),
+		   params: data,
+	       success: function(response, opts){
+				callback( response );
+	       },
+	       failure:  function(response, opts){
+				this.onFailure_(response);
+	       }
+	    });		
+	}
+   });
 
 
 }).call(this);

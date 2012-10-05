@@ -1,7 +1,7 @@
 {
-   "geoStoreBase":"http://localhost/geostore/rest/",
+   "geoStoreBase":"http://localhost:8080/geostore/rest/",
    "proxy":"/http_proxy/proxy?url=",
-   "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
+   "xmlJsonTranslateService": "http://localhost:8080/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
    "watermarkTitle": "Powered by NURC",
@@ -70,42 +70,6 @@
         }
    },
    "layers":[
-        {
-            "format": "image/jpeg",
-            "transparent": false,
-            "source": "GEOSIII",
-            "group": "background",
-            "name": "nurcbg",
-            "title": "Nurc Background"
-        }, 
-        {
-            "format": "image/png8",
-            "group": "Gliders",
-            "name": "nurc:watvelingv",
-            "opacity": 1,
-            "selected": false,
-            "source": "demo",
-            "title": "Watvel Forecast Model INGV",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "elevation": 1.472,
-            "styles":"watvel_marker_ramp"
-        },        
-		{
-            "format": "image/png8",
-            "group": "Gliders",
-            "name": "nurc:watvelroms",
-            "opacity": 1,
-            "selected": false,
-            "source": "demo",
-            "title": "Watvel Forecast Model ROMS",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "elevation": 10,
-            "styles":"watvel_marker_ramp"
-        },
         {
             "format": "image/png8",
             "group": "Gliders",

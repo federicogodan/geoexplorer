@@ -136,11 +136,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     template: this.zoomSliderText
                 })
             },{
-	            xtype: "gxp_watermark", 
-				url: config.watermarkUrl, 
-				text: config.watermarkTitle, 
-				position: config.watermarkPosition 
-	        },{
 	            xtype: "gxp_timevisualization",
 				position: config.timeVisualizationPosition
 	        }
@@ -249,17 +244,22 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                success: function(response, opts){  
                     var addConfig;
                     
+
                     try {
                       addConfig = Ext.util.JSON.decode(response.responseText);
                     } catch (err) {
+						console.error(response);
+						console.error('Cannot decode response as JSON because of: ' + err);
                     }
                     
                     if(addConfig){
                         if(addConfig.data){    
                             addConfig = Ext.util.JSON.decode(addConfig.data);
-                            this.applyConfig(Ext.applyIf(addConfig, config));
+							this.prepareConfig( addConfig, config );
+                            this.applyConfig( addConfig );
                         }else{        
-                            this.applyConfig(Ext.applyIf(addConfig, config));
+							this.prepareConfig( addConfig, config );
+                            this.applyConfig( addConfig );
                         }
                     } else {
                         this.applyConfig(config);
@@ -272,6 +272,60 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             });        
         }
     },
+
+	/**
+	 *  change dynamically the default configuration depending on custom parameters
+	 */
+    prepareConfig: function(addConfig, config){
+	
+		// add properties in config if they are not defined in addConfig
+		Ext.applyIf(addConfig, config);
+		
+		// add models to layers if defined
+		if ( addConfig.models ){
+			for (var i=0; i<addConfig.models.length; i++){
+				var model = addConfig.models[i];
+				addConfig.map.layers.push( model );
+			}
+		}
+		// remove model configuration
+		delete addConfig.models;
+		
+		// add background if any
+			if ( addConfig.backgrounds ){
+				for (var i=0; i<addConfig.backgrounds.length; i++){
+					var bg = addConfig.backgrounds[i];
+					addConfig.map.layers.push( bg );
+				}
+			}
+			// remove model configuration
+			delete addConfig.backgrounds;
+			
+			addConfig.map.extent = addConfig.bounds;
+			addConfig.map.maxExtent = addConfig.bounds;
+			delete addConfig.bounds;
+			
+			console.log('Apply this configuration:');
+			console.log(addConfig);
+			
+			this.mapItems.push({
+	            xtype: "gxp_watermark", 
+				url: addConfig.xmlJsonTranslateService + 'temp/' + addConfig.watermarkUrl, 
+				text: addConfig.watermarkTitle, 
+				position: addConfig.watermarkPosition 
+	        });
+	
+			// TODO refactor
+			addConfig.tools.push(
+				{	 
+					ptype: "gxp_synchronizer",
+					refreshTimeInterval: config.refreshTimeInterval,
+					actionTarget: {target: "paneltbar", index: 28},
+					range: addConfig.timeRange
+				}
+			);
+		return addConfig;	
+	},
     
     loadUserConfig: function(json){
         var uploadWin = Ext.getCmp('upload-win');

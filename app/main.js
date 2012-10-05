@@ -26,7 +26,7 @@ app.mount("/viewer", require("./root/viewer").app);
 
 app.mount("/informational", require("./root/informational").app);
 app.mount("/interactive", require("./root/interactive").app);
-
+app.mount("/control", require("./root/control").app);
 
 // debug mode loads unminified scripts
 // assumes markup pulls in scripts under the path /servlet_name/script/

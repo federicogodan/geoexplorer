@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Nurc - Control Panel</title>
+		 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<!-- Ext resources -->
+        <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/ext-all.css">
+        <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/xtheme-gray.css">
+
+		<script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
+
+	    <!-- OpenLayers resources -->
+	    <link rel="stylesheet" type="text/css" href="../externals/openlayers/theme/default/style.css">
+
+	    <!-- GeoExt resources -->
+	    <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/popup.css">
+	    <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/layerlegend.css">
+	    <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/gxtheme-gray.css">
+
+	    <!-- gxp resources -->
+	    <link rel="stylesheet" type="text/css" href="../externals/gxp/src/theme/all.css">
+	
+	 	<!-- GeoExplorer resources -->
+	    <link rel="stylesheet" type="text/css" href="../theme/app/geoexplorer.css" />
+	    <link rel="stylesheet" type="text/css" href="../theme/app/composer.css" />
+		<link rel="stylesheet" type="text/css" href="../theme/app/nurc.css" />
+	    <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
+	
+	    
+		<!-- <script type="text/javascript" src="../script/app/GeoStore.js"></script>
+		<script type="text/javascript" src="../script/app/ControlPanel.js"></script>
+		<script type="text/javascript" src="../externals/utils/base64.js"></script> -->
+		<script type="text/javascript" src="../script/GeoExplorer.js"></script> 
+
+	
+		
+		<!-- additional component from ext examples -->
+		<link rel="stylesheet" type="text/css" href="../externals/ext/examples/ux/fileuploadfield/css/fileuploadfield.css"/>
+		<link rel="stylesheet" type="text/css" href="../externals/ext/examples/ux/css/MultiSelect.css"/>
+		<script type="text/javascript" src="../externals/ext/examples/ux/fileuploadfield/FileUploadField.js"></script>
+		<script type="text/javascript" src="../externals/ext/examples/ux/MultiSelect.js"></script>
+		<script type="text/javascript" src="../externals/ext/examples/ux/ItemSelector.js"></script>
+	
+		
+		
+		
+	</head>
+	<body>
+	    <script type="text/javascript">
+		Ext.onReady(function(){
+			
+		    //
+			// Fix for IE7 and IE8
+			//
+			if (!Date.prototype.toISOString) {
+			    Date.prototype.toISOString = function() {
+			        function pad(n) { return n < 10 ? '0' + n : n }
+			        return this.getUTCFullYear() + '-'
+			            + pad(this.getUTCMonth() + 1) + '-'
+			            + pad(this.getUTCDate()) + 'T'
+			            + pad(this.getUTCHours()) + ':'
+			            + pad(this.getUTCMinutes()) + ':'
+			            + pad(this.getUTCSeconds()) + 'Z';
+			    };
+			}
+
+			// see http://stackoverflow.com/questions/11020658/javascript-json-date-parse-in-ie7-ie8-returns-nan
+			var D= new Date('2011-06-02T09:34:29+02:00');
+		    if(!D || +D!== 1307000069000){
+		        Date.fromISO= function(s){
+		            var day, tz,
+		            rx=/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):(\d\d))?$/,
+		            p= rx.exec(s) || [];
+		            if(p[1]){
+		                day= p[1].split(/\D/);
+		                for(var i= 0, L= day.length; i<L; i++){
+		                    day[i]= parseInt(day[i], 10) || 0;
+		                };
+		                day[1]-= 1;
+		                day= new Date(Date.UTC.apply(Date, day));
+		                if(!day.getDate()) return NaN;
+		                if(p[5]){
+		                    tz= (parseInt(p[5], 10)*60);
+		                    if(p[6]) tz+= parseInt(p[6], 10);
+		                    if(p[4]== '+') tz*= -1;
+		                    if(tz) day.setUTCMinutes(day.getUTCMinutes()+ tz);
+		                }
+		                return day;
+		            }
+		            return NaN;
+		        }
+		    }
+		    else{
+		        Date.fromISO = function(s){
+		            return new Date(s);
+		        }
+		    }
+			
+		    Ext.QuickTips.init();
+
+			// Fake data used for development
+
+
+		    // sample static data for the store 
+
+		    var vehicles = new Ext.data.ArrayStore({
+		        data: [
+		            ['elettra', 'elettra', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_elettra.png'],
+					['laura', 'laura', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_laura.png'],
+					['greta', 'greta', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_greta.png'],
+					['jade', 'jade', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_jade.png'],
+					['zoe', 'zoe', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_zoe.png'],
+					['sophie', 'sophie', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_sophie.png'],
+					['natalie', 'natalie', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_natalie.png'],
+					['noa', 'noa', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_noa.png']
+				],
+		        fields: ['value', 'text', 'url']
+		    });
+		
+			/*  {
+		            "format": "image/png8",
+		            "group": "Gliders",
+		            "name": "nurc:watvelingv",
+		            "opacity": 1,
+		            "selected": false,
+		            "source": "demo",
+		            "title": "Watvel Forecast Model INGV",
+		            "transparent": true,
+		            "visibility": true,
+		            "ratio": 1,
+		            "elevation": 1.472,
+		            "styles":"watvel_marker_ramp"
+		        },        
+				{
+		            "format": "image/png8",
+		            "group": "Gliders",
+		            "name": "nurc:watvelroms",
+		            "opacity": 1,
+		            "selected": false,
+		            "source": "demo",
+		            "title": "Watvel Forecast Model ROMS",
+		            "transparent": true,
+		            "visibility": true,
+		            "ratio": 1,
+		            "elevation": 10,
+		            "styles":"watvel_marker_ramp"
+		        },*/
+
+		    var models = new Ext.data.ArrayStore({
+		        data: [
+		            ['nurc:watvelroms', 'Watvel Forecast Model ROMS'], ['nurc:watvelingv', 'Watvel Forecast Model INGV']
+				],
+		        fields: ['value','text'],
+		        sortInfo: {
+		            field: 'value',
+		            direction: 'ASC'
+		        }
+		    });
+
+			/*{
+	            "format": "image/jpeg",
+	            "transparent": false,
+	            "source": "GEOSIII",
+	            "group": "background",
+	            "name": "nurcbg",
+	            "title": "Nurc Background"
+	        },*/
+		    var backgrounds = new Ext.data.ArrayStore({
+		        data: [
+		            ['nurcbg', 'Nurc Background']
+				],
+		        fields: ['value','text'],
+		        sortInfo: {
+		            field: 'value',
+		            direction: 'ASC'
+		        }
+		    });
+
+		    /// END fake data
+
+			var token = 'Basic ' +  Base64.encode('admin:admin');
+			
+
+			var control = new ControlPanel({
+				models: models,
+				vehicles: vehicles,
+				backgrounds: backgrounds,
+				token: token
+			});
+			
+		
+
+            var aboutButton = new Ext.Button({
+                text: GeoExplorer.prototype.appInfoText,
+                tooltip: 'Credits',
+                iconCls: "icon-geoexplorer",
+                handler: function(){
+                    var appInfo = new Ext.Panel({
+                        header: false,
+                        html: "<iframe style='border: none; height: 100%; width: 100%' src='../about.html' frameborder='0' border='0'><a target='_blank' href='../about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
+                    });
+
+                    var win = new Ext.Window({
+                        title:  GeoExplorer.prototype.aboutThisMapText,
+                        modal: true,
+                        layout: "fit",
+                        width: 370,
+                        height: 380,
+                        items: [appInfo]
+                    });
+                    
+                    win.show();
+                }
+            });            
+            
+            var poweredByGeoSol = new Ext.Button({
+                tooltip: 'Powered by GeoSolutions',
+                iconCls: "icon-geosol",
+                width : 150,
+                handler: function(btn){
+                    window.open('http://geo-solutions.it/', '_blank');
+                }
+            });
+
+			new Ext.Viewport({
+					layout: 'border',
+					title: 'Nurc - Control Panel',
+					margins: '0 0 0 0 ',
+					items: [{
+						id: 'main-header',
+						region: 'north',
+						border: false,
+		                height: 75,
+						hideCollapseTool: true,
+                        collapsible : true,
+                        collapsed: false,
+                        collapseMode: 'mini',
+						split: true,
+						html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_ControlPage.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:white"></h1></div>',
+		                bodyStyle: 'padding:0px;background-color: #0055bb;'
+					},
+					{
+						// layout: 'border',
+				    	id: 'cruise-browser',
+						title:"Cruise List",
+						tbar: [ { 
+							icon:'../theme/app/img/silk/add.png', 
+							text:"New cruise",
+							handler: control.createCruise,
+							scope: control
+							} ],
+				        region:'west',
+				        border: false,
+				        split:true,
+						// margins: '2 0 5 5',
+				        width: 150,
+				        minSize: 100,
+				        maxSize: 500,
+						items: control.getCruiseListView()
+					},
+					{
+						id: 'content-panel',
+						region: 'center', 
+						width:700,
+						layout: 'fit',
+						// margins: '2 5 5 0',
+						activeItem: 0,
+						border: false,
+						frame:true,
+						items: control.getCruisePanelView(),
+						bbar : [
+	                        poweredByGeoSol,"-",aboutButton
+	                    ]
+					}
+
+					],
+			        renderTo: Ext.getBody()
+			    });
+
+
+		});
+		</script>
+	</body>
+</html>

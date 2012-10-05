@@ -272,49 +272,116 @@
 			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
 			appMask.show();
 			
-            app = new GeoExplorer.Composer({
-			    modified: false,
-				watermarkUrl: serverConfig.watermarkUrl, 
-				watermarkTitle: serverConfig.watermarkTitle, 
-				watermarkPosition: serverConfig.watermarkPosition,
-                timeVisualizationPosition: serverConfig.timeVisualizationPosition,                
-				customTools: serverConfig.customTools,
-				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
-				cruiseName: cruiseName,
-                proxy: proxy,
-				xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
-                defaultSourceType: "gxp_wmssource",
-                renderToTab : 'appTabs',
-				// Time Animator //
-                timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES,
-                timeRange: [startTime, endTime],
-                timeStep: serverConfig.timeStep,
-                timeFrameRate: serverConfig.timeFrameRate,
-				// Real Time Synch //
-				refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
-                about: {
-                    title: "NOMR12 Cruise Gliders Map",
-                    'abstract': "NOMR12 Cruise Gliders Map",
-                    contact: "<a href='#'>#</a>."
-                },
-				vehicleSelector: serverConfig.vehicleSelector,
-                sources: serverConfig.gsSources,
-                map: {
-					projection: "EPSG:4326",
-                    units: "dd",
-					extent: [
-                        bounds[0], bounds[1],
-                        bounds[2], bounds[3]
-                    ],
-					maxExtent: [
-                        maxExtent[0], maxExtent[1],
-                        maxExtent[2], maxExtent[3]
-                    ],
-                    layers: serverConfig.layers,
-                    center: [center[0], center[1]],
-                    zoom: zoom
-                }
-            }, mapIdentifier, authorization, fullScreen);   
+      			if (mapIdentifier && mapIdentifier !== -1){
+		            app = new GeoExplorer.Composer({
+					    modified: false,
+						// watermarkUrl: serverConfig.watermarkUrl, 
+						watermarkTitle: serverConfig.watermarkTitle, 
+						// watermarkPosition: serverConfig.watermarkPosition,
+		                timeVisualizationPosition: serverConfig.timeVisualizationPosition,
+						customTools: serverConfig.customTools,
+						//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
+						// cruiseName: cruiseName,
+		                proxy: proxy,
+						xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
+		                defaultSourceType: "gxp_wmssource",
+		                renderToTab : 'appTabs',
+						// Time Animator //
+		                // timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES,
+		                // timeRange: [startTime, endTime],
+		                // timeStep: serverConfig.timeStep,
+		                // timeFrameRate: serverConfig.timeFrameRate,
+						// Real Time Synch //
+						refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
+		                about: {
+		                    title: "NOMR12 Cruise Gliders Map",
+		                    'abstract': "NOMR12 Cruise Gliders Map",
+		                    contact: "<a href='#'>#</a>."
+		                },
+						// vehicleSelector: serverConfig.vehicleSelector,
+		                sources: serverConfig.gsSources,
+		                map: {
+							projection: "EPSG:4326",
+		                    units: "dd",
+							extent: [
+		                        bounds[0], bounds[1],
+		                        bounds[2], bounds[3]
+		                    ],
+							maxExtent: [
+		                        maxExtent[0], maxExtent[1],
+		                        maxExtent[2], maxExtent[3]
+		                    ],
+		                    layers: serverConfig.layers
+		                    // center: [center[0], center[1]],
+		                    // zoom: zoom
+		                }
+		            }, mapIdentifier, authorization, fullScreen);   
+
+		       } else {
+
+		           Ext.Msg.show({
+		                   title: "Wrong argument",
+		                   msg: "You must specify the context identifier mapId in your request",
+		                   buttons: Ext.Msg.OK,
+		                   icon: Ext.MessageBox.ERROR
+		             });
+
+		           app = new GeoExplorer.Composer({
+					    modified: false,
+						watermarkUrl: serverConfig.watermarkUrl, 
+						watermarkTitle: serverConfig.watermarkTitle, 
+						watermarkPosition: serverConfig.watermarkPosition,
+		               timeVisualizationPosition: serverConfig.timeVisualizationPosition,
+						customTools: serverConfig.customTools,
+						//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
+					   cruiseName: cruiseName,
+		               proxy: proxy,
+					   xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
+		               defaultSourceType: "gxp_wmssource",
+		               renderToTab : 'appTabs',
+						// Time Animator //
+		               timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES,
+		               timeRange: [startTime, endTime],
+		               timeStep: serverConfig.timeStep,
+		               timeFrameRate: serverConfig.timeFrameRate,
+						// Real Time Synch //
+						refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
+		               about: {
+		                   title: "NOMR12 Cruise Gliders Map",
+		                   'abstract': "NOMR12 Cruise Gliders Map",
+		                   contact: "<a href='#'>#</a>."
+		               },
+					   vehicleSelector: serverConfig.vehicleSelector,
+		               sources: serverConfig.gsSources,
+					   bounds: [ bounds[0], bounds[1], bounds[2], bounds[3]], 
+					   backgrounds:[
+						{
+			            	"format": "image/jpeg",
+			            	"transparent": false,
+			            	"source": "GEOSIII",
+			            	"group": "background",
+			            	"name": "nurcbg",
+			            	"title": "Nurc Background"
+			        	}
+						],
+		               map: {
+							projection: "EPSG:4326",
+		                   units: "dd",
+							extent: [
+		                       bounds[0], bounds[1],
+		                       bounds[2], bounds[3]
+		                   ],
+							maxExtent: [
+		                       maxExtent[0], maxExtent[1],
+		                       maxExtent[2], maxExtent[3]
+		                   ],
+		                   layers: serverConfig.layers
+		                   // center: [center[0], center[1]],
+		                   // zoom: zoom
+		               }
+		           }, mapIdentifier, authorization, fullScreen); 
+
+			   }
             
             app.on({
                 'portalready' : function(){
@@ -326,7 +393,7 @@
                     }
 					
                     if(cruiseName){
-                        Ext.getCmp('tree').setTitle(cruiseName);
+                        Ext.getCmp('tree').setTitle(app.cruiseName);
                     }
                 },
 				'ready': function(){

@@ -83,11 +83,6 @@ table.featureInfo td{
     height: 20px;
 }
 
-.olControl_Watermark {
-    bottom:0px;
-    left:0px;
-}
-
 .olControl_TimeVisualization {
     top:0px;
     left:0px;

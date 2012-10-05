@@ -28,7 +28,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
     fullScreenText: "Full Screen",	
     // End i18n.
 	
-    constructor: function(config) {              
+    constructor: function(config, mapId) {     
+	    this.mapId = mapId;
 		config.tools = [
             {
                 ptype: "gxp_layertree",
@@ -110,11 +111,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 		        ptype:"gxp_embedded_link",
 		        actionTarget: {target: "paneltbar", index: 27}
 		    }, {
-				ptype: "gxp_synchronizer",
-				refreshTimeInterval: config.refreshTimeInterval,
-				actionTarget: {target: "paneltbar", index: 28},
-				range: config.timeRange
-			}, {
 	            actions: ["-"], actionTarget: "paneltbar"
 	        }, {
                 actions: ["->"], actionTarget: "paneltbar"
@@ -148,7 +144,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				config.tools.push(config.customTools[i]);
 			}			
 		}		
-       
+		
+
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
 

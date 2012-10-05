@@ -20,6 +20,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import java.util.List;
+import java.util.Iterator;
+
 /**
  * Servlet implementation class FileUploader
  */
@@ -108,8 +117,16 @@ public class FileUploader extends HttpServlet {
 				response.setContentType("text/html");
 				writeResponse( response, "{ \"success\":false, \"errorMessage\":\""+ ex.getLocalizedMessage() +"\"}" );				
 			} finally {
-				br.close();
-				writer.close();
+				try {
+					br.close();
+					writer.close();
+				} catch (IOException e) {
+					if (LOGGER.isLoggable(Level.SEVERE))
+						LOGGER.log(Level.SEVERE,
+								"Error closing streams ", e);
+					throw new ServletException(e.getMessage());
+				}
+				
 			}
 
 		} else {
@@ -130,31 +147,45 @@ public class FileUploader extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		BufferedReader in = null;
-		BufferedWriter out = null;
 		try{
-			// read the content data for this request
-			in = new BufferedReader(
-									new InputStreamReader( 
-											request.getInputStream()) );
+																	
 			// create a file with a random name
-
 			String uuid = UUID.randomUUID().toString();
-			out = new BufferedWriter(new FileWriter( tempDirectory + "/" + uuid ));
 
-			StringBuffer sb = new StringBuffer();
-			String line = null;
-			while ( (line=in.readLine()) != null ){
-				sb.append( line );
+			// see http://commons.apache.org/fileupload/using.html
+			if (ServletFileUpload.isMultipartContent(request)){
+				// Create a factory for disk-based file items
+				FileItemFactory factory = new DiskFileItemFactory();
+				// Create a new file upload handler
+				ServletFileUpload upload = new ServletFileUpload(factory);
+				// Parse the request
+				List /* FileItem */ items = upload.parseRequest(request);
+				// Process the uploaded items
+				Iterator iter = items.iterator();
+				while (iter.hasNext()) {
+				    FileItem item = (FileItem) iter.next();
+
+				    if (!item.isFormField()) { // Process a file upload
+						// TODO build file in a proper way!
+				        File uploadedFile = new File( tempDirectory + "/" + uuid );
+						item.write(uploadedFile);
+				    } else {
+				       	response.setContentType("text/html");
+						writeResponse( response, "{ \"success\":false, \"errorMessage\":\"This servlet can be used only to upload files.\"}" );
+				    }
+				}
 			}
-			
-			String input = clean( sb.toString() );
-			
-			
-			out.write( input );
 
 		    response.setContentType("text/html");	        
 			writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\""+ uuid +"\"}}");
+			
+		} catch (FileUploadException ex){
+			if (LOGGER.isLoggable(Level.SEVERE))
+				LOGGER.log(Level.SEVERE,
+								"Error encountered while uploading file");
+
+			response.setContentType("text/html");
+			writeResponse( response, "{ \"success\":false, \"errorMessage\":\""+ ex.getLocalizedMessage() +"\"}" );
 		} catch (IOException ex) {
 			if (LOGGER.isLoggable(Level.SEVERE))
 				LOGGER.log(Level.SEVERE,
@@ -162,31 +193,28 @@ public class FileUploader extends HttpServlet {
 
 			response.setContentType("text/html");
 			writeResponse( response, "{ \"success\":false, \"errorMessage\":\""+ ex.getLocalizedMessage() +"\"}" );
+
+		} catch (Exception ex) {
+				if (LOGGER.isLoggable(Level.SEVERE))
+					LOGGER.log(Level.SEVERE,
+								"Error encountered while uploading file");
+
+				response.setContentType("text/html");
+				writeResponse( response, "{ \"success\":false, \"errorMessage\":\""+ ex.getLocalizedMessage() +"\"}" );
 		
 
 		} finally {
-			if ( in != null ){
-				in.close();
-			}
-			if ( out != null ){
-				out.close();
-			}
+			/*try {
+				// do nothing
+			} catch (IOException e) {
+				if (LOGGER.isLoggable(Level.SEVERE))
+					LOGGER.log(Level.SEVERE,
+							"Error closing streams ", e);
+				throw new ServletException(e.getMessage());
+			}*/
+		
 		}
 
-	}
-	
-	/**
-	 *  trim multipart header and footer created by html form
-	 *
-	 *   -----------------------------20691717242189857501854012939Content-Disposition: form-data; name="file"; filename="Trentino.kml"Content-Type: application/vnd.google-earth.kml+xml
-	 *   -----------------------------206917172421... 
-	 *
-	 *
-	 */
-	private String clean(String input){
-		String start = "<kml";
-		String end = "</kml>";
-		return input.substring( input.indexOf( start ), input.lastIndexOf(end)+end.length() );
 	}
 	
 	private void writeResponse(HttpServletResponse response, String text)
@@ -199,10 +227,17 @@ public class FileUploader extends HttpServlet {
 			if (LOGGER.isLoggable(Level.SEVERE))
 				LOGGER.log(Level.SEVERE, e.getMessage());
 		} finally {
-			if (writer != null) {
-				writer.flush();
-				writer.close();
+			try{
+				if (writer != null) {
+					writer.flush();
+					writer.close();
+				}				
+			} catch( Exception e){
+				if (LOGGER.isLoggable(Level.SEVERE))
+					LOGGER.log(Level.SEVERE,
+								"Error closing response stream ", e);		
 			}
+
 		}
 	}	
 
