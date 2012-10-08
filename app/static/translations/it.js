@@ -14,7 +14,7 @@ GeoExt.Lang.add("it", {
         saveErrorText: "Problemi di salvataggio: ",
         bookmarkText: "URL del Segnalibro",
         permakinkText: "Permalink",
-        appInfoText: "Informazioni",
+        appInfoText: "Crediti",
         aboutText: "Riguardo GeoExplorer",
         mapInfoText: "Informazioni Mappa",
         descriptionText: "Descrizione",

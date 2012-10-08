@@ -216,7 +216,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			//ORIGINAL 
 			OpenLayers.Request.GET({
 				//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-				url: proxy + encodeURIComponent('http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime())),
+				url: proxy + encodeURIComponent(app.xmlJsonTranslateService + 'HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime())),
 				success: function(request) {
 					
 					var addConfig;
