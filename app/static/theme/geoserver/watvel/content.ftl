@@ -23,15 +23,27 @@
 			<#assign odd = !odd>
             <#setting number_format="0.##">
 			<#if attribute.name == 'Band1'>
-				<th>Speed</th><td>${attribute.value?number} [m/s]</td><td>${attribute.value?number * 1.94} [Knots]</td>
+				<#if attribute.value == 'NaN'>
+					<th>Speed</th><td>NaN</td><td>NaN</td>
+				<#else>
+				    <th>Speed</th><td>${attribute.value?number} [m/s]</td><td>${attribute.value?number * 1.94} [Knots]</td>
+				</#if>
 			</#if>
 			
 			<#if attribute.name == 'Band2'>
-				<th>Direction</th><td>${(attribute.value?number + 180) % 360} [deg]</td><td></td>
+			    <#if attribute.value == 'NaN'>
+					<th>Direction</th><td>NaN</td><td></td>
+				<#else>
+					<th>Direction</th><td>${(attribute.value?number + 180) % 360} [deg]</td><td></td>
+				</#if>
 			</#if>
 			
 			<#if attribute.name != 'Band1' && attribute.name != 'Band2'>
-				<th>${attribute.name}</th><td>${attribute.value}</td><td></td>
+			    <#if attribute.value == 'NaN'>
+					<th>${attribute.name}</th><td>NaN</td><td></td>
+				<#else>
+					<th>${attribute.name}</th><td>${attribute.value}</td><td></td>
+				</#if>
 			</#if>
 			
 			</tr>
