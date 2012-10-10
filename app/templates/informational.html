@@ -318,13 +318,6 @@
             
        } else {
 
-           Ext.Msg.show({
-                   title: "Wrong argument",
-                   msg: "You must specify the context identifier mapId in your request",
-                   buttons: Ext.Msg.OK,
-                   icon: Ext.MessageBox.ERROR
-             });
-
            app = new GeoExplorer.Composer({
 			    modified: false,
 				watermarkUrl: serverConfig.watermarkUrl, 

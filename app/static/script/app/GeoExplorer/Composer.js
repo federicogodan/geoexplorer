@@ -114,24 +114,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 	            actions: ["-"], actionTarget: "paneltbar"
 	        }, {
                 actions: ["->"], actionTarget: "paneltbar"
-            }, {
-                ptype:"gxp_playback",
-                outputTarget: "paneltbar",
-                playbackMode: "range",
-                showIntervals: false,
-                labelButtons: true,
-                settingsButton: true,
-                rateAdjuster: false,
-                dynamicRange: false,
-                timeFormat: 'l, F d, Y g:i:s A',
-                outputConfig: {
-                    controlConfig:{
-                        step: config.timeStep,
-                        units: config.timeUnits,
-                        range: config.timeRange,
-                        frameRate: config.timeFrameRate
-                    }
-                }
             }
         ]; 
 
@@ -172,11 +154,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 handler: function(button, evt){
                     if(button.pressed){
                         Ext.getCmp('tree').findParentByType('panel').collapse();
-						Ext.getCmp('feature-details').findParentByType('panel').collapse();
+						Ext.getCmp('east').collapse();
 					    Ext.getCmp('main-header').collapse();
                     } else {
                         Ext.getCmp('tree').findParentByType('panel').expand();
-						Ext.getCmp('feature-details').findParentByType('panel').expand();
+						Ext.getCmp('east').expand();
 						Ext.getCmp('main-header').expand();
                     }
                 }

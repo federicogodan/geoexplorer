@@ -1,11 +1,11 @@
 {
    "geoStoreBase":"http://localhost:8080/geostore/rest/",
    "proxy":"/http_proxy/proxy?url=",
-   "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
+   "xmlJsonTranslateService": "http://localhost:8080/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
    "watermarkTitle": "Powered by NURC",
-   "watermarkPosition": "position:relative;left:5px;bottom:5px",
+   "watermarkPosition": "position:absolute;left:5px;bottom:5px",
    "timeVisualizationPosition": "position:relative;left:60px;top:10px;background-color:#0055BB;color:#FFFFFF;font-size: 12px;",
    "maxExtent": [3.29817,40.266369,11.08748,45.93263],
    "bounds": [3.29817,40.266369,11.08748,45.93263],

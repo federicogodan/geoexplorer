@@ -255,18 +255,38 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     if(addConfig){
                         if(addConfig.data){    
                             addConfig = Ext.util.JSON.decode(addConfig.data);
-							this.prepareConfig( addConfig, config );
+							this.prepareConfig( config, addConfig );
                             this.applyConfig( addConfig );
                         }else{        
-							this.prepareConfig( addConfig, config );
+							this.prepareConfig( config, addConfig );
                             this.applyConfig( addConfig );
                         }
                     } else {
+						// add default bg to layers
+						/*config.map.layers.push({
+				            "format": "image/jpeg",
+				            "transparent": false,
+				            "source": "GEOSIII",
+				            "group": "background",
+				            "name": "nurcbg",
+				            "title": "Nurc Background"
+				        } );*/
+						this.prepareConfig( config );
                         this.applyConfig(config);
                     }
 
                },
                failure: function(response, opts){
+						// add default bg to layers
+						/*config.map.layers.push({
+				            "format": "image/jpeg",
+				            "transparent": false,
+				            "source": "GEOSIII",
+				            "group": "background",
+				            "name": "nurcbg",
+				            "title": "Nurc Background"
+				        } );*/
+				  this.prepareConfig( config );
                   this.applyConfig(config);
                }
             });        
@@ -276,55 +296,97 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	/**
 	 *  change dynamically the default configuration depending on custom parameters
 	 */
-    prepareConfig: function(addConfig, config){
+    prepareConfig: function(config, addConfig){
 	
-		// add properties in config if they are not defined in addConfig
-		Ext.applyIf(addConfig, config);
+		if ( addConfig ){
+			// add properties in config if they are not defined in addConfig
+			config = Ext.applyIf(addConfig, config);
+			config.watermarkUrl = config.xmlJsonTranslateService + 'temp/' + config.watermarkUrl;
+		}
+	
 		
 		// add models to layers if defined
-		if ( addConfig.models ){
-			for (var i=0; i<addConfig.models.length; i++){
-				var model = addConfig.models[i];
-				addConfig.map.layers.push( model );
-			}
-		}
-		// remove model configuration
-		delete addConfig.models;
-		
-		// add background if any
-			if ( addConfig.backgrounds ){
-				for (var i=0; i<addConfig.backgrounds.length; i++){
-					var bg = addConfig.backgrounds[i];
-					addConfig.map.layers.push( bg );
-				}
+		if ( config.models ){
+			for (var i=0; i<config.models.length; i++){
+				var model = config.models[i];
+				config.map.layers.push( model );
 			}
 			// remove model configuration
-			delete addConfig.backgrounds;
-			
-			addConfig.map.extent = addConfig.bounds;
-			addConfig.map.maxExtent = addConfig.bounds;
-			delete addConfig.bounds;
-			
-			console.log('Apply this configuration:');
-			console.log(addConfig);
-			
-			this.mapItems.push({
-	            xtype: "gxp_watermark", 
-				url: addConfig.xmlJsonTranslateService + 'temp/' + addConfig.watermarkUrl, 
-				text: addConfig.watermarkTitle, 
-				position: addConfig.watermarkPosition 
-	        });
+			delete config.models;
+		}
 	
-			// TODO refactor
-			addConfig.tools.push(
+		
+		// add background if any
+		if ( config.backgrounds ){
+			for (var i=0; i<config.backgrounds.length; i++){
+				var bg = config.backgrounds[i];
+				config.map.layers.push( bg );
+			}
+			// remove model configuration
+			delete config.backgrounds;
+		} else {
+			// add a default layer for bg
+			config.map.layers.push({
+	            "format": "image/jpeg",
+	            "transparent": false,
+	            "source": "GEOSIII",
+	            "group": "background",
+	            "name": "nurcbg",
+	            "title": "Nurc Background"
+	        } );
+		}
+
+		
+		if ( config.bounds ){
+			config.map.extent = config.bounds;
+			config.map.maxExtent = config.bounds;
+			delete config.bounds;		
+		}
+	
+			
+		// console.log('Apply this configuration:');
+		// console.log(config);
+			
+		this.mapItems.push({
+	            xtype: "gxp_watermark", 
+				url: config.watermarkUrl, 
+				text: config.watermarkTitle, 
+				position: config.watermarkPosition 
+	    });
+	
+		// TODO refactor
+		// it should be better to centralize definitions of common plugins in Composer.js
+		config.tools.push(
 				{	 
 					ptype: "gxp_synchronizer",
 					refreshTimeInterval: config.refreshTimeInterval,
 					actionTarget: {target: "paneltbar", index: 28},
-					range: addConfig.timeRange
+					range: config.timeRange
 				}
 			);
-		return addConfig;	
+			
+		config.tools.push(
+				{
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "range",
+                showIntervals: false,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'l, F d, Y g:i:s A',
+                outputConfig: {
+                    controlConfig:{
+                        step: config.timeStep,
+                        units: config.timeUnits,
+                        range: config.timeRange,
+                        frameRate: config.timeFrameRate
+                    }
+                }
+               }
+		   );
+		return config;	
 	},
     
     loadUserConfig: function(json){

@@ -49,7 +49,7 @@
 	</head>
 	<body>
 	    <script type="text/javascript">
-		Ext.onReady(function(){
+	
 			
 		    //
 			// Fix for IE7 and IE8
@@ -97,190 +97,242 @@
 		            return new Date(s);
 		        }
 		    }
-			
-		    Ext.QuickTips.init();
-
-			// Fake data used for development
-
-
-		    // sample static data for the store 
-
-		    var vehicles = new Ext.data.ArrayStore({
-		        data: [
-		            ['elettra', 'elettra', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_elettra.png'],
-					['laura', 'laura', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_laura.png'],
-					['greta', 'greta', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_greta.png'],
-					['jade', 'jade', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_jade.png'],
-					['zoe', 'zoe', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_zoe.png'],
-					['sophie', 'sophie', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_sophie.png'],
-					['natalie', 'natalie', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_natalie.png'],
-					['noa', 'noa', 'http://84.33.199.62/geoserver-gliders/styles/img/gliders/glider_noa.png']
-				],
-		        fields: ['value', 'text', 'url']
-		    });
-		
-			/*  {
-		            "format": "image/png8",
-		            "group": "Gliders",
-		            "name": "nurc:watvelingv",
-		            "opacity": 1,
-		            "selected": false,
-		            "source": "demo",
-		            "title": "Watvel Forecast Model INGV",
-		            "transparent": true,
-		            "visibility": true,
-		            "ratio": 1,
-		            "elevation": 1.472,
-		            "styles":"watvel_marker_ramp"
-		        },        
-				{
-		            "format": "image/png8",
-		            "group": "Gliders",
-		            "name": "nurc:watvelroms",
-		            "opacity": 1,
-		            "selected": false,
-		            "source": "demo",
-		            "title": "Watvel Forecast Model ROMS",
-		            "transparent": true,
-		            "visibility": true,
-		            "ratio": 1,
-		            "elevation": 10,
-		            "styles":"watvel_marker_ramp"
-		        },*/
-
-		    var models = new Ext.data.ArrayStore({
-		        data: [
-		            ['nurc:watvelroms', 'Watvel Forecast Model ROMS'], ['nurc:watvelingv', 'Watvel Forecast Model INGV']
-				],
-		        fields: ['value','text'],
-		        sortInfo: {
-		            field: 'value',
-		            direction: 'ASC'
-		        }
-		    });
-
-			/*{
-	            "format": "image/jpeg",
-	            "transparent": false,
-	            "source": "GEOSIII",
-	            "group": "background",
-	            "name": "nurcbg",
-	            "title": "Nurc Background"
-	        },*/
-		    var backgrounds = new Ext.data.ArrayStore({
-		        data: [
-		            ['nurcbg', 'Nurc Background']
-				],
-		        fields: ['value','text'],
-		        sortInfo: {
-		            field: 'value',
-		            direction: 'ASC'
-		        }
-		    });
-
-		    /// END fake data
+	
 
 			var token = 'Basic ' +  Base64.encode('admin:admin');
-			
 
-			var control = new ControlPanel({
-				models: models,
-				vehicles: vehicles,
-				backgrounds: backgrounds,
-				token: token
-			});
-			
 		
+		
+		 var ControlPanelUIBuilder = {
+			
+				createFooter: function(){
+		            var aboutButton = new Ext.Button({
+		                text: GeoExplorer.prototype.appInfoText,
+		                tooltip: 'Credits',
+		                iconCls: "icon-geoexplorer",
+		                handler: function(){
+		                    var appInfo = new Ext.Panel({
+		                        header: false,
+		                        html: "<iframe style='border: none; height: 100%; width: 100%' src='../about.html' frameborder='0' border='0'><a target='_blank' href='../about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
+		                    });
 
-            var aboutButton = new Ext.Button({
-                text: GeoExplorer.prototype.appInfoText,
-                tooltip: 'Credits',
-                iconCls: "icon-geoexplorer",
-                handler: function(){
-                    var appInfo = new Ext.Panel({
-                        header: false,
-                        html: "<iframe style='border: none; height: 100%; width: 100%' src='../about.html' frameborder='0' border='0'><a target='_blank' href='../about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
-                    });
+		                    var win = new Ext.Window({
+		                        title:  GeoExplorer.prototype.aboutThisMapText,
+		                        modal: true,
+		                        layout: "fit",
+		                        width: 370,
+		                        height: 380,
+		                        items: [appInfo]
+		                    });
 
-                    var win = new Ext.Window({
-                        title:  GeoExplorer.prototype.aboutThisMapText,
-                        modal: true,
-                        layout: "fit",
-                        width: 370,
-                        height: 380,
-                        items: [appInfo]
-                    });
-                    
-                    win.show();
-                }
-            });            
-            
-            var poweredByGeoSol = new Ext.Button({
-                tooltip: 'Powered by GeoSolutions',
-                iconCls: "icon-geosol",
-                width : 150,
-                handler: function(btn){
-                    window.open('http://geo-solutions.it/', '_blank');
-                }
-            });
+		                    win.show();
+		                }
+		            });            
 
-			new Ext.Viewport({
-					layout: 'border',
-					title: 'Nurc - Control Panel',
-					margins: '0 0 0 0 ',
-					items: [{
-						id: 'main-header',
-						region: 'north',
-						border: false,
-		                height: 75,
-						hideCollapseTool: true,
-                        collapsible : true,
-                        collapsed: false,
-                        collapseMode: 'mini',
-						split: true,
-						html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_ControlPage.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:white"></h1></div>',
-		                bodyStyle: 'padding:0px;background-color: #0055bb;'
-					},
-					{
-						// layout: 'border',
-				    	id: 'cruise-browser',
-						title:"Cruise List",
-						tbar: [ { 
-							icon:'../theme/app/img/silk/add.png', 
-							text:"New cruise",
-							handler: control.createCruise,
-							scope: control
-							} ],
-				        region:'west',
-				        border: false,
-				        split:true,
-						// margins: '2 0 5 5',
-				        width: 150,
-				        minSize: 100,
-				        maxSize: 500,
-						items: control.getCruiseListView()
-					},
-					{
-						id: 'content-panel',
-						region: 'center', 
-						width:700,
-						layout: 'fit',
-						// margins: '2 5 5 0',
-						activeItem: 0,
-						border: false,
-						frame:true,
-						items: control.getCruisePanelView(),
-						bbar : [
-	                        poweredByGeoSol,"-",aboutButton
-	                    ]
+		            var poweredByGeoSol = new Ext.Button({
+		                tooltip: 'Powered by GeoSolutions',
+		                iconCls: "icon-geosol",
+		                width : 150,
+		                handler: function(btn){
+		                    window.open('http://geo-solutions.it/', '_blank');
+		                }
+		            });			
+					return [poweredByGeoSol,"-",aboutButton];
+				},
+				
+				getVehicleData: function( vehicles ){
+					var data = new Array;
+					for (var i=0; i<vehicles.length; i++){
+						var vehicle = vehicles[i];
+						data.push( [ vehicle.name, vehicle.name, vehicle.url ] );
 					}
+					return data;
+				},
+				
+				getModelData: function( models ){
+					var data = new Array;
+					for (var i=0; i<models.length; i++){
+						var model = models[i];
+						data.push( [ model.name, model.description ] );
+					}
+					return data;
+				},
+				
+				getBackgroundData: function( bgs ){
+					var data = new Array;
+					for (var i=0; i<bgs.length; i++){
+						var bg = bgs[i];
+						data.push( [ bg.name, bg.description ] );
+					}
+					return data;
+				},
 
-					],
-			        renderTo: Ext.getBody()
-			    });
+				
+				/**
+				 * return a function which builds the user interface
+				 */
+				instance: function( config ){
+					var builder = this;
+					return function(){
+						
+						// console.log( config );
+						
+						var vehicles = new Ext.data.ArrayStore({
+						        data: builder.getVehicleData( config.vehicles ),
+						        fields: ['value', 'text', 'url']
+						});
+						
+						var models = new Ext.data.ArrayStore({
+								data: builder.getModelData( config.models ),
+								fields: ['value','text']
+						});
+						
+					    var backgrounds = new Ext.data.ArrayStore({
+					        data: builder.getBackgroundData( config.backgrounds ),
+					        fields: ['value','text']
+					    });
+						
+						var control = new ControlPanel({
+							interPageBaseUrl: config.interPageBaseUrl,
+							infoPageBaseUrl: config.infoPageBaseUrl,
+							fileUploaderServlet: config.fileUploaderServlet,
+							imgsBaseUrl: config.imgsBaseUrl,
+							proxy: config.proxy,
+							models: models,
+							vehicles: vehicles,
+							backgrounds: backgrounds,
+							token: token
+						});
+						
+						new Ext.Viewport({
+								layout: 'border',
+								title: 'Nurc - Control Panel',
+								margins: '0 0 0 0 ',
+								items: [
+									{
+										id: 'main-header',
+										region: 'north',
+										
+										bbar: [ control.getLoginButton()],
+										border: false,
+						                height: 75,
+										hideCollapseTool: true,
+				                        collapsible : true,
+				                        collapsed: false,
+				                        collapseMode: 'mini',
+										split: true,
+										html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_ControlPage.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:white"></h1></div>',
+						                bodyStyle: 'padding:0px;background-color: #0055bb;'
+									},
+									/*{
+										// layout: 'border',
+								    	id: 'cruise-browser',
+										title:"Cruise List",
+										tbar: [ { 
+											icon:'../theme/app/img/silk/add.png', 
+											text:"New cruise",
+											handler: control.createCruise,
+											scope: control
+											} ],
+								        region:'west',
+								        border: false,
+								        split:true,
+										// margins: '2 0 5 5',
+								        width: 150,
+								        minSize: 100,
+								        maxSize: 500,
+										items: control.getCruiseListView()
+									},*/
+									{
+										// id: 'content-panel',
+										region: 'center', 
+										width:700,
+										layout: 'fit',
+										// margins: '2 5 5 0',
+										activeItem: 0,
+										border: false,
+										frame:true,
+										// items: control.getCruisePanelView(),
+										items: {
+											layout: 'border',
+											margins: '0 0 0 0 ',
+											items:[
+												{
+													id: 'cruise-browser',
+													title:"Cruise List",
+													tbar: [ { 
+														icon:'../theme/app/img/silk/add.png', 
+														text:"New cruise",
+														handler: control.createCruise,
+														scope: control
+														} ],
+											        region:'west',
+											        border: false,
+											        split:true,
+													// margins: '2 0 5 5',
+											        width: 150,
+											        minSize: 100,
+											        maxSize: 500,
+													items: control.getCruiseListView()
+												},
+												{
+													id: 'content-panel',
+													region: 'center', 
+													width:700,
+													layout: 'fit',
+													activeItem: 0,
+													border: false,
+													frame:true,
+													items: control.getCruisePanelView(),
+												}
+											]
+											
+										},
+										bbar : builder.createFooter()
+									}
+
+									],
+							        renderTo: Ext.getBody()
+							    });
 
 
-		});
+						};
+				}
+		
+		 };
+		
+		  var configFilename = "../configs/controlConfig.js";
+	      Ext.Ajax.request({
+	          url: configFilename,
+	          method: 'GET',
+	          success: function(response, opts){    		  
+	              try{
+	                  var controlPanelConfig = Ext.util.JSON.decode(response.responseText);
+
+	              }catch(e){
+	                  Ext.Msg.show({
+	                        title: "Startup",
+	                        msg: "An error occurred while parsing configuration file: " + e,
+	                        buttons: Ext.Msg.OK,
+	                        icon: Ext.MessageBox.ERROR
+	                  });
+	              }
+	
+				// This should be outside the try-block because an exception is not a parsing error
+				if ( controlPanelConfig ){
+					Ext.onReady( ControlPanelUIBuilder.instance( controlPanelConfig ) );
+ 				}
+	          },
+	          failure:  function(response, opts){
+	              Ext.Msg.show({
+	                    title: "Startup",
+	                    msg: "An error occurred while parsing configuration file: " + response.status,
+	                    buttons: Ext.Msg.OK,
+	                    icon: Ext.MessageBox.ERROR
+	              });
+	          }
+	      });
+		
 		</script>
 	</body>
 </html>

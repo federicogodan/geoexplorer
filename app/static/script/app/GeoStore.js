@@ -294,7 +294,7 @@
 	       },
 	       failure:  function(response, opts){
 	       		var json = Ext.util.JSON.decode(response.responseText);
-				console.log(Ext.util.JSON.decode(json));
+				// console.log(Ext.util.JSON.decode(json));
 	       }
 	    });		
 	};
@@ -468,12 +468,12 @@
 			'</store>';
 			
 		xml += '</Resource>';
-		console.log(xml);
+		// console.log(xml);
 		return xml;
 	},
 	afterFind: function(json){
 		
-		console.log(json);
+		// console.log(json);
 		
 		if ( json.Resource){
 			var data = new Object;
