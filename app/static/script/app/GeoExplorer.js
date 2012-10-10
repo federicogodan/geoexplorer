@@ -227,6 +227,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
         if(config.isLoadedFromConfigFile){
           this.applyConfig(config);
+        } else if ( !this.mapId || this.mapId===-1 ){
+			this.prepareConfig( config );
+            this.applyConfig(config);
         } else {
             
             var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;

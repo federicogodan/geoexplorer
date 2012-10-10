@@ -18,7 +18,7 @@
 	// espose Google Services
 	var Google = root.Google = {};
 	// version for the API client
-	GeoStore.VERSION = '0.1';
+	GeoStore.VERSION = '0.2';
 	
 	/**
 	 * Class: Uri
@@ -29,6 +29,11 @@
 		this.SEPARATOR = '/';
 		this.params_ = new Object();
 		this.uri_ = options.url;
+		this.isLocal_ = function(uri){
+			var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+			var mHost=pattern.exec( uri );
+			return mHost[2] == location.host;
+		};
 	};
 
 	/** 
@@ -58,6 +63,21 @@
 		this.uri_ = baseUrl + this.SEPARATOR + this.uri_;
 		return this;
 	};
+	
+	/** 
+	 * Function: setProxy
+	 * set a (local) proxy which processes external calls
+	 *
+	 * Parameters:
+	 * proxy - {String} the proxy url
+	 * Return:
+	 * {Uri}
+	 */	
+	Uri.prototype.setProxy = function(proxy){
+		this.proxy_ = proxy;
+		return this;
+	};
+	
 	/** 
 	 * Function: appendId
 	 * add an id to the current uri
@@ -92,11 +112,22 @@
 	 * {String}
 	 */
 	Uri.prototype.toString = function(){
-		this.uri_ += '?';
-		for (key in this.params_){
-			this.uri_ += key + '=' + this.params_[key] + '&';
+		
+		
+		// console.log( this.uri_ );
+		if ( !this.isLocal_(this.uri_) && ! this.proxy_ ){
+			console.error('You must specify a local proxy to call an external url: ' + this.uri_);
+			return null;
+		} else {
+			var result = this.uri_;
+			result += '?';
+			for (key in this.params_){
+				result += key + '=' + this.params_[key] + '&';
+			}			
+			// console.log(this.isLocal_(this.uri_) ? result : this.proxy_ + encodeURIComponent( result ));
+			return this.isLocal_(this.uri_) ? result : this.proxy_ + encodeURIComponent( result );
 		}
-		return this.uri_;
+		
 	};
 
 	/**
@@ -107,6 +138,7 @@
 	var ContentProvider = GeoStore.ContentProvider = function(options){
 		this.authorization_ = options.authorization ;
 		this.baseUrl_ = options.url;
+		this.proxy_ = options.proxy;
 		this.resourceNamePrefix_ = '/';
 		this.acceptTypes_ = 'application/json, text/plain, text/xml';
 		this.onSuccess_ = Ext.emptyFn;
@@ -229,6 +261,7 @@
 		
 		// build the uri to invoke
 		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
 		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
 		if (params_opt){
 			for( name in params_opt ){
@@ -271,6 +304,7 @@
 		
 		// build the uri to invoke
 		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
 		if (params_opt){
 			for( name in params_opt ){
 				uri.addParam( name, params_opt[name] );
@@ -313,6 +347,7 @@
 	ContentProvider.prototype.update = function(pk, item, callback){
 		var data = this.beforeSave(item);
 		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
 		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),
@@ -345,6 +380,7 @@
 	 */
 	ContentProvider.prototype.deleteByPk = function(pk, callback){
 		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
 		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),
@@ -378,6 +414,7 @@
 	 */
 	ContentProvider.prototype.create = function(item, callback){
 		 var uri = new Uri({'url':this.baseUrl_});
+		 uri.setProxy( this.proxy_ );
 		 var data = this.beforeSave( item );
 		// build the Ajax request
 		var Request = Ext.Ajax.request({
@@ -511,6 +548,7 @@
 	update: function(pk, item, callback){
 		var data = this.beforeSave(item);
 		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
 		uri.appendId( pk );
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),

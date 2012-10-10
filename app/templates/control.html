@@ -98,8 +98,11 @@
 		        }
 		    }
 	
+	
+	
+		
 
-			var token = 'Basic ' +  Base64.encode('admin:admin');
+		// var token = 'Basic ' +  Base64.encode('admin:admin');
 
 		
 		
@@ -197,11 +200,12 @@
 							infoPageBaseUrl: config.infoPageBaseUrl,
 							fileUploaderServlet: config.fileUploaderServlet,
 							imgsBaseUrl: config.imgsBaseUrl,
+							geostoreBaseUrl: config.geostoreBaseUrl,
 							proxy: config.proxy,
 							models: models,
 							vehicles: vehicles,
 							backgrounds: backgrounds,
-							token: token
+							token: Application.user.token
 						});
 						
 						new Ext.Viewport({
@@ -213,7 +217,7 @@
 										id: 'main-header',
 										region: 'north',
 										
-										bbar: [ control.getLoginButton()],
+										bbar: [ '->', control.getLoginButton()],
 										border: false,
 						                height: 75,
 										hideCollapseTool: true,
@@ -224,25 +228,6 @@
 										html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_ControlPage.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:white"></h1></div>',
 						                bodyStyle: 'padding:0px;background-color: #0055bb;'
 									},
-									/*{
-										// layout: 'border',
-								    	id: 'cruise-browser',
-										title:"Cruise List",
-										tbar: [ { 
-											icon:'../theme/app/img/silk/add.png', 
-											text:"New cruise",
-											handler: control.createCruise,
-											scope: control
-											} ],
-								        region:'west',
-								        border: false,
-								        split:true,
-										// margins: '2 0 5 5',
-								        width: 150,
-								        minSize: 100,
-								        maxSize: 500,
-										items: control.getCruiseListView()
-									},*/
 									{
 										// id: 'content-panel',
 										region: 'center', 
@@ -260,12 +245,8 @@
 												{
 													id: 'cruise-browser',
 													title:"Cruise List",
-													tbar: [ { 
-														icon:'../theme/app/img/silk/add.png', 
-														text:"New cruise",
-														handler: control.createCruise,
-														scope: control
-														} ],
+													style:'background:white;',
+													tbar: [ control.getCreateButton() ],
 											        region:'west',
 											        border: false,
 											        split:true,
@@ -320,6 +301,7 @@
 	
 				// This should be outside the try-block because an exception is not a parsing error
 				if ( controlPanelConfig ){
+					Application.init( controlPanelConfig );
 					Ext.onReady( ControlPanelUIBuilder.instance( controlPanelConfig ) );
  				}
 	          },

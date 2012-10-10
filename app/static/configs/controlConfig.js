@@ -56,7 +56,8 @@
 	"interPageBaseUrl": "http://localhost:8080/MapStore/interactive/?mapId=",
 	"infoPageBaseUrl": "http://localhost:8080/MapStore/informational/?mapId=",
 	"proxy": "/http_proxy/proxy?url=",
-	"fileUploaderServlet": "http://localhost:8080/xmlJsonTranslate-gliders/FileUploader"
+	"fileUploaderServlet": "http://localhost:8080/xmlJsonTranslate-gliders/FileUploader",
+	"geostoreBaseUrl":"http://localhost:8080/geostore/rest/"
 	
 	
 }

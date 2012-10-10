@@ -36,6 +36,17 @@
 		"glidersPrefix": "it.geosolutions",
 		"wfsVersion": "1.1.0"
    },
+
+	"backgrounds":[
+		{
+        	"format": "image/jpeg",
+        	"transparent": false,
+        	"source": "GEOSIII",
+        	"group": "background",
+        	"name": "nurcbg",
+        	"title": "Nurc Background"
+    	}
+	],
    
    "gsSources":{
         "Gliders": {

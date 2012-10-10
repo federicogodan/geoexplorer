@@ -346,16 +346,7 @@
 			   vehicleSelector: serverConfig.vehicleSelector,
                sources: serverConfig.gsSources,
 			   bounds: [ bounds[0], bounds[1], bounds[2], bounds[3]], 
-			   backgrounds:[
-				{
-	            	"format": "image/jpeg",
-	            	"transparent": false,
-	            	"source": "GEOSIII",
-	            	"group": "background",
-	            	"name": "nurcbg",
-	            	"title": "Nurc Background"
-	        	}
-				],
+			   backgrounds: serverConfig.backgrounds,
                map: {
 					projection: "EPSG:4326",
                    units: "dd",
