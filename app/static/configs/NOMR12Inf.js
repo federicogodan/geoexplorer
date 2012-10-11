@@ -81,6 +81,45 @@
         }
    },
    "layers":[
+		{
+            "format": "image/png8",
+            "group": "Ocean Models",
+            "name": "nurc:watvelingv",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model INGV",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 1.472,
+            "styles": "watvel_marker_ramp"
+        },        
+		{
+            "format": "image/png8",
+            "group": "Ocean Models",
+            "name": "nurc:watvelroms",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model ROMS",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 10,
+            "styles": "watvel_marker_ramp",
+            "style": "watvel_raster"
+        },
+		{
+            "format": "image/png8",
+            "transparent": true,
+			"visibility": true,
+			"displayInLayerSwitcher": true,
+            "source": "Gliders",
+            "group": "default",
+            "name": "it.geosolutions:aoi",
+            "title": "Gliders AOI"
+        }, 
         {
             "format": "image/png8",
             "group": "Gliders",
