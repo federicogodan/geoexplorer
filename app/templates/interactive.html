@@ -272,25 +272,25 @@
 			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
 			appMask.show();
 			
-      			if (mapIdentifier && mapIdentifier !== -1){
+			
 		            app = new GeoExplorer.Composer({
 					    modified: false,
-						// watermarkUrl: serverConfig.watermarkUrl, 
+						watermarkUrl: serverConfig.watermarkUrl, //
 						watermarkTitle: serverConfig.watermarkTitle, 
-						// watermarkPosition: serverConfig.watermarkPosition,
+						watermarkPosition: serverConfig.watermarkPosition, //
 		                timeVisualizationPosition: serverConfig.timeVisualizationPosition,
 						customTools: serverConfig.customTools,
 						//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
-						// cruiseName: cruiseName,
+						cruiseName: cruiseName,
 		                proxy: proxy,
 						xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
 		                defaultSourceType: "gxp_wmssource",
 		                renderToTab : 'appTabs',
 						// Time Animator //
-		                // timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES,
-		                // timeRange: [startTime, endTime],
-		                // timeStep: serverConfig.timeStep,
-		                // timeFrameRate: serverConfig.timeFrameRate,
+		                timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES, //
+		                timeRange: [startTime, endTime], //
+		                timeStep: serverConfig.timeStep, //
+		                timeFrameRate: serverConfig.timeFrameRate, //
 						// Real Time Synch //
 						refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
 		                about: {
@@ -298,8 +298,10 @@
 		                    'abstract': "NOMR12 Cruise Gliders Map",
 		                    contact: "<a href='#'>#</a>."
 		                },
-						// vehicleSelector: serverConfig.vehicleSelector,
+						vehicleSelector: serverConfig.vehicleSelector, //
 		                sources: serverConfig.gsSources,
+						bounds: [ bounds[0], bounds[1], bounds[2], bounds[3]],  //
+						backgrounds: serverConfig.backgrounds, //
 		                map: {
 							projection: "EPSG:4326",
 		                    units: "dd",
@@ -317,55 +319,6 @@
 		                }
 		            }, mapIdentifier, authorization, fullScreen);   
 
-		       } else {
-
-		           app = new GeoExplorer.Composer({
-					    modified: false,
-						watermarkUrl: serverConfig.watermarkUrl, 
-						watermarkTitle: serverConfig.watermarkTitle, 
-						watermarkPosition: serverConfig.watermarkPosition,
-		               timeVisualizationPosition: serverConfig.timeVisualizationPosition,
-						customTools: serverConfig.customTools,
-						//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
-					   cruiseName: cruiseName,
-		               proxy: proxy,
-					   xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
-		               defaultSourceType: "gxp_wmssource",
-		               renderToTab : 'appTabs',
-						// Time Animator //
-		               timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES,
-		               timeRange: [startTime, endTime],
-		               timeStep: serverConfig.timeStep,
-		               timeFrameRate: serverConfig.timeFrameRate,
-						// Real Time Synch //
-						refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
-		               about: {
-		                   title: "NOMR12 Cruise Gliders Map",
-		                   'abstract': "NOMR12 Cruise Gliders Map",
-		                   contact: "<a href='#'>#</a>."
-		               },
-					   vehicleSelector: serverConfig.vehicleSelector,
-		               sources: serverConfig.gsSources,
-					   bounds: [ bounds[0], bounds[1], bounds[2], bounds[3]], 
-					   backgrounds: serverConfig.backgrounds,
-		               map: {
-							projection: "EPSG:4326",
-		                   units: "dd",
-							extent: [
-		                       bounds[0], bounds[1],
-		                       bounds[2], bounds[3]
-		                   ],
-							maxExtent: [
-		                       maxExtent[0], maxExtent[1],
-		                       maxExtent[2], maxExtent[3]
-		                   ],
-		                   layers: serverConfig.layers
-		                   // center: [center[0], center[1]],
-		                   // zoom: zoom
-		               }
-		           }, mapIdentifier, authorization, fullScreen); 
-
-			   }
             
             app.on({
                 'portalready' : function(){

@@ -302,7 +302,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     prepareConfig: function(config, addConfig){
 	
 		if ( addConfig ){
-			// add properties in config if they are not defined in addConfig
+			// add properties of config if they are not defined in addConfig
 			config = Ext.applyIf(addConfig, config);
 			config.watermarkUrl = config.xmlJsonTranslateService + 'temp/' + config.watermarkUrl;
 		}
