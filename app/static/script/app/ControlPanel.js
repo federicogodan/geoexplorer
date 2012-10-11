@@ -220,6 +220,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 		this.fileForm = new Ext.FormPanel({
 			border: false,
+			width:700,
 			fileUpload: true,
 			labelWidth: 120,
 			// bodyStyle: 'padding: 10px 10px 0 10px;',
@@ -254,6 +255,12 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 		var self = this;
 		this.cruisePanelView = new Ext.Panel({
+			// layout: 'fit',
+			
+			// layout: { type:'vbox', align: 'center' },
+			region:'center',
+			width:850,
+			
 			border: false,
 			autoScroll: true,
 			listeners: {
@@ -264,15 +271,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			    }, p);
 			  }
 			},
-			layout: {
-			        type: 'vbox',
-			        align: 'center',
-			        pack: 'center'
-			    },
 			items: [
 			new Ext.Panel({
 				border: false,
 				// fileUpload: true,
+				// autoScroll: true,
 				ref: '../formPanel',
 				width:800,
 				bodyStyle: 'padding: 10px 10px 0 10px;',

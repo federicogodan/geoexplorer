@@ -253,10 +253,14 @@
 											        border: false,
 											        split:true,
 													// margins: '2 0 5 5',
-											        width: 150,
-											        minSize: 100,
-											        maxSize: 500,
-													items: control.getCruiseListView()/*,
+											        width: 200,
+											        // minSize: 100,
+											        // maxSize: 500,
+													items:control.getCruiseListView()	
+												
+														
+													
+													/*,
 													bbar: new Ext.PagingToolbar({
 													        store: control.store,       
 													        displayInfo: true,
@@ -266,13 +270,15 @@
 												},
 												{
 													id: 'content-panel',
+													
 													region: 'center', 
-													width:700,
-													layout: 'fit',
+													// layout: 'fit',
+													layout:'border',
 													activeItem: 0,
 													border: false,
 													frame:true,
-													items: control.getCruisePanelView(),
+													items: [ control.getCruisePanelView() ]
+													
 												}
 											]
 											
