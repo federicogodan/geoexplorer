@@ -69,16 +69,6 @@
 				"TILESORIGIN": "-180,-90" 
 			}
         },
-	    "local": {
-            "ptype": "gxp_wmssource",
-            "title": "local",
-            "version": "1.1.1",
-            "url": "http://localhost:8080/geoserver-gliders/ows",
-			"layerBaseParams": {
-				"TILED": true,
-				"TILESORIGIN": "-180,-90" 
-			}
-        },
         "GEOSIII": {
             "ptype": "gxp_wmssource",
             "title": "GEOSIII", 
@@ -93,10 +83,39 @@
    "layers":[
 		{
             "format": "image/png8",
+            "group": "Ocean Models",
+            "name": "nurc:watvelingv",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model INGV",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 1.472,
+            "styles": "watvel_marker_ramp"
+        },        
+		{
+            "format": "image/png8",
+            "group": "Ocean Models",
+            "name": "nurc:watvelroms",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model ROMS",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 10,
+            "styles": "watvel_marker_ramp",
+            "style": "watvel_raster"
+        },
+		{
+            "format": "image/png8",
             "transparent": true,
 			"visibility": true,
 			"displayInLayerSwitcher": true,
-            "source": "local",
+            "source": "Gliders",
             "group": "default",
             "name": "it.geosolutions:aoi",
             "title": "Gliders AOI"
@@ -262,7 +281,7 @@
 			"autoActivate": false, 
 			"autoLoadFeatures": true,
 			"layer": {
-				"source": "local",
+				"source": "Gliders",
 				"name": "it.geosolutions:aoi"
 			}
 		}, {
