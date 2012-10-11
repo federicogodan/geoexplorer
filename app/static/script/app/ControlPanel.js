@@ -34,7 +34,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 		this.token = config.token;
 		this.store = new Ext.data.JsonStore({
-			fields: ['id', 'owner', 'name', 'description', 'blob']
+			fields: ['id', 'owner', 'name', 'description', 'blob'] /*,
+			buffered:true,
+			pageSize:2,
+			proxy: {
+					url: 'foo',
+			        type: "pagingmemory",
+					reader: 'json'
+			       }*/
 		});
 		this.infoPageBaseUrl = config.infoPageBaseUrl;
 		this.fileUploaderServlet = config.fileUploaderServlet;
@@ -160,7 +167,23 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 												icon: Ext.MessageBox.ERROR
 										});
 									}
-									
+								}
+				            }],
+							keys: [{ 
+				                key: [Ext.EventObject.ENTER],
+				                scope: this,
+				                handler: function submitLogin(){
+									if ( win.loginForm.getForm().isValid() ){
+										Application.user.login( win.username.getValue(), win.password.getValue());
+										win.destroy();
+									} else {
+										Ext.Msg.show({
+												title: 'Cannot login',
+												msg: 'You must specify a username and a password.',
+												buttons: Ext.Msg.OK,
+												icon: Ext.MessageBox.ERROR
+										});
+									}
 								}
 				            }]
 						}],
@@ -178,7 +201,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				} else {
 					Ext.MessageBox.show({
 					           title:'Logout',
-					           msg: 'You are quitting this application. <br/>Are you sure?',
+					           msg: 'You are closing this application. Every unsaved changes will be lost. <br/>Are you sure?',
 					           buttons: Ext.MessageBox.YESNO,
 					           fn: function(btn){
 									if ( btn === 'yes' ){
@@ -552,28 +575,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						ref: '../../stepUnitsField',
 						width: 500
 					}
-/*,{
-	                        //TODO: provide user information about these modes (Change to radio group?)
-	                        fieldLabel:this.rangedPlayChoiceText,
-	                        xtype:'gxp_playbackmodecombo',
-	                        timeAgents: this.timeManager && this.timeManager.timeAgents,
-	                        anchor:'-5' ,
-	                        listeners:{
-	                            'modechange':this.setPlaybackMode,
-	                            scope:this
-	                        },
-	                        ref:'../playbackModeField'
-	                    }*/
 					]
 				}
-/*,
-	                {
-	                    xtype:'checkbox',
-	                    boxLabel:this.loopText,
-	                    // handler:this.setLoopMode,
-	                    scope:this // ,
-	                    // ref:'../loopModeCheck'
-	                }*/
 
 				]
 			})] // cruise panel 		
@@ -633,7 +636,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 			// configuration of all tool plugins for this application
 			tools: [
-/*{
+			/*{
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "map.tbar", index: 1}
             },*/
@@ -661,39 +664,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			}
 
 			],
-
-
-			// "http://localhost:8080/http_proxy/proxy?q=" + encodeURIComponent( "http://geos3.nurc.nato.int/geoserver/ows" )
-			// "url": "http://geos3.nurc.nato.int/geoserver/ows",
-			// layer sources
-			sources: {
-				geos: {
-					ptype: "gxp_wmssource",
-					title: "geos",
-					version: "1.1.1",
-					url: "http://geos3.nurc.nato.int/geoserver/ows",
-					layerBaseParams: {
-						TILED: true,
-						TILESORIGIN: "-180,-90"
-					}
-				}
-			},
-
-			// map and layers
+			sources: config.sources,
 			map: {
 				id: "map-viewport",
-				// id needed to reference map in items above
-				// title: "Map",
-				projection: "EPSG:4326",
-				layers: [{
-					"format": "image/jpeg",
-					"transparent": false,
-					"source": "geos",
-					"group": "background",
-					"name": "nurcbg",
-					"title": "Nurc Background"
-				}],
-				items: []
+				// projection: "EPSG:4326",
+				layers: [ config.background ]
 			}
 		});
 
@@ -701,11 +676,20 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		var self = this;
 		this.tinyMap.on("ready", function() {
 			function resetBound() {
-				var extent = self.tinyMap.mapPanel.map.getExtent();
-				self.nwTextField.setValue(extent.left);
-				self.swTextField.setValue(extent.bottom);
-				self.seTextField.setValue(extent.right);
-				self.neTextField.setValue(extent.top);
+				var bounds = self.tinyMap.mapPanel.map.getExtent();		
+				
+				bounds = new OpenLayers.Bounds( 
+								bounds.left.toFixed(2), 
+								bounds.bottom.toFixed(2), 
+								bounds.right.toFixed(2), 
+								bounds.top.toFixed(2));
+					
+				var proj = new OpenLayers.Projection("EPSG:4326");
+				bounds.transform(self.tinyMap.mapPanel.map.getProjectionObject(), proj);
+				self.nwTextField.setValue( bounds.left.toFixed(2) );
+				self.swTextField.setValue(bounds.bottom.toFixed(2) );
+				self.seTextField.setValue(bounds.right.toFixed(2) );
+				self.neTextField.setValue(bounds.top.toFixed(2) );
 			};
 
 			resetBound();
@@ -716,8 +700,13 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				resetBound();
 			});
 
-			// TODO externalize
-			self.tinyMap.mapPanel.map.zoomToExtent([-3.0024875, 32.5526245, 23.3647, 50.1307495]);
+			
+			
+			// TODO externalize coordinates
+			var bounds = new OpenLayers.Bounds(-3.00, 32.55, 23.36, 50.13);
+			var proj = new OpenLayers.Projection("EPSG:4326");
+			bounds.transform(proj, self.tinyMap.mapPanel.map.getProjectionObject());
+			self.tinyMap.mapPanel.map.zoomToExtent( bounds );
 		});
 
 		this.updateMapSize = function(){
@@ -753,7 +742,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			// self.loginButton.setIconClass('gxp-icon-user');
 			self.token = null;
 		} );
-		Application.user.on( 'failed',  function logoutHandler( context ){
+		Application.user.on( 'failed',  function loginFailedHandler( context ){
 			self.createButton.disable();
 			self.token = null;
 			Ext.Msg.show({
@@ -931,8 +920,12 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						self.updateItemSelector(self.cruisePanelView.backgroundSelector, payload.backgrounds, function(item) {
 							return item.name;
 						});
+						
+						var bounds = new OpenLayers.Bounds(payload.bounds);
+						var proj = new OpenLayers.Projection("EPSG:4326");
+						bounds.transform(proj, self.tinyMap.mapPanel.map.getProjectionObject());
 
-						self.tinyMap.mapPanel.map.zoomToExtent(payload.bounds);
+						self.tinyMap.mapPanel.map.zoomToExtent( bounds );
 						
 						if (callback){
 							callback();

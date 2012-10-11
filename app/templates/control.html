@@ -205,7 +205,9 @@
 							models: models,
 							vehicles: vehicles,
 							backgrounds: backgrounds,
-							token: Application.user.token
+							// info for map embedded in control panel
+							background: config.background,
+							sources: config.sources
 						});
 						
 						new Ext.Viewport({
@@ -254,7 +256,13 @@
 											        width: 150,
 											        minSize: 100,
 											        maxSize: 500,
-													items: control.getCruiseListView()
+													items: control.getCruiseListView()/*,
+													bbar: new Ext.PagingToolbar({
+													        store: control.store,       
+													        displayInfo: true,
+													        pageSize: 2,
+													        prependButtons: true
+													    })*/
 												},
 												{
 													id: 'content-panel',

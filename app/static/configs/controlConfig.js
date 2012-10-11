@@ -52,6 +52,20 @@
 		}
 	],
 	
+	"sources": {
+		"google": {
+			"ptype": "gxp_googlesource"
+		}
+	},
+	
+	"background": {
+		"source": "google",
+		"group": "background",
+		"name": "TERRAIN",
+		"title": "Google Terrain"
+	},
+	
+	
 	"imgsBaseUrl": "http://localhost:8080/xmlJsonTranslate-gliders/temp/",
 	"interPageBaseUrl": "http://localhost:8080/MapStore/interactive/?mapId=",
 	"infoPageBaseUrl": "http://localhost:8080/MapStore/informational/?mapId=",
