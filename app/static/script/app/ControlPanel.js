@@ -264,11 +264,17 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			    }, p);
 			  }
 			},
+			layout: {
+			        type: 'vbox',
+			        align: 'center',
+			        pack: 'center'
+			    },
 			items: [
 			new Ext.Panel({
 				border: false,
 				// fileUpload: true,
 				ref: '../formPanel',
+				width:800,
 				bodyStyle: 'padding: 10px 10px 0 10px;',
 				bodyBorder: false,
 				defaults: {
