@@ -1020,15 +1020,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							self.clean();
 							self.mapId = newId;
 							
-							self.loadCruiseList(function(store){
+							self.loadCruiseList(function(data){
+								var store = data.store;
 								var id = self.mapId;
-								console.log(id);
-								var itemId = store.findExact('id', id);
-								console.log( itemId );
-								var item = store.getAt( itemId );
-								console.log(item);
+								var item = store.getById(id);
 								self.cruiseListView.select(item, false, true);
-								
 								self.loadCruise( newId );
 								// self.enable();
 							});
@@ -1106,7 +1102,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 									icon: Ext.MessageBox.OK
 								});
 								// reload data
-								self.loadCruiseList();
+
+								// self.clean();
+
+								self.loadCruiseList(function(data){
+										var store = data.store;
+										var id = self.mapId;
+										var item = store.getById(id);
+										self.cruiseListView.select(item, false, true);
+										self.loadCruise( self.mapId );
+										// self.enable();
+								});
+			
 							});
 						});			
 		},
@@ -1187,8 +1194,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 											buttons: Ext.Msg.OK,
 											icon: Ext.MessageBox.OK
 										});
+										
 										// reload data
-										self.loadCruiseList();
+												// self.clean();
+
+												self.loadCruiseList(function(data){
+														var store = data.store;
+														var id = self.mapId;
+														var item = store.getById(id);
+														self.cruiseListView.select(item, false, true);
+														self.loadCruise( self.mapId );
+														// self.enable();
+												});
 									});
 								});
 							} else {
@@ -1298,6 +1315,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.enable();
 			this.deleteButton.disable();
 			this.viewButton.disable();
+			this.reloadButton.disable();
 		},
 
 		loadCruiseList: function( callback ) {
@@ -1317,10 +1335,15 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			});
 
 			geostore.find(function cruiseListCallback(data) {
+				function getStore(){
+					return self.store;
+				};
 				// console.log(data);
 				if (callback){
 					var handler = function(){
-						callback(self.store);
+						
+						
+						callback( self );
 						self.store.un( 'load', handler);
 					};
 					self.store.on( 'load', handler);
