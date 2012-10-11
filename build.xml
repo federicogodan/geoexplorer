@@ -109,6 +109,9 @@
         <war destfile="${build}/${ant.project.name}.war">
             <fileset dir="${build}/${ant.project.name}"/>
         </war>
+        <war destfile="${build}/${ant.project.name}-gliders.war">
+            <fileset dir="${build}/${ant.project.name}"/>
+        </war>
     </target>
 
     <target name="debug">
