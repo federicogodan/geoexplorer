@@ -36,13 +36,34 @@
 	
 	"models": [
 		{
-			"name": "nurc:watvelroms",
-			"description": "Watvel Forecast Model ROMS"
+			 "format": "image/png8",
+		     "group": "Ocean Models",
+		     "name": "nurc:watvelingv",
+		     "opacity": 1,
+		     "selected": false,
+		     "source": "demo",
+		     "title": "Watvel Forecast Model INGV",
+		     "transparent": true,
+		     "visibility": true,
+		     "ratio": 1,
+		     "elevation": 1.472,
+		     "styles": "watvel_marker_ramp"
 		},
 		{
-			"name": "nurc:watvelingv",
-			"description":"Watvel Forecast Model INGV"
-		}
+	       "format": "image/png8",
+	       "group": "Ocean Models",
+	       "name": "nurc:watvelroms",
+	       "opacity": 1,
+	       "selected": false,
+	       "source": "demo",
+	       "title": "Watvel Forecast Model ROMS",
+	       "transparent": true,
+	       "visibility": true,
+	       "ratio": 1,
+	       "elevation": 10,
+	       "styles": "watvel_marker_ramp",
+	       "style": "watvel_raster"
+	   }
 	],
 	
 	"backgrounds": [
@@ -66,12 +87,12 @@
 	},
 	
 	
-	"imgsBaseUrl": "http://localhost:8080/xmlJsonTranslate-gliders/temp/",
-	"interPageBaseUrl": "http://localhost:8080/MapStore/interactive/?mapId=",
-	"infoPageBaseUrl": "http://localhost:8080/MapStore/informational/?mapId=",
+	"imgsBaseUrl": "http://192.168.1.160:8080/xmlJsonTranslate-gliders/temp/",
+	"interPageBaseUrl": "http://192.168.1.160:8080/MapStore/interactive/?mapId=",
+	"infoPageBaseUrl": "http://192.168.1.160:8080/MapStore/informational/?mapId=",
 	"proxy": "/http_proxy/proxy?url=",
-	"fileUploaderServlet": "http://localhost:8080/xmlJsonTranslate-gliders/FileUploader",
-	"geostoreBaseUrl":"http://localhost:8080/geostore/rest/"
+	"fileUploaderServlet": "http://192.168.1.160:8080/xmlJsonTranslate-gliders/FileUploader",
+	"geostoreBaseUrl":"http://192.168.1.160:8080/geostore/rest/"
 	
 	
 }

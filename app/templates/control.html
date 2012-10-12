@@ -185,9 +185,13 @@
 						        fields: ['value', 'text', 'url']
 						});
 						
-						var models = new Ext.data.ArrayStore({
-								data: builder.getModelData( config.models ),
-								fields: ['value','text']
+						
+						var models = new Ext.data.JsonStore({
+								// data: builder.getModelData( config.models ),
+								// fields: ['value','text']
+								data: config.models,
+								fields: ['format', 'group', 'name', 'opacity', 'selected', 
+									'source', 'title', 'transparent', 'visibility', 'ratio', 'elevation', 'styles', 'style']
 						});
 						
 					    var backgrounds = new Ext.data.ArrayStore({
@@ -219,7 +223,7 @@
 										id: 'main-header',
 										region: 'north',
 										
-										bbar: [ '->', control.getLoginButton()],
+									
 										border: false,
 						                height: 75,
 										hideCollapseTool: true,
@@ -233,6 +237,7 @@
 									{
 										// id: 'content-panel',
 										region: 'center', 
+										tbar: [ '->', control.getLoginButton()],
 										width:700,
 										layout: 'fit',
 										// margins: '2 5 5 0',

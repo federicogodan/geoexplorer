@@ -349,6 +349,7 @@
 		var uri = new Uri({'url':this.baseUrl_});
 		uri.setProxy( this.proxy_ );
 		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
+		// console.log(data);
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),
 	       method: 'PUT',
@@ -416,6 +417,7 @@
 		 var uri = new Uri({'url':this.baseUrl_});
 		 uri.setProxy( this.proxy_ );
 		 var data = this.beforeSave( item );
+		// console.log(data);
 		// build the Ajax request
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),

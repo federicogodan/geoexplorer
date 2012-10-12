@@ -233,7 +233,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			},
 			items: [{
 				ref: 'fileuploadField',
-				allowBlank: true,
+				allowBlank: false,
 				disabled: true,
 				xtype: "fileuploadfield",
 				emptyText: 'Select a file...',
@@ -356,14 +356,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							width: 250,
 							height: 200,
 							store: config.models,
-							displayField: 'text',
-							valueField: 'value'
+							displayField: 'title',
+							valueField: 'name'
 						}, {
 							width: 250,
 							height: 200,
-							displayField: 'text',
-							valueField: 'value',
-							store: [],
+							displayField: 'title',
+							valueField: 'name',
+							store: new Ext.data.JsonStore({
+									data: [],
+									fields: ['format', 'group', 'name', 'opacity', 'selected', 
+										'source', 'title', 'transparent', 'visibility', 'ratio', 'elevation', 'styles', 'style']
+							}),
 							tbar: [{
 								text: 'clear',
 								handler: function() {
@@ -578,6 +582,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							[OpenLayers.TimeUnit.YEARS, 'Years']
 						],
 						valueNotFoundText: this.noUnitsText,
+						value: OpenLayers.TimeUnit.MINUTES,
 						mode: 'local',
 						forceSelection: true,
 						autoSelect: false,
@@ -728,7 +733,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		
 		this.cruiseListView.on('click', function(list, index, node, evt) {
 			var listItem = self.store.getAt(index).data;
-			self.loadCruise( listItem.id );
+			
+			if ( listItem.id !== self.mapId){
+				self.loadCruise( listItem.id );
+			} else {
+				Ext.Msg.show({
+						title: 'Cannot select this cruise',
+						msg: 'This cruise is already selected.',
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.WARN
+				});				
+			}
+			
 		});
 		
 		// the control panel listens to authentication events
@@ -841,7 +857,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			
 			} else {
 				if (this.mapId === -1) { // a new configuration is created	
-					this.save();	
+					var filename = this.fileForm.fileuploadField.getValue();
+					if (filename && filename !== '') {
+						this.save();
+					} else {
+						Ext.Msg.show({
+							title: 'Cannot save this configuration',
+							msg: 'Watermark file is not specified.',
+							buttons: Ext.Msg.OK,
+							icon: Ext.MessageBox.ERROR
+						});				
+					}
+
 				} else { // an old conf is updated
 					var filename = this.fileForm.fileuploadField.getValue();
 
@@ -926,14 +953,19 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						self.cruisePanelView.rateValueField.setValue(payload.timeFrameRate);
 						self.cruisePanelView.stepUnitsField.setValue(payload.timeUnits);
 
-						self.updateItemSelector(self.cruisePanelView.vehicleSelector, payload.vehicleSelector.data, function(item) {
-							return item[1];
+					
+
+						self.updateItemSelector(self.cruisePanelView.vehicleSelector, payload.vehicleSelector.data, 
+						function(selected, multiselectItem) {
+							return selected[1] === multiselectItem.value;
 						});
-						self.updateItemSelector(self.cruisePanelView.modelSelector, payload.models, function(item) {
-							return item.name;
+						self.updateItemSelector(self.cruisePanelView.modelSelector, payload.models, 
+						function(selected, multiselectItem) {
+							return selected.name === multiselectItem.name;
 						});
-						self.updateItemSelector(self.cruisePanelView.backgroundSelector, payload.backgrounds, function(item) {
-							return item.name;
+						self.updateItemSelector(self.cruisePanelView.backgroundSelector, payload.backgrounds, 
+						function(selected, multiselectItem) {
+							return selected.name === multiselectItem.value;
 						});
 						
 						var bounds = new OpenLayers.Bounds(payload.bounds);
@@ -977,7 +1009,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					console.error(action);
 					Ext.Msg.show({
 						title: "Cannot upload watermark",
-						msg: action.responseText,
+						msg: "File does not exist or is not valid.",
 						buttons: Ext.Msg.OK,
 						icon: Ext.MessageBox.ERROR
 					});
@@ -1407,7 +1439,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 		},
 
-		updateItemSelector: function(selector, selectedItems, reader) {
+		updateItemSelector: function(selector, selectedItems, isEqual) {
 			// in this array I keep the list of removed item from the multiselect
 			// I need it because it is not safe to delete items within a for loop
 			var removed = new Array;
@@ -1421,7 +1453,12 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 				for (var j = 0; j < selectedItems.length; j++) {
 
-					if (reader(selectedItems[j]) === item.data.value) {
+					/*if (reader(selectedItems[j]) === item.data.value) {
+						selector.toMultiselect.store.add(item);
+						removed.push(item);
+					}*/
+					
+					if (isEqual(selectedItems[j], item.data) ) {
 						selector.toMultiselect.store.add(item);
 						removed.push(item);
 					}

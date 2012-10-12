@@ -295,6 +295,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			for (var i=0; i<config.models.length; i++){
 				var model = config.models[i];
 				config.map.layers.push( model );
+				// console.log(model);
 			}
 			// remove model configuration
 			delete config.models;

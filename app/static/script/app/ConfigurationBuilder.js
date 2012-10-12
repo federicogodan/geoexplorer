@@ -37,7 +37,7 @@ var ConfigurationBuilder =  {
 			var item = selected[i].data;
 			
 			result += '{';
-			result +=  '"format": "image/png8",'
+			/*result +=  '"format": "image/png8",'
 		             + '"group": "Ocean models",'
 		             + '"name": "' + item.value + '",'
 		             + '"opacity": 1,'
@@ -48,7 +48,23 @@ var ConfigurationBuilder =  {
 		             + '"visibility": true,'
 		             + '"ratio": 1,'
 		             + '"elevation": 10,'
-		             + '"styles":"watvel_marker_ramp"'
+		             + '"styles":"watvel_marker_ramp"'*/
+					result +=  '"format": "' + item.format + '",'
+				             + '"group": "' + item.group + '",'
+				             + '"name": "' + item.name + '",'
+				             + '"opacity": ' + item.opacity + ','
+				             + '"selected": ' + item.selected + ','
+				             + '"source": "'+ item.source + '",'
+				             + '"title":"' + item.title + '",'
+				             + '"transparent": ' + item.transparent + ','
+				             + '"visibility": ' + item.visibility + ','
+				             + '"ratio": ' + item.ratio +  ','
+				             + '"elevation": ' + item.elevation +   ','
+				             + '"styles":"' + item.styles +  '"';
+				if ( item.style ){
+					result += ', "style":"' + item.style + '"';
+				}
+				
 			result += '}';
 			
 			if ( i < selected.length - 1){
@@ -96,7 +112,7 @@ var ConfigurationBuilder =  {
 					    + '"timeStep":"' + params.timeStep  + '",'
 						+ '"timeFrameRate":"' + params.timeFrameRate + '",'
 						+ '"timeUnits":"' + params.timeUnits + '",'
-						+ '"models":['+ this.createModelConfiguration( params.models ) + '],'
+						 + '"models":['+ this.createModelConfiguration( params.models ) + '],'
 						+ '"backgrounds":['+ this.createBackgroundConfiguration( params.backgrounds ) + '],'
 				 	   + '"watermarkUrl":"'+ params.watermarkUrl + '",'
 						+ '"watermarkPosition":"'+ params.watermarkPosition + '",'
