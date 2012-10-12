@@ -1371,29 +1371,39 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		},
 
 		deleteCruise: function() {
-
-			var geostore = new GeoStore.Maps({
-				authorization: this.token,
-				proxy: this.proxy,
-				url: this.url
-			}).failure(function(response) {
-				console.error(response);
-				Ext.Msg.show({
-					title: 'Cannot delete this configuration',
-					msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-					buttons: Ext.Msg.OK,
-					icon: Ext.MessageBox.ERROR
-				});
-			});
-
+			
 			var self = this;
-			geostore.deleteByPk(this.mapId, function cruiseListCallback(data) {
-				// reload data
-				self.loadCruiseList();
-				self.clean();
-				self.disable();
-			});
+			Ext.MessageBox.show({
+			           title:'Logout',
+			           msg: 'You are deleting this configuraton forever. This operation cannot be undone. <br/>Are you sure?',
+			           buttons: Ext.MessageBox.YESNO,
+			           fn: function(btn){
+							if ( btn === 'yes' ){
+								var geostore = new GeoStore.Maps({
+									authorization: self.token,
+									proxy: self.proxy,
+									url: self.url
+								}).failure(function(response) {
+									console.error(response);
+									Ext.Msg.show({
+										title: 'Cannot delete this configuration',
+										msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
+										buttons: Ext.Msg.OK,
+										icon: Ext.MessageBox.ERROR
+									});
+								});
+	
+								geostore.deleteByPk(self.mapId, function cruiseListCallback(data) {
+									// reload data
+									self.loadCruiseList();
+									self.clean();
+									self.disable();
+								});
+							}
 
+					   },
+			           icon: Ext.MessageBox.QUESTION
+			       });
 
 		},
 
