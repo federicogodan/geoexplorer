@@ -461,6 +461,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						imagePath: '../theme/app/img/ext',
 						disabled: true,
 						ref: '../../vehicleSelector',
+					
 						
 						multiselects: [{
 							width: 250,
@@ -473,6 +474,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							height: 200,
 							blankText: 'At least one vehicle must be selected',
 							allowBlank: false,
+							// minSelections: 1,
 							store: [],
 							tbar: [{
 								text: 'clear',
@@ -898,7 +900,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					// get blob as a json object
 					var payload = null;
 					try {
-						payload = JSON.parse(data.blob);
+						// payload = JSON.parse(data.blob);
+						payload = Ext.util.JSON.decode(data.blob);
 					} catch (e) {
 						console.error(e);
 					}
@@ -980,13 +983,17 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					});
 				},
 				success: function(form, action) {
-					var response = JSON.parse(action.response.responseText);
+					// var response = JSON.parse(action.response.responseText);
+					var response = Ext.util.JSON.decode(action.response.responseText);
+					
 					if (response.success) {
 						// create a configuration
 						var conf = ConfigurationBuilder.create({
 							name: self.cruisePanelView.name.getValue(),
 							description: self.cruisePanelView.name.getValue(),
-							timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
+							// timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
+							timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
+										self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
 							timeStep: self.cruisePanelView.stepValueField.getValue(),
 							timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
 							timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
@@ -1055,7 +1062,9 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						var conf = ConfigurationBuilder.create({
 							name: self.cruisePanelView.name.getValue(),
 							description: self.cruisePanelView.name.getValue(),
-							timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
+							// timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
+							timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
+										self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
 							timeStep: self.cruisePanelView.stepValueField.getValue(),
 							timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
 							timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
@@ -1144,13 +1153,15 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							});
 						},
 						success: function(form, action) {
-							var response = JSON.parse(action.response.responseText);
+							var response = Ext.util.JSON.decode(action.response.responseText);
 							if (response.success) {
 								// create a configuration
 								var conf = ConfigurationBuilder.create({
 									name: self.cruisePanelView.name.getValue(),
 									description: self.cruisePanelView.name.getValue(),
-									timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
+									// timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
+									timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
+												self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],		
 									timeStep: self.cruisePanelView.stepValueField.getValue(),
 									timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
 									timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
