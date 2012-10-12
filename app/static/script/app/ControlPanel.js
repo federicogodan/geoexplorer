@@ -749,6 +749,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		Application.user.on( 'logout',  function logoutHandler( context ){
 			self.loginButton.setText('Login');
 			self.createButton.disable();
+			self.saveButton.disable();
+			self.deleteButton.disable();
 			// self.loginButton.setIconClass('gxp-icon-user');
 			self.token = null;
 		} );
