@@ -47,6 +47,39 @@
         	"title": "Nurc Background"
     	}
 	],
+	
+	"models":[
+		{
+            "format": "image/png8",
+            "group": "Ocean Models",
+            "name": "nurc:watvelingv",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model INGV",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 1.472,
+            "styles": "watvel_marker_ramp"
+        },        
+		{
+            "format": "image/png8",
+            "group": "Ocean Models",
+            "name": "nurc:watvelroms",
+            "opacity": 1,
+            "selected": false,
+            "source": "demo",
+            "title": "Watvel Forecast Model ROMS",
+            "transparent": true,
+            "visibility": true,
+            "ratio": 1,
+            "elevation": 10,
+            "styles": "watvel_marker_ramp",
+            "style": "watvel_raster"
+        }	
+	
+	],
    
    "gsSources":{
         "Gliders": {
@@ -81,35 +114,6 @@
         }
    },
    "layers":[
-		{
-            "format": "image/png8",
-            "group": "Ocean Models",
-            "name": "nurc:watvelingv",
-            "opacity": 1,
-            "selected": false,
-            "source": "demo",
-            "title": "Watvel Forecast Model INGV",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "elevation": 1.472,
-            "styles": "watvel_marker_ramp"
-        },        
-		{
-            "format": "image/png8",
-            "group": "Ocean Models",
-            "name": "nurc:watvelroms",
-            "opacity": 1,
-            "selected": false,
-            "source": "demo",
-            "title": "Watvel Forecast Model ROMS",
-            "transparent": true,
-            "visibility": true,
-            "ratio": 1,
-            "elevation": 10,
-            "styles": "watvel_marker_ramp",
-            "style": "watvel_raster"
-        },
 		{
             "format": "image/png8",
             "transparent": true,

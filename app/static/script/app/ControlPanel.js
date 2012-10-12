@@ -57,6 +57,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		this.cruiseListView = new Ext.list.ListView({
 			store: this.store,
 			hideHeaders: true,
+			autoScroll: true,
 			border: false,
 			singleSelect: true,
 			emptyText: 'No cruise to display',

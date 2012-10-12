@@ -265,30 +265,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                             this.applyConfig( addConfig );
                         }
                     } else {
-						// add default bg to layers
-						/*config.map.layers.push({
-				            "format": "image/jpeg",
-				            "transparent": false,
-				            "source": "GEOSIII",
-				            "group": "background",
-				            "name": "nurcbg",
-				            "title": "Nurc Background"
-				        } );*/
 						this.prepareConfig( config );
                         this.applyConfig(config);
                     }
 
                },
                failure: function(response, opts){
-						// add default bg to layers
-						/*config.map.layers.push({
-				            "format": "image/jpeg",
-				            "transparent": false,
-				            "source": "GEOSIII",
-				            "group": "background",
-				            "name": "nurcbg",
-				            "title": "Nurc Background"
-				        } );*/
 				  this.prepareConfig( config );
                   this.applyConfig(config);
                }
@@ -327,17 +309,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			}
 			// remove model configuration
 			delete config.backgrounds;
-		} else {
-			// add a default layer for bg
-			config.map.layers.push({
-	            "format": "image/jpeg",
-	            "transparent": false,
-	            "source": "GEOSIII",
-	            "group": "background",
-	            "name": "nurcbg",
-	            "title": "Nurc Background"
-	        } );
-		}
+		} 
 
 		
 		if ( config.bounds ){
