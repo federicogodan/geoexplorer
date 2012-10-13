@@ -477,7 +477,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							width: 250,
 							height: 200,
 							blankText: 'At least one vehicle must be selected',
-							allowBlank: false,
+							// allowBlank: false,
 							// minSelections: 1,
 							store: [],
 							tbar: [{
@@ -508,7 +508,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						}, {
 							width: 250,
 							height: 200,
-							allowBlank: false,
+							// allowBlank: false,
 							blankText: 'At least one background must be selected',
 							store: [],
 							tbar: [{
@@ -836,6 +836,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			
 			var period = endTime.getTime() - startTime.getTime();
 			var stepSize = step * computeDuration(unit);
+			
+			// at least one bg and on vehicle must be selected
+			if ( this.cruisePanelView.vehicleSelector.toMultiselect.store.getCount()<1
+					|| this.cruisePanelView.backgroundSelector.toMultiselect.store.getCount()<1  ){
+						Ext.Msg.show({
+									title: 'Cannot save this configuration',
+									msg: 'You must select at least one vehicle and at least one background.',
+									buttons: Ext.Msg.OK,
+									icon: Ext.MessageBox.ERROR
+								});
+				return;
+			}
 			
 			// console.log(stepSize);
 			// console.log(period);
@@ -1482,7 +1494,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		validateForm: function() {
 			return this.cruisePanelView.name.isValid(false) && this.cruisePanelView.startTime.isValid(false) && this.cruisePanelView.endTime.isValid(false) &&
 			// this.cruisePanelView.watermarkUrl.isValid(false) &&
-			this.cruisePanelView.watermarkPosition.isValid(false) && this.cruisePanelView.modelSelector.isValid(false) && this.cruisePanelView.vehicleSelector.isValid(false) && this.cruisePanelView.backgroundSelector.isValid(false) && this.cruisePanelView.vehicleSelector.toMultiselect.isValid(false) && this.cruisePanelView.backgroundSelector.toMultiselect.isValid(false) && this.cruisePanelView.stepValueField.isValid(false) && this.cruisePanelView.rateValueField.isValid(false) && this.cruisePanelView.stepUnitsField.isValid(false);
+			this.cruisePanelView.watermarkPosition.isValid(false) 
+			// && this.cruisePanelView.modelSelector.isValid(false) 
+			// && this.cruisePanelView.vehicleSelector.isValid(false)
+			// && this.cruisePanelView.backgroundSelector.isValid(false) 
+			&& this.cruisePanelView.vehicleSelector.toMultiselect.isValid(false) && this.cruisePanelView.backgroundSelector.toMultiselect.isValid(false) && this.cruisePanelView.stepValueField.isValid(false) && this.cruisePanelView.rateValueField.isValid(false) && this.cruisePanelView.stepUnitsField.isValid(false);
 		}
 
 
