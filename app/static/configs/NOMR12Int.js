@@ -315,12 +315,14 @@
 			"prefix": "notefeature"
 		}, {
 			"ptype": "gxp_import_kml",
+			"toggleGroup": "toolGroup", 
 			"actionTarget": {"target": "notes.tbar", "index": 25},
 			"alternativeStyle": true,
 			"srs":  "EPSG:4326",
 			"layerName": "Pilot notes Layer"
 		}, {
 			"ptype": "gxp_export_kml",
+			"toggleGroup": "toolGroup", 
 			"actionTarget": {"target": "notes.tbar", "index": 25},
 			"alternativeStyle": true,
 			"srs":  "EPSG:4326",

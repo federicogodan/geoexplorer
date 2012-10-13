@@ -297,11 +297,13 @@
 			"srs":  "EPSG:4326"
 		}, {
 			"ptype": "gxp_import_kml",
+			"toggleGroup": "toolGroup", 
 			"actionTarget": {"target": "notes.tbar", "index": 25},
 			"layerName": "Custom feature layer",
 			"srs":  "EPSG:4326"
 		}, {
 			"ptype": "gxp_export_kml",
+			"toggleGroup": "toolGroup", 
 			"actionTarget": {"target": "notes.tbar", "index": 25},
 			"layerName": "Custom feature layer",
 			"srs":  "EPSG:4326"
