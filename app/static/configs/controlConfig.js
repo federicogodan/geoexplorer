@@ -88,8 +88,8 @@
 	
 	
 	"imgsBaseUrl": "http://84.33.199.62/xmlJsonTranslate-gliders/temp/",
-	"interPageBaseUrl": "http://localhost:8080/MapStore/interactive/?mapId=",
-	"infoPageBaseUrl": "http://localhost:8080/MapStore/informational/?mapId=",
+	"interPageBaseUrl": "http://84.33.199.62/MapStore-gliders/interactive/?mapId=",
+	"infoPageBaseUrl": "http://84.33.199.62/MapStore-gliders/informational/?mapId=",
 	"proxy": "/http_proxy/proxy?url=",
 	"fileUploaderServlet": "http://84.33.199.62/xmlJsonTranslate-gliders/FileUploader",
 	"geostoreBaseUrl":"http://84.33.199.62/geostore/rest/"
