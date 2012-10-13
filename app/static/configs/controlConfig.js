@@ -87,12 +87,12 @@
 	},
 	
 	
-	"imgsBaseUrl": "http://192.168.1.160:8080/xmlJsonTranslate-gliders/temp/",
-	"interPageBaseUrl": "http://192.168.1.160:8080/MapStore/interactive/?mapId=",
-	"infoPageBaseUrl": "http://192.168.1.160:8080/MapStore/informational/?mapId=",
+	"imgsBaseUrl": "http://84.33.199.62/xmlJsonTranslate-gliders/temp/",
+	"interPageBaseUrl": "http://localhost:8080/MapStore/interactive/?mapId=",
+	"infoPageBaseUrl": "http://localhost:8080/MapStore/informational/?mapId=",
 	"proxy": "/http_proxy/proxy?url=",
-	"fileUploaderServlet": "http://192.168.1.160:8080/xmlJsonTranslate-gliders/FileUploader",
-	"geostoreBaseUrl":"http://192.168.1.160:8080/geostore/rest/"
+	"fileUploaderServlet": "http://84.33.199.62/xmlJsonTranslate-gliders/FileUploader",
+	"geostoreBaseUrl":"http://84.33.199.62/geostore/rest/"
 	
 	
 }

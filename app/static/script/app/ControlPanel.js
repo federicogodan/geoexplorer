@@ -999,7 +999,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	save: function(){
 			var self = this;
 			this.fileForm.getForm().submit({
-				url: self.fileUploaderServlet,
+				url: self.proxy + encodeURIComponent(self.fileUploaderServlet),
 				submitEmptyText: false,
 				waitMsg: 'Uploading watermark',
 				waitMsgTarget: true,
@@ -1016,6 +1016,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				},
 				success: function(form, action) {
 					// var response = JSON.parse(action.response.responseText);
+					// console.log(action.response.responseText);
 					var response = Ext.util.JSON.decode(action.response.responseText);
 					
 					if (response.success) {
@@ -1169,7 +1170,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					// TODO delete old file from server
 					var self = this;
 					this.fileForm.getForm().submit({
-						url: self.fileUploaderServlet,
+						url: self.proxy + encodeURIComponent(self.fileUploaderServlet),
 						submitEmptyText: false,
 						waitMsg: 'Uploading watermark',
 						waitMsgTarget: true,
