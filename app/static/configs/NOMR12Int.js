@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://localhost:8080/geostore/rest/",
-   "proxy":"/http_proxy/proxy?url=",
+   "proxy":"/proxy?url=",
    "xmlJsonTranslateService": "http://localhost:8080/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
