@@ -91,8 +91,9 @@
 	"interPageBaseUrl": "http://84.33.199.62/MapStore-gliders/interactive/?mapId=",
 	"infoPageBaseUrl": "http://84.33.199.62/MapStore-gliders/informational/?mapId=",
 	"proxy": "/http_proxy/proxy?url=",
-	"fileUploaderServlet": "http://84.33.199.62/xmlJsonTranslate-gliders/FileUploader",
-	"geostoreBaseUrl":"http://84.33.199.62/geostore/rest/"
-	
+	"fileUploaderServlet": "http://84.33.199.62/xmlJsonTranslate-gliders/",
+	"geostoreBaseUrl":"http://84.33.199.62/geostore/rest/",
+	"geoserverBaseUrl":"http://84.33.199.62/geoserver-gliders/",
+	"defaultWatermarkUrl":"../theme/app/img/nurc-logo.png"
 	
 }

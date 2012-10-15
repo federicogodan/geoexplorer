@@ -25,23 +25,13 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	cruisePanelView: null,
 	token: null,
 	
-	// url: 'http://localhost:8080/geostore/rest/resources',
-	// urlData: 'http://localhost:8080/geostore/rest/data',
-	// xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate",
 	toggleGroup: "toolGroup",
 
 	constructor: function(config) {
 
 		this.token = config.token;
 		this.store = new Ext.data.JsonStore({
-			fields: ['id', 'owner', 'name', 'description', 'blob'] /*,
-			buffered:true,
-			pageSize:2,
-			proxy: {
-					url: 'foo',
-			        type: "pagingmemory",
-					reader: 'json'
-			       }*/
+			fields: ['id', 'owner', 'name', 'description', 'blob'] 
 		});
 		this.infoPageBaseUrl = config.infoPageBaseUrl;
 		this.fileUploaderServlet = config.fileUploaderServlet;
@@ -51,6 +41,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		this.geostoreBaseUrl = config.geostoreBaseUrl;
 		this.url = config.geostoreBaseUrl + 'resources';
 		this.urlData = config.geostoreBaseUrl + 'data';
+		this.geoserverBaseUrl = config.geoserverBaseUrl;
+		this.defaultWatermarkUrl = config.defaultWatermarkUrl;
 
 		this.loadCruiseList();
 
@@ -868,26 +860,41 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				});		
 			
 			} else {
+				
+				// create a configuration from form fields
+				var conf = ConfigurationBuilder.create({
+							name: this.cruisePanelView.name.getValue(),
+							description: this.cruisePanelView.name.getValue(),
+							timeRange: [this.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
+										this.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
+							timeStep: this.cruisePanelView.stepValueField.getValue(),
+							timeFrameRate: this.cruisePanelView.rateValueField.getValue(),
+							timeUnits: this.cruisePanelView.stepUnitsField.getValue(),
+							models: this.cruisePanelView.modelSelector.toMultiselect.store.data.items,
+							backgrounds: this.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
+							vehicles: this.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
+							watermarkPosition: this.cruisePanelView.watermarkPosition.getValue(),
+							watermarkUrl: this.cruisePanelView.watermarkUrl.getValue(),
+							bounds: [this.nwTextField.getValue(), this.swTextField.getValue(), this.seTextField.getValue(), this.neTextField.getValue()],
+							geoserverBaseUrl: this.geoserverBaseUrl
+						});				
+				
 				if (this.mapId === -1) { // a new configuration is created	
 					var filename = this.fileForm.fileuploadField.getValue();
 					if (filename && filename !== '') {
-						this.save();
+						this.uploadFileAndSave( conf );
 					} else {
-						Ext.Msg.show({
-							title: 'Cannot save this configuration',
-							msg: 'Watermark file is not specified.',
-							buttons: Ext.Msg.OK,
-							icon: Ext.MessageBox.ERROR
-						});				
+						conf.setParam('watermarkUrl', this.defaultWatermarkUrl );
+						this.save( conf );		
 					}
 
 				} else { // an old conf is updated
 					var filename = this.fileForm.fileuploadField.getValue();
 
 					if (filename && filename !== '') { // a new logo is defined, use this one
-						this.updateAndUploadFile();
+						this.updateAndUploadFile( conf );
 					} else {
-						this.update();
+						this.update( conf );
 					}
 				}				
 			}
@@ -959,7 +966,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						self.cruisePanelView.watermarkUrl.setValue(payload.watermarkUrl);
 						self.cruisePanelView.watermarkPosition.setValue(payload.watermarkPosition);
 						self.cruisePanelView.watermarkLogo.setVisible(true);
-						self.cruisePanelView.watermarkLogo.getEl().dom.src = self.imgsBaseUrl  + payload.watermarkUrl;
+						self.cruisePanelView.watermarkLogo.getEl().dom.src = payload.watermarkUrl;
 
 						self.cruisePanelView.stepValueField.setValue(payload.timeStep);
 						self.cruisePanelView.rateValueField.setValue(payload.timeFrameRate);
@@ -1007,50 +1014,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				});
 		
 	},
+	
+	save: function( conf ){
 
-	save: function(){
-			var self = this;
-			this.fileForm.getForm().submit({
-				url: self.proxy + encodeURIComponent(self.fileUploaderServlet),
-				submitEmptyText: false,
-				waitMsg: 'Uploading watermark',
-				waitMsgTarget: true,
-				reset: true,
-				scope: this,
-				failure: function(form, action) {
-					console.error(action);
-					Ext.Msg.show({
-						title: "Cannot upload watermark",
-						msg: "File does not exist or is not valid.",
-						buttons: Ext.Msg.OK,
-						icon: Ext.MessageBox.ERROR
-					});
-				},
-				success: function(form, action) {
-					// var response = JSON.parse(action.response.responseText);
-					// console.log(action.response.responseText);
-					var response = Ext.util.JSON.decode(action.response.responseText);
-					
-					if (response.success) {
-						// create a configuration
-						var conf = ConfigurationBuilder.create({
-							name: self.cruisePanelView.name.getValue(),
-							description: self.cruisePanelView.name.getValue(),
-							// timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
-							timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
-										self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
-							timeStep: self.cruisePanelView.stepValueField.getValue(),
-							timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
-							timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
-							models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
-							backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
-							vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
-							watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
-							watermarkUrl: response.result.code,
-							bounds: [self.nwTextField.getValue(), self.swTextField.getValue(), self.seTextField.getValue(), self.neTextField.getValue()]
-						});
-						// send a request to the geostore
-						var geostore = new GeoStore.Maps({
+		var self = this;
+					var geostore = new GeoStore.Maps({
 							authorization: self.token,
 							proxy: self.proxy,
 							url: self.url
@@ -1063,69 +1031,86 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 								icon: Ext.MessageBox.ERROR
 							});
 						});
-						// send the current conf to the server
-						geostore.create(conf, function(newId) {
-							Ext.Msg.show({
-								title: 'Configuration saved',
-								msg: 'configuration saved successfully',
-								buttons: Ext.Msg.OK,
-								icon: Ext.MessageBox.INFO
-							});
-							
-							// reload data
-							
-							self.clean();
-							self.mapId = newId;
-							
-							self.loadCruiseList(function(data){
-								var store = data.store;
-								var id = self.mapId;
-								var item = store.getById(id);
-								self.cruiseListView.select(item, false, true);
-								self.loadCruise( newId );
-								// self.enable();
-							});
-							
-							
-						});
+			// send the current conf to the server
+			geostore.create(conf.build(), function(newId) {
+					Ext.Msg.show({
+						title: 'Configuration saved',
+						msg: 'configuration saved successfully',
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.INFO
+					});
+
+			// reload data
+
+			
+			self.clean();
+			self.mapId = newId;
+
+			self.loadCruiseList(function(data){
+						var store = data.store;
+						var id = self.mapId;
+						var item = store.getById(id);
+						self.cruiseListView.select(item, false, true);
+						self.loadCruise( newId );
+						// self.enable();
+					});
+
+
+			});
+	},
+
+	uploadFileAndSave: function( conf ){
+		
+		var filestore = new GeoStore.Filestore(
+			{
+				authorization: this.token,
+				proxy: this.proxy,
+				url: this.fileUploaderServlet
+			}		
+		);
+		
+		var self = this;
+		filestore.uploadFromForm(
+			this.fileForm.getForm(),
+			{
+				waitMsg: 'Uploading watermark',
+				waitMsgTarget: true,
+				onSuccess: function( response ){
+					if (response.success) {
+							// add address for uploaded file
+							conf.setParam('watermarkUrl', filestore.getBaseDir() + response.result.code);
+							self.save( conf );
+						
 					} else {
 						Ext.Msg.show({
-							title: "Cannot upload watermark",
-							msg: response.errorMessage,
-							buttons: Ext.Msg.OK,
-							icon: Ext.MessageBox.ERROR
-						});
-					}
+									title: "Cannot upload watermark",
+									msg: response.errorMessage,
+									buttons: Ext.Msg.OK,
+									icon: Ext.MessageBox.ERROR
+								});
+					}					
+				},
+				onFailure: function( response ) {
+					console.error( response );
+					Ext.Msg.show({
+						title: "Cannot upload watermark",
+						msg: "File does not exist or is not valid.",
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.ERROR
+					});
 				}
-
-			});			
+			}
+		);
+		
 		},
 
-		update: function( ){
+		update: function( conf ){
 						var self = this;
-						// create a configuration
-						var conf = ConfigurationBuilder.create({
-							name: self.cruisePanelView.name.getValue(),
-							description: self.cruisePanelView.name.getValue(),
-							// timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
-							timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
-										self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
-							timeStep: self.cruisePanelView.stepValueField.getValue(),
-							timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
-							timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
-							models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
-							backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
-							vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
-							watermarkUrl: self.cruisePanelView.watermarkUrl.getValue(),
-							watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
-							bounds: [self.nwTextField.getValue(), self.swTextField.getValue(), self.seTextField.getValue(), self.neTextField.getValue()]
-						});
 						// keep the old version for logo file and upload only changes
 						var datastore = new GeoStore.Datastore({
 							authorization: self.token,
 							proxy: self.proxy,
 							url: self.urlData
-							// url: self.proxy + encodeURIComponent(self.urlData)
 						}).failure(function(response) {
 							console.error(response);
 							Ext.Msg.show({
@@ -1137,7 +1122,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						});
 						// data in blob are saved separately
 						datastore.update(
-						self.mapId, conf.blob, function(data) { // callback
+						self.mapId, conf.build().blob, function(data) { // callback
 							var geostore = new GeoStore.Maps({
 									authorization: self.token,
 									proxy: self.proxy,
@@ -1153,7 +1138,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							});
 							// It is necessary to update both metadata and data in two steps!
 							geostore.update(
-							self.mapId, conf, function(data) { // callback
+							self.mapId, conf.build(), function(data) { // callback
 								Ext.Msg.show({
 									title: 'Configuration updated',
 									msg: 'configuration updated successfully',
@@ -1177,116 +1162,54 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						});			
 		},
 		
-		updateAndUploadFile: function(){
-					// reload a new file
-					// TODO delete old file from server
-					var self = this;
-					this.fileForm.getForm().submit({
-						url: self.proxy + encodeURIComponent(self.fileUploaderServlet),
-						submitEmptyText: false,
-						waitMsg: 'Uploading watermark',
-						waitMsgTarget: true,
-						reset: true,
-						scope: this,
-						failure: function(form, action) {
-							console.error(action);
+		updateAndUploadFile: function( conf ){
+			
+			var filestore = new GeoStore.Filestore(
+				{
+					authorization: this.token,
+					proxy: this.proxy,
+					url: this.fileUploaderServlet
+				}		
+			);
+			
+			var self = this;
+			filestore.uploadFromForm(
+				this.fileForm.getForm(),
+				{
+					waitMsg: 'Uploading watermark',
+					waitMsgTarget: true,
+					onFailure: function(response) {
+						console.error(response);
+						Ext.Msg.show({
+							title: "Cannot upload watermark",
+							msg: action.responseText,
+							buttons: Ext.Msg.OK,
+							icon: Ext.MessageBox.ERROR
+						});
+					},
+					onSuccess: function( response ){
+						if (response.success) {
+							// overwrite old watermark url
+							conf.setParam('watermarkUrl', filestore.getBaseDir() + response.result.code);
+							self.update( conf );
+						} else {
 							Ext.Msg.show({
 								title: "Cannot upload watermark",
-								msg: action.responseText,
+								msg: response.errorMessage,
 								buttons: Ext.Msg.OK,
 								icon: Ext.MessageBox.ERROR
 							});
-						},
-						success: function(form, action) {
-							var response = Ext.util.JSON.decode(action.response.responseText);
-							if (response.success) {
-								// create a configuration
-								var conf = ConfigurationBuilder.create({
-									name: self.cruisePanelView.name.getValue(),
-									description: self.cruisePanelView.name.getValue(),
-									// timeRange: [self.cruisePanelView.startTime.getValue().toISOString(), self.cruisePanelView.endTime.getValue().toISOString()],
-									timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
-												self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],		
-									timeStep: self.cruisePanelView.stepValueField.getValue(),
-									timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
-									timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
-									models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
-									backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
-									vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
-									watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
-									watermarkUrl: response.result.code,
-									bounds: [self.nwTextField.getValue(), self.swTextField.getValue(), self.seTextField.getValue(), self.neTextField.getValue()]
-								});
-								var datastore = new GeoStore.Datastore({
-									authorization: self.token,
-									proxy: self.proxy,
-									url: self.urlData
-								}).failure(function(response) {
-									console.error(response);
-									Ext.Msg.show({
-										title: 'Cannot save this configuration',
-										msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-										buttons: Ext.Msg.OK,
-										icon: Ext.MessageBox.ERROR
-									});
-								});
-								// data in blob are saved separately
-								datastore.update(
-								self.mapId, conf.blob, function(data) { // callback
-									var geostore = new GeoStore.Maps({
-											authorization: self.token,
-											proxy: self.proxy,
-											url: self.url
-									}).failure(function(response) {
-											console.error(response);
-											Ext.Msg.show({
-												title: 'Cannot save this configuration',
-												msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-												buttons: Ext.Msg.OK,
-												icon: Ext.MessageBox.ERROR
-											});
-									});
-									// It is necessary to update both metadata and data in two steps!
-									geostore.update(
-									self.mapId, conf, function(data) { // callback
-										Ext.Msg.show({
-											title: 'Configuration updated',
-											msg: 'configuration updated successfully',
-											buttons: Ext.Msg.OK,
-											icon: Ext.MessageBox.OK
-										});
-										
-										// reload data
-												// self.clean();
+						}						
+					}
+				}
+		   );
 
-												self.loadCruiseList(function(data){
-														var store = data.store;
-														var id = self.mapId;
-														var item = store.getById(id);
-														self.cruiseListView.select(item, false, true);
-														self.loadCruise( self.mapId );
-														// self.enable();
-												});
-									});
-								});
-							} else {
-								Ext.Msg.show({
-									title: "Cannot upload watermark",
-									msg: response.errorMessage,
-									buttons: Ext.Msg.OK,
-									icon: Ext.MessageBox.ERROR
-								});
-							}
-						}
-
-					});			
 		},
 		
 		enable: function() {
 			this.cruisePanelView.name.enable();
 			this.cruisePanelView.startTime.enable();
 			this.cruisePanelView.endTime.enable();
-			// this.cruisePanelView.watermarkUrl.enable();
 			this.fileForm.fileuploadField.enable();
 			this.cruisePanelView.watermarkPosition.enable();
 			this.cruisePanelView.modelSelector.enable();
@@ -1331,7 +1254,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.cruisePanelView.name.disable();
 			this.cruisePanelView.startTime.disable();
 			this.cruisePanelView.endTime.disable();
-			// this.cruisePanelView.watermarkUrl.disable();
 			this.fileForm.fileuploadField.disable();
 			this.cruisePanelView.watermarkPosition.disable();
 			this.cruisePanelView.modelSelector.disable();
@@ -1465,11 +1387,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				var item = availableItems[i];
 
 				for (var j = 0; j < selectedItems.length; j++) {
-
-					/*if (reader(selectedItems[j]) === item.data.value) {
-						selector.toMultiselect.store.add(item);
-						removed.push(item);
-					}*/
 					
 					if (isEqual(selectedItems[j], item.data) ) {
 						selector.toMultiselect.store.add(item);

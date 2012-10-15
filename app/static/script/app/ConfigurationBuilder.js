@@ -2,12 +2,27 @@
 /**
  *  this class contains info about cruise configurations
  */
+var Configuration = function( config, builder ){
+	this.builder_ = builder;
+	this.config_ = config;
+};
+
+Configuration.prototype.setParam = function(name, value){
+	this.config_[name]=value;
+};
+
+Configuration.prototype.build = function(){
+	return this.builder_.toString( this.config_ );
+};
+
+/**
+ *  this class is a builder for Configuration
+ */
 var ConfigurationBuilder =  {
 	
 	
 	createVehicleConfiguration: function( selected ){
 		var result = '';
-		// var selected =  selector.toMultiselect.store.data.items;
 		
 		for (var i=0; i<selected.length; i++){
 			
@@ -30,25 +45,11 @@ var ConfigurationBuilder =  {
 	
 	createModelConfiguration: function( selected ){
 		var result = '';
-		// var selected =  selector.toMultiselect.store.data.items;
-		
 		for (var i=0; i<selected.length; i++){
 			
 			var item = selected[i].data;
 			
 			result += '{';
-			/*result +=  '"format": "image/png8",'
-		             + '"group": "Ocean models",'
-		             + '"name": "' + item.value + '",'
-		             + '"opacity": 1,'
-		             + '"selected": true,'
-		             + '"source": "demo",'
-		             + '"title":"' + item.text + '",'
-		             + '"transparent": true,'
-		             + '"visibility": true,'
-		             + '"ratio": 1,'
-		             + '"elevation": 10,'
-		             + '"styles":"watvel_marker_ramp"'*/
 					result +=  '"format": "' + item.format + '",'
 				             + '"group": "' + item.group + '",'
 				             + '"name": "' + item.name + '",'
@@ -100,8 +101,11 @@ var ConfigurationBuilder =  {
 		return result;
 	},
 	
-	
 	create: function( params ){
+		return new Configuration( params, this );
+	},
+	
+	toString: function( params ){
 			var conf = new Object;
 			conf.name = params.name;
 			conf.description = params.name;
@@ -129,7 +133,7 @@ var ConfigurationBuilder =  {
 								+ this.createVehicleConfiguration( params.vehicles )
 					   + '],'
 					   +	'"refreshIconPath": "../theme/app/img/silk/arrow_refresh.png",'  
-					   +	'"geoserverBaseURL": "http://84.33.199.62/geoserver-gliders/",'		
+					   +	'"geoserverBaseURL": "' + params.geoserverBaseUrl + '",'		
 					   +	'"gliderPropertyName": "glider_name",'	
 					   +	'"cruisePropertyName": "cruise_name",'	
 					   +	'"glidersFeatureType": "GlidersTracks",'	

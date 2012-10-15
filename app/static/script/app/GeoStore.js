@@ -552,6 +552,7 @@
 		var uri = new Uri({'url':this.baseUrl_});
 		uri.setProxy( this.proxy_ );
 		uri.appendId( pk );
+		// console.log( data );
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),
 	       method: 'PUT',
@@ -561,7 +562,6 @@
 	          'Authorization' : this.authorization_
 	       },
 	       scope: this,
-		   // params: Ext.util.JSON.encode(data),
 		   params: data,
 	       success: function(response, opts){
 				callback( response );
@@ -573,6 +573,91 @@
 	}
    });
 
+   /**
+    * Class: GeoStore.Filestore
+    *
+    * this class allows to upload and download files
+    * using a backend servlet
+    *
+    */
+   var Filestore = GeoStore.Filestore = function(options){
+		this.authorization_ = options.authorization ;
+		this.baseUrl_ = options.url;
+		this.uploadUrl_ = this.baseUrl_ + 'FileUploader';
+		this.proxy_ = options.proxy;
+		this.verbose_ = options.verbose || false;
+		this.acceptTypes_ = 'application/json, text/plain, text/xml';
+		this.onSuccess_ = Ext.emptyFn;
+		this.onFailure_ = Ext.emptyFn;
+		this.initialize.apply(this, arguments);
+	};
+	
+	/** 
+	 * Function: initialize
+	 * initialize this class
+	 *
+	 * Parameters:
+	 * Return:
+	 */
+	Filestore.prototype.initialize = function(){
+		if ( this.verbose_ ){
+			console.log( 'created GeoStore.Filestore');
+			console.log( 'authorization: ' + this.authorization_ );
+			console.log( 'base url: ' + this.baseUrl_);			
+		}
+	};
+	
+	
+	/** 
+	 * Function: uploadFromForm
+	 * upload a file from a ExtJs form
+	 *
+	 * Parameters:
+	 * Return:
+	 */	
+	Filestore.prototype.uploadFromForm = function( form, params ){
+		var uri = new Uri({'url':this.uploadUrl_});
+		uri.setProxy( this.proxy_ );
+		form.submit({
+			url: uri.toString(),
+			submitEmptyText: false,
+			waitMsg: params.waitMsg,
+			waitMsgTarget: params.waitMsgTarget,
+			reset: true,
+			failure: function(form, action) {
+				params.onFailure.call(this, action);
+			},
+			success: function(form, action) {
+				var response = null;
+				try {
+					response = Ext.util.JSON.decode(action.response.responseText);
+				} catch (e) {
+					var msg = 'Cannot parse JSON response: ' + e;
+					console.error( msg  );
+					params.onFailure.call(this, msg);
+				}
+				if ( response ){
+					params.onSuccess.call(this, response);
+				}
+			}
+
+		});
+	};
+
+	/** 
+	 * Function: getBaseDir
+	 * get the directory where files are stored
+	 *
+	 * TODO at the moment it is not possible to change the directory dynamically
+	 * for this reason the name of the directory is hardcoded
+	 * in the future should be possible to have different dirs for different (kinds of) files 
+	 * 
+	 * Parameters:
+	 * Return:
+	 */	
+	 Filestore.prototype.getBaseDir = function(){
+		return this.baseUrl_ + 'temp/';
+	 };
 
 }).call(this);
 
