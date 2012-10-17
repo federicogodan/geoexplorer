@@ -42,6 +42,42 @@ var risk_data = {
 	}
 };
 
+var mammalData = {		
+    "speciesInformationData":[
+        ["Acadian redfish", "Sebastes fasciatus", "Scorpaenidae", "http://www.fao.org/fishery/species/2525/en"],
+        ["Adriatic sturgeon", "Acipenser naccarii", "Acipenseridae", "http://www.fao.org/fishery/species/10183/en"],
+        ["Aesop shrimp", "Pandalus montagui", "Pandalidae", "http://www.fao.org/fishery/species/3426/en"],
+        ["African angelshark", "Squatina africana", "Squatinidae", "http://www.fao.org/fishery/species/15415/en"],
+        ["African blackspot threadfin", "Polydactylus malagasyensis", "Polynemidae", "http://www.fao.org/fishery/species/18801/en"],
+        ["African cuttlefish", "Sepia bertheloti", "Sepiidae", "http://www.fao.org/fishery/species/16968/en"],
+        ["African squid", "Alloteuthis africana", "Loliginidae", "http://www.fao.org/fishery/species/17016/en"],
+        ["Akiami paste shrimp", "Acetes japonicus", "Sergestidae", "http://www.fao.org/fishery/species/3428/en"],
+        ["Alaska pollock(=Walleye poll.)", "Theragra chalcogramma", "Gadidae", "http://www.fao.org/fishery/species/3017/en"],
+        ["Albacore", "Thunnus alalunga", "Scombridae", "http://www.fao.org/fishery/species/2496/en"],
+        ["Amer. plaice(=Long rough dab)", "Hippoglossoides platessoides", "Pleuronectidae", "http://www.fao.org/fishery/species/3359/en"],
+        ["American angler", "Lophius americanus", "Lophiidae", "http://www.fao.org/fishery/species/3380/en"],
+        ["American cupped oyster", "Crassostrea virginica", "Ostreidae", "http://www.fao.org/fishery/species/2669/en"],
+        ["American lobster", "Homarus americanus", "Nephropidae", "http://www.fao.org/fishery/species/3482/en"],
+        ["American sea scallop", "Placopecten magellanicus", "Pectinidae", "http://www.fao.org/fishery/species/3519/en"],
+        ["Amur sturgeon", "Acipenser schrenckii", "Acipenseridae", "http://www.fao.org/fishery/species/10187/en"],
+        ["Analogous bobtail squid", "Sepiola affinis", "Sepiolidae", "http://www.fao.org/fishery/species/17097/en"],
+        ["Anchoveta(=Peruvian anchovy", "Engraulis ringens", "Engraulidae", "http://www.fao.org/fishery/species/2917/en"],
+        ["Andrea cuttlefish", "Sepia andreana", "Sepiidae", "http://www.fao.org/fishery/species/17071/en"],
+        ["Angel squid", "Ancistroteuthis lichtensteini", "Onychoteuthidae", "http://www.fao.org/fishery/species/16948/en"]
+    ],
+    "sightingsStrandingsData":[
+        [false, "Strandings", "http://geos3.nurc.nato.int/portal/web/guest"],
+        [false, "Ports", "http://geos3.nurc.nato.int/portal/web/guest"]
+    ]    
+};
+
+var habitatData = {		
+    "habitatData":[
+        [false, "Strandings", "http://geos3.nurc.nato.int/portal/web/guest"],
+        [false, "Ports", "http://geos3.nurc.nato.int/portal/web/guest"]        
+    ]    
+};
+
 var georeferences_data = [
     ["AFGHANISTAN" , "60.5054,29.612733,74.93195,38.538967"],
     ["ALBANIA" , "19.29795,39.713733,21.072,42.7006"],
