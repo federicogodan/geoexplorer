@@ -105,7 +105,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             
         this.mapItems = [
             {
-                xtype: "gxp_scaleoverlay"
+                xtype: "gxp_scaleoverlay",
+                topOutUnits:'nmi',    
+                topInUnits:'nmi',    
+                bottomInUnits:'m',    
+                bottomOutUnits:'km'
             }, {
                 xtype: "gx_zoomslider",
                 vertical: true,
@@ -115,6 +119,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 })
             }
         ];
+        
+        //pannellino openlayers possibilità di attaccare ... oppure mettere in configurazione.
         
         // //////////////////////////////////////////////////////////////////////////////////
         // both the Composer and the Viewer need to know about the viewerTools
