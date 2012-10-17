@@ -16,6 +16,7 @@
    "timeUnits": "Minutes",
    "timeStep": 30,
    "timeFrameRate": 10,
+   "featureInfoBuffer": 1000,
    
    "vehicleSelector": {
 		"data":[

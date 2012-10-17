@@ -213,7 +213,8 @@
 							background: config.background,
 							sources: config.sources,
 							geoserverBaseUrl: config.geoserverBaseUrl,
-							defaultWatermarkUrl: config.defaultWatermarkUrl
+							defaultWatermarkUrl: config.defaultWatermarkUrl,
+							pageSize: config.pageSize
 						});
 						
 						new Ext.Viewport({
@@ -267,13 +268,8 @@
 												
 														
 													
-													/*,
-													bbar: new Ext.PagingToolbar({
-													        store: control.store,       
-													        displayInfo: true,
-													        pageSize: 2,
-													        prependButtons: true
-													    })*/
+													,
+													bbar: control.pagingToolbar
 												},
 												{
 													id: 'content-panel',

@@ -29,10 +29,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 	constructor: function(config) {
 
+		// configuration settings
 		this.token = config.token;
-		this.store = new Ext.data.JsonStore({
-			fields: ['id', 'owner', 'name', 'description', 'blob'] 
-		});
 		this.infoPageBaseUrl = config.infoPageBaseUrl;
 		this.fileUploaderServlet = config.fileUploaderServlet;
 		this.proxy = config.proxy;
@@ -43,9 +41,35 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		this.urlData = config.geostoreBaseUrl + 'data';
 		this.geoserverBaseUrl = config.geoserverBaseUrl;
 		this.defaultWatermarkUrl = config.defaultWatermarkUrl;
+		
+		// create an instance of geostore client
+		this.geostore = new GeoStore.Maps({
+			authorization: this.token,
+			proxy: this.proxy,
+			url: config.geostoreBaseUrl
+		});
+		
+		// get the Ext.data.Store for the geostore client
+		// an associate it with a paging toolbar
+		this.store = this.geostore.getStore();
+		this.pagingToolbar = new Ext.PagingToolbar({
+		        store: this.store,       
+		        displayInfo: true,
+		        pageSize: config.pageSize,
+		        prependButtons: true
+		});
+		
+		// init store
+		this.store.load({
+            params:{
+                start: 0,
+                limit: config.pageSize
+            }
+        });
+		
+		// this.loadCruiseList();
 
-		this.loadCruiseList();
-
+		// list of cruise configurations
 		this.cruiseListView = new Ext.list.ListView({
 			store: this.store,
 			hideHeaders: true,
@@ -755,6 +779,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			self.loginButton.setText('Logout');
 			// self.loginButton.setIconClass('logout');
 			self.token = context.token;
+			self.geostore.setToken( self.token );
 		} );
 		Application.user.on( 'logout',  function logoutHandler( context ){
 			self.loginButton.setText('Login');
@@ -763,6 +788,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			self.deleteButton.disable();
 			// self.loginButton.setIconClass('gxp-icon-user');
 			self.token = null;
+			self.geostore.invalidateToken( );
 		} );
 		Application.user.on( 'failed',  function loginFailedHandler( context ){
 			self.createButton.disable();
@@ -773,8 +799,9 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					buttons: Ext.Msg.OK,
 					icon: Ext.MessageBox.ERROR
 			});
-			
+			self.geostore.invalidateToken( null );
 		} );
+
 
 
 	},
@@ -925,138 +952,123 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	},
 	
 	loadCruise: function(mapId, callback){
-		
-		var geostore = new GeoStore.Maps({
-				authorization: this.token,
-				proxy: this.proxy,
-				url: this.url
-		}).failure(function(response) {
+		var self = this;
+		this.geostore.findByPk(mapId, {
+			params: { full: true },
+			onFailure: function loadCruise_findByPK_callback_failed(response){
 				console.error(response);
 				Ext.Msg.show({
 					title: 'Cannot read configuration',
 					msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
 					buttons: Ext.Msg.OK,
 					icon: Ext.MessageBox.ERROR
-				});
-		});
-
-		var self = this;
-		geostore.findByPk(mapId, function readCruiseDetailsCallback(data) {
-
-					// get blob as a json object
-					var payload = null;
-					try {
-						// payload = JSON.parse(data.blob);
-						payload = Ext.util.JSON.decode(data.blob);
-					} catch (e) {
-						console.error(e);
-					}
-
-					// console.log(payload);
-					// reset original values
-					self.clean();
-					// populate form fields
-					self.mapId = data.id;
-					self.cruisePanelView.name.setValue(data.name);
-
-					if (payload) {
-
-						self.cruisePanelView.startTime.setValue(Date.parseDate(payload.timeRange[0], "Y-m-d\\TH:i:s.u\\Z"));
-						self.cruisePanelView.endTime.setValue(Date.parseDate(payload.timeRange[1], "Y-m-d\\TH:i:s.u\\Z"));
-						self.cruisePanelView.watermarkUrl.setValue(payload.watermarkUrl);
-						self.cruisePanelView.watermarkPosition.setValue(payload.watermarkPosition);
-						self.cruisePanelView.watermarkLogo.setVisible(true);
-						self.cruisePanelView.watermarkLogo.getEl().dom.src = payload.watermarkUrl;
-
-						self.cruisePanelView.stepValueField.setValue(payload.timeStep);
-						self.cruisePanelView.rateValueField.setValue(payload.timeFrameRate);
-						self.cruisePanelView.stepUnitsField.setValue(payload.timeUnits);
-
-					
-
-						self.updateItemSelector(self.cruisePanelView.vehicleSelector, payload.vehicleSelector.data, 
-						function(selected, multiselectItem) {
-							return selected[1] === multiselectItem.value;
-						});
-						self.updateItemSelector(self.cruisePanelView.modelSelector, payload.models, 
-						function(selected, multiselectItem) {
-							return selected.name === multiselectItem.name;
-						});
-						self.updateItemSelector(self.cruisePanelView.backgroundSelector, payload.backgrounds, 
-						function(selected, multiselectItem) {
-							return selected.name === multiselectItem.value;
-						});
-						
-						var bounds = new OpenLayers.Bounds(payload.bounds);
-						var proj = new OpenLayers.Projection("EPSG:4326");
-						bounds.transform(proj, self.tinyMap.mapPanel.map.getProjectionObject());
-
-						self.tinyMap.mapPanel.map.zoomToExtent( bounds );
-						
-						if (callback){
-							callback();
+				});			
+			},
+			onSuccess: function loadCruise_findByPK_callback_success(data) {
+						// get blob as a json object
+						var payload = null;
+						try {
+							// payload = JSON.parse(data.blob);
+							payload = Ext.util.JSON.decode(data.blob);
+						} catch (e) {
+							console.error(e);
 						}
-						
-					} else {
-						Ext.Msg.show({
-							title: 'Cannot load this configuration properly',
-							msg: 'The format read from server is unknown',
-							buttons: Ext.Msg.OK,
-							icon: Ext.MessageBox.ERROR
-						});
-					}
 
-					// enable editing
-					self.enable();
+						// reset original values
+						self.clean();
+						// populate form fields
+						self.mapId = data.id;
+						self.cruisePanelView.name.setValue(data.name);
 
-				}, {
-					full: true
-				});
+						if (payload) {
+
+								// externalize
+								self.cruisePanelView.startTime.setValue(Date.parseDate(payload.timeRange[0], "Y-m-d\\TH:i:s.u\\Z"));
+								self.cruisePanelView.endTime.setValue(Date.parseDate(payload.timeRange[1], "Y-m-d\\TH:i:s.u\\Z"));
+								self.cruisePanelView.watermarkUrl.setValue(payload.watermarkUrl);
+								self.cruisePanelView.watermarkPosition.setValue(payload.watermarkPosition);
+								self.cruisePanelView.watermarkLogo.setVisible(true);
+								self.cruisePanelView.watermarkLogo.getEl().dom.src = payload.watermarkUrl;
+
+								self.cruisePanelView.stepValueField.setValue(payload.timeStep);
+								self.cruisePanelView.rateValueField.setValue(payload.timeFrameRate);
+								self.cruisePanelView.stepUnitsField.setValue(payload.timeUnits);
+
+
+
+								self.updateItemSelector(self.cruisePanelView.vehicleSelector, payload.vehicleSelector.data, 
+								function(selected, multiselectItem) {
+									return selected[1] === multiselectItem.value;
+								});
+								self.updateItemSelector(self.cruisePanelView.modelSelector, payload.models, 
+								function(selected, multiselectItem) {
+									return selected.name === multiselectItem.name;
+								});
+								self.updateItemSelector(self.cruisePanelView.backgroundSelector, payload.backgrounds, 
+								function(selected, multiselectItem) {
+									return selected.name === multiselectItem.value;
+								});
+
+								var bounds = new OpenLayers.Bounds(payload.bounds);
+								var proj = new OpenLayers.Projection("EPSG:4326");
+								bounds.transform(proj, self.tinyMap.mapPanel.map.getProjectionObject());
+
+								self.tinyMap.mapPanel.map.zoomToExtent( bounds );
+
+								if (callback){
+									// cruise loaded correctly, call callback
+									callback();
+								}
+
+						} else {
+								Ext.Msg.show({
+									title: 'Cannot load this configuration properly',
+									msg: 'The format read from server is unknown',
+									buttons: Ext.Msg.OK,
+									icon: Ext.MessageBox.ERROR
+								});
+						}
+
+						// enable editing
+						self.enable();
+			
+			}
+		});
 		
 	},
 	
 	save: function( conf ){
 
 		var self = this;
-					var geostore = new GeoStore.Maps({
-							authorization: self.token,
-							proxy: self.proxy,
-							url: self.url
-						}).failure(function(response) {
-							console.error(response);
-							Ext.Msg.show({
-								title: 'Cannot save this configuration',
-								msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-								buttons: Ext.Msg.OK,
-								icon: Ext.MessageBox.ERROR
-							});
-						});
-			// send the current conf to the server
-			geostore.create(conf.build(), function(newId) {
+		// send the current conf to the server
+		this.geostore.create(conf.build(), {
+				onFailure: function save_create_failed( response ){
+					console.error(response);
+					Ext.Msg.show({
+						title: 'Cannot save this configuration',
+						msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.ERROR
+					});					
+				},
+				onSuccess: function save_create_success(newId){
+					// console.log( newId );
 					Ext.Msg.show({
 						title: 'Configuration saved',
 						msg: 'configuration saved successfully',
 						buttons: Ext.Msg.OK,
 						icon: Ext.MessageBox.INFO
+					});	
+					self.reload(
+						function(data){
+								var store = data.store;
+								var item = store.getById(newId);
+								self.cruiseListView.select(item, false, true);
+								self.loadCruise( newId );
 					});
-
-			// reload data
-
-			
-			self.clean();
-			self.mapId = newId;
-
-			self.loadCruiseList(function(data){
-						var store = data.store;
-						var id = self.mapId;
-						var item = store.getById(id);
-						self.cruiseListView.select(item, false, true);
-						self.loadCruise( newId );
-						// self.enable();
-					});
-
-
+				}
 			});
+
 	},
 
 	uploadFileAndSave: function( conf ){
@@ -1105,61 +1117,53 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		},
 
 		update: function( conf ){
-						var self = this;
-						// keep the old version for logo file and upload only changes
-						var datastore = new GeoStore.Datastore({
-							authorization: self.token,
-							proxy: self.proxy,
-							url: self.urlData
-						}).failure(function(response) {
+				var self = this;
+				// keep the old version for logo file and upload only changes
+				this.geostore.updateData(
+						self.mapId, conf.build().blob,{
+						onFailure: function(response){
 							console.error(response);
 							Ext.Msg.show({
-								title: 'Cannot save this configuration',
-								msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-								buttons: Ext.Msg.OK,
-								icon: Ext.MessageBox.ERROR
-							});
-						});
-						// data in blob are saved separately
-						datastore.update(
-						self.mapId, conf.build().blob, function(data) { // callback
-							var geostore = new GeoStore.Maps({
-									authorization: self.token,
-									proxy: self.proxy,
-									url: self.url
-							}).failure(function(response) {
-									console.error(response);
-									Ext.Msg.show({
-										title: 'Cannot save this configuration',
-										msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-										buttons: Ext.Msg.OK,
-										icon: Ext.MessageBox.ERROR
-									});
-							});
-							// It is necessary to update both metadata and data in two steps!
-							geostore.update(
-							self.mapId, conf.build(), function(data) { // callback
-								Ext.Msg.show({
-									title: 'Configuration updated',
-									msg: 'configuration updated successfully',
+									title: 'Cannot save this configuration',
+									msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
 									buttons: Ext.Msg.OK,
-									icon: Ext.MessageBox.OK
-								});
-								// reload data
-
-								// self.clean();
-
-								self.loadCruiseList(function(data){
-										var store = data.store;
-										var id = self.mapId;
-										var item = store.getById(id);
-										self.cruiseListView.select(item, false, true);
-										self.loadCruise( self.mapId );
-										// self.enable();
-								});
-			
+									icon: Ext.MessageBox.ERROR
 							});
-						});			
+						},
+						onSuccess: function(data){
+							// It is necessary to update both metadata and data in two steps!
+							self.geostore.update(
+								self.mapId, conf.build(), {
+									onFailure: function update_geostore_update_failed( response ){
+										console.error(response);
+										Ext.Msg.show({
+											title: 'Cannot save this configuration',
+											msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
+											buttons: Ext.Msg.OK,
+											icon: Ext.MessageBox.ERROR
+										});
+									},
+									onSuccess: function update_geostore_update_success( data ){
+											Ext.Msg.show({
+													title: 'Configuration updated',
+													msg: 'configuration updated successfully',
+													buttons: Ext.Msg.OK,
+													icon: Ext.MessageBox.OK
+											});
+											var mapId = self.mapId;
+											self.reload(function(data){
+														var store = data.store;
+														var item = store.getById(mapId);
+														self.cruiseListView.select(item, false, true);
+														self.loadCruise( mapId );
+
+												});
+									}
+								});
+											
+						}	
+				}); 							
+								
 		},
 		
 		updateAndUploadFile: function( conf ){
@@ -1301,40 +1305,17 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.reloadButton.disable();
 		},
 
-		loadCruiseList: function( callback ) {
-			var self = this;
-			var geostore = new GeoStore.Maps({
-				authorization: this.token,
-				proxy: this.proxy,
-				url: this.url
-			}).failure(function(response) {
-				console.error(response);
-				Ext.Msg.show({
-					title: 'Cannot get configurations from server',
-					msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-					buttons: Ext.Msg.OK,
-					icon: Ext.MessageBox.ERROR
-				});
-			});
-
-			geostore.find(function cruiseListCallback(data) {
-				function getStore(){
-					return self.store;
+		reload: function( callback ){
+			this.clean();
+			if (callback){
+				var self = this;
+				var handler = function(){
+					callback( self );
+					self.store.un( 'load', handler);
 				};
-				// console.log(data);
-				if (callback){
-					var handler = function(){
-						
-						
-						callback( self );
-						self.store.un( 'load', handler);
-					};
-					self.store.on( 'load', handler);
-				}
-				self.store.loadData(data);
-			}, {
-				full: true
-			});
+				this.store.on( 'load', handler);
+			}
+			this.store.reload();
 		},
 
 		deleteCruise: function() {
@@ -1346,25 +1327,21 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			           buttons: Ext.MessageBox.YESNO,
 			           fn: function(btn){
 							if ( btn === 'yes' ){
-								var geostore = new GeoStore.Maps({
-									authorization: self.token,
-									proxy: self.proxy,
-									url: self.url
-								}).failure(function(response) {
-									console.error(response);
-									Ext.Msg.show({
-										title: 'Cannot delete this configuration',
-										msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
-										buttons: Ext.Msg.OK,
-										icon: Ext.MessageBox.ERROR
-									});
-								});
 	
-								geostore.deleteByPk(self.mapId, function cruiseListCallback(data) {
-									// reload data
-									self.loadCruiseList();
-									self.clean();
-									self.disable();
+								self.geostore.deleteByPk(self.mapId, {
+									onFailure: function(response){
+										console.error(response);
+										Ext.Msg.show({
+												title: 'Cannot delete this configuration',
+												msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
+												buttons: Ext.Msg.OK,
+												icon: Ext.MessageBox.ERROR
+										});
+									},
+									onSuccess: function( data){
+										self.reload();
+										self.disable();
+									}
 								});
 							}
 

@@ -3,7 +3,7 @@
  *
  *  This module encapsulates the interaction logic with the GeoStore
  *  The idea is to abstract away from how the interaction is implemented (i.e. REST/json or xml messages)
- *  It is not intended to duplicate Ext.JSonStore, but to separate concerns
+ *  It is not intended to duplicate Ext.data.JSonStore, but to separate concerns
  *
  *  'extend' mechanism use the pseudoclassial pattern 
  */
@@ -19,6 +19,7 @@
 	var Google = root.Google = {};
 	// version for the API client
 	GeoStore.VERSION = '0.2';
+	
 	
 	/**
 	 * Class: Uri
@@ -129,6 +130,7 @@
 		}
 		
 	};
+	
 
 	/**
 	 * Class: GeoStore.ContentProvider
@@ -159,6 +161,21 @@
 		console.log( 'created GeoStore.ContentProvider');
 		console.log( 'authorization: ' + this.authorization_ );
 		console.log( 'base url: ' + this.baseUrl_);
+	};
+	
+	/** 
+	 * Function: setToken
+	 * 
+	 *
+	 * Parameters:
+	 * Return:
+	 */	
+	ContentProvider.prototype.setToken = function( token ){
+		this.authorization_ = token ;
+	};	
+	
+	ContentProvider.prototype.invalidateToken = function(  ){
+		this.authorization_ = null ;
 	};
 	
 	/** 
@@ -252,18 +269,22 @@
 	 * Parameters:
 	 * pk - {String} primary key
 	 * callback - {Function} callback
-	 * params_opt - {Array} optional array of the item of type {name:..., value:,...}
+	 * obj - {Object} 
 	 * Return:
 	 * 
 	 */
-	ContentProvider.prototype.findByPk = function(pk, callback, params_opt){
+	ContentProvider.prototype.findByPk = function(pk, obj){
 		this.beforeFind();
+		
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
 		
 		// build the uri to invoke
 		var uri = new Uri({'url':this.baseUrl_});
 		uri.setProxy( this.proxy_ );
-		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
-		if (params_opt){
+		uri.appendPath( this.readPath_ ).appendId( pk );
+		if (params_opt && params_opt){
 			for( name in params_opt ){
 				uri.addParam( name, params_opt[name] );
 			}
@@ -281,10 +302,12 @@
 	       scope: this,
 	       success: function(response, opts){
 				var data = self.afterFind( Ext.util.JSON.decode(response.responseText) ); 
-				callback(data);
+				successHandler.call(this, data);
+				// callback(data);
 	       },
 	       failure: function(response, opts){
-				this.onFailure_(response);
+				failureHandler.call(this, data);
+				// this.onFailure_(response);
 	       }
 	    });
 	};
@@ -294,17 +317,26 @@
 	 * Function: find
 	 * find all elements in async mode
 	 *
+	 *  Available params:
+	 *     full: Boolean
+	 *     page: Number
+	 *     entries: Number
+	 *
 	 * Parameters:
 	 * callback - {Function}
 	 * Return:
 	 * 
 	 */
-	ContentProvider.prototype.find = function(callback, params_opt){
+	ContentProvider.prototype.find = function(obj){
 		this.beforeFind();
+
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
 		
 		// build the uri to invoke
 		var uri = new Uri({'url':this.baseUrl_});
-		uri.setProxy( this.proxy_ );
+		uri.appendPath( this.retrievePath_ ).setProxy( this.proxy_ );
 		if (params_opt){
 			for( name in params_opt ){
 				uri.addParam( name, params_opt[name] );
@@ -324,10 +356,13 @@
 	       scope: this,
 	       success: function(response, opts){
 				var data = self.afterFind( Ext.util.JSON.decode(response.responseText) );
-				callback(data);
+				successHandler.call(this, data);
+				// callback(data);
 	       },
 	       failure:  function(response, opts){
-	       		var json = Ext.util.JSON.decode(response.responseText);
+				console.error( response.responseText );
+	       		// var json = Ext.util.JSON.decode(response.responseText);
+				failureHandler.call(this, response.responseText);
 				// console.log(Ext.util.JSON.decode(json));
 	       }
 	    });		
@@ -344,11 +379,16 @@
 	 * Return:
 	 * 
 	 */
-	ContentProvider.prototype.update = function(pk, item, callback){
+	ContentProvider.prototype.update = function(pk, item, obj){
 		var data = this.beforeSave(item);
+		
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
 		var uri = new Uri({'url':this.baseUrl_});
 		uri.setProxy( this.proxy_ );
-		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
+		uri.appendPath( this.updatePath_ ).appendId( pk );
 		// console.log(data);
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),
@@ -361,10 +401,12 @@
 	       scope: this,
 		   params: data,
 	       success: function(response, opts){
-				callback( response );
+				successHandler.call(this, response);
+				// callback( response );
 	       },
 	       failure:  function(response, opts){
-				this.onFailure_(response);
+				failureHandler.call(this, response);
+				// this.onFailure_(response);
 	       }
 	    });		
 	};	
@@ -379,10 +421,15 @@
 	 * Return:
 	 * 
 	 */
-	ContentProvider.prototype.deleteByPk = function(pk, callback){
+	ContentProvider.prototype.deleteByPk = function(pk, obj){
+		
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
 		var uri = new Uri({'url':this.baseUrl_});
 		uri.setProxy( this.proxy_ );
-		uri.appendPath( this.resourceNamePrefix_ ).appendId( pk );
+		uri.appendPath( this.deletePath_ ).appendId( pk );
 		var Request = Ext.Ajax.request({
 	       url: uri.toString(),
 	       method: 'DELETE',
@@ -394,11 +441,13 @@
 	       scope: this,
 	       success: function(response, opts){
 				// var json = Ext.util.JSON.decode(response.responseText);
-				callback( response );
+				// callback( response );
+				successHandler.call(this, response);
 	       },
 	       failure:  function(response, opts){
 	       		// var json = Ext.util.JSON.decode(response.responseText);
 				console.error( response );
+				failureHandler.call(this, response);
 	       }
 	    });		
 	};
@@ -413,9 +462,14 @@
 	 * Return:
 	 * 
 	 */
-	ContentProvider.prototype.create = function(item, callback){
+	ContentProvider.prototype.create = function(item, obj){
+		
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
 		 var uri = new Uri({'url':this.baseUrl_});
-		 uri.setProxy( this.proxy_ );
+		 uri.appendPath( this.createPath_ ).setProxy( this.proxy_ );
 		 var data = this.beforeSave( item );
 		// console.log(data);
 		// build the Ajax request
@@ -430,10 +484,12 @@
 	       params: data,
 	       scope: this,
 	       success: function(response, opts){
-				callback(response.responseText);
+				// callback(response.responseText);
+				successHandler.call(this, response.responseText);
 	       },
 	       failure:  function(response, opts){
 	       		console.log(response);
+				failureHandler.call(this, response);
 	       }
 	    });		
 	};
@@ -469,6 +525,55 @@
 	
    // init some content providers used in the application
 
+
+ /**
+  * Class: Datastore 
+  * {private}
+  *
+  * CRUD methods for maps in Datastore
+  * Inherits from:
+  *  - <GeoStore.ContentProvider>
+  *
+  */
+  var Datastore = ContentProvider.extend({
+	initialize: function(){
+		this.resourceNamePrefix_ = '';
+		this.updatePath_ = 'data';
+	},
+	update: function(pk, item, obj){
+		var data = this.beforeSave(item);
+
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+
+		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
+		uri.appendPath( this.updatePath_ ).appendId( pk );
+		// console.log( data );
+		var Request = Ext.Ajax.request({
+	       url: uri.toString(),
+	       method: 'PUT',
+	       headers:{
+	          'Content-Type' : 'application/json',
+	          'Accept' : this.acceptTypes_,
+	          'Authorization' : this.authorization_
+	       },
+	       scope: this,
+		   params: data,
+	       success: function(response, opts){
+				// callback( response );
+				successHandler.call(this, response);
+	       },
+	       failure:  function(response, opts){
+				// this.onFailure_(response);
+				console.error(response);
+				failureHandler.call(this, response);
+	       }
+	    });		
+	}
+   });
+
 /**
  * Class: GeoStore.Maps
  *
@@ -479,8 +584,137 @@
  */
    var Maps = GeoStore.Maps = ContentProvider.extend({
 	initialize: function(){
-		this.resourceNamePrefix_ = 'resource';
+	
+		this.createPath_ = 'resources';
+		this.readPath_ = 'resources/resource';
+		this.retrievePath_ = 'resources';
+		this.deletePath_ = 'resources/resource';
+		this.updatePath_ = 'resources/resource';
+		
+	
+		this.resourceNamePrefix_ = 'resources/resource';
+		this.searchPath_ = 'extjs/search/*';
+		this.datastorePath_ = 'data';
+		this.timeout_ = 10000;
+		this.headers_ = {'Accept': 'application/json'};
 	},
+
+	/** 
+	 * Function: updateData
+	 * 
+	 *  In the current implementation of GeoStore
+	 *  data and metadata must be updated in two distinct steps
+	 *  this function updates data (i.e. blob field) of a configuration with id=pk 
+	 *
+	 *  Possible improvement: make this fact transparent to users
+	 *
+	 * Parameters:
+	 * Return:
+	 * {Ext.data.Store}
+	 */	
+	updateData:function(pk, data, obj){
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
+		var datastore = new Datastore({
+			proxy: this.proxy_,
+			url: this.baseUrl_
+		});
+		datastore.setToken( this.authorization_ );
+		datastore.update( pk, data, {
+			params: params_opt,
+			onSuccess: successHandler,
+			onFailure: failureHandler
+		});
+	},
+	
+	/** 
+	 * Function: getStore
+	 * returns an Ext.data.Store 
+	 *
+	 * Parameters:
+	 * Return:
+	 * {Ext.data.Store}
+	 */
+	getStore:function(){
+		
+		// if not present, create an instance of Ext.data.Store for this GeoStore.Maps
+		if ( ! this.store_ ){
+			var uri = new Uri({'url':this.baseUrl_});
+			uri.setProxy( this.proxy_);
+			uri.appendPath( this.searchPath_ );
+			this.store_ = new Ext.data.JsonStore({
+	            autoDestroy: true,
+				scope: this,
+	            root: 'results',
+	            totalProperty: 'totalCount',
+	            successProperty: 'success',
+	            idProperty: 'id',
+	            remoteSort: false,
+	            fields: [{
+	                        name: "id",
+	                        type: "int"
+	                    },{
+	                        name: "name",
+	                        type: "string"
+	                    },{
+	                        name: "owner",
+	                        type: "string"
+	                    },{
+	                        name: "description",
+	                        type: "string"
+	                    },{
+	                        name: "creation",
+	                        type: "date",
+	                        dateFormat: 'c'
+	                    },{
+	                        name: "lastUpdate",
+	                        type: "date",
+	                        dateFormat: 'c'
+	                    },{
+	                        name: "canEdit",
+	                        type: "boolean"
+	                    },{
+	                        name: "canDelete",
+	                        type: "boolean"
+	                    }
+	            ],
+	            proxy: new Ext.data.HttpProxy({
+	                url: uri.toString(),
+	                restful: true,
+	                method : 'GET',
+	                disableCaching: true,
+	                timeout: this.timeout_,
+	                failure: function (result) {
+	                   console.error(result);
+	                },
+	                defaultHeaders: this.headers_
+	            }),
+				listeners:{
+					 // hack: when we use a proxy, we need to set params for geostore by hand
+					 // in order to avoid the issue described here 
+					 // https://github.com/geosolutions-it/mapstore/issues/31
+				     beforeload:function(store, options){
+						var params = options.params;
+						var uri = new Uri({'url':this.baseUrl_});
+						uri.setProxy( this.proxy_);
+						uri.appendPath( this.searchPath_ );
+						uri.addParam('start', params.start );
+						uri.addParam('limit', params.limit );
+						// console.log( uri.toString() );
+
+				        store.proxy.setUrl( uri.toString() );
+				     },
+				     scope: this
+				},
+	            sortInfo: { field: "creation", direction: "DESC" }
+	        });			
+		}
+
+		return this.store_;
+	},
+	
 	beforeSave: function(data){
 		// wrap new map within an xml envelop
 		var xml = '<Resource>';
@@ -543,35 +777,7 @@
 	}
    } );
 
-   var Datastore = GeoStore.Datastore = ContentProvider.extend({
-	initialize: function(){
-		this.resourceNamePrefix_ = '';
-	},
-	update: function(pk, item, callback){
-		var data = this.beforeSave(item);
-		var uri = new Uri({'url':this.baseUrl_});
-		uri.setProxy( this.proxy_ );
-		uri.appendId( pk );
-		// console.log( data );
-		var Request = Ext.Ajax.request({
-	       url: uri.toString(),
-	       method: 'PUT',
-	       headers:{
-	          'Content-Type' : 'application/json',
-	          'Accept' : this.acceptTypes_,
-	          'Authorization' : this.authorization_
-	       },
-	       scope: this,
-		   params: data,
-	       success: function(response, opts){
-				callback( response );
-	       },
-	       failure:  function(response, opts){
-				this.onFailure_(response);
-	       }
-	    });		
-	}
-   });
+ 
 
    /**
     * Class: GeoStore.Filestore
