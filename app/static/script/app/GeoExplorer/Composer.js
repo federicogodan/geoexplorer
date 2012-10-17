@@ -146,6 +146,18 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 					allowGroups: true
 				},
                 outputTarget: "idacontrol"
+            },  {
+                ptype: "gxp_idammdatabase",
+                outputConfig: {
+                    id: "mmpanel"
+                },
+                outputTarget: "idacontrol"
+            },  {
+                ptype: "gxp_idahabitat",
+                outputConfig: {
+                    id: "habitatPanel"
+                },
+                outputTarget: "idacontrol"
             }, /*{
                 ptype: "gxp_print",
                 customParams: {outputFilename: 'ida-print'},
