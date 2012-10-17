@@ -311,7 +311,7 @@
             //
             var sources = "{" + 
                 "\"ida\": {" + 
-                    "\"url\":\"http://localhost:8080/geoserver/ows\"," +
+                    "\"url\":\"http://localhost:8080/geoserver/ows/\"," +
                     "\"title\":\"IDA GeoServer\"," +
                     "\"version\":\"1.1.1\"," +
 				    "\"layerBaseParams\": {" +
@@ -402,6 +402,8 @@
                 },
                 georeferences: georeferences_data,
 				riskData: risk_data,
+                mammalData: mammalData,
+                habitatData: habitatData,
                 sources: sources,
                 map: {
 					projection: "EPSG:4326",
@@ -535,7 +537,7 @@
 			
 		Ext.Ajax.request({
 		  //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-		  url: location.host.indexOf("localhost:8081")!=-1? "/urlConfig.js": "/MapComposer/urlConfig",
+		  url: location.host.indexOf("localhost:8083")!=-1? "/urlConfig.js": "/MapComposer/urlConfig",
 		  method: 'GET',
 		  success: function(response, opts){      
 			  var serverConfig;    
