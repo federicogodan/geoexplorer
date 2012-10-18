@@ -37,8 +37,8 @@ var risk_data = {
 		}
 	],
     urlParameters: {
-		capabilitiesURL: "http://localhost:8080/geoserver",
-		proxy: "/proxy/?url=" // If not defined the app proxy is used
+		capabilitiesURL: "http://demo.geo-solutions.it/geoserver",
+		proxy: "/httpProxy/proxy/?url=" // If not defined the app proxy is used
 	}
 };
 
@@ -66,15 +66,15 @@ var mammalData = {
         ["Angel squid", "Ancistroteuthis lichtensteini", "Onychoteuthidae", "http://www.fao.org/fishery/species/16948/en"]
     ],
     "sightingsStrandingsData":[
-        [false, "Strandings", "http://geos3.nurc.nato.int/portal/web/guest"],
-        [false, "Ports", "http://geos3.nurc.nato.int/portal/web/guest"]
+        [false, "Strandings", "http://www.coa.edu/strandings.htm"],
+        [false, "Ports", "http://www.coa.edu/strandings.htm"]
     ]    
 };
 
 var habitatData = {		
     "habitatData":[
-        [false, "Strandings", "http://geos3.nurc.nato.int/portal/web/guest"],
-        [false, "Ports", "http://geos3.nurc.nato.int/portal/web/guest"]        
+        [false, "Strandings", "http://www.coa.edu/strandings.htm"],
+        [false, "Ports", "http://www.coa.edu/strandings.htm"]        
     ]    
 };
 
