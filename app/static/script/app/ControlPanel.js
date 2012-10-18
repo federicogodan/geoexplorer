@@ -69,6 +69,16 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		
 		// this.loadCruiseList();
 
+		this.reloadListButton = new Ext.Button({
+			iconCls:'gxp-icon-refresh', 
+			// text:"Reload",
+			// disabled: true,
+			ref:'../reloadListButton',
+			handler: this.reloadListHandler,
+			tooltip: 'Reload cruise list',
+			scope: this			
+		});
+
 		// list of cruise configurations
 		this.cruiseListView = new Ext.list.ListView({
 			store: this.store,
@@ -111,7 +121,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		
 		this.createButton = new Ext.Button({ 
 			icon:'../theme/app/img/silk/add.png', 
-			text:"New cruise",
+			// text:"New cruise",
+			tooltip:'Create new cruise',
 			disabled: true,
 			ref:'../createButton',
 			handler: this.createCruise,
@@ -126,6 +137,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			handler: this.createLoadCruiseHandler( this ),
 			scope: this
 		});
+		
 		
 		this.loginButton =  new Ext.Button({
 			iconCls: 'gxp-icon-user',
@@ -806,6 +818,17 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 	},
 	
+	reloadListHandler: function(){
+		var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
+		appMask.show();
+		var self = this;
+		var handler = function(){
+			appMask.hide();
+			self.store.un( 'load', handler);
+		};
+		this.store.on( 'load', handler);
+		this.store.reload();
+	},
 
 	getCreateButton: function(){
 		return this.createButton;
@@ -952,10 +975,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	},
 	
 	loadCruise: function(mapId, callback){
+		var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
+		appMask.show();
+		
 		var self = this;
 		this.geostore.findByPk(mapId, {
 			params: { full: true },
 			onFailure: function loadCruise_findByPK_callback_failed(response){
+				appMask.hide();
 				console.error(response);
 				Ext.Msg.show({
 					title: 'Cannot read configuration',
@@ -965,6 +992,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				});			
 			},
 			onSuccess: function loadCruise_findByPK_callback_success(data) {
+						appMask.hide();
 						// get blob as a json object
 						var payload = null;
 						try {
@@ -1039,10 +1067,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	
 	save: function( conf ){
 
+		var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, saving..."});
+		appMask.show();
+
 		var self = this;
 		// send the current conf to the server
 		this.geostore.create(conf.build(), {
 				onFailure: function save_create_failed( response ){
+					appMask.hide();
 					console.error(response);
 					Ext.Msg.show({
 						title: 'Cannot save this configuration',
@@ -1052,6 +1084,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					});					
 				},
 				onSuccess: function save_create_success(newId){
+					appMask.hide();
 					// console.log( newId );
 					Ext.Msg.show({
 						title: 'Configuration saved',
@@ -1117,11 +1150,16 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		},
 
 		update: function( conf ){
+			
+				var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, updating..."});
+				appMask.show();
+			
 				var self = this;
 				// keep the old version for logo file and upload only changes
 				this.geostore.updateData(
 						self.mapId, conf.build().blob,{
 						onFailure: function(response){
+							appMask.hide();
 							console.error(response);
 							Ext.Msg.show({
 									title: 'Cannot save this configuration',
@@ -1131,6 +1169,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							});
 						},
 						onSuccess: function(data){
+							appMask.hide();
 							// It is necessary to update both metadata and data in two steps!
 							self.geostore.update(
 								self.mapId, conf.build(), {
