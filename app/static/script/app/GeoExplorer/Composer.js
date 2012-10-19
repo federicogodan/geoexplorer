@@ -578,6 +578,33 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         
         return tools;
     },
+
+    /*
+     * private: method[viewIdaLink]
+     */
+    viewIdaLink: function(link, title){
+        var tabPanel = Ext.getCmp(app.renderToTab);
+        
+        var tabs = tabPanel.find('title', title);
+        if(tabs && tabs.length > 0){
+            tabPanel.setActiveTab(tabs[0]); 
+        }else{
+            
+            var linkTab = new Ext.Panel({
+                title: title,
+                layout:'fit', 
+                tabTip: title,
+                closable: true,
+                items: [ 
+                    new Ext.ux.IFrameComponent({ 
+                        url: link
+                    }) 
+                ]
+            });
+            
+            tabPanel.add(linkTab);
+        }
+    },
     
     /*
      * private: method[openPreview]

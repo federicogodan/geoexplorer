@@ -37,8 +37,8 @@ var risk_data = {
 		}
 	],
     urlParameters: {
-		capabilitiesURL: "http://demo.geo-solutions.it/geoserver",
-		proxy: "/httpProxy/proxy/?url=" // If not defined the app proxy is used
+		capabilitiesURL: "http://localhost:8080/geoserver",
+		proxy: "/proxy/?url=" // If not defined the app proxy is used
 	}
 };
 
