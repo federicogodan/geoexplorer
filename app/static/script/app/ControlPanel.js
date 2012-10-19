@@ -343,18 +343,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						ref: '../../watermarkUrl',
 						width: 500
 					},
-					new Ext.BoxComponent({
-						ref: '../../watermarkLogo',
-						width:30,
-						heigth:30,
-						fieldLabel: 'Current <span style="color:green;" ext:qtip="This is the default watermark if you do not specify a new file.">?</span> ',
-						hideLabel: false,
-						hidden: true,
-					    autoEl: {
-					        tag: 'img',
-					        src: '../theme/app/img/nurc-logo.png'
-					    }
-					}),
+							new Ext.BoxComponent({
+								ref: '../../watermarkLogo',
+								width:30,
+								heigth:30,
+								fieldLabel: 'Current',
+								// fieldLabel: 'Current <span style="color:green;" ext:qtip="This is the default watermark if you do not specify a new file.">?</span> ',
+								hidden: true,
+							    autoEl: {
+							        tag: 'img',
+							        src: '../theme/app/img/nurc-logo.png'
+							    }
+							}),
 					this.fileForm,
 					{
 						xtype: "combo",
@@ -789,14 +789,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			
 			if ( listItem.id !== self.mapId){
 				self.loadCruise( listItem.id );
-			} else {
+			} /*else {
 				Ext.Msg.show({
 						title: 'Cannot select this cruise',
 						msg: 'This cruise is already selected.',
 						buttons: Ext.Msg.OK,
 						icon: Ext.MessageBox.WARN
 				});				
-			}
+			}*/
 			
 		});
 		
@@ -879,7 +879,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		window.open( this.interPageBaseUrl + + this.mapId);
 	},
 
-	saveOrUpdate: function() {
+	saveOrUpdate: function() {		
 
 		if (this.validateForm()) {
 			
@@ -921,8 +921,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				return;
 			}
 			
-			// console.log(stepSize);
-			// console.log(period);
 			
 			if ( endTime.getTime() <= startTime.getTime() ){
 				Ext.Msg.show({
@@ -941,43 +939,69 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			
 			} else {
 				
-				// create a configuration from form fields
-				var conf = ConfigurationBuilder.create({
-							name: this.cruisePanelView.name.getValue(),
-							description: this.cruisePanelView.name.getValue(),
-							timeRange: [this.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
-										this.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
-							timeStep: this.cruisePanelView.stepValueField.getValue(),
-							timeFrameRate: this.cruisePanelView.rateValueField.getValue(),
-							timeUnits: this.cruisePanelView.stepUnitsField.getValue(),
-							models: this.cruisePanelView.modelSelector.toMultiselect.store.data.items,
-							backgrounds: this.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
-							vehicles: this.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
-							watermarkPosition: this.cruisePanelView.watermarkPosition.getValue(),
-							watermarkUrl: this.cruisePanelView.watermarkUrl.getValue(),
-							watermarkText: this.cruisePanelView.watermarkText.getValue(),
-							bounds: [this.nwTextField.getValue(), this.swTextField.getValue(), this.seTextField.getValue(), this.neTextField.getValue()],
-							geoserverBaseUrl: this.geoserverBaseUrl
-						});				
+				var self = this;
+				// verfy if the name is already taken
+				this.geostore.count(this.cruisePanelView.name.getValue(), {
+					onFailure: function( response ){
+							Ext.Msg.show({
+								title: 'Cannot save this configuration',
+								msg: 'Cannot connect to GeoStore',
+								buttons: Ext.Msg.OK,
+								icon: Ext.MessageBox.ERROR
+							});			
+					},
+					onSuccess: function( count ){
+						if ( count > 1 || ( count>0 && ( self.mapId===-1) ) ){
+							Ext.Msg.show({
+								title: 'Cannot save this configuration',
+								msg: 'Name already used',
+								buttons: Ext.Msg.OK,
+								icon: Ext.MessageBox.ERROR
+							});	
+							self.cruisePanelView.name.markInvalid();				
+						} else {
+										// create a configuration from form fields
+										var conf = ConfigurationBuilder.create({
+													name: self.cruisePanelView.name.getValue(),
+													description: self.cruisePanelView.name.getValue(),
+													timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
+																self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
+													timeStep: self.cruisePanelView.stepValueField.getValue(),
+													timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
+													timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
+													models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
+													backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
+													vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
+													watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
+													watermarkUrl: self.cruisePanelView.watermarkUrl.getValue(),
+													watermarkText: self.cruisePanelView.watermarkText.getValue(),
+													bounds: [self.nwTextField.getValue(), self.swTextField.getValue(), self.seTextField.getValue(), self.neTextField.getValue()],
+													geoserverBaseUrl: self.geoserverBaseUrl
+												});				
+
+										if (self.mapId === -1) { // a new configuration is created	
+											var filename = self.fileForm.fileuploadField.getValue();
+											if (filename && filename !== '') {
+												self.uploadFileAndSave( conf );
+											} else {
+												conf.setParam('watermarkUrl', self.defaultWatermarkUrl );
+												self.save( conf );		
+											}
+
+										} else { // an old conf is updated
+											var filename = self.fileForm.fileuploadField.getValue();
+
+											if (filename && filename !== '') { // a new logo is defined, use this one
+												self.updateAndUploadFile( conf );
+											} else {
+												self.update( conf );
+											}
+										}
+						}
+					}
+				});				
 				
-				if (this.mapId === -1) { // a new configuration is created	
-					var filename = this.fileForm.fileuploadField.getValue();
-					if (filename && filename !== '') {
-						this.uploadFileAndSave( conf );
-					} else {
-						conf.setParam('watermarkUrl', this.defaultWatermarkUrl );
-						this.save( conf );		
-					}
-
-				} else { // an old conf is updated
-					var filename = this.fileForm.fileuploadField.getValue();
-
-					if (filename && filename !== '') { // a new logo is defined, use this one
-						this.updateAndUploadFile( conf );
-					} else {
-						this.update( conf );
-					}
-				}				
+	
 			}
 			
 

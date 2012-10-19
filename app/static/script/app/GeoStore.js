@@ -630,6 +630,42 @@
 	},
 	
 	/** 
+	 * Function: count
+	 * 
+	 *  returns the number of elements with a given name
+	 */	
+	count: function( filter, obj ){
+		
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
+		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
+		uri.appendPath( 'extjs/search' ).appendPath( filter );
+		uri.addParam('start', 0);
+		uri.addParam('limit', 100); // TODO how to specify infinite?
+		var Request = Ext.Ajax.request({
+	       url: uri.toString(),
+	       method: 'GET',
+	       headers:{
+	          'Content-Type' : 'application/json',
+	          'Accept' : this.acceptTypes_,
+	          'Authorization' : this.authorization_
+	       },
+	       scope: this,
+	       success: function(response, opts){
+				var obj = Ext.util.JSON.decode(response.responseText);
+				successHandler.call(this, obj.totalCount);
+	       },
+	       failure:  function(response, opts){
+				console.error( response );
+				failureHandler.call(this, response);
+	       }
+	    });		
+	},
+	
+	/** 
 	 * Function: getStore
 	 * returns an Ext.data.Store 
 	 *
