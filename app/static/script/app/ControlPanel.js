@@ -265,7 +265,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				disabled: true,
 				xtype: "fileuploadfield",
 				emptyText: 'Select a file...',
-				fieldLabel: 'Watermark file',
+				fieldLabel: 'File',
 				name: "watermarkFile",
 				buttonText: "",
 				buttonCfg: {
@@ -328,7 +328,13 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						disabled: true,
 						ref: '../../name',
 						width: 500
-					}, {
+					}]
+				},{
+					xtype: 'fieldset',
+					title: 'Watermark',
+					labelWidth: 120,
+					items:[
+					 {
 						xtype: "hidden",
 						id: "fileUrl",
 						fieldLabel: 'Watermark picture url',
@@ -341,7 +347,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						ref: '../../watermarkLogo',
 						width:30,
 						heigth:30,
-						fieldLabel: 'Current Watermark',
+						fieldLabel: 'Current <span style="color:green;" ext:qtip="This is the default watermark if you do not specify a new file.">?</span> ',
 						hideLabel: false,
 						hidden: true,
 					    autoEl: {
@@ -352,7 +358,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					this.fileForm,
 					{
 						xtype: "combo",
-						fieldLabel: 'Watermark position',
+						fieldLabel: 'Position',
 						invalidText: 'A position must be specified',
 						emptyText: 'Select a position...',
 						store: [
@@ -369,7 +375,17 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						// value: 'position:relative;left:5px;bottom:5px',
 						ref: '../../watermarkPosition',
 						width: 500
-					}]
+					},
+					{
+						xtype: 'textfield',
+						allowBlank: true,
+						fieldLabel: 'Text',
+						disabled: true,
+						ref: '../../watermarkText',
+						width: 500
+					}
+					
+					]
 				}, {
 					xtype: 'fieldset',
 					title: 'Select ocean models',
@@ -679,6 +695,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				}]
 			},
 
+			
 			// configuration of all tool plugins for this application
 			tools: [
 			/*{
@@ -713,7 +730,15 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			map: {
 				id: "map-viewport",
 				// projection: "EPSG:4326",
-				layers: [ config.background ]
+				// maxResolution: 156543.0339,
+				layers: [ config.background ],
+				controls: [
+				  new OpenLayers.Control.Navigation({zoomWheelOptions: {interval: 250}}),
+                  // new OpenLayers.Control.PanPanel(),
+                  // new OpenLayers.Control.ZoomPanel(),
+                  // new OpenLayers.Control.Attribution(),
+				  new OpenLayers.Control.LoadingPanel()
+				]
 			}
 		});
 
@@ -751,7 +776,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			var bounds = new OpenLayers.Bounds(-3.00, 32.55, 23.36, 50.13);
 			var proj = new OpenLayers.Projection("EPSG:4326");
 			bounds.transform(proj, self.tinyMap.mapPanel.map.getProjectionObject());
-			self.tinyMap.mapPanel.map.zoomToExtent( bounds );
+			self.tinyMap.mapPanel.map.zoomToExtent( bounds, true );
 		});
 
 		this.updateMapSize = function(){
@@ -795,9 +820,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		} );
 		Application.user.on( 'logout',  function logoutHandler( context ){
 			self.loginButton.setText('Login');
-			self.createButton.disable();
-			self.saveButton.disable();
-			self.deleteButton.disable();
+			if ( self.mapId === -1){
+				self.disable();
+			} else {
+				self.createButton.disable();
+				self.saveButton.disable();
+				self.deleteButton.disable();
+			}
+			
 			// self.loginButton.setIconClass('gxp-icon-user');
 			self.token = null;
 			self.geostore.invalidateToken( );
@@ -925,6 +955,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							vehicles: this.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
 							watermarkPosition: this.cruisePanelView.watermarkPosition.getValue(),
 							watermarkUrl: this.cruisePanelView.watermarkUrl.getValue(),
+							watermarkText: this.cruisePanelView.watermarkText.getValue(),
 							bounds: [this.nwTextField.getValue(), this.swTextField.getValue(), this.seTextField.getValue(), this.neTextField.getValue()],
 							geoserverBaseUrl: this.geoserverBaseUrl
 						});				
@@ -1010,10 +1041,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 						if (payload) {
 
-								// externalize
+								// TODO externalize
 								self.cruisePanelView.startTime.setValue(Date.parseDate(payload.timeRange[0], "Y-m-d\\TH:i:s.u\\Z"));
 								self.cruisePanelView.endTime.setValue(Date.parseDate(payload.timeRange[1], "Y-m-d\\TH:i:s.u\\Z"));
 								self.cruisePanelView.watermarkUrl.setValue(payload.watermarkUrl);
+								self.cruisePanelView.watermarkText.setValue(payload.watermarkText);
 								self.cruisePanelView.watermarkPosition.setValue(payload.watermarkPosition);
 								self.cruisePanelView.watermarkLogo.setVisible(true);
 								self.cruisePanelView.watermarkLogo.getEl().dom.src = payload.watermarkUrl;
@@ -1041,7 +1073,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 								var proj = new OpenLayers.Projection("EPSG:4326");
 								bounds.transform(proj, self.tinyMap.mapPanel.map.getProjectionObject());
 
-								self.tinyMap.mapPanel.map.zoomToExtent( bounds );
+								self.tinyMap.mapPanel.map.zoomToExtent( bounds, true );
 
 								if (callback){
 									// cruise loaded correctly, call callback
@@ -1255,6 +1287,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.cruisePanelView.endTime.enable();
 			this.fileForm.fileuploadField.enable();
 			this.cruisePanelView.watermarkPosition.enable();
+			this.cruisePanelView.watermarkText.enable();
 			this.cruisePanelView.modelSelector.enable();
 			this.cruisePanelView.vehicleSelector.enable();
 			this.cruisePanelView.backgroundSelector.enable();
@@ -1299,6 +1332,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.cruisePanelView.endTime.disable();
 			this.fileForm.fileuploadField.disable();
 			this.cruisePanelView.watermarkPosition.disable();
+			this.cruisePanelView.watermarkPosition.disable();
 			this.cruisePanelView.modelSelector.disable();
 			this.cruisePanelView.vehicleSelector.disable();
 			this.cruisePanelView.backgroundSelector.disable();
@@ -1323,6 +1357,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.mapId = -1;
 
 			this.cruisePanelView.watermarkLogo.setVisible(false);
+			this.cruisePanelView.watermarkPosition.reset();
 			this.cruisePanelView.watermarkLogo.getEl().dom.src = '';
 
 			this.cruisePanelView.stepValueField.reset();
@@ -1342,6 +1377,9 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.deleteButton.disable();
 			this.viewButton.disable();
 			this.reloadButton.disable();
+			
+			this.cruisePanelView.watermarkLogo.setVisible(true);
+			this.cruisePanelView.watermarkLogo.getEl().dom.src = this.defaultWatermarkUrl;
 		},
 
 		reload: function( callback ){
@@ -1359,6 +1397,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 		deleteCruise: function() {
 			
+			
+			
 			var self = this;
 			Ext.MessageBox.show({
 			           title:'Logout',
@@ -1366,9 +1406,13 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			           buttons: Ext.MessageBox.YESNO,
 			           fn: function(btn){
 							if ( btn === 'yes' ){
+								
+								var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, deleting..."});
+								appMask.show();
 	
 								self.geostore.deleteByPk(self.mapId, {
 									onFailure: function(response){
+										appMask.hide();
 										console.error(response);
 										Ext.Msg.show({
 												title: 'Cannot delete this configuration',
@@ -1378,6 +1422,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 										});
 									},
 									onSuccess: function( data){
+										appMask.hide();
 										self.reload();
 										self.disable();
 									}

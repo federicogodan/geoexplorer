@@ -118,8 +118,12 @@ var ConfigurationBuilder =  {
 						+ '"timeUnits":"' + params.timeUnits + '",'
 						 + '"models":['+ this.createModelConfiguration( params.models ) + '],'
 						+ '"backgrounds":['+ this.createBackgroundConfiguration( params.backgrounds ) + '],'
-				 	   + '"watermarkUrl":"'+ params.watermarkUrl + '",'
-						+ '"watermarkPosition":"'+ params.watermarkPosition + '",'
+				 	   + '"watermarkUrl":"'+ params.watermarkUrl + '",';
+			if ( params.watermarkText && params.watermarkText !== '' ){
+				conf.blob += '"watermarkText":"'+ params.watermarkText + '",'
+			}
+				        
+				conf.blob += '"watermarkPosition":"'+ params.watermarkPosition + '",'
 
 						+ '"bounds":['  
 						+	params.bounds[0] + ','

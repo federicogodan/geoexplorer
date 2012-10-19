@@ -4,7 +4,7 @@
    "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
-   "watermarkTitle": "Powered by NURC",
+   "watermarkText": "Powered by GeoSolutions for Nurc",
    "watermarkPosition": "position:absolute;left:5px;bottom:5px",
    "timeVisualizationPosition": "position:relative;left:60px;top:10px;background-color:#0055BB;color:#FFFFFF;font-size: 12px;",
    "maxExtent": [3.29817,40.266369,11.08748,45.93263],
@@ -16,7 +16,6 @@
    "timeUnits": "Minutes",
    "timeStep": 30,
    "timeFrameRate": 10,
-   "featureInfoBuffer": 1000,
    
    "vehicleSelector": {
 		"data":[
@@ -292,6 +291,7 @@
 			}
 		}, {
 			"ptype": "gxp_nurcfeatureeditor",
+			"featureInfoBuffer": 15,
 			"featureManager": "featuremanager",
 			"gliderPropertyName": "glider_name",
 			"cruisePropertyName": "cruise_name",

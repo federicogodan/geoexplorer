@@ -286,7 +286,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		if ( addConfig ){
 			// add properties of config if they are not defined in addConfig
 			config = Ext.applyIf(addConfig, config);
-			// config.watermarkUrl = config.xmlJsonTranslateService + 'temp/' + config.watermarkUrl;
 		}
 	
 		
@@ -326,7 +325,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		this.mapItems.push({
 	            xtype: "gxp_watermark", 
 				url: config.watermarkUrl, 
-				text: config.watermarkTitle, 
+				text: config.watermarkText, 
 				position: config.watermarkPosition 
 	    });
 	
