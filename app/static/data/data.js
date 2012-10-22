@@ -64,18 +64,7 @@ var mammalData = {
         ["Anchoveta(=Peruvian anchovy", "Engraulis ringens", "Engraulidae", "http://www.fao.org/fishery/species/2917/en"],
         ["Andrea cuttlefish", "Sepia andreana", "Sepiidae", "http://www.fao.org/fishery/species/17071/en"],
         ["Angel squid", "Ancistroteuthis lichtensteini", "Onychoteuthidae", "http://www.fao.org/fishery/species/16948/en"]
-    ],
-    "sightingsStrandingsData":[
-        [false, "Strandings", "http://www.coa.edu/strandings.htm"],
-        [false, "Ports", "http://www.coa.edu/strandings.htm"]
-    ]    
-};
-
-var habitatData = {		
-    "habitatData":[
-        [false, "Strandings", "http://www.coa.edu/strandings.htm"],
-        [false, "Ports", "http://www.coa.edu/strandings.htm"]        
-    ]    
+    ]
 };
 
 var georeferences_data = [
