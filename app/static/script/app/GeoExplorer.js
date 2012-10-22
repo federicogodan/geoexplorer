@@ -106,10 +106,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         this.mapItems = [
             {
                 xtype: "gxp_scaleoverlay",
-                topOutUnits:'nmi',    
-                topInUnits:'nmi',    
-                bottomInUnits:'m',    
-                bottomOutUnits:'km'
+                topOutUnits: scaleOverlayUnits ? scaleOverlayUnits.topOutUnits : null,
+                topInUnits: scaleOverlayUnits ? scaleOverlayUnits.topInUnits : null,
+                bottomInUnits: scaleOverlayUnits ? scaleOverlayUnits.bottomInUnits : null,
+                bottomOutUnits: scaleOverlayUnits ? scaleOverlayUnits.bottomOutUnits : null,
+                enableSetScaleUnits: config.enableSetScaleUnits
             }, {
                 xtype: "gx_zoomslider",
                 vertical: true,

@@ -1,6 +1,11 @@
 {
-   "geoStoreBase":"http://localhost:8080/geostore/rest/",
-   "proxy":"/proxy/?url=",
-   "gsSources":[
-   ]
+    "geoStoreBase":"http://localhost:8080/geostore/rest/",
+    "proxy":"/proxy/?url=",
+    "gsSources":[],
+    "scaleOverlayUnits":{
+        "topOutUnits":"nmi",    
+        "topInUnits":"nmi",    
+        "bottomInUnits":"m",    
+        "bottomOutUnits":"km"
+    }  
 }

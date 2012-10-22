@@ -93,6 +93,9 @@
         var geoStoreBaseURL;        
         var customSources;
         
+        // 
+        var scaleOverlayUnits;
+        
         var onReady = function(){
 
             Ext.BLANK_IMAGE_URL = (function() {
@@ -400,10 +403,10 @@
                     'abstract': "IDA Map",
                     contact: "<a href='#'>#</a>."
                 },
+                enableSetScaleUnits: true, //If set to true enables the selection of scale units in the ScaleOverlay widget
                 georeferences: georeferences_data,
 				riskData: risk_data,
                 mammalData: mammalData,
-                habitatData: habitatData,
                 sources: sources,
                 map: {
 					projection: "EPSG:4326",
@@ -503,7 +506,9 @@
                         title: "Strandings",
                         name: "nurc:strandings",
                         selected: false,
-                        visibility: false,
+                        visibility: true,
+                        showInTab: true,
+                        link: "http://www.coa.edu/strandings.htm",
                         group: "ida"
                     },{
                         source: "ida",
@@ -511,6 +516,8 @@
                         name: "nurc:ports",
                         selected: false,
                         visibility: false,
+                        showInTab: true,
+                        link: "http://www.coa.edu/strandings.htm",                        
                         group: "ida"
                     }]
                     /*,
@@ -557,6 +564,7 @@
 				  proxy = serverConfig.proxy; 
 				  geoStoreBaseURL = serverConfig.geoStoreBase;                  
 				  customSources = serverConfig.gsSources;
+                  scaleOverlayUnits = serverConfig.scaleOverlayUnits;
 
 				  //      
 				  // Run the application when browser is ready
