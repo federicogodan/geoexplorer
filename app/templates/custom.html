@@ -246,8 +246,8 @@
                         title:  GeoExplorer.prototype.aboutThisMapText,
                         modal: true,
                         layout: "fit",
-                        width: 300,
-                        height: 300,
+                        width: 370,
+                        height: 280,
                         items: [appInfo]
                     });
                     
@@ -393,10 +393,10 @@
             app = new GeoExplorer.Composer({
                 modified: false,
                 proxy: proxy,
-                xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/",
+                xmlJsonTranslateService: "http://demo.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                printService: "http://localhost:8080/geoserver/pdf/",
+                printService: "http://demo.geo-solutions.it/geoserver/pdf/",
                 mapTitle: GeoExplorer.prototype.viewTabTitle || 'View',
                 about: {
                     title: "IDA Map",
@@ -507,7 +507,7 @@
                         name: "nurc:strandings",
                         selected: false,
                         visibility: true,
-                        showInTab: true,
+                        showInTabM: true,
                         link: "http://www.coa.edu/strandings.htm",
                         group: "ida"
                     },{
@@ -516,7 +516,7 @@
                         name: "nurc:ports",
                         selected: false,
                         visibility: false,
-                        showInTab: true,
+                        showInTabH: true,
                         link: "http://www.coa.edu/strandings.htm",                        
                         group: "ida"
                     }]
@@ -544,7 +544,7 @@
 			
 		Ext.Ajax.request({
 		  //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-		  url: location.host.indexOf("localhost:8083")!=-1? "/urlConfig.js": "/MapComposer/urlConfig",
+		  url: location.host.indexOf("localhost:8083")!=-1? "/urlConfig.js": "/IDAMapStore_test/urlConfig.js",
 		  method: 'GET',
 		  success: function(response, opts){      
 			  var serverConfig;    

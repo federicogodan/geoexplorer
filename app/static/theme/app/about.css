@@ -14,13 +14,22 @@ div.versioninfo {
     text-align: center;
 }
 
+div.nurc_logo {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+    height: 75px;
+    background: url('img/nurc-logo.png') center no-repeat;
+}
+
 div.logo {
     margin-left: auto;
     margin-right: auto;
     width: 100%;
     text-align: center;
-    height: 70px;
-    background: url('img/GeoExt_Logo.png') center no-repeat;
+    height: 80px;
+    background: url('img/GeoExt_Logo1.png') center no-repeat;
 }
 
 div.geosolutions_logo {
@@ -28,8 +37,8 @@ div.geosolutions_logo {
     margin-right: auto;
     width: 100%;
     text-align: center;
-    height: 61px;
-    background: url('img/GeoSolutions_logo.png') center no-repeat;
+    height: 70px;
+    background: url('img/GeoSolutions_logo1.png') center no-repeat;
 }
 
 h3 {
