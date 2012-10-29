@@ -210,8 +210,8 @@
                     handler: function(btn){
                         window.open('http://geo-solutions.it/contact/', '_blank');
                     }
-                });    
-                
+                });
+            
                 var appViewport = new Ext.Viewport({
                     id: 'appVieport',
                     layout:'fit',
@@ -223,7 +223,7 @@
                         header : false,                    
                         items : [appTabs],                            
                         bbar : [
-                          poweredByGeoSol, ' ', aboutButton, '->',languageSelector
+                          poweredByGeoSol, ' ', aboutButton
                         ]
                     }]
                 });
@@ -238,25 +238,65 @@
                         contact: "<a href='#'>#</a>."
                     },
                     sources: {
+                        mapquest: {
+                            ptype: "gxp_mapquestsource"
+                        },
+                        osm: {
+                            ptype: "gxp_osmsource"
+                        },
                         google: {
                             ptype: "gxp_googlesource"
+                        },
+                        bing: {
+                            ptype: "gxp_bingsource"
+                        },
+                        ol: {
+                            ptype: "gxp_olsource"
                         }
                     },
                     georeferences: georeferences_data,
                     map: {
                         projection: "EPSG:900913",
                         units: "m",
-                        maxExtent: [
-                            -20037508.34, -20037508.34,
-                            20037508.34, 20037508.34
-                        ],
+                        maxExtent: [667992.119160014, 4563241.88685229, 1583403.10697534, 6164237.56683964],
                         layers: [{
-                            source: "google",
-                            title: "Google Hybrid",
-                            name: "HYBRID",
-                            group: "background"
-                        }],
-                        center: [1250000.000000, 5370000.000000],
+                                source: "bing",
+                                title: "Bing Aerial",
+                                name: "Aerial",
+                                visibility: false,
+                                group: "background"
+                            }, {
+                                source: "osm",
+                                title: "Open Street Map",
+                                name: "mapnik",
+                                visibility: false,
+                                group: "background"
+                            },{
+                                source: "mapquest",
+                                title: "MapQuest OpenStreetMap",
+                                name: "osm",
+                                visibility: false,
+                                group: "background"
+                            },{
+                                source: "google",
+                                title: "Google Roadmap",
+                                name: "ROADMAP",
+                                visibility: false,
+                                group: "background"
+                            },{
+                                source: "google",
+                                title: "Google Terrain",
+                                name: "TERRAIN",
+                                visibility: false,
+                                group: "background"
+                            },{
+                                source: "google",
+                                title: "Google Hybrid",
+                                name: "HYBRID",
+                                visibility: true,
+                                group: "background"
+                            }],
+                        extent: [667992.119160014, 4563241.88685229, 1583403.10697534, 6164237.56683964],
                         zoom: 5
                     }
                 }, mapIdentifier, false, fullScreen);   
@@ -285,8 +325,8 @@
             };			
                 
 			Ext.Ajax.request({
-				  url: "/MapComposer/urlConfig.js",
-				  //url: "/urlConfig.js",
+				  //url: "/MapComposer/urlConfig.js",
+				  url: "/urlConfig.js",
 				  method: 'GET',
 				  success: function(response, opts){      
 					  var serverConfig;    

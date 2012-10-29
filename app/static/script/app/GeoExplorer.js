@@ -84,7 +84,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		// Set the z-indexes of both graphics to make sure the background
         // graphics stay in the background
         graphicZIndex: 11,
-        backgroundGraphicZIndex: 10
+        backgroundGraphicZIndex: 10      
 	},
 		
 	markerTemplateSelected: {
@@ -98,7 +98,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		// Set the z-indexes of both graphics to make sure the background
         // graphics stay in the background
         graphicZIndex: 11,
-        backgroundGraphicZIndex: 10
+        backgroundGraphicZIndex: 10  
 	},
     
 	externalGraphicMarkers: 'theme/app/img/markers/default_information.png',
@@ -174,7 +174,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 checked: true, 
                 iconCls: "gxp-icon-pan",
                 ptype: "gxp_navigation", 
-                toggleGroup: this.toggleGroup
+                toggleGroup: "interaction"
             }, {
                 leaf: true, 
                 text: gxp.plugins.ZoomBox.prototype.zoomInTooltip + " / " + gxp.plugins.ZoomBox.prototype.zoomOutTooltip, 
@@ -182,7 +182,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-zoombox-in",
                 numberOfButtons: 2,
                 ptype: "gxp_zoombox", 
-                toggleGroup: this.toggleGroup
+                toggleGroup: "interaction"      
             }, {
                 leaf: true, 
                 text: gxp.plugins.Zoom.prototype.zoomInTooltip + " / " + gxp.plugins.Zoom.prototype.zoomOutTooltip, 
@@ -197,21 +197,21 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-zoom-previous",
                 numberOfButtons: 2,
                 ptype: "gxp_navigationhistory"
-            }, {
+            },/* {
                 leaf: true, 
                 text: gxp.plugins.WMSGetFeatureInfo.prototype.infoActionTip, 
                 checked: true, 
                 iconCls: "gxp-icon-getfeatureinfo",
                 ptype: "gxp_wmsgetfeatureinfo", 
-                toggleGroup: this.toggleGroup
-            }, {
+                toggleGroup: "interaction"
+            },*/ {
                 leaf: true, 
                 text: gxp.plugins.Measure.prototype.measureTooltip, 
                 checked: true, 
                 iconCls: "gxp-icon-measure-length",
                 ptype: "gxp_measure", 
                 controlOptions: {immediate: true},
-                toggleGroup: this.toggleGroup
+                toggleGroup: "interaction"
             },/* {
                 leaf: true, 
                 text: gxp.plugins.GeoReferences.prototype.tooltip, 
@@ -219,12 +219,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 ptype: "gxp_georeferences"
             },*/ {
                 leaf: true,
-                text: "Google Geocoder",
+                text: "Google Places",
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googlegeocoder",
                 outputConfig:{
-                    emptyText:"Google GeoCoder"
+                    emptyText:"Google Places"
                 },
                 outputTarget:"paneltbar"
             }/*, {
@@ -681,47 +681,20 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				
 				return radius;
 			},
-			
-			getBackgroundOffset : function(ft){
-			    var label;
-				var radius;
-				
-				try{
-					label = parseInt(ft.attributes.label);
-				}catch(e){
-					radius = 12;
-				} 
-		
-				var cluster = ft.attributes.cluster;
-									
-				radius = radius ? radius : 12;
-				if(label && cluster){
-					if(label > 0 && label <= 200){
-						radius = 12;
-					}else if(label > 201 && label <= 500){
-						radius = 16;
-					}else if(label > 501 && label <= 1000){
-						radius = 18;
-					}else if(label > 1001 && label <= 2000){
-						radius = 20;
-					}else if(label > 2001 && label <= 4000){
-						radius = 22;
-					}else if(label > 4001 && label <= 8000){
-						radius = 24;
-					}else if(label > 8001 && label <= 16000){
-						radius = 26;
-					}else if(label > 16001 && label <= 32000){
-						radius = 28;
-					}else if(label > 32001){
-						radius = 32;
-					}
-				}
-				
-				var offset = -1*(radius/2);
-				
-				return offset;
-			},
-			
+
+            getBackgroundXOffset : function(ft){                
+                return  -0.7*context.getRadius(ft)/2;                
+            },
+            getBackgroundYOffset : function(ft){
+                return -1.5* context.getRadius(ft);                
+            },
+            getGraphicYOffset : function(ft){
+                return -1.9* context.getRadius(ft);                
+            },
+            getLabelYOffset : function(ft){
+                return  context.getRadius(ft);                
+            },
+            
 			getMarkerShadowIcon: function (ft){
 				if(ft.attributes.cluster)
 					return clusterShadow;
@@ -732,14 +705,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
 		this.markerTemplateDefault.externalGraphic = "${getMarkerIcon}";
 		this.markerTemplateDefault.pointRadius = "${getRadius}";
+		this.markerTemplateDefault.backgroundXOffset = "${getBackgroundXOffset}";
+		this.markerTemplateDefault.backgroundYOffset = "${getBackgroundYOffset}";  
+        this.markerTemplateDefault.graphicYOffset="${getGraphicYOffset}";
+        this.markerTemplateDefault.labelYOffset ="${getLabelYOffset}"; 
+		this.markerTemplateDefault.backgroundGraphic = "${getMarkerShadowIcon}";        
+        
+		this.markerTemplateSelected.externalGraphic = "${getMarkerSelectionIcon}";        
 		this.markerTemplateSelected.pointRadius = "${getRadius}";		
-		this.markerTemplateSelected.externalGraphic = "${getMarkerSelectionIcon}";
-		this.markerTemplateDefault.backgroundXOffset = "${getBackgroundOffset}";
-		this.markerTemplateDefault.backgroundYOffset = "${getBackgroundOffset}";
-		this.markerTemplateSelected.backgroundXOffset = "${getBackgroundOffset}";	
-		this.markerTemplateSelected.backgroundYOffset = "${getBackgroundOffset}";
-		
-		this.markerTemplateDefault.backgroundGraphic = "${getMarkerShadowIcon}";
+		this.markerTemplateSelected.backgroundXOffset = "${getBackgroundXOffset}";	
+		this.markerTemplateSelected.backgroundYOffset = "${getBackgroundYOffset}";
+        this.markerTemplateSelected.graphicYOffset="${getGraphicYOffset}";
+        this.markerTemplateSelected.labelYOffset ="${getLabelYOffset}";         
 		this.markerTemplateSelected.backgroundGraphic = "${getMarkerShadowIcon}";
 		
         var styleMap = new OpenLayers.StyleMap({ 
@@ -750,42 +727,81 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         return(styleMap); 
     }, 
     
-    /** api: method[showMarkerGeoJSON]
+    /** api: method[showClusterGeoJSON]
      *  :return: ``String``
      *
-     *  Add Markers and Tracks to map.
+     *  Add Clusters and Tracks to map.
      */
-    showMarkerGeoJSON: function(markerName, geoJson, trackName, showLine) {
+    showMarkerGeoJSON: function(markerName, geoJson, clusterName, trackName, showLine) {
+        
+        var clusterName= clusterName ||  markerName;
         
         // allow testing of specific renderers via "?renderer=Canvas", etc
         var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
         renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-        
-        // check if the marker layer exists
-        var markerLyr = app.mapPanel.map.getLayersByName(markerName);           
-        if (markerLyr.length) {
-           for (var key in markerLyr.features) {
-                markerLyr.removeFeatures(markerLyr.features[key]);
-                markerLyr.addFeatures(markerLyr.features[key]);
-            }
-        }else {
             
+        // check if the marker layer exists
+        if(markerName){
+            var markerLyr = app.mapPanel.map.getLayersByName(markerName);
+        }
+        // check if the cluster layer exists
+        if(clusterName){        
+            var clusterLyr = app.mapPanel.map.getLayersByName(clusterName);
+        }    
+        
+        if ((markerLyr && markerLyr.length) || (clusterLyr && clusterLyr.length)) {
+            //do nothing
+        }else {
             // Create a new parser for GeoJSON
             var geojson_format = new OpenLayers.Format.GeoJSON({
 				internalProjection: app.mapPanel.map.getProjectionObject(),
 				externalProjection: new OpenLayers.Projection("EPSG:4326")
 			});
 
+            var markers = new Array();
+            var clusters = new Array();
+            
+            var features = geojson_format.read(geoJson);
+            
+            for(var i=0;i<features.length;i++){
+                if(features[i].attributes.cluster){
+                    clusters.push(features[i]);
+                }else{
+                    markers.push(features[i]);                
+                }
+            }
+            
             // Sets the style for the markers
-            var styleMarkers = this.setMarkersStyle();
-			
-            // Create new vector layer for markers
-            var marker_layer = new OpenLayers.Layer.Vector(markerName, {
-				styleMap: styleMarkers,
-				displayInLayerSwitcher: false,
-				rendererOptions: {yOrdering: true},
-				renderers: renderer
-			});
+            var styleCluster = this.setMarkersStyle();
+
+            if (markers.length>0){
+                // Create new vector layer for markers
+                var marker_layer = new OpenLayers.Layer.Vector(markerName, {
+                    styleMap: styleCluster,
+                    displayInLayerSwitcher: true,
+                    //rendererOptions: {yOrdering: true},
+                    renderers: renderer
+                });
+            }
+            
+            if (clusters.length>0){
+                // Create new vector layer for clusters
+                var cluster_layer = new OpenLayers.Layer.Vector(clusterName, {
+                    styleMap: styleCluster,
+                    displayInLayerSwitcher: true,
+                    //rendererOptions: {yOrdering: true},
+                    renderers: renderer
+                });
+            }
+            
+            // workaround to make the text features rendered in the same container having the vector features
+            if (clusters.length>0){
+                cluster_layer.renderer.textRoot = cluster_layer.renderer.vectorRoot;
+            }
+            
+            if (markers.length>0){
+                marker_layer.renderer.textRoot = marker_layer.renderer.vectorRoot;
+            }
             
             // Create the popups for markers
 			var popupTitle = this.markerPopupTitle;
@@ -818,17 +834,35 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     selectControl.unselect(feature);
                 }
             }
-            
-            app.mapPanel.map.addLayer(marker_layer);
-            
-            marker_layer.addFeatures(geojson_format.read(geoJson));
 
-            var selectControl = new OpenLayers.Control.SelectFeature(marker_layer,{
+
+            if(markers.length>0){
+                app.mapPanel.map.addLayer(marker_layer);
+                marker_layer.addFeatures(markers);
+            }
+            
+            if(clusters.length>0){
+                app.mapPanel.map.addLayer(cluster_layer);
+                cluster_layer.addFeatures(clusters);
+            }
+
+            var vectorSelect;
+            
+            if(clusters.length>0 && markers.length>0){
+                vectorSelect = [cluster_layer,marker_layer];
+            }else if(clusters.length==0 && markers.length>0){
+                vectorSelect = marker_layer;
+            }else{
+                vectorSelect = cluster_layer;
+            }
+            
+            var selectControl = new OpenLayers.Control.SelectFeature(vectorSelect ,{
 				onSelect: onFeatureSelect,
 				clickout: false,
-				multiple: true
-			});
-                                
+				multiple: true,
+                autoActivate: true
+			});        
+                  
             app.mapPanel.map.addControl(selectControl);
             selectControl.activate();
         }
@@ -850,7 +884,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			    // Creates new vector layer for tracks
                 trackLayer = new OpenLayers.Layer.Vector(trackName, {
 					styleMap: styleTracks,
-					displayInLayerSwitcher: false
+					displayInLayerSwitcher: true
 				});
 				
 				app.mapPanel.map.addLayer(trackLayer);
