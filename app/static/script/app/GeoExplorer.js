@@ -176,6 +176,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 ptype: "gxp_navigation", 
                 toggleGroup: "interaction"
             }, {
+                actions: ["-"], checked: true
+            }, {
                 leaf: true, 
                 text: gxp.plugins.ZoomBox.prototype.zoomInTooltip + " / " + gxp.plugins.ZoomBox.prototype.zoomOutTooltip, 
                 checked: true, 
@@ -191,12 +193,16 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 numberOfButtons: 2,
                 ptype: "gxp_zoom"
             }, {
+                actions: ["-"], checked: true
+            }, {
                 leaf: true, 
                 text: gxp.plugins.NavigationHistory.prototype.previousTooltip + " / " + gxp.plugins.NavigationHistory.prototype.nextTooltip, 
                 checked: true, 
                 iconCls: "gxp-icon-zoom-previous",
                 numberOfButtons: 2,
                 ptype: "gxp_navigationhistory"
+            }, {
+                actions: ["-"], checked: true
             },/* {
                 leaf: true, 
                 text: gxp.plugins.WMSGetFeatureInfo.prototype.infoActionTip, 
@@ -809,8 +815,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 if (feature.attributes.html){
                     new GeoExt.Popup({
                         title: popupTitle,
-                        width: 200,
-                        height: 100,
+                        width: 300,
+                        height: 200,
                         layout: "fit",
                         map: app.mapPanel,
                         location: feature.geometry.getBounds().getCenterLonLat(),
