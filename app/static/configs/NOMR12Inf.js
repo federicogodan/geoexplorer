@@ -58,10 +58,11 @@
             "source": "demo",
             "title": "Watvel Forecast Model INGV",
             "transparent": true,
-            "visibility": true,
+            "visibility":  true,
             "ratio": 1,
             "elevation": 1.472,
-            "styles": "watvel_marker_ramp"
+            "styles": "watvel_marker_ramp",
+			"style": "watvel_raster"
         },        
 		{
             "format": "image/png8",

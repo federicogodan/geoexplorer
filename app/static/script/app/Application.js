@@ -59,6 +59,119 @@ var Application =  {
 		on: function( action, handler ){
 			this.handlers[ action ] = handler;
 		},
+		// TODO this should not be here
+		getLoginButton: function(){
+			if (! this.loginBtn ){
+			this.loginBtn = new Ext.Button({
+					iconCls: 'gxp-icon-user',
+					text: 'Login',
+					handler: function(){
+
+						if ( Application.user.isGuest() ){
+							var win = new Ext.Window({
+
+					            title: 'Enter your credentials',
+					            iconCls: 'gxp-icon-user',
+					            layout: "fit",
+					            width: 275,
+								closeAction: 'hide',
+					            height: 130,
+					            plain: true,
+					            border: false,
+					            modal: true,
+					            items: [{
+									xtype:'form',
+									ref:'loginForm',
+									labelWidth:80,
+									frame:true, 
+									defaultType:'textfield',
+									items:[
+										{  
+						                	fieldLabel: 'Username',
+						                	ref:'../username', 
+						                	allowBlank:false,
+						                	listeners: {
+						                 		beforeRender: function(field) {
+						                    		field.focus(false, 1000);
+						                  		}
+						                	}
+						            	},{  
+						                	fieldLabel:'Password', 
+						                	ref:'../password', 
+						                	inputType:'password', 
+						                	allowBlank:false
+						            	}],
+						            buttons:[{ 
+						                text: 'Login',
+						                iconCls: 'save',
+						                formBind: true,
+						                scope: this,
+						                handler: function submitLogin(){
+											if ( win.loginForm.getForm().isValid() ){
+												Application.user.login( win.username.getValue(), win.password.getValue());
+												win.destroy();
+											} else {
+												Ext.Msg.show({
+														title: 'Cannot login',
+														msg: 'You must specify a username and a password.',
+														buttons: Ext.Msg.OK,
+														icon: Ext.MessageBox.ERROR
+												});
+											}
+										}
+						            }],
+									keys: [{ 
+						                key: [Ext.EventObject.ENTER],
+						                scope: this,
+						                handler: function submitLogin(){
+											if ( win.loginForm.getForm().isValid() ){
+												Application.user.login( win.username.getValue(), win.password.getValue());
+												win.destroy();
+											} else {
+												Ext.Msg.show({
+														title: 'Cannot login',
+														msg: 'You must specify a username and a password.',
+														buttons: Ext.Msg.OK,
+														icon: Ext.MessageBox.ERROR
+												});
+											}
+										}
+						            }]
+								}],
+					            listeners: {
+					                afterRender: function(){
+					                    win.loginForm.getForm().clearInvalid();
+					                },
+					                hide: function(){
+					                    win.loginForm.getForm().reset();
+					                }
+					            }
+					        });
+					        win.show();
+
+						} else {
+							Ext.MessageBox.show({
+							           title:'Logout',
+							           msg: 'You are closing this application. Every unsaved changes will be lost. <br/>Are you sure?',
+							           buttons: Ext.MessageBox.YESNO,
+							           fn: function(btn){
+											if ( btn === 'yes' ){
+												Application.user.logout();
+											}
+
+									   },
+							           icon: Ext.MessageBox.QUESTION
+							       });
+						}
+
+
+					},
+					scope: this
+				});
+			}
+			return this.loginBtn;
+			
+		},
 		username: null,
 		role: null,
 		token: null,

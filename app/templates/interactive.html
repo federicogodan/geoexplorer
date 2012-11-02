@@ -259,6 +259,7 @@
                         bodyStyle: 'padding:0px;background-color: #0055bb;'
                     },{
                         region : 'center',
+						tbar: [ '->', Application.user.getLoginButton()],
                         layout : 'border',
                         border : false,
                         header : false,                    
@@ -271,6 +272,10 @@
                  
 			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
 			appMask.show();
+			
+			
+			    // initialize cross-cutting features of the app
+				Application.init( {geostoreBaseUrl:serverConfig.geoStoreBase} );
 			
 			
 		            app = new GeoExplorer.Composer({

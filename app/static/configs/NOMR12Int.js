@@ -1,5 +1,5 @@
 {
-   "geoStoreBase":"http://84.33.199.62/geostore/rest/",
+   "geoStoreBase":"http://84.33.199.62/geostore-gliders/rest/",
    "proxy":"/http_proxy/proxy?url=",
    "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
@@ -299,6 +299,7 @@
 			"actionTarget": "vselector.tbar"
 		}, {
 			"ptype": "gxp_pilot_notes",
+			"layerName": "Pilot notes Layer",
 			"id": "notes",
 			"outputTarget": "east"
 		}, {

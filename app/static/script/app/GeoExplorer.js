@@ -331,7 +331,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	
 		// TODO refactor
 		// it should be better to centralize definitions of common plugins in Composer.js
-		config.tools.push(
+		config.tools.unshift(
 				{	 
 					ptype: "gxp_synchronizer",
 					refreshTimeInterval: config.refreshTimeInterval,
@@ -340,7 +340,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				}
 			);
 			
-		config.tools.push(
+		config.tools.unshift(
 				{
                 ptype:"gxp_playback",
                 outputTarget: "paneltbar",

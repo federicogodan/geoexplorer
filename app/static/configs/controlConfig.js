@@ -92,7 +92,7 @@
 	"infoPageBaseUrl": "http://84.33.199.62/MapStore-gliders/informational/?mapId=",
 	"proxy": "/http_proxy/proxy?url=",
 	"fileUploaderServlet": "http://84.33.199.62/xmlJsonTranslate-gliders/",
-	"geostoreBaseUrl":"http://84.33.199.62/geostore/rest/",
+	"geostoreBaseUrl":"http://84.33.199.62/geostore-gliders/rest/",
 	"geoserverBaseUrl":"http://84.33.199.62/geoserver-gliders/",
 	"defaultWatermarkUrl":"../theme/app/img/nurc-logo.png",
 	"pageSize":20

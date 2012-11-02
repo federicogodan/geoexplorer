@@ -35,6 +35,9 @@
 			var mHost=pattern.exec( uri );
 			return mHost[2] == location.host;
 		};
+		this.endsWith_ = function(str, suffix) {
+		    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+		}
 	};
 
 	/** 
@@ -47,7 +50,11 @@
 	 * {Uri}
 	 */
 	Uri.prototype.appendPath = function(path){
-		this.uri_ = this.uri_ + this.SEPARATOR + path;
+		if ( this.endsWith_(this.uri_, this.SEPARATOR) ){
+			this.uri_ = this.uri_ +  path;
+		} else {
+			this.uri_ = this.uri_ + this.SEPARATOR + path;
+		}
 		return this;
 	};
 	/** 
@@ -735,7 +742,9 @@
 						var params = options.params;
 						var uri = new Uri({'url':this.baseUrl_});
 						uri.setProxy( this.proxy_);
-						uri.appendPath( this.searchPath_ );
+						// uri.appendPath( this.searchPath_ );
+						uri.appendPath( 'extjs/search' );
+						uri.appendPath( 'category/MAP');
 						uri.addParam('start', params.start );
 						uri.addParam('limit', params.limit );
 						// console.log( uri.toString() );
@@ -900,6 +909,547 @@
 	 Filestore.prototype.getBaseDir = function(){
 		return this.baseUrl_ + 'temp/';
 	 };
+	
+	/// refactoring to take into account categories
+	
+	/**
+	 * Class: GeoStore.Resource
+	 *
+	 * CRUD methods for a generic Resource in GeoStore
+	 * Inherits from:
+	 *  - <GeoStore.ContentProvider>
+	 *
+	 */
+	var Resources = GeoStore.Resources = ContentProvider.extend({
+	initialize: function( opts ){
+
+		this.baseUrl_ = opts.baseUrl;
+		this.category_ = opts.category;
+		this.proxy_ = opts.proxy;
+		// this.authorization_ = opts.token;
+		this.setToken( opts.token );
+		
+		this.createPath_ = 'resources';
+		this.readPath_ = 'resources/resource';
+		this.retrievePath_ = 'resources';
+		this.deletePath_ = 'resources/resource';
+		this.updatePath_ = 'resources/resource';
+		this.searchPath_ = 'extjs/search';
+		
+		this.datastorePath_ = 'data';
+		this.timeout_ = 10000;
+		this.headers_ = {'Accept': 'application/json'};
+	},
+	find: function( filter, obj ){
+		
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
+		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
+		uri.appendPath( 'extjs/search' ).appendPath( filter );
+		uri.addParam('start', 0);
+		uri.addParam('limit', 100); // TODO how to specify infinite?
+		var Request = Ext.Ajax.request({
+	       url: uri.toString(),
+	       method: 'GET',
+	       headers:{
+	          'Content-Type' : 'application/json',
+	          'Accept' : this.acceptTypes_,
+	          'Authorization' : this.authorization_
+	       },
+	       scope: this,
+	       success: function(response, opts){
+				var obj = Ext.util.JSON.decode(response.responseText);
+				successHandler.call(this, obj);
+	       },
+	       failure:  function(response, opts){
+				console.error( response );
+				failureHandler.call(this, response);
+	       }
+	    });		
+	},
+	beforeSave: function(data){
+		// wrap new map within an xml envelop
+		var xml = '<Resource>';
+		if (data.owner) 
+			xml += 
+			'<Attributes>' +
+				'<attribute>' +
+					'<name>owner</name>' +
+					'<type>STRING</type>' +
+					'<value>' + data.owner + '</value>' +
+				'</attribute>' +
+			'</Attributes>';
+		xml +=
+			'<description>' + data.description + '</description>' +
+			'<metadata></metadata>' +
+			'<name>' + data.name + '</name>';
+		if (data.blob)
+		  xml+=
+			'<category>' +
+				'<name>' + this.category_ + '</name>' +
+			'</category>' +
+			'<store>' +
+				'<data><![CDATA[ ' + data.blob + ' ]]></data>' +
+			'</store>';
+			
+		xml += '</Resource>';
+		// console.log(xml);
+		return xml;
+	},
+	afterFind: function(json){
+		
+		// console.log(json);
+		
+		if ( json.Resource){
+			var data = new Object;
+			data.owner = json.Resource.Attributes.attribute.value;
+			data.description = json.Resource.description;
+			data.name = json.Resource.name;
+			data.blob = json.Resource.data.data;
+			data.id = json.Resource.id;
+			data.creation = json.Resource.creation;		
+			return data;	
+		} else if ( json.ResourceList ||  json.ResourceList===''){
+			var array = new Array;
+			if ( json.ResourceList.Resource ){
+				if ( json.ResourceList.Resource.length ){
+					for ( var i=0; i< json.ResourceList.Resource.length ; i++){
+						var obj = json.ResourceList.Resource[i];
+						array.push( obj );
+					}	
+				} else {
+					array.push( json.ResourceList.Resource );
+				}
+			}
+			return array;	
+		} else {
+			this.onFailure_('cannot parse response');
+		}
+
+	},
+	/** 
+	 * Function: updateData
+	 * 
+	 *  In the current implementation of GeoStore
+	 *  data and metadata must be updated in two distinct steps
+	 *  this function updates data (i.e. blob field) of a configuration with id=pk 
+	 *
+	 *  
+	 */	
+	updateData:function(pk, data, obj){
+		var params_opt = obj.params;
+		var successHandler = obj.onSuccess || this.onSuccess_;
+		var failureHandler = obj.onFailure || this.onFailure_;
+		
+		var datastore = new Datastore({
+			proxy: this.proxy_,
+			url: this.baseUrl_
+		});
+		datastore.setToken( this.authorization_ );
+		datastore.update( pk, data, {
+			params: params_opt,
+			onSuccess: successHandler,
+			onFailure: failureHandler
+		});
+	}
+   } );
+
+   
+	
+	Resources.prototype.getStore = function(){
+		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_);
+		uri.appendPath( this.searchPath_ ); 
+		// uri.appendPath( '/misc/category/name/{cname}/resources' );
+		uri.appendPath( '*' ); // all elements
+		var categoryName = this.category_;
+		var store = new Ext.data.JsonStore({
+            autoDestroy: true,
+			scope: this,
+            root: 'results',
+            totalProperty: 'totalCount',
+            successProperty: 'success',
+            idProperty: 'id',
+            remoteSort: false,
+            fields: [
+					/*{
+		               name: "id",
+		               type: "int"
+		            },*/
+					{
+                        name: "id",
+                        type: "int"
+                    },{
+                        name: "name",
+                        type: "string"
+                    },{
+                        name: "owner",
+                        type: "string"
+                    },{
+                        name: "description",
+                        type: "string"
+                    },{
+                        name: "creation",
+                        type: "date",
+                        dateFormat: 'c'
+                    },{
+                        name: "lastUpdate",
+                        type: "date",
+                        dateFormat: 'c'
+                    },{
+                        name: "canEdit",
+                        type: "boolean"
+                    },{
+                        name: "canDelete",
+                        type: "boolean"
+                    }
+            ],
+            proxy: new Ext.data.HttpProxy({
+                url: uri.toString(),
+                restful: true,
+                method : 'GET',
+                disableCaching: true,
+                timeout: this.timeout_,
+                failure: function (result) {
+                   console.error(result);
+                },
+                defaultHeaders: this.headers_
+            }),
+			listeners:{
+				 // hack: when we use a proxy, we need to set params for geostore by hand
+				 // in order to avoid the issue described here 
+				 // https://github.com/geosolutions-it/mapstore/issues/31
+			     beforeload:function(store, options){
+					var params = options.params;
+					var uri = new Uri({'url':this.baseUrl_});
+					uri.setProxy( this.proxy_);
+					uri.appendPath( this.searchPath_ );
+					uri.appendPath( 'category/' + categoryName );
+					// the current GeoStore is not able to perform a category-based search using filters
+					// uri.appendPath( '*' ); // all elements
+					uri.addParam('start', params.start );
+					uri.addParam('limit', params.limit );
+					// uri.addParam('categoryName', categoryName );
+
+			        store.proxy.setUrl( uri.toString() );
+			     },
+			     scope: this
+			},
+            sortInfo: { field: "creation", direction: "DESC" }
+        });		
+		return store;
+	};	
+	
+	var Command = function(){
+		this.handleFailure_ = Ext.emptyFn;
+		this.handleSuccess_ = Ext.emptyFn;		
+	};
+	
+	Command.prototype.failure = function(handler){
+		this.handleFailure_ = handler;
+		return this;
+	};
+	
+	Command.prototype.success = function(handler){
+		this.handleSuccess_ = handler;
+		return this;
+	};
+	
+	Command.prototype.execute = function(){
+		// default: do nothing
+	};
+	
+	
+	
+	var Cursor = function( resources, params ){
+		this.resourceId_ = params.resourceId;
+		this.filter_ = params.filter;
+		this.resources_ = resources;
+		this.first_ = 0;
+		this.length_ = 100; // TODO how to say no limit?
+		this.handleFailure_ = Ext.emptyFn;
+		this.handleSuccess_ = Ext.emptyFn;
+		
+		var cursor = this;
+		var category = this.resources_.category_;
+		var proxy = this.resources_.proxy_;
+		// some handlers
+		this.createCategoryHandler = function( chain ){
+				// verify if a category with this name already exists
+				var uri = new Uri({'url':this.baseUrl_});
+				uri.appendPath('categories/count/' + category);
+				uri.setProxy( proxy );
+				var Request = Ext.Ajax.request({
+				       url: uri.toString(), 
+				       method: 'GET',
+				       headers:{
+				          'Content-Type' : 'application/json',
+				          'Accept' : this.acceptTypes_,
+				          'Authorization' : this.authorization_
+				       },
+				       scope: this,
+				       success: function(response, opts){
+							var count = response.responseText;
+							if ( count == 0 ){
+								var postUri = new Uri({'url':this.baseUrl_});
+								postUri.appendPath('categories');
+								postUri.setProxy( proxy );
+								// create a category with this name
+								Ext.Ajax.request({
+									url: postUri.toString(), 
+								    method: 'POST',
+								    params: '<Category><name>' + category + '</name></Category>',
+								    headers:{
+								          'Content-Type' : 'text/xml',
+								          'Accept' : this.acceptTypes_,
+								          'Authorization' : this.authorization_
+								     },
+								    scope: this,
+								    success: function(response, opts){
+									    chain.next();
+									},
+									failure: function(response, opts){
+										console.error('cannot create GeoStore category with name ' + category + ': ' + response);
+										cursor.handleFailure_.call(this, 'cannot create GeoStore category with name ' + category );
+									}
+								});
+							} else if ( count > 1 ){
+								// this code should never be executed
+								console.error('internal error: duplicate categories');
+								cursor.handleFailure_.call(this, 'internal error: duplicate categories');
+							} else {
+								chain.next();
+							}
+				       },
+				       failure: function(response, opts){
+						 console.error('cannot create or access to GeoStore category ' + category + ': ' + response);
+						 throw 'cannot connect or access to GeoStore category ' + category;
+				       }
+				    });			
+			};
+		
+		// chain of filters to apply before execution
+		var Chain = function(  ){
+			this.handlers_ = new Array;
+			this.next = function(){
+				if ( this.handlers_.length > 0){
+					var handler = this.handlers_.shift();
+					handler.call(resources, this);
+				}
+			};
+		};
+		this.chain_ = new Chain;
+	};
+		
+	Cursor.prototype.limit = function( first, length ){
+		this.first_ = first;
+		this.length_ = length_;
+		return this;
+	};
+	
+	Cursor.prototype.count = function(){
+		this.resources_.find( this.filter_, {
+			params: { full: true },
+			onSuccess: function(data){
+				if ( data.totalCount ){
+					this.handleSuccess_.call(this, data.totalCount);
+				} else {
+					console.error(data);
+					this.handleFailure_.call(this, 'unexpected response from the server');
+				}
+				
+			},
+			onFailure: this.handleFailure_
+		});
+	};
+	
+	Cursor.prototype.getStore = function(){
+		return this.resources_.getStore();
+	};
+	
+	Cursor.prototype.getStoreAsync = function(){
+		var self = this;
+		this.require( this.createCategoryHandler )
+		    .require( function(chain){
+				var store = self.resources_.getStore();
+				self.handleSuccess_.call(this, store);
+			});
+		this.chain_.next();
+	};
+	
+	Cursor.prototype.execute = function(){
+		if ( this.resourceId_ ){
+			this.resources_.findByPk( this.resourceId_, {
+				params: { full: true },
+				onSuccess: this.handleSuccess_,
+				onFailure: this.handleFailure_
+			});			
+		} else if ( this.filter_ ){
+			this.resources_.find( this.filter_, {
+				params: { full: true },
+				onSuccess: this.handleSuccess_,
+				onFailure: this.handleFailure_
+			});			
+		} else {
+			console.error('No filter or id specified');
+			this.handleFailure_.call(this, 'No filter or id specified');
+		}
+
+	};
+	
+	Cursor.prototype.failure = function( handler ){
+		this.handleFailure_ = handler;
+		return this;
+	};
+	
+	Cursor.prototype.success = function( handler ){
+		this.handleSuccess_ = handler;
+		return this;
+	};
+	
+	Cursor.prototype.require = function( handler ){
+		this.chain_.handlers_.push( handler );
+		return this;
+	}
+	
+	var Resource = function( opts ){
+		this.resources_ = new Resources( opts );
+	};
+	
+	Resource.prototype.findById = function(resourceId){
+		return new Cursor(this.resources_, {resourceId:resourceId} );
+	};
+	
+	Resource.prototype.find = function(filter){
+		return new Cursor(this.resources_, {filter:filter} );
+	};
+	
+	Resource.prototype.create = function(data){
+		var self = this;
+		return new (Ext.extend(Command, {
+			execute: function( ){
+				self.resources_.create( data , {
+						onFailure: this.handleFailure_,
+						onSuccess: this.handleSuccess_
+					});
+			}
+		}));
+	};
+	
+	Resource.prototype.update = function(resourceId, data){
+		var self = this;
+		return new (Ext.extend(Command, {
+			execute: function( ){
+				var handleFailure = this.handleFailure_;
+				var handleSuccess = this.handleSuccess_;
+				// It is necessary to update both metadata and data in two steps!
+				// update data (pk, data, obj)
+				self.resources_.updateData(
+							resourceId, data.blob,{
+							onFailure: this.failureHandler_,
+							onSuccess: function( response ){		
+								// if data updated, update metadata
+								self.resources_.update(
+									resourceId, data, {
+										onFailure: handleFailure,
+										onSuccess: function ( data ){
+											handleSuccess.call(this, data);
+										}
+									});
+
+							}	
+					});
+			}
+		}) );
+	};
+	
+	Resource.prototype.deleteByPk = function( resourceId ){
+		var self = this;
+		return new (Ext.extend(Command, {
+			execute: function( ){
+				self.resources_.deleteByPk( resourceId , {
+						onFailure: this.failureHandler_,
+						onSuccess: this.successHandler_
+					});
+			}
+		}) );		
+	};
+	
+	Resource.prototype.setToken = function( token ){
+		this.resources_.setToken(token);
+	};
+	
+	Resource.prototype.invalidateToken = function(  ){
+		this.resources_.invalidateToken();
+	};
+	
+	var Connection = function( opts ){
+		
+		// TODO make this async!
+		
+		if ( ! opts.url ){
+			console.error('you must specify an url for geostore');
+			throw 'no url for geostore specified';
+		}
+		this.baseUrl_ = opts.url;
+		this.proxy_ = opts.proxy;
+		this.token_ = opts.token;
+		
+		this.handleFailure_ = Ext.emptyFn;
+		this.handleSuccess_ = Ext.emptyFn;
+		
+		// verify if it is possible to connect to GeoStore
+		var uri = new Uri({'url':this.baseUrl_});
+		uri.setProxy( this.proxy_ );
+		var Request = Ext.Ajax.request({
+		       url: uri.toString(), 
+		       method: 'GET',
+		       headers:{
+		          'Content-Type' : 'application/json',
+		          'Accept' : this.acceptTypes_,
+		          'Authorization' : this.authorization_
+		       },
+		       scope: this,
+		       success: function(response, opts){
+					// everything ok, do nothing
+					// TODO verify if the response is what you expected
+					// console.log(response);
+		       },
+		       failure: function(response, opts){
+				 console.error('cannot connect to GeoStore: ' + response);
+				 throw 'cannot connect to GeoStore';
+		       }
+		    });
+	};
+	
+	Connection.prototype.setToken = function( token ){
+		this.token_ = token;
+	};
+
+	Connection.prototype.success = function( handler ){
+		this.successHandler_ = handler;
+	};
+
+	Connection.prototype.failure = function( handler ){
+		this.failureHandler_ = handler;
+	};
+	
+	Connection.prototype.getResource = function( category ){
+		var resource = 	new Resource({
+							baseUrl:this.baseUrl_, 
+							category:category, 
+							proxy:this.proxy_, 
+							token:this.token_} );
+		return resource;
+	};
+	
+	GeoStore.connect = function( opts ){
+		return new Connection( opts );
+	};
+	
 
 }).call(this);
 
