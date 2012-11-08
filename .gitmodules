@@ -7,11 +7,6 @@
 [submodule "app/static/externals/gxp"]
 	path = app/static/externals/gxp
 	url = git@geosolutions.sourcerepo.com:geosolutions/gxp.git
-[submodule "app/static/externals/csw"]
-	path = app/static/externals/csw
-	
-        url = git@geosolutions.sourcerepo.com:geosolutions/csw.git
-
 [submodule "app/static/externals/GeoExt"]
 	path = app/static/externals/GeoExt
 	url = git://github.com/opengeo/GeoExt.git
