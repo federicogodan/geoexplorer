@@ -319,23 +319,34 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     initPortal: function() {
         
-        var westPanel = new Ext.Panel({
+        var westPanel = new Ext.TabPanel({
             border: false,
-            layout: "border",
             id:'west',
             region: "west",
             width: 250,
+			minWidth: 250,
+			maxWidth: 250,
             split: true,
             collapsible: true,
             collapseMode: "mini",
+			activeTab:0,
             header: false,
             items: [
-                {region: 'center', autoScroll: true, tbar: [], border: false, id: 'tree', title: this.layersText}, 
                 {
-                    region: 'south', xtype: "panel", layout: "fit", 
-                    collapsible : true, collapseMode:  'mini',
-                    split : true, hideCollapseTool: true,
-                    border: false, height: 200, id: 'legend'
+                    region: 'center',
+                    autoScroll: true,
+                    tbar: [],
+                    border: false,
+                    id: 'tree',
+                    title: this.layersText
+                },{
+                    region: 'north',
+                    xtype: "panel", 
+					autoScroll:true,
+                    border: false,
+                    height: 200,
+                    id: 'legend',
+                    title:'Legend'
                 }
             ]
         });
