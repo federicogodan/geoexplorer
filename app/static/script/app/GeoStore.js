@@ -1075,10 +1075,6 @@
             idProperty: 'id',
             remoteSort: false,
             fields: [
-					/*{
-		               name: "id",
-		               type: "int"
-		            },*/
 					{
                         name: "id",
                         type: "int"
@@ -1370,9 +1366,11 @@
 		var self = this;
 		return new (Ext.extend(Command, {
 			execute: function( ){
+				var handleFailure = this.handleFailure_;
+				var handleSuccess = this.handleSuccess_;
 				self.resources_.deleteByPk( resourceId , {
-						onFailure: this.failureHandler_,
-						onSuccess: this.successHandler_
+						onFailure: handleFailure,
+						onSuccess: handleSuccess
 					});
 			}
 		}) );		

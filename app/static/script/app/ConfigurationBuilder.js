@@ -44,12 +44,51 @@ var ConfigurationBuilder =  {
 	},
 	
 	createModelConfiguration: function( selected ){
+		
+		var defaults ={
+			'nurc:watvelroms': {
+				format: 'image/png8',
+				transparent: true,
+				visibility: true,
+				source: 'demo',
+				group: 'Ocean Models',
+				opacity: 1,
+				selected: false,
+				ratio: 1,
+				elevation: 10,
+				styles: 'watvel_marker_ramp',
+				style:'watvel_raster'
+			},
+			'nurc:watvelingv':{
+				format: 'image/png8',
+				transparent: true,
+				visibility: true,
+				source: 'demo',
+				group: 'Ocean Models',
+				opacity: 1,
+				selected: false,
+				ratio: 1,
+				elevation: 1.472,
+				styles: 'watvel_marker_ramp'
+			}
+		};
+		
 		var result = '';
 		for (var i=0; i<selected.length; i++){
 			
 			var item = selected[i].data;
 			
-			result += '{';
+			var defaultParams = defaults[ item.name ] || {};
+			
+			var layer = Ext.applyIf({
+				name: item.name,
+				title: item.title
+			}, defaultParams);
+			
+			
+			result += Ext.encode( layer );
+			
+			/*result += '{';
 					result +=  '"format": "' + item.format + '",'
 				             + '"group": "' + item.group + '",'
 				             + '"name": "' + item.name + '",'
@@ -61,7 +100,7 @@ var ConfigurationBuilder =  {
 				             + '"visibility": ' + item.visibility + ','
 				             + '"ratio": ' + item.ratio +  ','
 				             + '"elevation": ' + item.elevation +   ','
-				             + '"styles":"' + item.styles +  '"';
+				             + '"styles":"' + item.styles +  '"';*/
 				if ( item.style ){
 					result += ', "style":"' + item.style + '"';
 				}
@@ -77,26 +116,47 @@ var ConfigurationBuilder =  {
 	},
 	
 	createBackgroundConfiguration: function( selected ){
+		
+		var defaults ={
+			'nurcbg': {
+				format: 'image/jpeg',
+				transparent: 'false',
+				source: 'GEOSIII',
+				group: 'background'
+			}
+		};
+		
 		var result = '';
-		// var selected =  selector.toMultiselect.store.data.items;
 		
 		for (var i=0; i<selected.length; i++){
 			
 			var item = selected[i].data;
 			
-			result += '{';
+			var defaultParams = defaults[ item.name ] || {};
+			
+			var layer = Ext.applyIf({
+				name: item.name,
+				title: item.title
+			}, defaultParams);
+			
+			
+			/*result += '{';
 			result +=  '"format": "image/jpeg",'
 		             + '"transparent": false,'
 		             + '"source": "GEOSIII",'
 		             + '"group": "background",'
 		             + '"name": "' + item.value +  '",'
 		             + '"title": "' + item.text + '"'
-			result += '}';
+			result += '}';*/
+			
+			result += Ext.encode( layer );
 			
 			if ( i < selected.length - 1){
 				result += ', ';
 			}
 		}
+		
+		// console.log(result);
 		
 		return result;
 	},

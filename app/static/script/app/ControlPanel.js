@@ -1,3 +1,459 @@
+
+var Source = Ext.extend(Ext.util.Observable, {
+	
+	constructor: function(config){
+		this.url = config.url;
+		this.id = config.id || Ext.id(null);
+		Source.superclass.constructor.apply(this, arguments);
+        if (!this.format) {
+            this.format = new OpenLayers.Format.WMSCapabilities({keepData: true});
+        }
+	},
+	
+	init: function(scope){
+		this.createStore();
+	},
+	
+	getStore: function(){
+		return this.store;
+	},
+	
+	createStore: function(){
+		var baseParams = this.baseParams || {
+	            SERVICE: "WMS",
+	            REQUEST: "GetCapabilities"
+	        };
+	     if (this.version) {
+	         baseParams.VERSION = this.version;
+	     }
+
+	     this.store = new GeoExt.data.WMSCapabilitiesStore({
+	            // Since we want our parameters (e.g. VERSION) to override any in the 
+	            // given URL, we need to remove corresponding paramters from the 
+	            // provided URL.  Simply setting baseParams on the store is also not
+	            // enough because Ext just tacks these parameters on to the URL - so
+	            // we get requests like ?Request=GetCapabilities&REQUEST=GetCapabilities
+	            // (assuming the user provides a URL with a Request parameter in it).
+	            url: this.url,
+	            baseParams: baseParams,
+	            format: this.format,
+	            autoLoad: true,
+	            layerParams: {exceptions: null},
+	            listeners: {
+	                load: function() {
+	                    // The load event is fired even if a bogus capabilities doc 
+	                    // is read (http://trac.geoext.org/ticket/295).
+	                    // Until this changes, we duck type a bad capabilities 
+	                    // object and fire failure if found.
+	                    if (!this.store.reader.raw || !this.store.reader.raw.service) {
+	                        this.fireEvent("failure", this, "Invalid capabilities document.");
+	                    } else {
+	                        if (!this.title) {
+	                            this.title = this.store.reader.raw.service.title;                        
+	                        }
+	                        if (!this.ready) {
+	                            this.ready = true;
+	                            this.fireEvent("ready", this);
+	                        } else {
+	                            this.lazy = false;
+	                            //TODO Here we could update all records from this
+	                            // source on the map that were added when the
+	                            // source was lazy.
+	                        }
+	                    }
+	                    // clean up data stored on format after parsing is complete
+	                    delete this.format.data;
+	                },
+	                exception: function(proxy, type, action, options, response, error) {
+	                    delete this.store;
+	                    var msg, details = "";
+	                    if (type === "response") {
+	                        if (typeof error == "string") {
+	                            msg = error;
+	                        } else {
+	                            msg = "Invalid response from server.";
+	                            // special error handling in IE
+	                            var data = this.format && this.format.data;
+	                            if (data && data.parseError) {
+	                                msg += "  " + data.parseError.reason + " - line: " + data.parseError.line;
+	                            }
+	                            var status = response.status;
+	                            if (status >= 200 && status < 300) {
+	                                // TODO: consider pushing this into GeoExt
+	                                var report = error && error.arg && error.arg.exceptionReport;
+	                                details = gxp.util.getOGCExceptionText(report);
+	                            } else {
+	                                details = "Status: " + status;
+	                            }
+	                        }
+	                    } else {
+	                        msg = "Trouble creating layer store from response.";
+	                        details = "Unable to handle response.";
+	                    }
+	                    // TODO: decide on signature for failure listeners
+	                    this.fireEvent("failure", this, msg, details);
+	                    // clean up data stored on format after parsing is complete
+	                    delete this.format.data;
+	                },
+	                scope: this
+	            }
+	        });		
+	}
+	
+});
+
+var SourceCollection = Ext.extend(Ext.util.Observable, {
+	
+	
+	constructor: function(config) {
+		this.addEvents(
+			'server-added'
+		);
+		Ext.apply(this, {
+	        layerSources: {}
+	    });
+	    SourceCollection.superclass.constructor.apply(this, arguments);
+	},
+	
+	addLayerSource: function( options ){
+	
+	    var config = options.config;
+		var source = new Source( config );
+	  
+	    source.on({
+	            ready: {
+	                fn: function() {
+						this.fireEvent('server-added', source, this);
+	                    var callback = options.callback || Ext.emptyFn;
+	                    callback.call(options.scope || this, id);
+	                },
+	                scope: this,
+	                single: true
+	            },
+	            failure: {
+	                fn: function() {
+	                    var fallback = options.fallback || Ext.emptyFn;
+	                    delete this.layerSources[id];
+	                    fallback.apply(options.scope || this, arguments);
+	                },
+	                scope: this,
+	                single: true
+	            }
+	    });
+	   this.layerSources[source.id] = source;
+	   source.init(this);
+	   return source;		
+	},
+	get: function( key ){
+		return this.layerSources[key];
+	}
+});
+
+var ServerListView = Ext.extend(Ext.form.ComboBox, {
+		untitledText: 'Title not specified',
+        valueField: "id",
+        displayField: "title",
+        triggerAction: "all",
+        editable: false,
+        allowBlank: false,
+        forceSelection: true,
+        mode: "local",
+		store: new Ext.data.ArrayStore({
+            fields: ["id", "title"],
+            data: []
+        }),
+
+		addServer: function( source ){
+			var record = new this.store.recordType({
+                id: source.id,
+                title: source.title || this.untitledText
+            });
+            this.store.insert(0, [record]);
+            this.onSelect(record, 0);			
+		}
+});
+
+var LayerListView = Ext.extend(Ext.grid.GridPanel,{
+
+	autoScroll: true,
+	loadMask: true,
+	height: 100,
+	
+
+	initComponent: function( ){
+		
+		this.sm = new Ext.grid.RowSelectionModel({
+	            // singleSelect: true
+	    });
+		this.colModel = new Ext.grid.ColumnModel([
+	        {id: "title", header: 'Title', dataIndex: "title", sortable: true},
+	        {header: "Id", dataIndex: "name", width: 150, sortable: true},
+	        {header: "uuid", dataIndex: "keywords", width: 150, sortable: true, hidden: true}
+	    ]);
+		this.store = new Ext.data.ArrayStore({
+	        fields: ["name", "keywords", "title"],
+	        data: []
+	    });
+		
+		
+		LayerListView.superclass.initComponent.call(this, arguments);
+	}
+	
+
+});
+
+var LayerSelector = Ext.extend(Ext.util.Observable, {
+	
+	
+	constructor: function(config){
+		
+		this.name = config.name;
+		this.ref = config.ref;
+	
+		this.sources = new SourceCollection({});
+		this.layerList = new LayerListView({
+			
+		});
+		this.selectedLayerList = new LayerListView({
+
+			});
+		this.serverList = new ServerListView({
+			
+		});		
+        LayerSelector.superclass.constructor.apply(this, config);		
+		this.bind();
+    },
+	bind: function(){
+		this.sources.on('server-added', this.serverList.addServer, this.serverList);
+		this.serverList.on('select', this.uploadLayersHandler, this);
+	},
+	addServerHandler: function(){
+		var newSourceWindow = new gxp.NewSourceWindow({
+            modal: true,
+            listeners: {
+                "server-added": function(url) {
+                    newSourceWindow.setLoading();
+					this.sources.addLayerSource({
+						config: {url:url},
+						callback: function(id){
+							newSourceWindow.hide();
+						},
+						fallback: function(source, msg){
+							newSourceWindow.setError(
+                                new Ext.Template(this.addLayerSourceErrorText).apply({msg: msg})
+                            );
+						},
+						scope: this
+					 });
+                },
+                scope: this
+            }
+        });
+		newSourceWindow.show();
+	},
+	uploadLayersHandler: function(  combo, record, index){
+		// get the store with layers of the selected source
+		var store = this.sources.get( record.get("id") ).getStore();
+		// upload capabilities into layerList (delete previous items)
+		this.layerList.store.clearFilter();                    
+        this.layerList.reconfigure( store , this.layerList.getColumnModel());
+		// select already selected layers
+		var selectedLayers = this.selectedLayerList.getStore().getRange();
+		this.layerList.getSelectionModel().selectRecords( selectedLayers );
+	},
+	addToRightHandler: function(){
+		// add selected layer to the list of selected layers
+		var selectedLayers = this.layerList.getSelectionModel().getSelections();
+		if ( selectedLayers.length === 0){
+				Ext.Msg.show({
+						title: 'Cannot add layer',
+						msg: 'No layer selected in left grid.',
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.WARNING
+				});
+				return;
+		}
+		for (var i=0; i<selectedLayers.length; i++){
+			var layer = selectedLayers[i];
+			var index = this.selectedLayerList.getStore().find('name', layer.data.name);
+			if ( index === -1 ){
+				this.selectedLayerList.getStore().add( layer );
+			} else {
+				Ext.Msg.show({
+						title: 'Cannot select layer',
+						msg: 'Layer already selected.',
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.WARNING
+				});
+			}
+			
+		}
+		
+	},
+	
+	removeFromRightHandler: function(){
+		var selectedLayers = this.selectedLayerList.getSelectionModel().getSelections();
+		if ( selectedLayers.length === 0){
+					Ext.Msg.show({
+							title: 'Cannot remove layer',
+							msg: 'No layer selected in right grid.',
+							buttons: Ext.Msg.OK,
+							icon: Ext.MessageBox.WARNING
+					});
+					return;
+			}
+		for (var i=0; i<selectedLayers.length; i++){
+			var layer = selectedLayers[i];
+			this.selectedLayerList.getStore().remove( layer );
+		}
+		
+	},
+	
+	resetHandler: function(){
+		this.selectedLayerList.getStore().removeAll( );
+	},
+	
+	enableHandler: function( scope ){
+		return function(){
+				scope.left.addServerBtn.enable();
+				scope.layerList.enable();
+				scope.selectedLayerList.enable();
+				scope.serverList.enable();
+				scope.right.addBtn.enable();
+				scope.right.removeBtn.enable();
+				scope.right.resetBtn.enable();
+		};
+	
+	},
+	
+	disableHandler: function( scope ){
+		return function(){
+				scope.left.addServerBtn.disable();
+				scope.layerList.disable();
+				scope.selectedLayerList.disable();
+				scope.serverList.disable();
+				scope.right.addBtn.disable();
+				scope.right.removeBtn.disable();
+				scope.right.resetBtn.disable();
+		};
+	
+	},
+	
+	getSelectedLayersHandler: function( scope ){
+		return function(){
+			var layers = scope.selectedLayerList.getStore().getRange();
+			return layers;			
+		};
+	
+	},
+	
+	selectedLayersHandler: function( scope ){
+		return function( layers ){
+			var store = scope.selectedLayerList.getStore();
+			for (var i=0; i<layers.length; i++){
+				var layer = layers[i];
+				var record = new store.recordType({
+					title: layer.title,
+					name: layer.name
+				});
+				store.add( record );
+			}
+				
+		};
+	
+	},
+	
+	reset: function(){
+		
+	},
+	
+	getView: function(){
+		this.left = new Ext.Panel({
+			scope: this,
+			tbar: [ 
+				'View layers from: ', 
+				this.serverList,
+		            new Ext.Button({
+		                text: 'Add server',
+						ref:'../addServerBtn',
+		                iconCls: "gxp-icon-addserver",
+		                handler: this.addServerHandler,
+		                scope : this
+		            })
+				],
+			items:[
+				this.layerList
+			]
+		});
+		this.right = new Ext.Panel({
+				buttonAlign:'right',
+				scope: this,
+				tbar: [ 
+						new Ext.Button({
+			                text: 'Add',
+							ref:'../addBtn',
+			                iconCls: "add",
+			                handler: this.addToRightHandler,
+			                scope : this
+			            }),
+						new Ext.Button({
+			                text: 'Remove',
+							ref:'../removeBtn',
+			                iconCls: "delete",
+			                handler: this.removeFromRightHandler,
+			                scope : this
+			            }),
+						'->',
+			            new Ext.Button({
+			                text: 'Reset',
+							ref:'../resetBtn',
+			                iconCls: "refresh",
+			                handler: this.resetHandler,
+			                scope : this
+			            })
+					],
+				items:[
+					this.selectedLayerList
+				]
+			});
+			
+		var columns = 	new Ext.Container( 
+			{
+			    layout: 'column',
+				ref: this.ref,
+			    defaults: {
+			        xtype: 'container',
+			        layout: 'form',
+			        columnWidth: 0.5,
+			        style: {
+			            padding: '10px'
+			        }
+			    },
+				enable: this.enableHandler( this ),
+				disable: this.disableHandler( this ),
+				getSelectedLayers: this.getSelectedLayersHandler( this ),
+				selectLayers: this.selectedLayersHandler( this ),
+				reset: this.reset,
+				scope:this,
+			    items: [
+					{
+			        	items: this.left
+			    	}, 
+					{
+			        	items: this.right
+			    	}
+				]
+		    });	
+		
+			this.disableHandler( this ).call(this);
+		
+		return columns;
+	}
+	
+	
+});
+
+
 var ControlPanel = Ext.extend(Ext.Panel, {
 
 	/** i18n */
@@ -282,6 +738,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			}]
 		});
 
+
+
 		var self = this;
 		this.cruisePanelView = new Ext.Panel({
 			// layout: 'fit',
@@ -389,7 +847,10 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				}, {
 					xtype: 'fieldset',
 					title: 'Select ocean models',
-					items: [{
+					id:'ocean-models-id',
+					items: [
+						
+					/*	{
 						xtype: 'itemselector',
 						name: 'itemselector',
 						// fieldLabel: 'Models',
@@ -420,8 +881,53 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 								scope: this
 							}]
 						}]
-					}]
-				}, {
+					}
+					,*/ (new LayerSelector( {
+							ref: '../../modelSelector'
+						 } )).getView()
+					
+					
+					]
+				}, 
+				
+				{
+					xtype: 'fieldset',
+					title: 'Select backgrounds',
+					items: [/*{
+						xtype: 'itemselector',
+						name: 'itemselector',
+						// fieldLabel: 'Backgrounds',
+						imagePath: '../theme/app/img/ext',
+						disabled: true,
+						ref: '../../backgroundSelector',
+						multiselects: [{
+							width: 250,
+							height: 200,
+							store: config.backgrounds,
+							displayField: 'text',
+							valueField: 'value'
+						}, {
+							width: 250,
+							height: 200,
+							// allowBlank: false,
+							blankText: 'At least one background must be selected',
+							store: [],
+							tbar: [{
+								text: 'clear',
+								handler: function() {
+									this.cruisePanelView.backgroundSelector.reset();
+								},
+								scope: this
+							}]
+						}]
+					}*/
+					(new LayerSelector( {
+							ref: '../../backgroundSelector'
+						 } )).getView()
+					]
+				},				
+				
+				{
 					xtype: 'fieldset',
 					title: 'Select vehicles',
 					buttonAlign: 'left',
@@ -535,37 +1041,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					}]
 				}, {
 					xtype: 'fieldset',
-					title: 'Select backgrounds',
-					items: [{
-						xtype: 'itemselector',
-						name: 'itemselector',
-						// fieldLabel: 'Backgrounds',
-						imagePath: '../theme/app/img/ext',
-						disabled: true,
-						ref: '../../backgroundSelector',
-						multiselects: [{
-							width: 250,
-							height: 200,
-							store: config.backgrounds,
-							displayField: 'text',
-							valueField: 'value'
-						}, {
-							width: 250,
-							height: 200,
-							// allowBlank: false,
-							blankText: 'At least one background must be selected',
-							store: [],
-							tbar: [{
-								text: 'clear',
-								handler: function() {
-									this.cruisePanelView.backgroundSelector.reset();
-								},
-								scope: this
-							}]
-						}]
-					}]
-				}, {
-					xtype: 'fieldset',
 					title: 'Map Extent',
 					items: [{
 						xtype: 'panel',
@@ -642,6 +1117,11 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				]
 			})] // cruise panel 		
 		});
+		
+	
+		
+		
+		
 
 		this.nwTextField = new Ext.form.TextField({
 			xtype: 'textfield',
@@ -910,7 +1390,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			var stepSize = step * computeDuration(unit);
 			
 			// at least one bg and on vehicle must be selected
-			if ( this.cruisePanelView.vehicleSelector.toMultiselect.store.getCount()<1
+			/*if ( this.cruisePanelView.vehicleSelector.toMultiselect.store.getCount()<1
 					|| this.cruisePanelView.backgroundSelector.toMultiselect.store.getCount()<1  ){
 						Ext.Msg.show({
 									title: 'Cannot save this configuration',
@@ -919,7 +1399,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 									icon: Ext.MessageBox.ERROR
 								});
 				return;
-			}
+			}*/
 			
 			
 			if ( endTime.getTime() <= startTime.getTime() ){
@@ -960,6 +1440,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							});	
 							self.cruisePanelView.name.markInvalid();				
 						} else {
+							
+							
 										// create a configuration from form fields
 										var conf = ConfigurationBuilder.create({
 													name: self.cruisePanelView.name.getValue(),
@@ -969,8 +1451,10 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 													timeStep: self.cruisePanelView.stepValueField.getValue(),
 													timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
 													timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
-													models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
-													backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
+													// models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
+													// backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
+													models: self.cruisePanelView.modelSelector.getSelectedLayers(),
+													backgrounds: self.cruisePanelView.backgroundSelector.getSelectedLayers(),
 													vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
 													watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
 													watermarkUrl: self.cruisePanelView.watermarkUrl.getValue(),
@@ -1084,14 +1568,18 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 								function(selected, multiselectItem) {
 									return selected[1] === multiselectItem.value;
 								});
-								self.updateItemSelector(self.cruisePanelView.modelSelector, payload.models, 
+								
+								self.cruisePanelView.modelSelector.selectLayers( payload.models );
+								self.cruisePanelView.backgroundSelector.selectLayers( payload.backgrounds );
+								
+								/*self.updateItemSelector(self.cruisePanelView.modelSelector, payload.models, 
 								function(selected, multiselectItem) {
 									return selected.name === multiselectItem.name;
 								});
 								self.updateItemSelector(self.cruisePanelView.backgroundSelector, payload.backgrounds, 
 								function(selected, multiselectItem) {
 									return selected.name === multiselectItem.value;
-								});
+								});*/
 
 								var bounds = new OpenLayers.Bounds(payload.bounds);
 								var proj = new OpenLayers.Projection("EPSG:4326");
@@ -1323,10 +1811,10 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				"add", function(){
 					 self.cruisePanelView.vehicleSelector.toMultiselect.clearInvalid();
 			});
-			this.cruisePanelView.backgroundSelector.toMultiselect.store.on(
+			/*this.cruisePanelView.backgroundSelector.toMultiselect.store.on(
 				"add", function(){
 					 self.cruisePanelView.backgroundSelector.toMultiselect.clearInvalid();
-			});
+			});*/
 			
 
 			Ext.getCmp('vehicle-selector-btn').enable();
@@ -1500,7 +1988,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			// && this.cruisePanelView.modelSelector.isValid(false) 
 			// && this.cruisePanelView.vehicleSelector.isValid(false)
 			// && this.cruisePanelView.backgroundSelector.isValid(false) 
-			&& this.cruisePanelView.vehicleSelector.toMultiselect.isValid(false) && this.cruisePanelView.backgroundSelector.toMultiselect.isValid(false) && this.cruisePanelView.stepValueField.isValid(false) && this.cruisePanelView.rateValueField.isValid(false) && this.cruisePanelView.stepUnitsField.isValid(false);
+			/*&& this.cruisePanelView.vehicleSelector.toMultiselect.isValid(false) && this.cruisePanelView.backgroundSelector.toMultiselect.isValid(false)*/
+			 && this.cruisePanelView.stepValueField.isValid(false) && this.cruisePanelView.rateValueField.isValid(false) && this.cruisePanelView.stepUnitsField.isValid(false);
 		}
 
 
