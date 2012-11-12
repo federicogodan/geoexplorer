@@ -740,7 +740,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     showMarkerGeoJSON: function(markerName, geoJson, clusterName, trackName, showLine) {
         
-        var clusterName= clusterName ||  markerName;
+        var clusterName = clusterName ||  markerName;
         
         // allow testing of specific renderers via "?renderer=Canvas", etc
         var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
@@ -763,17 +763,55 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 				internalProjection: app.mapPanel.map.getProjectionObject(),
 				externalProjection: new OpenLayers.Projection("EPSG:4326")
 			});
-
+            
+            var clusters = new Array();            
             var markers = new Array();
-            var clusters = new Array();
+            var markersLayers = new Array();
             
             var features = geojson_format.read(geoJson);
+
+            //unique array
+            function unique(arrayName){
+                var newArray=new Array();
+                label:for(var a=0; a<arrayName.length;a++ ){  
+                    for(var j=0; j<newArray.length;j++ ){
+                        if(newArray[j]==arrayName[a]) 
+                        continue label;
+                    }
+                    newArray[newArray.length] = arrayName[a];
+                }
+                return newArray;
+            } 
+            
+            for(var i=0;i<features.length;i++){
+                if(!features[i].attributes.cluster){
+                    if(features[i].attributes.layer){
+                        markersLayers.push(features[i].attributes.layer);
+                    }else{
+                        markersLayers.push(features[i].attributes.layer);
+                    }
+                }
+            }
+
+            var uniqueMarkersLayers = new Array;
+            uniqueMarkersLayers = unique(markersLayers);
             
             for(var i=0;i<features.length;i++){
                 if(features[i].attributes.cluster){
                     clusters.push(features[i]);
-                }else{
-                    markers.push(features[i]);                
+                }
+            }
+            
+            for (var m=0;m<uniqueMarkersLayers.length;m++){
+                markers[m] = new Array();
+                var count = 0;
+                for(var mi=0;mi<features.length;mi++){
+                    if(!features[mi].attributes.cluster){
+                        if(features[mi].attributes.layer == uniqueMarkersLayers[m]){
+                            markers[m][count] = features[mi];
+                            count++;
+                        }
+                    }
                 }
             }
             
@@ -781,13 +819,25 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             var styleCluster = this.setMarkersStyle();
 
             if (markers.length>0){
-                // Create new vector layer for markers
-                var marker_layer = new OpenLayers.Layer.Vector(markerName, {
-                    styleMap: styleCluster,
-                    displayInLayerSwitcher: true,
-                    //rendererOptions: {yOrdering: true},
-                    renderers: renderer
-                });
+                for (var i = 0; i<uniqueMarkersLayers.length; i++){
+                    if(uniqueMarkersLayers[i] == undefined){
+                        // Create new vector layer for default markers
+                       var marker_layer = new OpenLayers.Layer.Vector(markerName, {
+                            styleMap: styleCluster,
+                            displayInLayerSwitcher: true,
+                            //rendererOptions: {yOrdering: true},
+                            renderers: renderer
+                        });
+                    }else{
+                        // Create new vector layer for named markers
+                        uniqueMarkersLayers[i] = new OpenLayers.Layer.Vector(uniqueMarkersLayers[i], {
+                            styleMap: styleCluster,
+                            displayInLayerSwitcher: true,
+                            //rendererOptions: {yOrdering: true},
+                            renderers: renderer
+                        });
+                    }
+                }
             }
             
             if (clusters.length>0){
@@ -806,7 +856,13 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             }
             
             if (markers.length>0){
-                marker_layer.renderer.textRoot = marker_layer.renderer.vectorRoot;
+                for (var i = 0; i<uniqueMarkersLayers.length; i++){
+                    if(uniqueMarkersLayers[i] == undefined){
+                        marker_layer.renderer.textRoot = marker_layer.renderer.vectorRoot;
+                    }else{
+                        uniqueMarkersLayers[i].renderer.textRoot = uniqueMarkersLayers[i].renderer.vectorRoot;
+                    }
+                }
             }
             
             // Create the popups for markers
@@ -841,23 +897,44 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }
             }
 
-
             if(markers.length>0){
-                app.mapPanel.map.addLayer(marker_layer);
-                marker_layer.addFeatures(markers);
+                for (var i = 0; i<uniqueMarkersLayers.length; i++){
+                    for (var c=0; c<markers[i].length;c++){
+                        if(uniqueMarkersLayers[i] == undefined){
+                            app.mapPanel.map.addLayer(marker_layer);
+                            marker_layer.addFeatures(markers[i][c]);
+                        }else{
+                            app.mapPanel.map.addLayer(uniqueMarkersLayers[i]);
+                            uniqueMarkersLayers[i].addFeatures(markers[i][c]);
+                        }
+                    }
+                }
             }
             
             if(clusters.length>0){
                 app.mapPanel.map.addLayer(cluster_layer);
                 cluster_layer.addFeatures(clusters);
             }
-
-            var vectorSelect;
+            
+            var vectorSelect = new Array;
             
             if(clusters.length>0 && markers.length>0){
-                vectorSelect = [cluster_layer,marker_layer];
+                vectorSelect = [cluster_layer];
+                for (var i = 0; i<uniqueMarkersLayers.length; i++){
+                    if(uniqueMarkersLayers[i] == undefined){
+                        vectorSelect.push(marker_layer);
+                    }else{
+                        vectorSelect.push(uniqueMarkersLayers[i]);
+                    }
+                }                
             }else if(clusters.length==0 && markers.length>0){
-                vectorSelect = marker_layer;
+                for (var i = 0; i<uniqueMarkersLayers.length; i++){
+                    if(uniqueMarkersLayers[i] == undefined){
+                        vectorSelect.push(marker_layer);
+                    }else{
+                        vectorSelect.push(uniqueMarkersLayers[i]);
+                    }
+                }    
             }else{
                 vectorSelect = cluster_layer;
             }
@@ -871,6 +948,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                   
             app.mapPanel.map.addControl(selectControl);
             selectControl.activate();
+            
         }
         
 		if(trackName){
