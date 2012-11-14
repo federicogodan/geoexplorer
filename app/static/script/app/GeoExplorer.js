@@ -78,6 +78,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		fontWeight: "bold",
 		fontSize: "10px",
 		fontColor: "#FFFFFF",
+        //graphicWidth: 30,
 		//backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
 		//backgroundXOffset: -7,
 		//backgroundYOffset: -7,
@@ -91,7 +92,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		label: "${label}",
 		fontWeight: "bold",
 		fontSize: "10px",
-		fontColor: "#FFFFFF",
+		fontColor: "#FFFFFF",     
 		//backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
 		//backgroundXOffset: -7,
 		//backgroundYOffset: -7,
@@ -621,25 +622,57 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		
         var context = {
             getMarkerIcon : function (ft){
-                if(ft.attributes.highlights) 
-					if(ft.attributes.cluster)
+                if(ft.attributes.highlights) {
+					if(ft.attributes.cluster){
 						return highlightsClusterMarker;
-					else	
-						return highlightsMarker; 
-                else{
-					if(ft.attributes.cluster)
+					}else{
+                        if(ft.attributes.icons){
+                            return ft.attributes.icons.img.markerHighlights;
+                        }else{
+                            return highlightsMarker;                      
+                        }           
+                    }
+                }else{
+					if(ft.attributes.cluster){
 						return defaultClusterMarker; 
-					else 
-						return defaultMarker; 
-				} 
-                    
+					}else{ 
+                        if(ft.attributes.icons){
+                            return ft.attributes.icons.img.markerDefault;
+                        }else{
+                            return defaultMarker;                             
+                        }
+                    }
+				}   
             },
-			
+            getMarkerWidth : function (ft){
+                if(ft.attributes.icons.markersDimensions){
+                    return parseInt(ft.attributes.icons.markersDimensions.width);
+                }
+            },
+            getBackgroundMarkerWidth : function (ft){
+                if(ft.attributes.icons.shadowDimensions){
+                    return parseInt(ft.attributes.icons.shadowDimensions.width);
+                }
+            },
+            getMarkerHeight : function (ft){
+                if(ft.attributes.icons.markersDimensions){
+                    return parseInt(ft.attributes.icons.markersDimensions.height);
+                }
+            },       
+            getBackgroundMarkerHeight : function (ft){
+                if(ft.attributes.icons.shadowDimensions){
+                    return parseInt(ft.attributes.icons.shadowDimensions.height);
+                }
+            },            
 			getMarkerSelectionIcon : function (ft){
 				if(ft.attributes.cluster)
 					return clusterSelection;
 				else	
-					return defaultSelection;                     
+                    if(ft.attributes.icons){
+                        return ft.attributes.icons.img.markerSelected;
+                    }else{
+                        return defaultSelection;                               
+                    }                   
             },
 			
 			getMarkerLabel : function(ft){
@@ -684,28 +717,52 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 						radius = 32;
 					}
 				}
-				
-				return radius;
+                
+                return radius;
 			},
 
-            getBackgroundXOffset : function(ft){                
-                return  -0.7*context.getRadius(ft)/2;                
+            getBackgroundXOffset : function(ft){        
+                if(ft.attributes.icons && !ft.attributes.cluster){
+                    return -0.9*context.getBackgroundMarkerWidth(ft)/4;
+                }else{            
+                    return  -0.7*context.getRadius(ft)/2;
+                }
             },
             getBackgroundYOffset : function(ft){
-                return -1.5* context.getRadius(ft);                
+                if(ft.attributes.icons && !ft.attributes.cluster){
+                    return -1.85*context.getBackgroundMarkerHeight(ft)/2;
+                }else{
+                    return -1.5* context.getRadius(ft);
+                }               
             },
             getGraphicYOffset : function(ft){
-                return -1.9* context.getRadius(ft);                
+                if(ft.attributes.icons && !ft.attributes.cluster){
+                    return -1.95*context.getMarkerHeight(ft)/2;
+                }else{
+                    return -1.9* context.getRadius(ft);
+                }
             },
             getLabelYOffset : function(ft){
-                return  context.getRadius(ft);                
+                if(ft.attributes.icons && !ft.attributes.cluster){
+                    return context.getMarkerHeight(ft)/2;
+                }else{                
+                    return  context.getRadius(ft);                
+                }    
             },
             
 			getMarkerShadowIcon: function (ft){
 				if(ft.attributes.cluster)
 					return clusterShadow;
-				else				    
-					return defaultShadow;     			
+				else
+                    if(ft.attributes.icons && !ft.attributes.cluster){
+                        if(ft.attributes.icons.img){
+                            return ft.attributes.icons.img.markerShadow;
+                        }else{
+                            return defaultShadow;
+                        }
+                    }else{
+                        return defaultShadow;
+                    }
             }
         };
         
@@ -717,7 +774,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         this.markerTemplateDefault.labelYOffset ="${getLabelYOffset}"; 
 		this.markerTemplateDefault.backgroundGraphic = "${getMarkerShadowIcon}";        
         
-		this.markerTemplateSelected.externalGraphic = "${getMarkerSelectionIcon}";        
+		this.markerTemplateSelected.externalGraphic = "${getMarkerSelectionIcon}";
 		this.markerTemplateSelected.pointRadius = "${getRadius}";		
 		this.markerTemplateSelected.backgroundXOffset = "${getBackgroundXOffset}";	
 		this.markerTemplateSelected.backgroundYOffset = "${getBackgroundYOffset}";
@@ -729,7 +786,39 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             "default" : new OpenLayers.Style(this.markerTemplateDefault, {context:context}),
             "select" : new OpenLayers.Style(this.markerTemplateSelected, {context:context})
         }); 
-            
+        
+        var rules = [
+            new OpenLayers.Rule({
+                filter: new OpenLayers.Filter.Logical({
+                    type: OpenLayers.Filter.Logical.AND,
+                    filters: [
+                        new OpenLayers.Filter.Comparison({
+                            type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
+                            property: "icons",
+                            value: null
+                        }),
+                        new OpenLayers.Filter.Comparison({
+                            type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
+                            property: "cluster",
+                            value: true
+                        })
+                    ]
+                }),
+                symbolizer: {
+                    graphicWidth: "${getMarkerWidth}",
+                    graphicHeight: "${getMarkerHeight}",
+                    backgroundWidth: "${getBackgroundMarkerWidth}",
+                    backgroundHeight: "${getBackgroundMarkerHeight}"
+                }                
+            }),
+            new OpenLayers.Rule({
+                elseFilter: true
+            })
+        ];
+        
+        styleMap.styles['default'].addRules(rules);
+        styleMap.styles['select'].addRules(rules);  
+        
         return(styleMap); 
     }, 
     
@@ -816,7 +905,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             }
             
             // Sets the style for the markers
-            var styleCluster = this.setMarkersStyle();
+            var styleCluster = this.setMarkersStyle(false);
+
 
             if (markers.length>0){
                 for (var i = 0; i<uniqueMarkersLayers.length; i++){
