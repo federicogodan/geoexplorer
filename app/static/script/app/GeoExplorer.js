@@ -440,6 +440,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		var eastPanel = new Ext.Panel({
             border: false,
             // layout: "border",
+			// layout:'fit',
+			/*	style: {
+							width: '100%',
+				            height: '100%'
+				        },*/
+			autoHeight: true,
             id: 'east',
             region: "east",
             width: 350,

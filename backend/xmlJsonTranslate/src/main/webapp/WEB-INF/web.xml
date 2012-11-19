@@ -3,6 +3,17 @@
 	
 	<display-name>xmlJsonTranslate</display-name>
 
+  <!-- Upload KMZ files -->
+  <servlet>
+    <servlet-name>KMZUploader</servlet-name>
+    <servlet-class>it.geosolutions.xmlJsonTranslate.KMZUploader</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>KMZUploader</servlet-name>
+    <url-pattern>/KMZUploader/*</url-pattern>
+  </servlet-mapping>
+
   <!-- File upload -->
   <servlet>
     <servlet-name>FileUploader</servlet-name>
