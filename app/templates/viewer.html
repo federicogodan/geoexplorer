@@ -114,7 +114,7 @@
 				
 				var url = Ext.urlDecode(query);        
 				var code = url.locale || 'it';			
-				var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
+				var langData = [['en', 'English'],['fr','Fran袩s'],['it','Italiano']];
 				
 				// //////////////////////////////////////////////////        
 				// Setting the initial language for the selector
@@ -279,12 +279,6 @@
                                 group: "background"
                             },{
                                 source: "google",
-                                title: "Google Roadmap",
-                                name: "ROADMAP",
-                                visibility: false,
-                                group: "background"
-                            },{
-                                source: "google",
                                 title: "Google Terrain",
                                 name: "TERRAIN",
                                 visibility: false,
@@ -293,6 +287,12 @@
                                 source: "google",
                                 title: "Google Hybrid",
                                 name: "HYBRID",
+                                visibility: false,                          
+                                group: "background"
+                            },{
+                                source: "google",
+                                title: "Google Roadmap",
+                                name: "ROADMAP",
                                 visibility: true,
                                 group: "background"
                             }],

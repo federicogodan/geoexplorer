@@ -78,6 +78,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		fontWeight: "bold",
 		fontSize: "10px",
 		fontColor: "#FFFFFF",
+        labelSelect: true,
         //graphicWidth: 30,
 		//backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
 		//backgroundXOffset: -7,
@@ -92,7 +93,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 		label: "${label}",
 		fontWeight: "bold",
 		fontSize: "10px",
-		fontColor: "#FFFFFF",     
+		fontColor: "#FFFFFF",
+        //labelSelect: true,
 		//backgroundGraphic: 'theme/app/img/markers/markers_shadow.png',
 		//backgroundXOffset: -7,
 		//backgroundYOffset: -7,
@@ -811,13 +813,21 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     backgroundHeight: "${getBackgroundMarkerHeight}"
                 }                
             }),
+            /*new OpenLayers.Rule({
+                filter: new OpenLayers.Filter.Comparison({
+                    type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
+                    property: "html",
+                    value: null
+                }),
+                symbolizer: {labelSelect: true, graphic: true}
+            }),*/
             new OpenLayers.Rule({
                 elseFilter: true
             })
         ];
-        
+
         styleMap.styles['default'].addRules(rules);
-        styleMap.styles['select'].addRules(rules);  
+        styleMap.styles['select'].addRules(rules);        
         
         return(styleMap); 
     }, 
