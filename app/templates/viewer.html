@@ -114,7 +114,7 @@
 				
 				var url = Ext.urlDecode(query);        
 				var code = url.locale || 'it';			
-				var langData = [['en', 'English'],['fr','Fran袩s'],['it','Italiano']];
+				var langData = [['en', 'English'],['fr','Français'],['it','Italiano']];
 				
 				// //////////////////////////////////////////////////        
 				// Setting the initial language for the selector
@@ -211,7 +211,7 @@
                         window.open('http://geo-solutions.it/contact/', '_blank');
                     }
                 });
-
+            
                 var appViewport = new Ext.Viewport({
                     id: 'appVieport',
                     layout:'fit',
@@ -260,18 +260,18 @@
                         units: "m",
                         maxExtent: [667992.119160014, 4563241.88685229, 1583403.10697534, 6164237.56683964],
                         layers: [{
-                                source: "bing",
-                                title: "Bing Aerial",
-                                name: "Aerial",
-                                visibility: false,
-                                group: "background"
-                            }, {
                                 source: "osm",
                                 title: "Open Street Map",
                                 name: "mapnik",
                                 visibility: false,
                                 group: "background"
                             },{
+                                source: "bing",
+                                title: "Bing Aerial",
+                                name: "Aerial",
+                                visibility: false,
+                                group: "background"
+                            }, {
                                 source: "mapquest",
                                 title: "MapQuest OpenStreetMap",
                                 name: "osm",
@@ -279,8 +279,8 @@
                                 group: "background"
                             },{
                                 source: "google",
-                                title: "Google Terrain",
-                                name: "TERRAIN",
+                                title: "Google Satellite",
+                                name: "SATELLITE",
                                 visibility: false,
                                 group: "background"
                             },{
@@ -325,8 +325,8 @@
             };			
                 
 			Ext.Ajax.request({
-				  //url: "/MapComposer/urlConfig.js",
 				  url: "urlConfig.js",
+				  //url: "/urlConfig.js",
 				  method: 'GET',
 				  success: function(response, opts){      
 					  var serverConfig;    
