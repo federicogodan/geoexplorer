@@ -1,0 +1,200 @@
+div.olControlPanel {
+    top: 0px;
+    right: 20px;
+    position: absolute;
+}
+.olControlPanel div {
+    display: block;
+    width:  50px;
+    height: 50px;
+    border: none;
+    margin: 2px;
+    
+}
+.olControlPanel .hidePanelButtonItemInactive{
+	background: url("../img/arrow_left.png") no-repeat;
+	position:absolute;
+	border-radius: 4px 4px 4px 4px;
+	margin:5px;
+	background-color: rgba(0, 60, 136, 0.5);
+	vertical-align: middle;
+	top:2px;
+	width:30px;
+	height:50px;
+	left:-35px;
+
+}
+.olControlPanel .hidePanelButtonItemActive{
+background: url("../img/arrow_right.png") no-repeat;
+	position:absolute;
+	border-radius: 4px 4px 4px 4px;
+	background-color: rgba(0, 60, 136, 0.5);
+	vertical-align: middle;
+	top:2px;
+	width:30px;
+	height:50px;
+	left:-35px;
+}
+.geoLocalizationButtonItemInactive {
+    background-image: url("../img/geolocation_icon.png");
+	background-color: rgba(0, 60, 136, 0.5);
+	border-radius: 4px 4px 4px 4px;
+}
+.geoCodingButtonItemInactive {
+	background-image: url("../img/icon-search.png");
+	background-color: rgba(0, 60, 136, 0.5);
+	border-radius: 4px 4px 4px 4px;
+}
+
+.LayerSwitcherButtonItemInactive{
+	background-image: url("../img/layers_icon.png");
+	background-color: rgba(0, 60, 136, 0.5);
+	border-radius: 4px 4px 4px 4px;
+}
+div.olControlAttribution{
+	bottom:0;
+}
+div.olControlPanel{
+top: 8px;
+right: 8px;
+background: rgba(255, 255, 255, 0.4);
+border-radius: 4px;
+padding: 2px;
+}
+div.olControlZoom a.olControlZoomIn,div.olControlZoom a.olControlZoomOut  {
+	font-size: 40px;
+	height:40px;
+	width:40px;
+	padding-top:10px;
+	font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-decoration: none;
+
+
+}
+
+.nominatim-geocoder-embedded-search-box input{
+	padding-left:35px;
+	padding-right:40px;
+	background-repeat: no-repeat;
+	background-image: url("../img/icon-search35-reverse.png");
+	border-radius: 4px 4px 4px 4px;
+	
+}
+ .nominatim-geocoder-embedded-search-box .close-search {
+	width: 25px;
+	height: 25px;
+	display: block;
+	z-index:999999;
+	background: url(../img/close-search.png) no-repeat center center;
+	position: absolute;
+	top: 50%;
+	margin-top: -12px;
+	right: 2px;
+	cursor: pointer;
+}
+
+
+.olPopup .olPopupCloseBox {
+  background: url("../img/close.png") no-repeat;
+  background-position: center center;
+  top:0;
+  right:0px;
+  width:20px;
+  height:20px;
+  cursor: pointer;
+  
+ 
+}
+
+.olPopup{
+ border-radius: 10px;
+ z-index:11000;
+ box-shadow: rgba(0,0,0,0.6) 5px 5px 20px;
+ padding:10px;
+ /*background: url("../img/v-grad.png") repeat-x;*/
+ 
+}
+/* css for GeoJson description content */
+.olPopup .olPopupContent{
+	overflow: auto;
+
+}
+
+.olPopupContent h4.popupTitle{
+	border-bottom: thin solid gray;
+
+}
+
+/**
+ * MobileLayer switcher
+ */
+.olControlMobileLayerSwitcher  {
+    width: 90%;
+    height:90%;
+    border:2px solid #CED6D9;
+    background-color: #FFFFFF;
+    display:none;
+	border-radius: 8px 8px 8px 8px;
+    padding-top:25px;
+    overflow-y:auto;
+    position:absolute;
+    margin-left:-50%;
+    left:55%;
+    top:1%;
+	z-index:1011;
+	
+}
+
+.olControlMobileLayerSwitcher span{
+    padding-left:15px;
+    font-size:1.2em;
+    font-weight:bold;
+}
+
+.olControlMobileLayerSwitcher a.btnClose {
+    background: url("../img/close.png") no-repeat;
+    display: block;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    right: 5px;
+    text-indent: -9999px;
+    top: 5px;
+    
+}
+
+.olControlMobileLayerSwitcher ul {
+    padding-left:0px;
+    list-style-type:none;
+    margin:2px;
+}
+
+.olControlMobileLayerSwitcher ul li{
+    padding:5px 20px;
+    border-bottom:1px solid #efefef;
+}   
+.olControlMobileLayerSwitcher input{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border:none;
+  vertical-align:middle;
+  margin-right: 5px;
+  background-color:transparent !important;
+}
+
+.olControlMobileLayerSwitcher input[type="checkbox"]{
+  background-image: url(../img/checkbox_unchecked.png);
+}
+.olControlMobileLayerSwitcher input[type="checkbox"]:checked {
+  background-image: url(../img/checkbox_checked.png);
+}
+.olControlMobileLayerSwitcher input[type="radio"]{
+  background-image: url(../img/checkbox_unchecked.png);
+}
+.olControlMobileLayerSwitcher input[type="radio"]:checked {
+  background-image: url(../img/checkbox_checked.png);
+}
