@@ -1,7 +1,7 @@
   {
-   "geoStoreBase":"http://localhost:8080/geostore/rest/",
+    "geoStoreBase":"http://localhost:8080/geostore/rest/",
    
-   "proxy": "proxy?url=",
+    "proxy": "/proxy?url=",
     "gsSources":[],
     "scaleOverlayUnits":{
         "topOutUnits":"nmi",    
@@ -26,6 +26,6 @@
         "url": "http://localhost:8080/geostore/rest/",
         "user": "admin",
         "password": "admin",
-        "proxy":"/http_proxy/proxy?url="
+        "proxy":"/proxy?url="
     }
 }

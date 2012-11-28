@@ -569,21 +569,22 @@
                     ovestPanel.collapse();
                 }
             },
-                
-            'ready' : function(){    
-                    
-                
-                     			
-            }    
+
+			'ready' : function(){    					
+				/*var addLayer = app.tools["addlayer"];
+				addLayer.addLayer(
+						"geosolutions:country",
+						"http://demo1.geo-solutions.it/geoserver-enterprise/ows"
+				);*/
+			}    
         });
-    };			
+	};			
 			
-    Ext.Ajax.request({
-        //url: "/proxy/?url=" + "http://localhost:8080/geostore/urlConfig.js",
-        url: /*location.host.indexOf("localhost:8083")!=-1? "/*/"urlConfig.js"/*: "/IDAMapStore_test/urlConfig.js"*/,
-        method: 'GET',
-        success: function(response, opts){      
-            var serverConfig;    
+	Ext.Ajax.request({
+	  url: "/urlConfig.js",
+	  method: 'GET',
+	  success: function(response, opts){      
+			var serverConfig;    
 			  
             try{
                 serverConfig = Ext.util.JSON.decode(response.responseText);
