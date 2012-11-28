@@ -44,9 +44,9 @@
 		    var activateSearchTab, activateViewTab, runSimpleSearch;
 		    
 		    //var proxy = "/proxy/?url=";
-		    var proxy = "/http_proxy/proxy/?url=";
-			var server = 'http://demo1.geo-solutions.it/';
-
+		    var proxy = "/httpProxy/proxy/?url=";
+			var server = 'http://www2.fouta-djallon-programme.org/';
+			var xmlJsonTranslateService = server + "xmlJsonTranslate/"
         Ext.onReady(function(){
             Ext.BLANK_IMAGE_URL = (function() {
                     if (Ext.isIE8 || Ext.isGecko || Ext.isOpera || Ext.isChrome) {
@@ -210,8 +210,8 @@
 				];
 			};
 			
-			var gnURL = 'http://demo1.geo-solutions.it/geonetwork/srv/' + gnLangStr + '/main.home' ;
-			var fdhPortal =  'http://demo1.geo-solutions.it/geoserver/www/portal/' + gnLangStr + '/index.htm';
+			var gnURL = '/geonetwork/srv/' + gnLangStr + '/main.home' ;
+			var fdhPortal =  '/portal/' + gnLangStr + '/index.htm';
 			
 			var portalPanel = new Ext.Panel({
                 id: 'portalPanel',
@@ -345,10 +345,10 @@
                 //modified: false,
                 authStatus: <% status %>,
                 proxy: "/http_proxy/proxy/?url=",
-				loginService: "http://demo1.geo-solutions.it/exist/rest/mapadmin/login.xml",
-                printService: "http://demo1.geo-solutions.it/geoserver/pdf/",
-                xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
-                //xmlJsonTranslateService: "http://localhost:8081/web-gis/",
+		loginService: "http://193.43.36.103/exist/rest/mapadmin/login.xml",
+                printService: "/geoserver/pdf/",
+                xmlJsonTranslateService: xmlJsonTranslateService,
+             
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
                 //mapTitle : GeoExplorer.prototype.viewTabTitle || (gnLangStr === 'en' ? 'View' : 'Veu'),
@@ -359,7 +359,7 @@
                 },
                 sources: {
                     fdh: {
-                        url: "http://demo1.geo-solutions.it/geoserver/ows",
+                        url: "/geoserver/ows",
                         title: "FDH GeoServer",
                         layerBaseParams: { 
                             TILED : true,
