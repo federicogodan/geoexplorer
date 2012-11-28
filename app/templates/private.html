@@ -83,6 +83,12 @@
         top:0px;
         left:0px;
     }   
+    .olTimeBack {
+        position:relative;
+        left:60px;
+        top:10px;
+        background-color:#222B43;
+    }     
   </style>
   
     <script type="text/javascript">
@@ -152,7 +158,7 @@
         var app;
 
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl;
+        var uuid; var lay; var wmsurl; var serverConfig;
 
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
@@ -516,7 +522,7 @@
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                appType: "default",
+                appType: serverConfig.appType,
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -541,34 +547,9 @@
                     ],
                     layers: [
                     {
-                        source: "bing",
-                        title: "Bing Aerial",
-                        name: "Aerial",
-                        group: "background"
-                    },{
                         source: "osm",
                         title: "Open Street Map",
                         name: "mapnik",
-                        group: "background"
-                    },{
-                        source: "mapquest",
-                        title: "MapQuest OpenStreetMap",
-                        name: "osm",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Roadmap",
-                        name: "ROADMAP",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Hybrid",
-                        name: "HYBRID",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Terrain",
-                        name: "TERRAIN",
                         group: "background"
                     },{
                        "format":"image/png8",
@@ -715,7 +696,7 @@
 					uuid : msLayerUUID,
 					gnURL: gnUrl + "srv/" + gnLangStr + "/",
 					source: sourceId
-				  });     
+				  });        
 						  
 				  if (record) {
 					var layerStore = app.mapPanel.layers;  
@@ -852,11 +833,10 @@
 			
       Ext.Ajax.request({
           //url: "/MapStore/urlConfig.js", //TEST
-          url: "/urlConfig.js", //TEST
+          url: "/urlConfigPrivate.js", //TEST
           method: 'GET',
           success: function(response, opts){      
-              var serverConfig;    
-              
+
               try{
                   serverConfig = Ext.util.JSON.decode(response.responseText);
               }catch(e){
@@ -870,8 +850,8 @@
               
               if(serverConfig){
                   proxy = serverConfig.proxy; 
-                  geoStoreBaseURL = serverConfig.geoStoreBase;                  
-                  customSources = serverConfig.gsSources;
+                  geoStoreBaseURL = serverConfig.geoStoreBase;
+                  customSources = serverConfig.gsSources;                  
 
                   //      
                   // Run the application when browser is ready

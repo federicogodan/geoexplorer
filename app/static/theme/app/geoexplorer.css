@@ -271,6 +271,12 @@ table.featureInfo caption{
     padding: .2em .2em;
 }
 
+.olControlLoadingPanel {
+     background-image: url(img/loader5.gif);
+     background-position: center;
+     background-repeat: no-repeat;
+}
+
 #loading-mask {
   position: absolute;
   left:     0px;
@@ -301,3 +307,4 @@ table.featureInfo caption{
   margin:     0px;
   text-align: center;
 }
+

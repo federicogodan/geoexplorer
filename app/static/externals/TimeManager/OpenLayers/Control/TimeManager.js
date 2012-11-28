@@ -66,6 +66,15 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
 	step:1,
 	
     /**
+     * APIProperty: stepType
+     * {Number} The type of step. 
+     *     Must be one of:
+     *     "next" - call incrementTime function
+     *     "back" - call decrementTime function
+     */
+    stepType: "next",
+	
+    /**
      * APIProperty: range
      * {Array(Date|String)} 2 member array containing the minimum and maximum times
      *     in UTC that the time-series animation will use. (Optional if using
@@ -177,6 +186,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         else if(this.range) {
             if(!(this.range[0] instanceof Date)) {
                 this.range[0] = OpenLayers.Date.parse(this.range[0]);
+                
+                //SCRIVE IL TIME DEI LAYER SULLA MAPPA
+                OpenLayers.Util.getElement('olTime').innerHTML = this.range[0];
+                
             }
             if(!(this.range[1] instanceof Date)) {
                 this.range[1] = OpenLayers.Date.parse(this.range[1]);
@@ -290,7 +303,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.events.triggerEvent('rangemodified');
         }
         if(this.range && !this.currentTime) {
-            this.currentTime = new Date(this.range[(this.step > 0) ? 0 : 1].getTime());
+            this.setTime(new Date(this.range[(this.step > 0) ? 0 : 1].getTime()));
+        } else if(this.currentTime){
+            //force a tick call and maybe a tick event
+            this.setTime(this.currentTime);
         }
         //set map agents for layer additions and removal
         this.map.events.on({
@@ -421,22 +437,143 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             }
         }
         else {
-            this.incrementTime();
+           if(this.stepType == "next"){
+                if (this.toolbar.btnBack.disabled == true){
+                    this.toolbar.btnBack.enable();
+                }            
+                this.incrementTime();
+                
+            }else if(this.stepType == "back"){
+                if (this.toolbar.btnNext.disabled == true){
+                    this.toolbar.btnNext.enable();
+                }
+                if (this.toolbar.btnPlay.disabled == true){
+                    this.toolbar.btnPlay.enable();
+                }     
+                if (this.toolbar.btnFastforward.disabled == true){
+                    if(this.toolbar.btnFastforward.active){
+                        this.toolbar.btnFastforward.enable();
+                    }
+                }                  
+                if(this.currentTime <= this.range[0]) {
+                    
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stato raggiunto l'inizio del timestamp",
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO
+                    });
+                    this.toolbar.btnBack.disable();
+                  
+                }else{
+                    this.decrementTime();                
+                }
+            }else if(this.stepType == "play"){
+                //if(this.currentTime >= this.range[1] && this.loop) {
+                    this.incrementTime();
+                /*}
+                if(this.currentTime >= this.range[1] && !this.loop) {
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stato raggiunta la fine del timestamp",
+                        buttons: Ext.Msg.OK,
+                        fn: this.decrementTime(),
+                        icon: Ext.MessageBox.INFO,
+                        scope: this
+                    });                      
+                    this.clearTimer();
+                    this.toolbar.btnNext.disable();
+                    this.toolbar.btnPlay.disable();
+                }*/      
+            }else{
+                this.incrementTime();
+            }
+            
         }
         //test that we have reached the end of our range
         if(this.currentTime > this.range[1] || this.currentTime < this.range[0]) {
             //loop in looping mode
             if(this.loop) {
-                this.clearTimer();
-                this.reset(true);
-                this.play();
+                if(this.stepType == "play"){
+                    this.clearTimer();
+                    this.reset(true);
+                    this.play();
+                    //this.toolbar.slider.fireEvent('change',this.toolbar.slider,this.toolbar.slider.value,this.toolbar.slider.thumbs[0],true,false);
+                }
+                if(this.stepType == "next"){
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stata raggiunta la fine del timestamp",
+                        buttons: Ext.Msg.OK,
+                        fn: this.decrementTime(),
+                        icon: Ext.MessageBox.INFO,
+                        scope: this
+                    });                      
+                    this.clearTimer();
+                    this.toolbar.btnNext.disable();
+                    this.toolbar.btnPlay.disable();
+                    //this.reset(true);
+                }                
+                
             }
             //stop in normal mode
             else {
-                this.clearTimer();
-                this.events.triggerEvent('stop', {
-                    'rangeExceeded' : true
-                });
+                if(this.stepType == "next"){
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stata raggiunta la fine del timestamp",
+                        buttons: Ext.Msg.OK,
+                        fn: this.decrementTime(),
+                        icon: Ext.MessageBox.INFO,
+                        scope: this
+                    });                     
+                    this.clearTimer();
+                    this.toolbar.btnNext.disable();
+                    this.toolbar.btnPlay.disable();
+                    this.toolbar.btnFastforward.disable();
+                    /*this.reset(false);
+                    this.events.triggerEvent('stop', {
+                        'rangeExceeded' : false
+                    });*/                    
+                }else if(this.stepType == "play"){
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stata raggiunta la fine del timestamp",
+                        buttons: Ext.Msg.OK,
+                        fn: this.decrementTime(),
+                        icon: Ext.MessageBox.INFO,
+                        scope: this
+                    });                     
+                    this.clearTimer();
+                    this.toolbar.btnNext.disable();
+                    this.toolbar.btnPlay.disable();
+                    this.toolbar.btnFastforward.disable();
+                    /*this.reset(false);
+                    this.events.triggerEvent('stop', {
+                        'rangeExceeded' : false
+                    });*/                   
+                }else{
+                    /*Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stato raggiunto la fine del timestamp",
+                        buttons: Ext.MessageBox.CANCEL,
+                        animEl: 'mb4',
+                        icon: Ext.MessageBox.INFO,
+                        scope: this
+                    });*/
+                    Ext.MessageBox.show({
+                        title: "Info",
+                        msg: "E' stato raggiunto l'inizio del timestamp",
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.INFO
+                    });                    
+                    this.clearTimer();
+                    this.toolbar.btnBack.disable();
+                    //this.reset(true);   
+                    /*this.events.triggerEvent('stop', {
+                        'rangeExceeded' : true
+                    });*/                     
+                }
             }
         }
         else {
@@ -444,6 +581,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                 this.events.triggerEvent('tick', {
                     currentTime : this.currentTime
                 });
+                
+            //SCRIVE IL TIME DI LAYER SULLA MAPPA    
+            OpenLayers.Util.getElement('olTime').innerHTML = this.currentTime;
+            
             }
             else {
                 var intervalId, checkCount = 0, maxDelays = this.maxFrameDelay * 4;
@@ -458,12 +599,16 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                         this.events.triggerEvent('tick', {
                             currentTime : this.currentTime
                         });
+                        
+                        //SCRIVE IL TIME DI LAYER SULLA MAPPA
+                        OpenLayers.Util.getElement('olTime').innerHTML = this.currentTime;    
+                        
                         if(!this._stopped){
                             this.clearTimer();
-                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+                            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
                         }
                     }
-                }, this), 1000 / (this.frameRate * 4));
+                }, this), 1000 * (this.frameRate / 4));
             }
         }
     },
@@ -480,7 +625,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             delete this._stopped;
             this.tick();
             this.clearTimer(); //no seriously we really really only want 1 timer
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
         }
     },
 	/**
@@ -518,9 +663,12 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             var newTime = new Date(this.range[(this.step > 0) ? 0 : 1].getTime());
             this.setTime(newTime);
         }
-        if(this.range[0].getTime() != oldRange[0] || this.range[1].getTime() != oldRange[1]) {
+        //#######
+        //commentato l'if per consentire il settaggio dei valori dello slide cambiando lo step e le unità anche se i valore di range non sono cambiati
+        //#######
+        //if(this.range[0].getTime() != oldRange[0] || this.range[1].getTime() != oldRange[1]) {
             this.events.triggerEvent("rangemodified");
-        }
+        //}
     },
 	/**
 	 * APIMethod:setStart
@@ -564,7 +712,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      * time - {Date|String} UTC current animantion time/date using either a
      *     Date object or ISO 8601 formatted string.
      */ 
-     setTime:function(time) {
+     setTime:function(time, pippo) {
         if(!( time instanceof Date)) {
             time = OpenLayers.Date.parse(time);
         }
@@ -589,10 +737,19 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         }
         else {
             this.currentTime = time;
+            /*if(this.toolbar.slider instanceof Ext.slider.MultiSlider){
+                //var pippo = new Date(this.toolbar.slider.getValue(0));
+                var pippo = new Date(this.toolbar.slider.thumbs[0].value);
+            }*/
+            
+            //SCRIVE IL TIME DI LAYER SULLA MAPPA
+            OpenLayers.Util.getElement('olTime').innerHTML = time;
         }
+        if (!pippo){
         this.events.triggerEvent('tick', {
             'currentTime' : this.currentTime
         });
+        }
     },
     /**
      * APIMethod:setFrameRate
@@ -605,7 +762,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         this.frameRate = rate;
         if(playing){
             //this.tick();
-            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 / this.frameRate);
+            this.timer = setInterval(OpenLayers.Function.bind(this.tick, this), 1000 * this.frameRate);
         }
     },
     /**
@@ -641,10 +798,30 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.currentTime['setUTCDate'](newTime);
         }else{
             var newTime = parseFloat(this.currentTime['getUTC'+stepUnit]()) + parseFloat(step);
-            this.currentTime['setUTC'+stepUnit](newTime);    
+            this.currentTime['setUTC'+stepUnit](newTime);
         }
     },
-
+    
+    /**
+     * APIMethod: decrementTime
+     * Moves the current animation time backward by the specified step & stepUnit
+     *
+     * Parameters:
+     * step - {Number}
+     * stepUnit - {<OpenLayers.TimeUnit>}
+     */ 
+     decrementTime:function(step,stepUnit) {
+        var step = step || this.step;
+        var stepUnit = stepUnit || this.units;
+        if (stepUnit == "Days"){
+            var newTime = parseFloat(this.currentTime['getUTCDate']()) - parseFloat(step);
+            this.currentTime['setUTCDate'](newTime);
+        }else{
+            var newTime = parseFloat(this.currentTime['getUTC'+stepUnit]()) - parseFloat(step);
+            this.currentTime['setUTC'+stepUnit](newTime);
+        }
+    },
+    
 	/**
 	 * Method: buildTimeAgents
 	 * Creates the controls "managed" by this control.
@@ -814,9 +991,10 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                     return a.resolution.step - b.resolution.step;
                 }
             });
-            this.setRange([timeSpans[0].start, timeSpans[0].end]);
-            this.units = timeSpans[0].resolution.units;
-            this.step = timeSpans[0].resolution.step;
+            // Commentato perchè sovrascrive le impostazioni della configurazione
+            //this.setRange([timeSpans[0].start, timeSpans[0].end]);
+            //this.units = timeSpans[0].resolution.units;
+            //this.step = timeSpans[0].resolution.step;
         }
         else if (this.intervals) {
             this.snapToIntervals = false

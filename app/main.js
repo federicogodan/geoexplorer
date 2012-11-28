@@ -8,22 +8,23 @@ app.mount("/", function(request) {
     if (request.pathInfo.length > 1) {
         throw {notfound: true};
     }
-    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/composer/";
+    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/private/";
     return {
         status: 303,
         headers: {"Location": target},
         body: []
     };
 });
-app.mount("/composer", require("./root/composer").app);
+//app.mount("/composer", require("./root/composer").app);
 app.mount("/login", require("./root/login").app);
 app.mount("/maps/", require("./root/maps").app);
-app.mount("/proxy", require("./root/proxy").app);
+//app.mount("/proxy", require("./root/proxy").app);
 // TODO: remove workaround for added slashes
-app.mount("/viewer/proxy", require("./root/proxy").app);
-app.mount("/composer/proxy", require("./root/proxy").app);
-app.mount("/viewer", require("./root/viewer").app);
-
+//app.mount("/viewer/proxy", require("./root/proxy").app);
+//app.mount("/composer/proxy", require("./root/proxy").app);
+//app.mount("/viewer", require("./root/viewer").app);
+//app.mount("/public", require("./root/public").app);
+app.mount("/private", require("./root/private").app);
 
 // debug mode loads unminified scripts
 // assumes markup pulls in scripts under the path /servlet_name/script/
@@ -32,6 +33,11 @@ if (java.lang.System.getProperty("app.debug")) {
     var config = fs.normal(fs.join(module.directory, "..", "buildjs.cfg"));
     app.mount("/script/", require("./autoloader").App(config));
 
+    var debug_proxy = java.lang.System.getProperty("app.debug.proxy");
+    if (debug_proxy) {
+        app.mount("/proxy", require("./root/proxy").app);
+    }    
+    
     // proxy a remote geoserver on /geoserver by setting app.proxy.geoserver to remote URL
     // only recommended for debug mode
     var geoserver = java.lang.System.getProperty("app.proxy.geoserver");

@@ -48,7 +48,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         style: 'padding:5px',                  
                         baseParams: {
                             LEGEND_OPTIONS: 'forceLabels:on;fontSize:10',
-                            WIDTH: 12, HEIGHT: 12
+                            WIDTH: 12,
+                            HEIGHT: 12
                         }
                     }
                 }
@@ -56,7 +57,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
                 upload: true
-            }, {
+            },/* {
                 ptype: "gxp_removelayer",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
@@ -71,7 +72,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_groupproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
-            }, {
+            },*/ {
                 ptype: "gxp_layerproperties",
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
@@ -83,24 +84,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                    "layertree.contextMenu"
                 ]
             }, {
-                ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 15}
-            }, {
-                ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 7}
-            }, {
-                ptype: "gxp_measure", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 12}
-            }, {
-                ptype: "gxp_zoom",
-                actionTarget: {target: "paneltbar", index: 20}
-            }, {
-                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 24}
-            }, {
-                ptype: "gxp_navigationhistory",
-                actionTarget: {target: "paneltbar", index: 22}
-            }, {
                 ptype: "gxp_zoomtoextent",
                 /*extent: function(){
                     var bbox = new OpenLayers.Bounds.fromString('-15,8,-7,15');
@@ -108,20 +91,126 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         new OpenLayers.Projection("EPSG:4326"),
                         new OpenLayers.Projection("EPSG:102113"));
                 },*/
-                actionTarget: {target: "paneltbar", index: 26}
-            },{
-                ptype: "gxp_saveDefaultContext",
-                actionTarget: {target: "paneltbar", index: 40},
-				        needsAuthorization: true
+                actionTarget: {target: "paneltbar", index: 15}
             }, {
-                actions: ["->"], actionTarget: "paneltbar"
+                ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 16}
             }, {
                 actions: ["-"], actionTarget: "paneltbar"
             }, {
+                ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 17}
+            }, {
+                ptype: "gxp_zoom",
+                actionTarget: {target: "paneltbar", index: 18}
+            }, {
+                actions: ["-"], actionTarget: "paneltbar"
+            }, {
+                ptype: "gxp_navigationhistory",
+                actionTarget: {target: "paneltbar", index: 19}
+            }, {
+                actions: ["-"], actionTarget: "paneltbar"
+            }, {
+                ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 21}
+            }, {
+                actions: ["-"], actionTarget: "paneltbar"
+            }, {
+                ptype: "gxp_measure", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 20}
+            }, {
+                actions: ["-"], actionTarget: "paneltbar"
+            },{
+                ptype: "gxp_saveDefaultContext",
+                actionTarget: {target: "paneltbar", index: 22},
+				        needsAuthorization: true
+            }/*, {
+                actions: ["->"], actionTarget: "paneltbar"
+            }*/
+        ];
+
+   /**
+     * Parses the ISO 8601 formated date into a date object, ISO 8601 is YYYY-MM-DD
+     * 
+     * @param {String} date the date as a string eg 1971-12-15
+     * @returns {Date} Date object representing the date of the supplied string
+     */
+    Date.prototype.parseISO8601 = function(date){
+        var matches = date.match(/^\s*(\d{4})-(\d{2})-(\d{2})\s*$/);
+
+        if(matches){
+            this.setFullYear(parseInt(matches[1]));    
+            this.setMonth(parseInt(matches[2]) - 1);    
+            this.setDate(parseInt(matches[3]));    
+        }
+
+        return this;
+    };
+        
+        if (config.map.layers[22]){
+            var layerName = config.map.layers[22].name;
+            var layerNameData = layerName.substring(layerName.lastIndexOf("_")+1,layerName.lastIndexOf("_")+12);
+            var anno = layerNameData.substring(0,4);
+            var mese = layerNameData.substring(4,6);
+            var giorno = layerNameData.substring(6,8);
+            var run = layerNameData.substring(8,11);
+
+            var startTime = new Date(Date.UTC(anno,mese-1,giorno));
+
+            function pad(n) { return n < 10 ? '0' + n : n }        
+            var startDateStr = pad(startTime.getUTCFullYear()) + "-" + pad(startTime.getUTCMonth() + 1) + "-" + pad(startTime.getUTCDate());
+            
+            // somma data per ARW_3KM_RUN00
+            var endTimeArw3kmRun00 = addDays(startTime, 2);        
+            var endDateStrArw3kmRun00 = pad(endTimeArw3kmRun00.getUTCFullYear()) + "-" + pad(endTimeArw3kmRun00.getUTCMonth() + 1) + "-" + pad(endTimeArw3kmRun00.getUTCDate());
+
+            // somma data per ARW_3KM_RUN12
+            var endTimeArw3kmRun12 = addDays(startTime, 3);        
+            var endDateStrArw3kmRun12 = pad(endTimeArw3kmRun12.getUTCFullYear()) + "-" + pad(endTimeArw3kmRun12.getUTCMonth() + 1) + "-" + pad(endTimeArw3kmRun12.getUTCDate());
+            var startDate3km12 = addHours(startTime, 12);        
+            
+            // somma data per ARW_9KM_RUN00
+            var endTimeArw9kmRun00 = addDays(startTime, 3);        
+            var endDateStrArw9kmRun00 = pad(endTimeArw9kmRun00.getUTCFullYear()) + "-" + pad(endTimeArw9kmRun00.getUTCMonth() + 1) + "-" + pad(endTimeArw9kmRun00.getUTCDate());
+
+            // somma data per ARW_9KM_RUN12
+            var endTimeArw9kmRun12 = addDays(startTime, 4);        
+            var endDateStrArw9kmRun12 = pad(endTimeArw9kmRun12.getUTCFullYear()) + "-" + pad(endTimeArw9kmRun12.getUTCMonth() + 1) + "-" + pad(endTimeArw9kmRun12.getUTCDate());
+            var startDate9km12 = addHours(startTime, 12);
+
+            // somma data per GFS_RUN00 and GFS_RUN06
+            var endTimeGfsRun_00_06 = addDays(startTime, 7);        
+            var endDateStrGfsRun_00_06 = pad(endTimeGfsRun_00_06.getUTCFullYear()) + "-" + pad(endTimeGfsRun_00_06.getUTCMonth() + 1) + "-" + pad(endTimeGfsRun_00_06.getUTCDate());
+            var startDateGfs06 = addHours(startTime, 6);
+            
+            // somma data per GFS_RUN12 and GFS_RUN18
+            var endTimeGfsRun_12_18 = addDays(startTime, 8);        
+            var endDateStrGfsRun_12_18 = pad(endTimeGfsRun_12_18.getUTCFullYear()) + "-" + pad(endTimeGfsRun_12_18.getUTCMonth() + 1) + "-" + pad(endTimeGfsRun_12_18.getUTCDate());        
+            var startDateGfs12 = addHours(startTime, 12);
+            var startDateGfs18 = addHours(startTime, 18);
+            
+            var arw3kmRun = config.sources.ARW_3KM_RUN00 || config.sources.ARW_3KM_RUN12;
+            var arw9kmRun = config.sources.ARW_9KM_RUN00 || config.sources.ARW_9KM_RUN12;
+            var gfsRun = config.sources.GFS_50KM_RUN00 || config.sources.GFS_50KM_RUN06 || config.sources.GFS_50KM_RUN12 || config.sources.GFS_50KM_RUN18;
+        }
+
+        function addDays(data, giorni)
+        {
+            return new Date(data.getTime() + giorni*86400000)
+        }
+
+        
+        function addHours(data, ore)
+        {
+            return new Date(data.getTime() + ore*3600000)
+        }        
+        
+        if (config.sources.MSG1 && !arw3kmRun && !arw9kmRun && !gfsRun){
+            config.tools.push({
                 ptype:"gxp_playback",
                 outputTarget: "paneltbar",
                 playbackMode: "track",
-                showIntervals: false,
+                showIntervals: true,
                 labelButtons: true,
                 settingsButton: true,
                 rateAdjuster: false,
@@ -129,15 +218,213 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 timeFormat: 'c',
                 outputConfig: {
                     controlConfig:{
-                        units: "Hours",
-                        //step: 1,
+                        units: OpenLayers.TimeUnit.MINUTES,
+                        step: 5
                         //units:config.units,
                         //timeSpans: config.timeSpans,
                         //range: config.range
                     }
                 }
+            })
+        }else if (config.sources.MSG2 && !arw3kmRun && !arw9kmRun && !gfsRun){
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units: OpenLayers.TimeUnit.MINUTES,
+                        step: 15//,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        //range: config.range
+                    }
+                }
+            })
+        }else if (config.sources.RADAR && !arw3kmRun && !arw9kmRun && !gfsRun){
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units: OpenLayers.TimeUnit.MINUTES,
+                        step: 15
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        //range: config.range
+                    }
+                }
+            })
+        }else if (gfsRun){
+            var startRunGfs;
+            var endRunGfs;
+            var endGfs;
+            var currentTimeGfs;            
+            
+            switch(gfsRun.title) {
+              case "LaMMA GFS_50KM_RUN00":
+                startRunGfs = "T00:00:00.000Z";
+                endRunGfs = "T12:00:00.000Z";
+                endGfs = endDateStrGfsRun_00_06;
+                currentTimeGfs = startTime;
+              break;
+              case "LaMMA GFS_50KM_RUN06":
+                startRunGfs = "T06:00:00.000Z";
+                endRunGfs = "T18:00:00.000Z";
+                endGfs = endDateStrGfsRun_00_06;
+                currentTimeGfs = startDateGfs06;
+              break;
+              case "LaMMA GFS_50KM_RUN12":
+                startRunGfs = "T12:00:00.000Z";
+                endRunGfs = "T00:00:00.000Z";
+                endGfs = endDateStrGfsRun_12_18;
+                currentTimeGfs = startDateGfs12;
+              break;
+              default:
+                startRunGfs = "T18:00:00.000Z";
+                endRunGfs = "T06:00:00.000Z";
+                endGfs = endDateStrGfsRun_12_18;
+                currentTimeGfs = startDateGfs18;
             }
-        ];
+
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units:OpenLayers.TimeUnit.HOURS,
+                        step: 6,
+                        currentTime: currentTimeGfs,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        range: [startDateStr+startRunGfs,endGfs+endRunGfs]
+                    }
+                }
+            })
+        }else if (arw3kmRun){
+            var startRunArw3km;
+            var endRunArw3km;
+            var endArw3km;
+            var currentTimeArw3Km;
+            
+            switch(arw3kmRun.title) {
+              case "LaMMA ARW_3KM_RUN00":
+                startRunArw3km = "T00";
+                endRunArw3km = "T00";
+                endArw3km = endDateStrArw3kmRun00;
+                currentTimeArw3Km = startTime;
+              break;
+              default:
+                startRunArw3km = "T12";
+                endRunArw3km = "T00";
+                endArw3km = endDateStrArw3kmRun12;
+                currentTimeArw3Km = startDate3km12;
+            }
+
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units: OpenLayers.TimeUnit.HOURS,
+                        step: 1,
+                        currentTime: currentTimeArw3Km,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        range: [startDateStr+startRunArw3km+":00:00.000Z",endArw3km+endRunArw3km+":00:00.000Z"]
+                    }
+                }
+            })
+        }else if (arw9kmRun){
+            var startRunArw9km;
+            var endRunArw9km;
+            var startArw9km;
+            var currentTimeArw9Km;
+            
+            switch(arw9kmRun.title) {
+              case "LaMMA ARW_9KM_RUN00":
+                startRunArw9km = "T00";
+                endRunArw9km = "T00";
+                endArw9km = endDateStrArw9kmRun00;
+                currentTimeArw9Km = startTime;
+              break;
+              default:
+                startRunArw9km = "T12";
+                endRunArw9km = "T00";
+                endArw9km = endDateStrArw9kmRun12;
+                currentTimeArw9Km = startDate9km12;
+            }
+
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units: OpenLayers.TimeUnit.HOURS,
+                        step: 1,
+                        currentTime: currentTimeArw9Km,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        range: [startDateStr+startRunArw9km+":00:00.000Z",endArw9km+endRunArw9km+":00:00.000Z"]
+                    }
+                }
+            })
+        } else {
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units: OpenLayers.TimeUnit.HOURS,
+                        step: 1//,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        //range: config.range
+                    }
+                }
+            })
+        }
         
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
@@ -165,9 +452,13 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 enableToggle: true,
                 handler: function(button, evt){
                     if(button.pressed){
-                        Ext.getCmp('tree').findParentByType('panel').collapse();
+                        Ext.getCmp('east').collapse();
+                        Ext.getCmp('west').collapse();
+                        Ext.getCmp('main-header').collapse();
                     } else {
-                        Ext.getCmp('tree').findParentByType('panel').expand();
+                        Ext.getCmp('east').expand();
+                        Ext.getCmp('west').expand();
+                        Ext.getCmp('main-header').expand();
                     }
                 }
             });            

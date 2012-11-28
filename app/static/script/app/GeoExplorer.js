@@ -114,9 +114,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     
     fScreen: false,
 
-    constructor: function(config, mapId, auth, fScreen) {
-    //constructor: function(config, mapId, auth, fScreen) {
-    
+    constructor: function(config, mapId, auth, fScreen) {    
         if(mapId)
             this.mapId = mapId;
         if(auth)
@@ -136,7 +134,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 plugins: new GeoExt.ZoomSliderTip({
                     template: this.zoomSliderText
                 })
-            }
+            },{
+	            xtype: "gxp_timevisualization",
+				position: "position:relative;color:#FFFFFF;font-weight:bold;padding:2px;"
+	        }
         ];
         
         // both the Composer and the Viewer need to know about the viewerTools
@@ -216,8 +217,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 11}
-        }
-        */];
+        }*/];
 
         GeoExplorer.superclass.constructor.apply(this, arguments);
     }, 
@@ -225,7 +225,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     loadConfig: function(config) {
 
         if(config.isLoadedFromConfigFile){
+
           this.applyConfig(config);
+
         } else {
             
             var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
@@ -265,8 +267,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                }
             });        
         }
-        /*
-        var success = function(request) {                                
+		
+        /*var success = function(request) {                                
                   var addConfig;
                   try {
                     addConfig = Ext.util.JSON.decode(request.responseText);
@@ -293,9 +295,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
           success: success,
           failure: failure,
           scope: this
-        });
-        */
-        
+        });*/
     },
     
     loadUserConfig: function(json){
@@ -303,22 +303,16 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         if(uploadWin != null){
             uploadWin.destroy();
         }
-
+        
         var layerTree = Ext.getCmp('tree');
         layerTree.destroy();
         
         app.destroy();
 
         var config = Ext.util.JSON.decode(json);
-        //if(config && config.result.map){
+		
         if(config && config.map){
             config.isLoadedFromConfigFile = true;
-            
-            //if(modified){
-            //    config.modified = modified;
-            //}
-            
-            //app = new GeoExplorer.Composer(config);
             app = new GeoExplorer.Composer(config, this.mapId, this.auth, this.fScreen);
         }else{
             Ext.Msg.show({
@@ -343,7 +337,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     initPortal: function() {
 
-        
+        var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Attendere prego..."});
+        mask.show();
         //
         //Combobox per la selezione del modello per Geoportale Consorzio LaMMA
         //
@@ -493,6 +488,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                 selectOnFocus:true,
                                 listeners: { 
                                     select: function(combo, record, index) {
+                                        var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Attendere prego..."});
+                                        mask.show();                                        
                                         mapId = comboRuns.getValue();
                                         var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
                                         var mHost=pattern.exec(geoStoreBaseURL);
@@ -508,6 +505,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                            },
                                            success: function(response, opts){  
                                                 app.loadUserConfig(response.responseText);
+                                                mask.hide();
                                            },
                                            failure: function(response, opts){
                                               Ext.Msg.show({
@@ -585,40 +583,78 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 items: [geoDatiLamma]
             }]
         });
-
-        var eastPanel = new Ext.Panel({
-            border: false,
-            layout: "border",
-            id:'east',
-            region: "east",
-            width: 240,
-            split: true,
-            collapsible: true,
-            collapseMode: "mini",
-            header: false,
-            items: [
-                {
+        
+        var privateComboModels =  {
                     region: 'center',
                     autoScroll: true,
                     border: false,
                     id: 'selDati',
                     title: this.combosModelsTitle,
                     items: [datiFormPanel]
-                },
-                        {
-                            region: 'south',
-                            xtype: "panel",
-                            layout: "fit", 
-                            collapsible : true,
-                            collapseMode:  'mini',
-                            split : true,
-                            hideCollapseTool: true,
-                            border: false,
-                            height: 360,
-                            id: 'legend'
-                        }
-            ]
-        });
+                };
+                
+        if (this.initialConfig.appType == "public"){
+            var eastPanel = new Ext.Panel({
+                border: false,
+                layout: "border",
+                id:'east',
+                region: "east",
+                width: 240,
+                split: true,
+                collapsible: true,
+                collapseMode: "mini",
+                header: false,
+                items: [
+                            {
+                                region: 'center',
+                                xtype: "panel",
+                                layout: "fit", 
+                                collapsible : true,
+                                collapseMode:  'mini',
+                                split : true,
+                                hideCollapseTool: true,
+                                border: false,
+                                height: 340,
+                                id: 'legend'
+                            }
+                ]
+            });
+        }else{
+            var eastPanel = new Ext.Panel({
+                border: false,
+                layout: "border",
+                id:'east',
+                region: "east",
+                width: 240,
+                split: true,
+                collapsible: true,
+                collapseMode: "mini",
+                header: false,
+                items: [ 
+                    {
+                        region: 'center',
+                        autoScroll: true,
+                        border: false,
+                        id: 'selDati',
+                        title: this.combosModelsTitle,
+                        items: [datiFormPanel]
+                    },
+                            {
+                                region: 'south',
+                                xtype: "panel",
+                                layout: "fit", 
+                                collapsible : true,
+                                collapseMode:  'mini',
+                                split : true,
+                                hideCollapseTool: true,
+                                border: false,
+                                height: 340,
+                                id: 'legend'
+                            }
+                ]
+            });            
+        }
+
         
         this.toolbar = new Ext.Toolbar({
             disabled: true,
@@ -627,6 +663,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         });
         
         this.on("ready", function() {
+            
+            mask.hide();
             // enable only those items that were not specifically disabled
             var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;

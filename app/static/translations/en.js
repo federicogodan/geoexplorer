@@ -198,7 +198,7 @@ GeoExt.Lang.add("en", {
         menuText: "Zoom to layer extent",
         tooltip: "Zoom to layer extent"
     },
-    
+
     "gxp.WMSLayerPanel.prototype": {
         aboutText: "About",
         titleText: "Title",
@@ -207,6 +207,8 @@ GeoExt.Lang.add("en", {
         displayText: "Display",
         opacityText: "Opacity",
         formatText: "Format",
+        infoFormatText: "Info format",
+        infoFormatEmptyText: "Select a format",        
         transparentText: "Transparent",
         cacheText: "Cache",
         cacheFieldText: "Use cached version",
@@ -343,6 +345,8 @@ GeoExt.Lang.add("en", {
         stopTooltip: "Stop",
         fastforwardLabel: "FFWD",
         fastforwardTooltip: "Double Speed Playback",
+        backLabel:'Back',
+        backTooltip:'Draw back One Frame',            
         nextLabel: "Next",
         nextTooltip: "Advance One Frame",
         resetLabel: "Reset",

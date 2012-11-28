@@ -152,7 +152,7 @@
         var app;
 
         var modified = false; var mapIdentifier; var authorization; var fullScreen;
-        var uuid; var lay; var wmsurl;
+        var uuid; var lay; var wmsurl; var serverConfig;
 
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
@@ -383,8 +383,17 @@
                 id : 'appTabs',
                 enableTabScroll: true
             });
+            //gfs_50km_Temperature_height_above_ground_20121009T120000000Z
+            //ARW_9KM_RUN00:arw_9km_Temperature_surface_20121012T000000000Z:0.0
+            // 	gfs_50km_Relative_humidity_20121012T060000000Z
+            //arw_3km_Wind_20121012T000000000Z computed on 2012-10-12T00:00:00.000Z with elevation 1000.0
 
-
+            var prova = new Ext.Button({
+                text: "Prova",
+                handler: function(){
+                    addMSLayer("ARW_3KM_RUN12:arw_3km_Temperature_20121110T120000000Z:1000.0","arw_3km_Temperature_20121110T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
+                }
+            });
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
                 iconCls: "icon-geoexplorer",
@@ -430,7 +439,8 @@
                         header : false,                    
                         items : [appTabs],                            
                         bbar : [
-                          /*poweredByGeoSol, ' ',*/aboutButton, '->',languageSelector
+                            //aboutButton, '->',languageSelector
+                            prova, aboutButton, '->',languageSelector
                         ]
                     }]
             });
@@ -438,12 +448,7 @@
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
-            var sources = "{" +
-                 "\"LaMMA_Stazioni\": {" +
-                        "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"," +                
-                        "\"title\": \"LaMMA Stazioni\"" +
-
-                "}," +          
+            var sources = "{" +         
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -516,7 +521,7 @@
                 xmlJsonTranslateService: "http://demo1.geo-solutions.it/xmlJsonTranslate/",
                 defaultSourceType: "gxp_wmssource",
                 renderToTab : 'appTabs',
-                appType: "default",
+                appType: serverConfig.appType,                
                 about: {
                     title: "Custom Map",
                     'abstract': "Custom Map",
@@ -531,7 +536,7 @@
                         }
                     ],
                     layoutConfig: {
-                        monitorResize: false
+                        monitorResize: true
                     },*/
                     projection: "EPSG:900913",
                     units: "m",
@@ -570,111 +575,6 @@
                         title: "Google Terrain",
                         name: "TERRAIN",
                         group: "background"
-                    },{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:prec60_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Pioggia oraria",
-                       "transparent":true,
-                       "visibility":true,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    }/*,{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:prec15_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Pioggia 15 minuti",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    }*/,{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:prec360_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Pioggia 6 ore",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    },{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:temparia_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Temperatura oraria",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    },{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:pres_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Pressione oraria",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    },{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:umid_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Umidità oraria",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    },{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:vent_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Vento orario",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
                     }],
                     center: [1250000.000000, 5375000.000000],
                     zoom: 7
@@ -706,16 +606,22 @@
 
             addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl, enableViewTab){
                   var layerString = msLayerName.split(":");
-                  
+                  var styles;
+                  if(layerString[1].indexOf("Wind") != -1){
+                        styles = "wind_arrow_palette";
+                  }else{
+                        styles = layerString[1].substring(0,layerString[1].lastIndexOf("_")) + "_" + layerString[2];                                     
+                  }
+                  //wind_arrow_palette
 				  var record = source.createLayerRecord({
 					name: layerString[0] + ":" + layerString[1], //msLayerName.substring(0,msLayerName.lastIndexOf(":")),
 					title: layerString[2] ? layerString[1] + ":" + layerString[2] : layerString[1], //msLayerName,
                     elevation: layerString[2] ? layerString[2] : "", //msLayerName.substring(msLayerName.lastIndexOf(":")+1,msLayerName.lastIndexOf(":")+(numElev)),
-                    styles: layerString[2] ? [layerString[1].substring(0,layerString[1].lastIndexOf("_")) + "_" + layerString[2]] : [],
+                    styles: layerString[2] ? [styles] : [],
 					uuid : msLayerUUID,
 					gnURL: gnUrl + "srv/" + gnLangStr + "/",
 					source: sourceId
-				  });     
+				  });  
 						  
 				  if (record) {
 					var layerStore = app.mapPanel.layers;  
@@ -852,10 +758,9 @@
 			
       Ext.Ajax.request({
           //url: "/MapStore/urlConfig.js", //TEST
-          url: "/urlConfig.js", //TEST
+          url: "/urlConfigPublic.js", //TEST
           method: 'GET',
           success: function(response, opts){      
-              var serverConfig;    
               
               try{
                   serverConfig = Ext.util.JSON.decode(response.responseText);
