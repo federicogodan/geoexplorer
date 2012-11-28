@@ -49,7 +49,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
      *  ``String`` Execute request identifier
      */
     id: null,
-    
+
     /** private: property[instances]
      *  ``Object``
      */
@@ -70,25 +70,30 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
     /** private: method[constructor]
      */
     constructor: function(config) {
-   
-        OpenLayers.ProxyHost = "/MapComposer/proxy?url=";
-        gxp.plugins.WPSManager.superclass.constructor.apply(this, arguments);   
-        
+        gxp.plugins.WPSManager.superclass.constructor.apply(this, arguments);    
         
         this.wpsClient = new OpenLayers.WPSClient({
             servers: {
                 opengeo: config.url
             }
         });
-        this.geoStoreClient = config.geoStore;
-        var geoStore= this.geoStoreClient;
+        
+        this.geoStoreClient= config.geoStore;
+    },
+    
+    
+    init: function(target){
+       gxp.plugins.WPSManager.superclass.init.apply(this, arguments); 
+       OpenLayers.ProxyHost = this.target.proxy;
+
+       var geoStore= this.geoStoreClient;
       
         var wpsCategory= {
             type:"category", 
             name: this.id
         };
         
-        var me= this;
+      
         geoStore.existsEntity(wpsCategory,
             function(exists){
                 if(! exists){
@@ -96,15 +101,11 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
                         if( !categoryID){
                             geoStore.fireEvent("geostorefailure", this, "Geostore: create WPS category error");
                         }   
-                    }/*, function(){
-                        me.fireEvent("geostorefailure", this);
-                    }*/);
+                    });
                 } 
-            }/*, function(){
-                me.fireEvent("geostorefailure", this);
-            }*/);    
+        });    
+       
     },
-    
     
     /** api: method[getExecuteInstances]
      *
