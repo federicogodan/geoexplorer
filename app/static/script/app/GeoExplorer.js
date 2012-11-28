@@ -216,25 +216,28 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			//ORIGINAL 
 			OpenLayers.Request.GET({
 				//url: 'http://demo1.geo-solutions.it/xmlJsonTranslate/HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
-				url: proxy + encodeURIComponent(app.xmlJsonTranslateService + 'HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime())),
+				url: xmlJsonTranslateService + 'HTTPWebGISXmlUpload?' + 'd=' + (new Date().getTime()),
 				success: function(request) {
 					
 					var addConfig;
 					try {
 						addConfig = Ext.util.JSON.decode(request.responseText);
 					} catch (err) {
-						// pass
+						console.log("Remote configuration parse error.");
 					}
 					
 					if(addConfig && addConfig.success && addConfig.success == true){	
-                        addConfig.result.modified = false;                     
+                        			addConfig.result.modified = false;                     
 						this.applyConfig(Ext.applyIf(addConfig.result, config));
+						console.log("Remote configuration loaded.");
 					} else {
-                        config.modified = false; 
+                        			config.modified = false; 
 						this.applyConfig(config);
+						console.log("Rolling up to default configuration.");
 					}
 				},
 				failure: function(request){
+					console.log("remote configuration unreachable. Loading default Config.");
 					this.applyConfig(config);
 				},
 				scope: this
@@ -590,7 +593,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 									//Create an hidden iframe for forced download
 									var elemIF = document.createElement("iframe"); 
 									elemIF.setAttribute("id","downloadIFrame");
-									elemIF.src = proxy + encodeURIComponent(app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText); 
+									elemIF.src = app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText; 
 									elemIF.style.display = "none"; 
 									document.body.appendChild(elemIF); 
 									 
