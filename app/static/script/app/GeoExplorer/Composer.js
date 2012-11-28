@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2009-2010 The Open Planning Project
  *
  * @requires GeoExplorer.js
@@ -120,9 +120,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 toggleGroup: this.toggleGroup,
                 appendActions: false
             },{
-				ptype: "gxp_idaspm",
+		ptype: "gxp_idaspm",
                 toggleGroup: this.toggleGroup,
-				outputTarget: "idacontrol"
+                wpsManager: "wpsSPM",
+		outputTarget: "idacontrol"
 			
 			}, {
                 ptype: "gxp_saveDefaultContext",
@@ -167,6 +168,22 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             },*/ {
                 ptype: "gxp_georeferences",
                 actionTarget: {target: "paneltbar", index: 22}
+            },{
+                ptype: "gxp_wpsmanager",
+                id: "wpsSPM",
+                url: spm.wpsURL,
+                proxy: proxy,
+                geoStore: new gxp.plugins.GeoStoreClient({
+                    url: geostore.url,
+                    user: geostore.user,
+                    password: geostore.password,
+                    proxy: geostore.proxy,
+                    listeners: {
+                        "geostorefailure": function(tool, msg){
+                            alert(msg);
+                        }
+                    }
+                })
             }
         ];
         
@@ -648,7 +665,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         var iframe = body.dom.firstChild;
         var loading = new Ext.LoadMask(body);
         loading.show();
-        Ext.get(iframe).on('load', function() { loading.hide(); });
+        Ext.get(iframe).on('load', function() {loading.hide();});
     },
 
     /** private: method[showEmbedWindow]
