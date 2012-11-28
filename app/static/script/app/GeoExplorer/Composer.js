@@ -172,7 +172,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_wpsmanager",
                 id: "wpsSPM",
                 url: spm.wpsURL,
-                proxy: proxy,
                 geoStore: new gxp.plugins.GeoStoreClient({
                     url: geostore.url,
                     user: geostore.user,
@@ -180,7 +179,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     proxy: geostore.proxy,
                     listeners: {
                         "geostorefailure": function(tool, msg){
-                            alert(msg);
+                            Ext.Msg.show({
+				title: "Geostore Exception",
+				msg: msg,
+				buttons: Ext.Msg.OK,
+				icon: Ext.Msg.ERROR
+			    });
                         }
                     }
                 })
