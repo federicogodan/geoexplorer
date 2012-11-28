@@ -71,7 +71,8 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
      */
     constructor: function(config) {
    
-        OpenLayers.ProxyHost = "/MapComposer/proxy?url=";
+        // ???
+        OpenLayers.ProxyHost = "/proxy?url=";
         gxp.plugins.WPSManager.superclass.constructor.apply(this, arguments);   
         
         

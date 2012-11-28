@@ -119,23 +119,17 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputTarget: "idacontrol",
                 toggleGroup: this.toggleGroup,
                 appendActions: false
-            },{
-		ptype: "gxp_idaspm",
+            }, {
+				ptype: "gxp_idaspm",
                 toggleGroup: this.toggleGroup,
                 wpsManager: "wpsSPM",
-		outputTarget: "idacontrol"
+				outputTarget: "idacontrol"
 			
 			}, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				needsAuthorization: true
-            }, /*{
-                ptype: "gxp_idaspm",
-                outputConfig: {
-                    id: "spmpanel"
-                },
-                outputTarget: "idacontrol"
-            },*/ {
+            }, {
                 ptype: "gxp_idaattribute",
                 outputConfig: {
                     id: "attributepanel"
@@ -147,28 +141,22 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 					allowGroups: true
 				},
                 outputTarget: "idacontrol"
-            },  {
+            }, {
                 ptype: "gxp_idammdatabase",
                 outputConfig: {
                     id: "mmpanel"
                 },
                 outputTarget: "idacontrol"
-            },  {
+            }, {
                 ptype: "gxp_idahabitat",
                 outputConfig: {
                     id: "habitatPanel"
                 },
                 outputTarget: "idacontrol"
-            }, /*{
-                ptype: "gxp_print",
-                customParams: {outputFilename: 'ida-print'},
-                printService: config.printService,
-                legendPanelId: 'legendPanel',
-                actionTarget: {target: "paneltbar", index: 4}
-            },*/ {
+            }, {
                 ptype: "gxp_georeferences",
                 actionTarget: {target: "paneltbar", index: 22}
-            },{
+            }, {
                 ptype: "gxp_wpsmanager",
                 id: "wpsSPM",
                 url: spm.wpsURL,
@@ -184,7 +172,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }
                 })
-            }
+            }, {
+			    ptype: "gxp_addlayer",
+				id: "addlayer"
+			}
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
