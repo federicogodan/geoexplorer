@@ -113,7 +113,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     title: "Features"
                 },
                 outputTarget: "idalaylist"
-            }, {
+            },{
                 ptype: "gxp_queryform",
                 featureManager: "featuremanager",
                 outputTarget: "idacontrol",
@@ -176,10 +176,20 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                         }
                     }
                 })
+            },{
+                ptype: "gxp_wfsgrid",
+                addLayerTool: "addlayer",
+                title: "SPM",
+                wfsURL: spm.wfsURL,
+                featureType: spm.wfsFeature,
+                featureNS: "", 
+                srsName: "EPSG:4326", 
+                version: "1.1.0", 
+                outputTarget: "idalaylist"
             }, {
-			    ptype: "gxp_addlayer",
-				id: "addlayer"
-			}
+                ptype: "gxp_addlayer",
+	        id: "addlayer"
+	   }
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
