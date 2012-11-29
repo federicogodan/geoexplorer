@@ -291,8 +291,31 @@ GeoExt.Lang.add("fr", {
         nextPageTip: "Dernière page",
         totalMsg: "Total: {0} records"
     },
-	
-	"gxp.plugins.QueryForm.prototype": {
+    "gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Query",
+        queryMenuText: "Couche de requêtes",
+        queryActionTip: "Interroger la couche sélectionnée",
+        queryByLocationText: "Query selon le lieu",
+        currentTextText: "Mesure actuelle",
+        queryByAttributesText: "Requête par attributs",
+		queryMsg: "Recherche...",
+        cancelButtonText: "Remettre",
+        noFeaturesTitle: "Pas de correspondance",
+        noFeaturesMessage: "Votre requête n'a retourné aucun résultat.",
+        title: "Rechercher",
+        northLabel:"Nord",
+        westLabel:"Ouest",
+        eastLabel:"Est",
+        southLabel:"Sud",
+        setAoiText: "FixéROI",
+        setAoiTooltip: "Activer le contrôle TextBox pour dessiner un ROI (BOX) sur la carte",
+        attributeEnablement: "Requête par attributs",
+        attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
+        searchType: "Réglages de base",
+        typeLabel: "Type",
+        featureLabel: "Max Features"
+    },
+	"gxp.plugins.IDAQueryForm.prototype": {
         queryActionText: "Query",
         queryMenuText: "Couche de requêtes",
         queryActionTip: "Interroger la couche sélectionnée",

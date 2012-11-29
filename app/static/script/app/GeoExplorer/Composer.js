@@ -113,8 +113,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     title: "Features"
                 },
                 outputTarget: "idalaylist"
-            },{
-                ptype: "gxp_queryform",
+            }, {
+                ptype: "gxp_idaqueryform",
                 featureManager: "featuremanager",
                 outputTarget: "idacontrol",
                 toggleGroup: this.toggleGroup,
@@ -135,8 +135,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     id: "attributepanel"
                 },
 				defaultBuilder: {
-					baseURL: config.geoserverURL,
-					proxy: config.proxy,
+					//baseURL: config.geoserverURL,
+					//proxy: config.proxy,
 					allowBlank: true,
 					allowGroups: true
 				},
@@ -167,12 +167,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     proxy: geostore.proxy,
                     listeners: {
                         "geostorefailure": function(tool, msg){
-                            Ext.Msg.show({
-				title: "Geostore Exception",
-				msg: msg,
-				buttons: Ext.Msg.OK,
-				icon: Ext.Msg.ERROR
-			    });
+							Ext.Msg.show({
+								title: "Geostore Exception",
+								msg: msg,
+								buttons: Ext.Msg.OK,
+								icon: Ext.Msg.ERROR
+							});
                         }
                     }
                 })

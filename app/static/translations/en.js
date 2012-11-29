@@ -326,8 +326,8 @@ GeoExt.Lang.add("en", {
 		cancelText        : "Cancel",
 		startDay          : 0		
 	
-	},
-    "gxp.plugins.QueryForm.prototype": {
+	},	
+	"gxp.plugins.IDAQueryForm.prototype": {
         queryActionText: "Query",
         queryMenuText: "Query layer",
         queryActionTip: "Query the selected layer",
@@ -366,6 +366,30 @@ GeoExt.Lang.add("en", {
 		summerText : "Summer",
 		modelRunDateText:'Model Run Date',
 		modelEndDateText:'Model End Date'
+    },	
+    "gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Query",
+        queryMenuText: "Query layer",
+        queryActionTip: "Query the selected layer",
+        queryByLocationText: "Region Of Interest",
+        currentTextText: "Current extent",
+        queryByAttributesText: "Query by attributes",
+        queryMsg: "Querying...",
+        cancelButtonText: "Reset",
+        noFeaturesTitle: "No Match",
+        noFeaturesMessage: "Your query did not return any results.",
+        title: "Search",
+        northLabel:"North",
+        westLabel:"West",
+        eastLabel:"East",
+        southLabel:"South",
+        setAoiText: "SetROI",
+        setAoiTooltip: "Enable the SetBox control to draw a ROI (BBOX) on the map",
+        attributeEnablement: "Query by Attribute",
+        attributeEnablementMsg: "Invalid search Type! To use this you have to select 'Feature' type and to select a vector layer before.",
+        searchType: "Base Settings",
+        typeLabel: "Type",
+        featureLabel: "Max Features"
     },
 	"gxp.plugins.GeoReferences.prototype": {
         initialText: "Select an area",
