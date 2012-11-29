@@ -145,6 +145,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
             store: wfsStore, 
+            id:"wfsGridPanel",
             //sm: new GeoExt.grid.FeatureSelectionModel(), 
             //width: 320, 
            
@@ -164,7 +165,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 			tooltip: 'Add Layer to Map',
 			scope: this,
 			handler: function(gpanel, rowIndex, colIndex) {
-                            var store = gpanel.getStore();		
+                            //var store = gpanel.getStore();	
+                            var store=Ext.getCmp("wfsGridPanel").getStore();
+                            alert(store.toSource());
 		            var record = store.getAt(rowIndex);
                             
                             addLayer.addLayer(record.get("wsName")+":"+record.get("layerName"),
@@ -180,11 +183,11 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
             },{
                 header: "Model Run Date", 
                 dataIndex: "runBegin",
-                width: 100
+                width: 200
             },{
                 header: "Model End Date", 
                 dataIndex: "runEnd",
-                width: 100
+                width: 200
             }],bbar: new Ext.PagingToolbar({
                 pageSize: 10,
                 store: wfsStore,
