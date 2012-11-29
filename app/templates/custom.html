@@ -4,8 +4,6 @@
 <link rel="stylesheet" type="text/css" href="externals/openlayers/theme/default/style.css">
 <script type="text/javascript" src="script/OpenLayers.js"></script>
 
-
-
 <!-- colorpicker resources -->
 <link rel="stylesheet" type="text/css" href="externals/colorpicker/css/colorpicker.css">
 <script type="text/javascript" src="script/colorpicker.js"></script> 
@@ -45,6 +43,10 @@
 <!-- WPS Manger resources -->
 <script type="text/javascript" src="script/WPSManager.js"></script>
 <!--<script type="text/javascript" src="externals/WPSManager/lib/WPSManager.js"></script>-->
+
+<!-- WFS Grid resources -->
+<script type="text/javascript" src="script/WFSGrid.js"></script>
+<!--script type="text/javascript" src="externals/WFSGrid/lib/WFSGrid.js"></script-->
 
 
 <!-- OpenLayersExt resources -->
@@ -581,7 +583,7 @@
 	};			
 			
 	Ext.Ajax.request({
-	  url: "/urlConfig.js",
+	  url: "urlConfig.js",
 	  method: 'GET',
 	  success: function(response, opts){      
 			var serverConfig;    
