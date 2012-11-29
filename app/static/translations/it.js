@@ -322,8 +322,31 @@ GeoExt.Lang.add("it", {
         nextPageTip: "Ultima pagina",
         totalMsg: "Totale: {0} righe"
     },
-	
-    "gxp.plugins.QueryForm.prototype": {
+	"gxp.plugins.QueryForm.prototype": {
+        queryActionText: "Interrogazione",
+        queryMenuText: "Interrogazione livello",
+        queryActionTip: "Interrogazione il livello selezionato",
+        queryByLocationText: "Regione di Interesse",
+        currentTextText: "Estensione corrente",
+        queryByAttributesText: "Interrogazione per attributo",
+        queryMsg: "Interrogazione in corso...",
+        cancelButtonText: "Reimposta",
+        noFeaturesTitle: "Nessun Risultato",
+        noFeaturesMessage: "La tua ricerca non ha prodotto risultati.",
+        title: "Ricerca",
+        northLabel:"Nord",
+        westLabel:"Ovest",
+        eastLabel:"Est",
+        southLabel:"Sud",
+        setAoiText: "ImpostaROI",
+        setAoiTooltip: "Abilita il controllo SetBox per disegnare una ROI (BBOX) sulla mappa",
+        attributeEnablement: "Interrogazione per Attributo",
+        attributeEnablementMsg: "Tipo di ricerca invalido! Si deve prima selezionare il tipo 'Feature' e il layer vettoriale.",
+        searchType: "Impostazioni di base",
+        typeLabel: "Tipo",
+        featureLabel: "Max Features"
+    },
+    "gxp.plugins.IDAQueryForm.prototype": {
         queryActionText: "Interrogazione",
         queryMenuText: "Interrogazione livello",
         queryActionTip: "Interrogazione il livello selezionato",

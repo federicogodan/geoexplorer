@@ -4,8 +4,6 @@
 <link rel="stylesheet" type="text/css" href="externals/openlayers/theme/default/style.css">
 <script type="text/javascript" src="script/OpenLayers.js"></script>
 
-
-
 <!-- colorpicker resources -->
 <link rel="stylesheet" type="text/css" href="externals/colorpicker/css/colorpicker.css">
 <script type="text/javascript" src="script/colorpicker.js"></script> 
@@ -32,45 +30,30 @@
 <script type="text/javascript" src="script/GeoExplorer.js"></script>
 <script type="text/javascript" src="script/ux.js"></script>
 
-<!-- PrintPreview resources -->
-<link rel="stylesheet" type="text/css" href="externals/PrintPreview/resources/css/printpreview.css">
-<script type="text/javascript" src="script/PrintPreview.js"></script>
-
-
 <!-- GeoStore Client resources -->
 <script type="text/javascript" src="script/GeoStoreClient.js"></script>
-<!--<script type="text/javascript" src="externals/GeoStoreClient/lib/GeoStoreClient.js"></script>-->
-
 
 <!-- WPS Manger resources -->
 <script type="text/javascript" src="script/WPSManager.js"></script>
-<!--<script type="text/javascript" src="externals/WPSManager/lib/WPSManager.js"></script>-->
 
-
-<!-- OpenLayersExt resources -->
-<!--<script type="text/javascript" src="script/OpenLayersExt.js"></script>-->
-<script src="externals/openlayersExt/lib/OpenLayers/Format/WCSGetCoverage.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/OGCExceptionReport.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/XML/VersionedOGC.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/OWSCommon.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/OWSCommon/v1_ext.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/WFST/v1_1_0_ext.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/OWSCommon/v1_1_0_ext.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/GeoStore.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/RequestExt.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/EventsExt.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/RequestExt/XMLHttpRequestExt.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/WPSClient.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/WPSProcess.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/WPSDescribeProcess.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/WPSExecute.js"></script>
-<script src="externals/openlayersExt/lib/OpenLayers/Format/WPSExecuteRequest.js"></script>
-
-
-
-<!-- csw resources -->
-<!--link rel="stylesheet" type="text/css" href="externals/csw/CSWViewer/css/csw.css"-->
-<!--script type="text/javascript" src="script/CSWViewer.js"></script-->
+<!-- OpenLayersExt resources TODO Fix this
+<script type="text/javascript" src="script/OpenLayersExt.js"></script> -->
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/WCSGetCoverage.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/OGCExceptionReport.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/XML/VersionedOGC.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/OWSCommon.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/OWSCommon/v1_ext.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/WFST/v1_1_0_ext.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/OWSCommon/v1_1_0_ext.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/GeoStore.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/RequestExt.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/EventsExt.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/RequestExt/XMLHttpRequestExt.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/WPSClient.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/WPSProcess.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/WPSDescribeProcess.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/WPSExecute.js"></script>
+<script type="text/javascript" src="openlayersExt/lib/OpenLayers/Format/WPSExecuteRequest.js"></script>
 
 <!-- translation data  -->
 <script type="text/javascript" src="translations/en.js"></script>
@@ -126,8 +109,7 @@
     var proxy; 
     var geoStoreBaseURL;        
     var customSources;
-        
-    // 
+       
     var scaleOverlayUnits;
         
     var onReady = function(){
@@ -355,27 +337,7 @@
             "\"TILED\": true," +
             "\"TILESORIGIN\": \"-180,-90\"" +
             "}" +
-            "}"
-        /*"\"gwc\": {" + 
-                "\"url\":\"http://localhost:8080/geowebcache/service/wms\"," +
-                "\"title\":\"IDA GeoWebCache\"," +
-                "\"version\":\"1.1.1\"" +
-            "}," +
-            "\"mapquest\": {" +
-                "\"ptype\": \"gxp_mapquestsource\"" +
-            "}," + 
-            "\"osm\": {" + 
-                "\"ptype\": \"gxp_osmsource\"" +
-            "}," +
-            "\"google\": {" +
-                "\"ptype\": \"gxp_googlesource\"" + 
-            "}," +
-            "\"bing\": {" +
-                "\"ptype\": \"gxp_bingsource\"" + 
-            "}," + 
-            "\"ol\": {" + 
-                "\"ptype\": \"gxp_olsource\"" + 
-            "}"*/;
+            "}";
             
         if(customSources.length > 0)
             sources += ",";
@@ -420,7 +382,7 @@
         }
 			      		     
         /*var auth = 'Basic ' + Base64.encode('admin:admin');
-                          Ext.Ajax.defaultHeaders = {
+        Ext.Ajax.defaultHeaders = {
             'Authorization' : auth
         };*/
              
@@ -452,111 +414,101 @@
                         -0.52734, 36.68946, 20.69824, 46.53321
                 ],
                 layers: [{
-                        source: "ida",
-                        title: "NURC BG",
-                        name: "geosolutions:world.topo.bathy.2004",
-                        group: "background",
-                        format: "image/jpeg",
-                        transparent: false
-                    }/*, {
-                    source: "ida",
-                    title: "Natural Earth",
-                    name: "geosolutions:ne_shaded",
-                    group: "background",
-                                            format: "image/jpeg",
-                                            transparent: false
-                }*/,{
-                        source: "ida",
-                        title: "Bathymetry",
-                        name: "nurc:gebco_sea",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "reference"
-                    },{
-                        source: "ida",
-                        title: "DEM slope",
-                        name: "nurc:slope",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "reference"
-                    },{
-                        source: "ida",
-                        title: "DEM aspect",
-                        name: "nurc:aspect",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "reference"
-                    },{
-                        source: "ida",
-                        title: "Distance 1000 m",
-                        name: "nurc:eucdist_1000m",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "reference"
-                    },{
-                        source: "ida",
-                        title: "Chl spring 2007",
-                        name: "nurc:spring2007",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "chl"
-                    },{
-                        source: "ida",
-                        title: "Chl spring 2008",
-                        name: "nurc:spring2008",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "chl"
-                    },{
-                        source: "ida",
-                        title: "Chl spring 2009",
-                        name: "nurc:spring2009",
-                        //format: "image/jpeg",
-                        transparent: false,
-                        selected: false,
-                        visibility: false,
-                        group: "chl"
-                    },{
-                        source: "ida",
-                        title: "Coastlines",
-                        name: "nurc:gshs_coastline",
-                        selected: false,
-                        visibility: false,
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Strandings",
-                        name: "nurc:strandings",
-                        selected: false,
-                        visibility: true,
-                        showInTabM: true,
-                        link: "http://www.coa.edu/strandings.htm",
-                        group: "ida"
-                    },{
-                        source: "ida",
-                        title: "Ports",
-                        name: "nurc:ports",
-                        selected: false,
-                        visibility: false,
-                        showInTabH: true,
-                        link: "http://www.coa.edu/strandings.htm",                        
-                        group: "ida"
-                    }]
-                /*,
-                center: [-15,20],
-                zoom: 1*/
+						source: "ida",
+						title: "NURC BG",
+						name: "geosolutions:world.topo.bathy.2004",
+						group: "background",
+						format: "image/jpeg",
+						transparent: false
+					},{
+						source: "ida",
+						title: "Bathymetry",
+						name: "nurc:gebco_sea",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "reference"
+					},{
+						source: "ida",
+						title: "DEM slope",
+						name: "nurc:slope",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "reference"
+					},{
+						source: "ida",
+						title: "DEM aspect",
+						name: "nurc:aspect",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "reference"
+					},{
+						source: "ida",
+						title: "Distance 1000 m",
+						name: "nurc:eucdist_1000m",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "reference"
+					},{
+						source: "ida",
+						title: "Chl spring 2007",
+						name: "nurc:spring2007",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "chl"
+					},{
+						source: "ida",
+						title: "Chl spring 2008",
+						name: "nurc:spring2008",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "chl"
+					},{
+						source: "ida",
+						title: "Chl spring 2009",
+						name: "nurc:spring2009",
+						//format: "image/jpeg",
+						transparent: false,
+						selected: false,
+						visibility: false,
+						group: "chl"
+					},{
+						source: "ida",
+						title: "Coastlines",
+						name: "nurc:gshs_coastline",
+						selected: false,
+						visibility: false,
+						group: "ida"
+					},{
+						source: "ida",
+						title: "Strandings",
+						name: "nurc:strandings",
+						selected: false,
+						visibility: true,
+						showInTabM: true,
+						link: "http://www.coa.edu/strandings.htm",
+						group: "ida"
+					},{
+						source: "ida",
+						title: "Ports",
+						name: "nurc:ports",
+						selected: false,
+						visibility: false,
+						showInTabH: true,
+						link: "http://www.coa.edu/strandings.htm",                        
+						group: "ida"
+				}]
             }
         }, mapIdentifier, authorization, fullScreen);   
             
@@ -581,7 +533,7 @@
 	};			
 			
 	Ext.Ajax.request({
-	  url: "/urlConfig.js",
+	  url: "urlConfig.js",
 	  method: 'GET',
 	  success: function(response, opts){      
 			var serverConfig;    

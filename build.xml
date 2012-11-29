@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MapComposer" default="dist" basedir=".">
+<project name="IDAMapStore" default="dist" basedir=".">
 
     <description>
-        GeoExplorer Build File
+        IDAMapStore Build File
     </description>
 
     <property name="build" location="build"/>

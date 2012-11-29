@@ -213,9 +213,13 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         if(config.isLoadedFromConfigFile){
           this.applyConfig(config);
         } else {
+            var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+            var mHost=pattern.exec(geoStoreBaseURL);
+
+            var mUrl = geoStoreBaseURL + "data/" + this.mapId;
+
             Ext.Ajax.request({
-               url: proxy + geoStoreBaseURL + "data/" + this.mapId,
-               //url: geoStoreBaseURL + "data/" + this.mapId,
+               url: mHost[2] == location.host ? mUrl : proxy + mUrl,
                method: 'GET',
                scope: this,
                headers:{
