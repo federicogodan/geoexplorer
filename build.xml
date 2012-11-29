@@ -6,6 +6,7 @@
     </description>
 
     <property name="build" location="build"/>
+    <property name="extAS" location="/home/maro/Programmi/apache-tomcat-7.0.27/webapps/"/>
     <property name="app.proxy.geoserver" value=""/>
     <property name="app.port" value="8081"/>
 
@@ -56,8 +57,8 @@
         </copy>
         <copy todir="${build}/${ant.project.name}/WEB-INF/app">
             <fileset dir="app">
-                <exclude name="**/externals/**"/>
-                <exclude name="**/script/**"/>
+               <!-- <exclude name="**/externals/**"/>
+                <exclude name="**/script/**"/>-->
             </fileset>
         </copy>
         <!-- copy Ext resources -->
@@ -94,6 +95,18 @@
         <war destfile="${build}/${ant.project.name}.war">
             <fileset dir="${build}/${ant.project.name}"/>
         </war>
+    </target>
+    
+    <target name="extDeploy" depends="dist">
+      <mkdir dir="${build}/${ant.project.name}"/>
+      <copy todir="${extAS}/${ant.project.name}">
+            <fileset dir="${build}/${ant.project.name}"/>
+      </copy>
+    </target>
+    
+    
+    <target name="extClean" depends="dist">
+      <delete dir="${extAS}/${ant.project.name}"/>
     </target>
 
     <target name="debug">
