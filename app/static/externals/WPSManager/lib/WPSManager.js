@@ -283,7 +283,6 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
      *  Send Execute Process request
      */
     execute: function(processName, executeRequest) {
-      
         var process = this.wpsClient.getProcess('opengeo', processName);    
         var instanceName=null;
         var executeOptions;
