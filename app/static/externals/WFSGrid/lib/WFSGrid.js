@@ -109,6 +109,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     addOutput: function(config) {
        var addLayer = this.target.tools[this.addLayerTool]; 
        var wfsStore= new GeoExt.data.FeatureStore({ 
+                id: this.id+"_store",
                 fields: [{
                     name: "name", 
                     type: "string"
@@ -202,7 +203,15 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                     items: [{
                            // icon   : this.addLayerIconPath,  
                             tooltip: this.addLayerTooltip,
-                            scope: this,
+                            scope: this
+                        },{
+                            getClass: function(v, meta, rec) {
+                                
+                                if (rec.get('itemStatus') == "COMPLETED")  
+                                      return 'action-add-layer';
+                                  else
+                                      return  'no-action-add-layer'
+                            },
                             handler: function(gpanel, rowIndex, colIndex) {
                                 var store = gpanel.getStore();	
                                 var record = store.getAt(rowIndex);
@@ -211,13 +220,6 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                     record.get("outputUrl")
                                 );
                             }
-                        },{
-                            getClass: function(v, meta, rec) {
-                                if (rec.get('itemStatus') == "COMPLETED")  
-                                      return 'action-add-layer';
-                                  else
-                                      return  'no-action-add-layer'
-                            } 
                         }]
                 },{
                     xtype: 'actioncolumn',
