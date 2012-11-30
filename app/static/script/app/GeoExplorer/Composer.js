@@ -158,23 +158,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_wpsmanager",
                 id: "wpsSPM",
                 url: spm.wpsURL,
-                geoStore: new gxp.plugins.GeoStoreClient({
-                    url: geostore.url,
-                    user: geostore.user,
-                    password: geostore.password,
-                    proxy: geostore.proxy,
-                    listeners: {
-                        "geostorefailure": function(tool, msg){
-							Ext.Msg.show({
-								title: "Geostore Exception",
-								msg: msg,
-								buttons: Ext.Msg.OK,
-								icon: Ext.Msg.ERROR
-							});
-                        }
-                    }
-                })
-            },{
+				geostoreUrl: geostore.url,
+				geostoreUser: geostore.user,
+				geostorePassword: geostore.password,
+				geostoreProxy: geostore.proxy
+            }, {
                 ptype: "gxp_wfsgrid",
                 addLayerTool: "addlayer",
                 title: "SPM",
@@ -479,124 +467,128 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             tools.push('-');
         }
         
-        tools.push(new Ext.Button({
-            tooltip: this.saveMapText,
-            needsAuthorization: false,
-            //disabled: !this.isAuthorized(),
-            handler: function() {
-                this.save(this.showUrl);
-            },
-            scope: this,
-            iconCls: "icon-save"
-        }));      		
-        
-		var gxMap = this.mapPanel.map;
-        tools.push(new Ext.Button({
-            tooltip: this.loadMapText,
-            needsAuthorization: false,
-            //disabled: !this.isAuthorized(),
-            handler: function() {    
-                var composer = this; 
-                var win;  
-                  
-                var fp = new Ext.FormPanel({
-                    fileUpload: true,
-                    autoWidth: true,
-                    autoHeight: true,
-                    frame: true,
-                    bodyStyle: 'padding: 10px 10px 0 10px;',
-                    labelWidth: 50,
-                    defaults: {
-                        anchor: '95%',
-                        allowBlank: false,
-                        msgTarget: 'side'
-                    },
-                    items: [{
-                        xtype: 'fileuploadfield',
-                        id: 'form-file',
-                        emptyText: this.loadMapEmptyText,
-                        fieldLabel: 'File',
-                        name: 'file-path',
-                        buttonText: '',
-                        buttonCfg: {
-                            iconCls: 'upload-icon'
-                        }
-                    }],
-                    buttons: [{
-                        text: this.uploadText,
-                        handler: function(){
-                            if(fp.getForm().isValid()){
-                              fp.getForm().submit({
-                                  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                  waitMsg: this.loadMapUploadText,
-                                  success: function(fp, o){
-                                      win.hide();
-                                      win.destroy();
-									  
-									  if(o.result.result.indexOf('kml') == -1){
-										  var json_str = unescape(o.result.result);
-										  json_str = json_str.replace(/\+/g, ' ');
-										  composer.loadUserConfig(json_str);  
+		if(this.xmlJsonTranslateService){
+		    tools.push(
+				new Ext.Button({
+					tooltip: this.saveMapText,
+					needsAuthorization: false,
+					//disabled: !this.isAuthorized(),
+					handler: function() {
+						this.save(this.showUrl);
+					},
+					scope: this,
+					iconCls: "icon-save"
+				})
+			);      		
+			
+			var gxMap = this.mapPanel.map;
+			tools.push(new Ext.Button({
+				tooltip: this.loadMapText,
+				needsAuthorization: false,
+				//disabled: !this.isAuthorized(),
+				handler: function() {    
+					var composer = this; 
+					var win;  
+					  
+					var fp = new Ext.FormPanel({
+						fileUpload: true,
+						autoWidth: true,
+						autoHeight: true,
+						frame: true,
+						bodyStyle: 'padding: 10px 10px 0 10px;',
+						labelWidth: 50,
+						defaults: {
+							anchor: '95%',
+							allowBlank: false,
+							msgTarget: 'side'
+						},
+						items: [{
+							xtype: 'fileuploadfield',
+							id: 'form-file',
+							emptyText: this.loadMapEmptyText,
+							fieldLabel: 'File',
+							name: 'file-path',
+							buttonText: '',
+							buttonCfg: {
+								iconCls: 'upload-icon'
+							}
+						}],
+						buttons: [{
+							text: this.uploadText,
+							handler: function(){
+								if(fp.getForm().isValid()){
+								  fp.getForm().submit({
+									  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+									  url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+									  waitMsg: this.loadMapUploadText,
+									  success: function(fp, o){
+										  win.hide();
+										  win.destroy();
 										  
-										  //app.modified = true;
-										  modified = true;   
-									  }else{
-									     var url = proxy + app.xmlJsonTranslateService + "temp/" + o.result.result;
-										 
-										 var geographic = new OpenLayers.Projection("EPSG:4326");
-										 var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
-										    projection: geographic,
-											strategies: [new OpenLayers.Strategy.Fixed()],
-											protocol: new OpenLayers.Protocol.HTTP({
-												url: url,
-												format: new OpenLayers.Format.KML({
-													extractStyles: true, 
-													extractAttributes: true,
-													maxDepth: 2
+										  if(o.result.result.indexOf('kml') == -1){
+											  var json_str = unescape(o.result.result);
+											  json_str = json_str.replace(/\+/g, ' ');
+											  composer.loadUserConfig(json_str);  
+											  
+											  //app.modified = true;
+											  modified = true;   
+										  }else{
+											 var url = proxy + app.xmlJsonTranslateService + "temp/" + o.result.result;
+											 
+											 var geographic = new OpenLayers.Projection("EPSG:4326");
+											 var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
+												projection: geographic,
+												strategies: [new OpenLayers.Strategy.Fixed()],
+												protocol: new OpenLayers.Protocol.HTTP({
+													url: url,
+													format: new OpenLayers.Format.KML({
+														extractStyles: true, 
+														extractAttributes: true,
+														maxDepth: 2
+													})
 												})
-											})
-										});
-										
-										gxMap.addLayer(kmlLayer);
+											});
+											
+											gxMap.addLayer(kmlLayer);
+										  }
+									  },                                    
+									  failure: function(fp, o){
+										  win.hide();
+										  win.destroy();
+										  
+										  Ext.Msg.show({
+											 title:this.loadMapErrorText,
+											 msg: o.result.errorMessage,
+											 buttons: Ext.Msg.OK,
+											 icon: Ext.MessageBox.ERROR
+										  });
 									  }
-                                  },                                    
-                                  failure: function(fp, o){
-                                      win.hide();
-                                      win.destroy();
-                                      
-                                      Ext.Msg.show({
-                                         title:this.loadMapErrorText,
-                                         msg: o.result.errorMessage,
-                                         buttons: Ext.Msg.OK,
-                                         icon: Ext.MessageBox.ERROR
-                                      });
-                                  }
-                              });
-                            }
-                        }
-                    }]
-                });
-                
-                win = new Ext.Window({
-                    title: this.loadMapWindowTitle,
-                    id: 'upload-win',
-                    layout: 'form',
-                    //labelAlign: 'top',
-                    modal: true,
-                    bodyStyle: "padding: 5px",
-                    width: 380,
-                    items: [fp]
-                });
-                
-                win.show();
-            },
-            scope: this,
-            iconCls: "icon-load"
-        }));
-        
-        tools.push('-');
-        
+								  });
+								}
+							}
+						}]
+					});
+					
+					win = new Ext.Window({
+						title: this.loadMapWindowTitle,
+						id: 'upload-win',
+						layout: 'form',
+						//labelAlign: 'top',
+						modal: true,
+						bodyStyle: "padding: 5px",
+						width: 380,
+						items: [fp]
+					});
+					
+					win.show();
+				},
+				scope: this,
+				iconCls: "icon-load"
+			}));
+			
+			tools.push('-');
+		}
+
         return tools;
     },
 

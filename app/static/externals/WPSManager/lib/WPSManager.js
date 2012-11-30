@@ -78,7 +78,22 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             }
         });
         
-        this.geoStoreClient= config.geoStore;
+        this.geoStoreClient = new gxp.plugins.GeoStoreClient({
+			url: config.geostoreUrl,
+			user: config.geostoreUser,
+			password: config.geostorePassword,
+			proxy: config.geostoreProxy,
+			listeners: {
+				"geostorefailure": function(tool, msg){
+					Ext.Msg.show({
+						title: "Geostore Exception",
+						msg: msg,
+						buttons: Ext.Msg.OK,
+						icon: Ext.Msg.ERROR
+					});
+				}
+			}
+		});
     },
     
     
