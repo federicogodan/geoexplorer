@@ -121,7 +121,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             }
         ];
         
-        //pannellino openlayers possibilità di attaccare ... oppure mettere in configurazione.
+        //pannellino openlayers possibilitï¿½ di attaccare ... oppure mettere in configurazione.
         
         // //////////////////////////////////////////////////////////////////////////////////
         // both the Composer and the Viewer need to know about the viewerTools
@@ -442,6 +442,16 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             collapseMode: "mini",
             collapsed: false,
             header: false,
+            listeners: {
+                 "expand": function(){
+                     var grid=Ext.getCmp("wfsGridPanel");
+                     if(grid){
+                         var lastOptions = grid.store.lastOptions;
+                         grid.store.reload(lastOptions);
+                         grid.getView().refresh();
+                     }
+                 }
+            },
             items: [
                 {
                   xtype: 'tabpanel', activeTab: 0, region: 'center', id: 'idalaylist', autoScroll: true, border: false/*,
