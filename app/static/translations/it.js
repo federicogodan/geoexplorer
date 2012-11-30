@@ -59,8 +59,8 @@ GeoExt.Lang.add("it", {
         panelTitleText: "Titolo",
         layerSelectionText: "Visualizzare i dati disponibili presso:",
         doneText: "Fatto",
-       removeFilterText: "Ripulisci Filtro", 
-       filterEmptyText: "Filtro",
+        removeFilterText: "Ripulisci Filtro", 
+        filterEmptyText: "Filtro",
         uploadText: "Upload dei dati"
     },
 
@@ -410,8 +410,9 @@ GeoExt.Lang.add("it", {
 		applyText: 'Applica',
 		resetText: 'Resetta',
 		settingColorTitle: 'Colore',
-		settingColorTitle: 'Colore'
-	
+		settingColorTitle: 'Colore',
+	    spmList: "Lista SPM",
+		spmTooltip: "Mostra la Lista SPM"
 	},	
 	"Ext.DatePicker.prototype":{
 		todayText         : "Oggi",

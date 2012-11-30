@@ -415,8 +415,9 @@ GeoExt.Lang.add("en", {
 		applyText: 'Apply',
 		resetText: 'Reset',
 		settingColorTitle: 'Color',
-		settingColorTitle: 'Color'
-	
+		settingColorTitle: 'Color',
+		spmList: "SPM List",
+		spmTooltip: "Show the SPM List"
 	},
 	/*-------------------------------------------------------------*/
 	

@@ -121,10 +121,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 appendActions: false
             }, {
 				ptype: "gxp_idaspm",
+			    wfsGrid: "wfsGridPanel",
                 toggleGroup: this.toggleGroup,
                 wpsManager: "wpsSPM",
 				outputTarget: "idacontrol"
-			
 			}, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
@@ -135,8 +135,6 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     id: "attributepanel"
                 },
 				defaultBuilder: {
-					//baseURL: config.geoserverURL,
-					//proxy: config.proxy,
 					allowBlank: true,
 					allowGroups: true
 				},
@@ -180,6 +178,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_wfsgrid",
                 addLayerTool: "addlayer",
                 title: "SPM",
+				id: "wfsGridPanel",
                 wfsURL: spm.wfsURL,
                 featureType: spm.wfsFeature,
                 featureNS: "", 
@@ -188,8 +187,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputTarget: "idalaylist"
             }, {
                 ptype: "gxp_addlayer",
-	        id: "addlayer"
-	   }
+				id: "addlayer"
+		    }
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);

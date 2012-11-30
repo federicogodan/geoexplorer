@@ -94,7 +94,8 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     
     
     
-    
+    id: "wfsGridPanel",
+	
     /** private: method[constructor]
      */
     constructor: function(config) {
@@ -102,9 +103,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         
        
     },
-    
-    
-    
+
     /** api: method[addOutput]
      */
     addOutput: function(config) {
@@ -172,7 +171,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         srsName: this.srsName,
                         version: this.version
                     }) 
-                  /*  protocol: new OpenLayers.Protocol.HTTP({
+                    /*protocol: new OpenLayers.Protocol.HTTP({
                         url: "http://localhost:8080/MapComposer/proxy?url="+encodeURIComponent(urlTest),
                         format: new OpenLayers.Format.GeoJSON()
                     })*/
@@ -305,12 +304,11 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 
         config = Ext.apply(wfsGridPanel, config || {});
         var wfsGrid = gxp.plugins.WFSGrid.superclass.addOutput.call(this, config);
-        
+		
         Ext.getCmp(this.outputTarget).setActiveTab(wfsGrid);
         
         return wfsGrid;
-    }
-            
+    }   
 });
 
 Ext.preg(gxp.plugins.WFSGrid.prototype.ptype, gxp.plugins.WFSGrid);
