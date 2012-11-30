@@ -182,118 +182,123 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
             store: wfsStore, 
-            columns: [{
-		xtype: 'actioncolumn',
-		sortable : false, 
-		width: 30,
-		listeners: {
-                    scope: this,
-		    click: function(column, grd, row, e){
-                    }
-	        },
-	        items: [{
-			icon   : this.addLayerIconPath,  
-			tooltip: this.addLayerTooltip,
-			scope: this,
-			handler: function(gpanel, rowIndex, colIndex) {
-                            var store = gpanel.getStore();	
-		            var record = store.getAt(rowIndex);
-                            addLayer.addLayer(record.get("wsName")+":"+record.get("layerName"),
-                            record.get("outputUrl")
-                            );
-			}
-                      },{
-                          getClass: function(v, meta, rec) {
-
-                            if (rec.get('itemStatus') != "COMPLETED")  {
-                                 alert('available-col');
-                                 return 'available-col';
-                            } else{
-                                alert('not-available-col');
-                                return 'not-available-col';
+            id: this.id,
+            layout: "fit",
+            viewConfig : {
+                    forceFit: true
+            },
+            colModel: new Ext.grid.ColumnModel({
+                
+                columns: [{
+                    xtype: 'actioncolumn',
+                    sortable : false, 
+                    width: 30,
+                    
+                    listeners: {
+                        scope: this,
+                        click: function(column, grd, row, e){
+                        }
+                    },
+                    items: [{
+                           // icon   : this.addLayerIconPath,  
+                            tooltip: this.addLayerTooltip,
+                            scope: this,
+                            handler: function(gpanel, rowIndex, colIndex) {
+                                var store = gpanel.getStore();	
+                                var record = store.getAt(rowIndex);
+                                addLayer.addLayer(record.get("wsName")+":"+record.get("layerName"),
+                                record.get("outputUrl")
+                                );
                             }
-                               
-                          } 
-                     }]
-	    },{
-		xtype: 'actioncolumn',
-		sortable : false, 
-		width: 30,
-	        items: [{
-			icon   : this.detailsIconPath,  
-			tooltip: this.detailsTooltip,
-			scope: this,
-			handler: function(gpanel, rowIndex, colIndex) {
-                            var store = gpanel.getStore();	
-		            var record = store.getAt(rowIndex);
-                            var detailsStore=new Ext.data.ArrayStore({
-                                fields: ['name', 'value'],
-                                idIndex: 0 
-                            });
-                           var recordDetailsData = new Array();
-                            
-                           recordDetailsData.push([ 'ftUUID', record.get("ftUUID")]);
-                           recordDetailsData.push([ 'itemStatus', record.get("itemStatus")]);
-                           recordDetailsData.push([ 'name', record.get("name")]);
-                           recordDetailsData.push([ 'runBegin', record.get("runBegin")]);
-                           recordDetailsData.push([ 'runEnd', record.get("runEnd")]);
-                           recordDetailsData.push([ 'season', record.get("season")]);
-                           recordDetailsData.push([ 'srcFrequency', record.get("srcFrequency")]);
-                           recordDetailsData.push([ 'srcPressureLevel', record.get("srcPressureLevel")]);
-                           recordDetailsData.push([ 'layerName', record.get("layerName")]);
-                           recordDetailsData.push([ 'wsName', record.get("wsName")]);
-                           recordDetailsData.push([ 'outputUrl', record.get("outputUrl")]);
-                           recordDetailsData.push([ 'itemStatusMessage', record.get("itemStatusMessage")]);
-                           recordDetailsData.push([ 'securityLevel', record.get("securityLevel")]);
-                           recordDetailsData.push([ 'srcPath', record.get("srcPath")]);
-                           recordDetailsData.push([ 'octaveConfigFilePath', record.get("octaveConfigFilePath")]);
-                           recordDetailsData.push([ 'storeName', record.get("storeName")]);
-                           recordDetailsData.push([ 'userId', record.get("userId")]);
-                     
-                           detailsStore.loadData(recordDetailsData);
-                            new Ext.Window({ 
-                                title: record.get("name")+ " - " + this.detailsWinTitle,
-                                height: 400,
-                                width: 400,
-                                layout: 'fit',
-                                resizable: true,
-                                items:
-                                    new Ext.grid.GridPanel({
-                                        store: detailsStore,
-                                        anchor: '100%',
-                                        viewConfig : {
-                                            forceFit: true
-                                        },
-                                        columns: [
-                                            {
-                                            header: this.detailsHeaderName, 
-                                            dataIndex: "name",
-                                          
-                                            renderer: function (val){
-                                                return '<b>' + val + '</b>';
-                                            }
-                                            },{
-                                            header: this.detailsHeaderName, 
-                                            dataIndex: "value"
-                                            }]
-                                    })
-                            }).show();
-			}}]
-	    },{
-                header: "Model Status", 
-                dataIndex: "itemStatus"
-            },{
-                header: "Model Name", 
-                dataIndex: "name"
-            },{
-                header: "Model Run Date", 
-                dataIndex: "runBegin",
-                width: 200
-            },{
-                header: "Model End Date", 
-                dataIndex: "runEnd",
-                width: 200
-            }],bbar: new Ext.PagingToolbar({
+                        },{
+                            getClass: function(v, meta, rec) {
+                                if (rec.get('itemStatus') != "COMPLETED")  
+                                      return 'action-add-layer';
+                                  else
+                                      return  'no-action-add-layer'
+                            } 
+                        }]
+                },{
+                    xtype: 'actioncolumn',
+                    sortable : false, 
+                    width: 30,
+                    items: [{
+                            icon   : this.detailsIconPath,  
+                            tooltip: this.detailsTooltip,
+                            scope: this,
+                            handler: function(gpanel, rowIndex, colIndex) {
+                                var store = gpanel.getStore();	
+                                var record = store.getAt(rowIndex);
+                                var detailsStore=new Ext.data.ArrayStore({
+                                    fields: ['name', 'value'],
+                                    idIndex: 0 
+                                });
+                            var recordDetailsData = new Array();
+
+                            recordDetailsData.push([ 'ftUUID', record.get("ftUUID")]);
+                            recordDetailsData.push([ 'itemStatus', record.get("itemStatus")]);
+                            recordDetailsData.push([ 'name', record.get("name")]);
+                            recordDetailsData.push([ 'runBegin', record.get("runBegin")]);
+                            recordDetailsData.push([ 'runEnd', record.get("runEnd")]);
+                            recordDetailsData.push([ 'season', record.get("season")]);
+                            recordDetailsData.push([ 'srcFrequency', record.get("srcFrequency")]);
+                            recordDetailsData.push([ 'srcPressureLevel', record.get("srcPressureLevel")]);
+                            recordDetailsData.push([ 'layerName', record.get("layerName")]);
+                            recordDetailsData.push([ 'wsName', record.get("wsName")]);
+                            recordDetailsData.push([ 'outputUrl', record.get("outputUrl")]);
+                            recordDetailsData.push([ 'itemStatusMessage', record.get("itemStatusMessage")]);
+                            recordDetailsData.push([ 'securityLevel', record.get("securityLevel")]);
+                            recordDetailsData.push([ 'srcPath', record.get("srcPath")]);
+                            recordDetailsData.push([ 'octaveConfigFilePath', record.get("octaveConfigFilePath")]);
+                            recordDetailsData.push([ 'storeName', record.get("storeName")]);
+                            recordDetailsData.push([ 'userId', record.get("userId")]);
+
+                            detailsStore.loadData(recordDetailsData);
+                                new Ext.Window({ 
+                                    title: record.get("name")+ " - " + this.detailsWinTitle,
+                                    height: 400,
+                                    width: 400,
+                                    layout: 'fit',
+                                    resizable: true,
+                                    items:
+                                        new Ext.grid.GridPanel({
+                                            store: detailsStore,
+                                            anchor: '100%',
+                                            viewConfig : {
+                                                forceFit: true
+                                            },
+                                            columns: [
+                                                {
+                                                header: this.detailsHeaderName, 
+                                                dataIndex: "name",
+
+                                                renderer: function (val){
+                                                    return '<b>' + val + '</b>';
+                                                }
+                                                },{
+                                                header: this.detailsHeaderName, 
+                                                dataIndex: "value"
+                                                }]
+                                        })
+                                }).show();
+                            }}]
+                },{
+                    header: "Model Status", 
+                    dataIndex: "itemStatus"
+                },{
+                    header: "Model Name", 
+                    dataIndex: "name"
+                },{
+                    header: "Model Run Date", 
+                    dataIndex: "runBegin",
+                    width: 200
+                },{
+                    header: "Model End Date", 
+                    dataIndex: "runEnd",
+                    width: 200
+                }]
+            }),
+            bbar: new Ext.PagingToolbar({
                 pageSize: 10,
                 store: wfsStore,
                 displayInfo: true,
