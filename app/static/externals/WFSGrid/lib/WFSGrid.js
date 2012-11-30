@@ -212,7 +212,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                             }
                         },{
                             getClass: function(v, meta, rec) {
-                                if (rec.get('itemStatus') != "COMPLETED")  
+                                if (rec.get('itemStatus') == "COMPLETED")  
                                       return 'action-add-layer';
                                   else
                                       return  'no-action-add-layer'
