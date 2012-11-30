@@ -412,12 +412,12 @@ GeoExt.Lang.add("en", {
 		pointSelectionButtionTip: 'Enable Point Selection',
 		seasonLabelText: 'Season',
 		securityLevelLabelText : 'Security Level',
-		applyText: 'Apply',
+		applyText: 'Run',
 		resetText: 'Reset',
 		settingColorTitle: 'Color',
 		settingColorTitle: 'Color',
-		spmList: "SPM List",
-		spmTooltip: "Show the SPM List"
+		spmList: "Models Submits",
+		spmTooltip: "Show the Models Submits List"
 	},
 	/*-------------------------------------------------------------*/
 	

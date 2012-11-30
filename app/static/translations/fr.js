@@ -376,12 +376,12 @@ GeoExt.Lang.add("fr", {
 		pointSelectionButtionTip: 'Activer la sélection du point',
 		seasonLabelText: 'Saison',
 		securityLevelLabelText : 'Niveau de sécurité',
-		applyText: 'Appliquer',
+		applyText: 'Courir',
 		resetText: 'Reset',
 		settingColorTitle: 'Couleur',
 		settingColorTitle: 'Couleur',
-		spmList: "Liste SPM",
-		spmTooltip: "Affiche la liste SPM"
+		spmList: "Modèles Soumet",
+		spmTooltip: "Affiche les Modèles Soumet"
 	},
 	"Ext.DatePicker.prototype":{
 		todayText         : "Aujourd'hui",
