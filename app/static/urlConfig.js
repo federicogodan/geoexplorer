@@ -29,7 +29,7 @@
     },
 	
     "geostore": {
-        "url": "http://localhost:8080/geostore/rest/", 
+        "url": "http://localhost:8080/geostore/rest", 
         "user": "admin",
         "password": "admin",
         "proxy":"proxy?url="

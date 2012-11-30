@@ -88,15 +88,14 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
      */
     emptyMsg: "No topics to display",
     
-    
+    id: "wfsGridPanel",
+	
     /** private: method[constructor]
      */
     constructor: function(config) {
         gxp.plugins.WFSGrid.superclass.constructor.apply(this, arguments);        
     },
-    
-    
-    
+
     /** api: method[addOutput]
      */
     addOutput: function(config) {
@@ -134,7 +133,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         srsName: this.srsName,
                         version: this.version
                     }) 
-                  /*  protocol: new OpenLayers.Protocol.HTTP({
+                    /*protocol: new OpenLayers.Protocol.HTTP({
                         url: "http://localhost:8080/MapComposer/proxy?url="+encodeURIComponent(urlTest),
                         format: new OpenLayers.Format.GeoJSON()
                     })*/
@@ -145,71 +144,68 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
             store: wfsStore, 
-            id:"wfsGridPanel",
+            id: this.id,
             //sm: new GeoExt.grid.FeatureSelectionModel(), 
             //width: 320, 
            
             columns: [{
-		xtype: 'actioncolumn',
-		sortable : false, 
-		width: 30,
-		listeners: {
-                    scope: this,
-		    click: function(column, grd, row, e){
-                       // grd.getSelectionModel().selectRow(row);
-                       //alert("click");
-                    }
-	        },
-	        items: [{
-			icon   : this.addLayerIconPath,  
-			tooltip: 'Add Layer to Map',
-			scope: this,
-			handler: function(gpanel, rowIndex, colIndex) {
-                            //var store = gpanel.getStore();	
-                            var store=Ext.getCmp("wfsGridPanel").getStore();
-                            alert(store.toSource());
-		            var record = store.getAt(rowIndex);
-                            
-                            addLayer.addLayer(record.get("wsName")+":"+record.get("layerName"),
-                            record.get("outputUrl")
-                            );
-			}}]
-	    },{
-                header: "Model Status", 
-                dataIndex: "itemStatus"
-            },{
-                header: "Model Name", 
-                dataIndex: "name"
-            },{
-                header: "Model Run Date", 
-                dataIndex: "runBegin",
-                width: 200
-            },{
-                header: "Model End Date", 
-                dataIndex: "runEnd",
-                width: 200
-            }],bbar: new Ext.PagingToolbar({
-                pageSize: 10,
-                store: wfsStore,
-                displayInfo: true,
-                displayMsg: this.displayMsgPaging,
-                emptyMsg: this.emptyMsg
-            })
-        }); 
-      
-    
-        
-        config = Ext.apply(wfsGridPanel, config || {});
-        
-      
-        
+				xtype: 'actioncolumn',
+				sortable : false, 
+				width: 30,
+				listeners: {
+						scope: this,
+						click: function(column, grd, row, e){
+						   // grd.getSelectionModel().selectRow(row);
+						   //alert("click");
+						}
+				},
+				items: [{
+					icon   : this.addLayerIconPath,  
+					tooltip: 'Add Layer to Map',
+					scope: this,
+					handler: function(gpanel, rowIndex, colIndex) {
+						//var store = gpanel.getStore();	
+						var store=Ext.getCmp("wfsGridPanel").getStore();
+						//alert(store.toSource());
+						var record = store.getAt(rowIndex);
+						
+						addLayer.addLayer(
+							record.get("wsName") + ":" + record.get("layerName"),
+							record.get("outputUrl")
+						);
+					}
+				}]
+			},{
+				header: "Model Status", 
+				dataIndex: "itemStatus"
+			},{
+				header: "Model Name", 
+				dataIndex: "name"
+			},{
+				header: "Model Run Date", 
+				dataIndex: "runBegin",
+				width: 200
+			},{
+				header: "Model End Date", 
+				dataIndex: "runEnd",
+				width: 200
+			}],bbar: new Ext.PagingToolbar({
+				pageSize: 10,
+				store: wfsStore,
+				displayInfo: true,
+				displayMsg: this.displayMsgPaging,
+				emptyMsg: this.emptyMsg
+			})
+		}); 
+
+		config = Ext.apply(wfsGridPanel, config || {});
+
         var wfsGrid = gxp.plugins.WFSGrid.superclass.addOutput.call(this, config);
-        
+		
         Ext.getCmp(this.outputTarget).setActiveTab(wfsGrid);
         
         return wfsGrid;
-    }
-            
+    }   
 });
 
 Ext.preg(gxp.plugins.WFSGrid.prototype.ptype, gxp.plugins.WFSGrid);

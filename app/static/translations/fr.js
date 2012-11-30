@@ -379,7 +379,9 @@ GeoExt.Lang.add("fr", {
 		applyText: 'Appliquer',
 		resetText: 'Reset',
 		settingColorTitle: 'Couleur',
-		settingColorTitle: 'Couleur'
+		settingColorTitle: 'Couleur',
+		spmList: "Liste SPM",
+		spmTooltip: "Affiche la liste SPM"
 	},
 	"Ext.DatePicker.prototype":{
 		todayText         : "Aujourd'hui",
