@@ -142,9 +142,9 @@
             return {
                 msg : function(title, format){
                     if(!msgCt){
-                        msgCt = Ext.DomHelper.append(Ext.get("idalaylist")/*document.body*/, {id:'msg-div'}, true);
+                        msgCt = Ext.DomHelper.insertAfter(Ext.get("center")/*document.body*/, {id:'msg-div'}, true);
                     }
-                    msgCt.alignTo(Ext.get("idalaylist")/*document*/, 't-t');
+                    msgCt.alignTo(Ext.get("center")/*document*/, 't-t');
                     var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
                     var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
                     m.slideIn('t').pause(2).ghost("t", {remove:true});
