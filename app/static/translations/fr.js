@@ -439,7 +439,6 @@ GeoExt.Lang.add("fr", {
         addGroupText: "Ajouter un groupe",
         removeConditionText: "Supprimer la condition"
     },
-	
 	"gxp.plugins.IDAAttribute.prototype": {
         title: "Attributes de niveau",
 		settingsTitle: "Réglages de base",
@@ -450,5 +449,17 @@ GeoExt.Lang.add("fr", {
 		reloadLayerText: "Recharger les niveaux",
 		applyFilterText: "Appliquer",
 		resetText: "Remettre"
-    }
+    },
+    
+        
+    "gxp.plugins.WFSGrid.prototype":{
+	displayMsgPaging: "Affichage des résultats {0} - {1} of {2}",
+        emptyMsg: "Aucun résultat à afficher",
+        addLayerTooltip: "Ajouter couche à la carte",
+        detailsTooltip: "Afficher les détails",
+        detailsHeaderName: "Nom de la propriété",
+        detailsHeaderValue: "Valeur de la propriété",
+        detailsWinTitle: "Détails"
+     }
+
 });

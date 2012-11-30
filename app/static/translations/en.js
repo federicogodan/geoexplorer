@@ -448,5 +448,15 @@ GeoExt.Lang.add("en", {
 		reloadLayerText: "Reload Layers",
 		applyFilterText: "Apply",
 		resetText: "Reset"
-    }
+    },
+    
+    "gxp.plugins.WFSGrid.prototype":{
+	displayMsgPaging: "Displaying topics {0} - {1} of {2}",
+        emptyMsg: "No topics to display",
+        addLayerTooltip: "Add Layer to Map",
+        detailsTooltip: "View Details",
+        detailsHeaderName: "Property Name",
+        detailsHeaderValue: "Property Value",
+        detailsWinTitle: "Details"
+     }
 });

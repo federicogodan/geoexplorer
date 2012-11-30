@@ -370,7 +370,7 @@ GeoExt.Lang.add("it", {
         typeLabel: "Tipo",
         featureLabel: "Max Features",
        	spatialLabelText: "Non settando una ROI stai chiedendo l'intero insieme di dati nell'estenzione corrente della mappa.",
-	    featureLabelText: "Con un elevato numero di features il server può richiedere lungo tempo prima di rispondere. Limita la tua ricerca!",
+	    featureLabelText: "Con un elevato numero di features il server puï¿½ richiedere lungo tempo prima di rispondere. Limita la tua ricerca!",
 		spmText:"SPM",
 		sourcedepthLabel : "Profondit&agrave; Sorgente (m)",
 		sourcefrequencyLabel : 'Frequenza Sorgente (kHz)',
@@ -482,5 +482,15 @@ GeoExt.Lang.add("it", {
 		reloadLayerText: "Ricarica Livelli",
 		applyFilterText: "Applica",
 		resetText: "Reimposta"
-    }
+    },
+    
+    "gxp.plugins.WFSGrid.prototype":{
+	displayMsgPaging: "Visualizza risultati {0} - {1} of {2}",
+        emptyMsg: "Nessun risultato da visualizzare",
+        addLayerTooltip: "Aggiungi Layer alla Mappa",
+        detailsTooltip: "Visualizza Dettagli",
+        detailsHeaderName: "Nome Attributo",
+        detailsHeaderValue: "Valore Attributo",
+        detailsWinTitle: "Dettagli"
+     }
 });
