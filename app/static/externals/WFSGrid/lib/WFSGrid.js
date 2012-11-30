@@ -206,8 +206,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                             handler: function(gpanel, rowIndex, colIndex) {
                                 var store = gpanel.getStore();	
                                 var record = store.getAt(rowIndex);
-                                addLayer.addLayer(record.get("wsName")+":"+record.get("layerName"),
-                                record.get("outputUrl")
+                                addLayer.addLayer(record.get("name"),
+                                    record.get("wsName") + ":" + record.get("layerName"),
+                                    record.get("outputUrl")
                                 );
                             }
                         },{
