@@ -155,21 +155,18 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 				listeners: {
 						scope: this,
 						click: function(column, grd, row, e){
-						   // grd.getSelectionModel().selectRow(row);
-						   //alert("click");
 						}
 				},
 				items: [{
 					icon   : this.addLayerIconPath,  
 					tooltip: 'Add Layer to Map',
 					scope: this,
-					handler: function(gpanel, rowIndex, colIndex) {
-						//var store = gpanel.getStore();	
+					handler: function(gpanel, rowIndex, colIndex) {	
 						var store=Ext.getCmp("wfsGridPanel").getStore();
-						//alert(store.toSource());
 						var record = store.getAt(rowIndex);
 						
 						addLayer.addLayer(
+						    record.get("name"),
 							record.get("wsName") + ":" + record.get("layerName"),
 							record.get("outputUrl")
 						);
