@@ -73,26 +73,34 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     addLayerIconPath: "theme/app/img/silk/add.png",
     
     
+    detailsIconPath: "theme/app/img/silk/information.png",
+    
+    
     addLayerTool: null,
     
-    /** api: config[displayMsgPaging]
-     *  ``String``
-     * 
-     */
+    
+    
+    // start i18n
     displayMsgPaging: "Displaying topics {0} - {1} of {2}",
-    
-    
-    /** api: config[emptyMsg]
-     *  ``String``
-     * 
-     */
     emptyMsg: "No topics to display",
+    addLayerTooltip: "Add Layer to Map",
+    detailsTooltip: "View Details",
+    detailsHeaderName: "Property Name",
+    detailsHeaderValue: "Property Value",
+    detailsWinTitle: "Details",
+    // end i18n
+    
+    
+    
+    
     
     
     /** private: method[constructor]
      */
     constructor: function(config) {
-        gxp.plugins.WFSGrid.superclass.constructor.apply(this, arguments);        
+        gxp.plugins.WFSGrid.superclass.constructor.apply(this, arguments);  
+        
+       
     },
     
     
@@ -123,6 +131,36 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 },{
                     name: "outputUrl", 
                     type: "string"
+                },{
+                    name: "ftUUID", 
+                    type: "string"
+                },{
+                    name: "season", 
+                    type: "string"
+                },{
+                    name: "srcFrequency", 
+                    type: "string"
+                },{
+                    name: "srcPressureLevel", 
+                    type: "string"
+                },{
+                    name: "itemStatusMessage", 
+                    type: "string"
+                },{
+                    name: "securityLevel", 
+                    type: "string"
+                },{
+                    name: "srcPath", 
+                    type: "string"
+                },{
+                    name: "octaveConfigFilePath", 
+                    type: "string"
+                },{
+                    name: "storeName", 
+                    type: "string"
+                },{
+                    name: "userId", 
+                    type: "string"
                 }], 
                 proxy: new GeoExt.data.ProtocolProxy({ 
                     protocol: new OpenLayers.Protocol.WFS({ 
@@ -145,10 +183,6 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
             store: wfsStore, 
-            id:"wfsGridPanel",
-            //sm: new GeoExt.grid.FeatureSelectionModel(), 
-            //width: 320, 
-           
             columns: [{
 		xtype: 'actioncolumn',
 		sortable : false, 
@@ -156,23 +190,95 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 		listeners: {
                     scope: this,
 		    click: function(column, grd, row, e){
-                       // grd.getSelectionModel().selectRow(row);
-                       //alert("click");
                     }
 	        },
 	        items: [{
 			icon   : this.addLayerIconPath,  
-			tooltip: 'Add Layer to Map',
+			tooltip: this.addLayerTooltip,
 			scope: this,
 			handler: function(gpanel, rowIndex, colIndex) {
-                            //var store = gpanel.getStore();	
-                            var store=Ext.getCmp("wfsGridPanel").getStore();
-                            alert(store.toSource());
+                            var store = gpanel.getStore();	
 		            var record = store.getAt(rowIndex);
-                            
                             addLayer.addLayer(record.get("wsName")+":"+record.get("layerName"),
                             record.get("outputUrl")
                             );
+			}
+                      },{
+                          getClass: function(v, meta, rec) {
+
+                            if (rec.get('itemStatus') != "COMPLETED")  {
+                                 alert('available-col');
+                                 return 'available-col';
+                            } else{
+                                alert('not-available-col');
+                                return 'not-available-col';
+                            }
+                               
+                          } 
+                     }]
+	    },{
+		xtype: 'actioncolumn',
+		sortable : false, 
+		width: 30,
+	        items: [{
+			icon   : this.detailsIconPath,  
+			tooltip: this.detailsTooltip,
+			scope: this,
+			handler: function(gpanel, rowIndex, colIndex) {
+                            var store = gpanel.getStore();	
+		            var record = store.getAt(rowIndex);
+                            var detailsStore=new Ext.data.ArrayStore({
+                                fields: ['name', 'value'],
+                                idIndex: 0 
+                            });
+                           var recordDetailsData = new Array();
+                            
+                           recordDetailsData.push([ 'ftUUID', record.get("ftUUID")]);
+                           recordDetailsData.push([ 'itemStatus', record.get("itemStatus")]);
+                           recordDetailsData.push([ 'name', record.get("name")]);
+                           recordDetailsData.push([ 'runBegin', record.get("runBegin")]);
+                           recordDetailsData.push([ 'runEnd', record.get("runEnd")]);
+                           recordDetailsData.push([ 'season', record.get("season")]);
+                           recordDetailsData.push([ 'srcFrequency', record.get("srcFrequency")]);
+                           recordDetailsData.push([ 'srcPressureLevel', record.get("srcPressureLevel")]);
+                           recordDetailsData.push([ 'layerName', record.get("layerName")]);
+                           recordDetailsData.push([ 'wsName', record.get("wsName")]);
+                           recordDetailsData.push([ 'outputUrl', record.get("outputUrl")]);
+                           recordDetailsData.push([ 'itemStatusMessage', record.get("itemStatusMessage")]);
+                           recordDetailsData.push([ 'securityLevel', record.get("securityLevel")]);
+                           recordDetailsData.push([ 'srcPath', record.get("srcPath")]);
+                           recordDetailsData.push([ 'octaveConfigFilePath', record.get("octaveConfigFilePath")]);
+                           recordDetailsData.push([ 'storeName', record.get("storeName")]);
+                           recordDetailsData.push([ 'userId', record.get("userId")]);
+                     
+                           detailsStore.loadData(recordDetailsData);
+                            new Ext.Window({ 
+                                title: record.get("name")+ " - " + this.detailsWinTitle,
+                                height: 400,
+                                width: 400,
+                                layout: 'fit',
+                                resizable: true,
+                                items:
+                                    new Ext.grid.GridPanel({
+                                        store: detailsStore,
+                                        anchor: '100%',
+                                        viewConfig : {
+                                            forceFit: true
+                                        },
+                                        columns: [
+                                            {
+                                            header: this.detailsHeaderName, 
+                                            dataIndex: "name",
+                                          
+                                            renderer: function (val){
+                                                return '<b>' + val + '</b>';
+                                            }
+                                            },{
+                                            header: this.detailsHeaderName, 
+                                            dataIndex: "value"
+                                            }]
+                                    })
+                            }).show();
 			}}]
 	    },{
                 header: "Model Status", 
@@ -196,13 +302,8 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 emptyMsg: this.emptyMsg
             })
         }); 
-      
-    
-        
+
         config = Ext.apply(wfsGridPanel, config || {});
-        
-      
-        
         var wfsGrid = gxp.plugins.WFSGrid.superclass.addOutput.call(this, config);
         
         Ext.getCmp(this.outputTarget).setActiveTab(wfsGrid);
