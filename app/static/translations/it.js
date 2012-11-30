@@ -394,18 +394,27 @@ GeoExt.Lang.add("it", {
         pauseTooltip: "Pausa"
     },
     "gxp.PlaybackOptionsPanel.prototype": {
-        titleText: "Date & Time Options",
-        rangeFieldsetText: "Time Range",
-        animationFieldsetText: "Animation Options",
-        startText: "Start",
-        endText: "End",
-        listOnlyText: "Use Exact List Values Only",
-        stepText: "Animation Step",
-        unitsText: "Animation Units",
+        titleText: "Opzioni Data e Tempo",
+        rangeFieldsetText: "Intervallo di tempo",
+        animationFieldsetText: "Opzioni di animazione",
+        startText: "Inizio",
+        endText: "Fine",
+        saveText: 'Salva',
+        cancelText: 'Cancella',        
+        listOnlyText: "Utilizzare solamente l'elenco dei valori esatti",
+        stepText: "Step animazione",
+        unitsText: "Unità animazione",
+        frameRateText:'Velocità animazione (s)',
         noUnitsText: "Snap To Time List",
-        loopText: "Loop Animation",
-        reverseText: "Reverse Animation",
+        loopText: "Animazione continua",
+        reverseText: "Inverti animazione",
         rangeChoiceText: "Choose the range for the time control",
-        rangedPlayChoiceText: "Playback Mode"
+        rangedPlayChoiceText: "Playback Mode",
+        secondsText: 'Secondi', 
+        minutesText: 'Minuti', 
+        hoursText: 'Ore', 
+        daysText: 'Giorni', 
+        monthsText: 'Mesi', 
+        yearsText: 'Anni'
     }
 });
