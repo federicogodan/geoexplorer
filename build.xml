@@ -89,6 +89,11 @@
         <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/colorpicker/css">
             <fileset dir="app/static/externals/colorpicker/css"/>
         </copy>
+        
+            <!-- copy wfsgrid css -->
+        <copy todir="${build}/${ant.project.name}/WEB-INF/app/static/externals/WFSGrid/resources/">
+            <fileset dir="app/static/externals/WFSGrid/resources"/>
+        </copy>
     </target>
 
     <target name="war" depends="dist">
