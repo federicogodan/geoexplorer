@@ -1,4 +1,14 @@
 
+
+/*
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      new Class
+ *      not yet used in MapStore
+ * --------------------------------------------------------- 
+ *
+ **/
+
 /**
  * Class: OpenLayers.Format.GeoStore.Category
  * GeoStore Entity Category.

@@ -17,6 +17,12 @@
  * Inherits from:
  *  - <OpenLayers.Format.Filter.v1_1_0>
  *  - <OpenLayers.Format.WFST.v1>
+ *  
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
  */
 OpenLayers.Format.WFST.v1_1_0_ext = OpenLayers.Class(
     OpenLayers.Format.Filter.v1_1_0, OpenLayers.Format.WFST.v1, {

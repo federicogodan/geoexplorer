@@ -11,6 +11,12 @@
 /**
  * Namespace: OpenLayers.Event
  * Utility functions for event handling.
+ * 
+ * 
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
  */
 OpenLayers.EventExt = {
 

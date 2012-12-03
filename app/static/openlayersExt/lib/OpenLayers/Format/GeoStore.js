@@ -12,6 +12,12 @@
  *
  * Inherits from:
  *  - <OpenLayers.Format.XML>
+ *  
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      New Class (not Openlayers lib class)
+ * --------------------------------------------------------- 
  */
 
 

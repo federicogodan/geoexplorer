@@ -11,6 +11,11 @@
 /**
  * TODO: deprecate me
  * Use OpenLayers.RequestExt.proxy instead.
+ * 
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * ---------------------------------------------------------     
  */
 OpenLayers.ProxyHost = "";
 

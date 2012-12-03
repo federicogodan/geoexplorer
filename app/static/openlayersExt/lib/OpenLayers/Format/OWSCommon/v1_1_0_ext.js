@@ -13,6 +13,12 @@
  *
  * Inherits from:
  *  - <OpenLayers.Format.OWSCommon.v1_ext>
+ *  
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * ---------------------------------------------------------  
  */
 OpenLayers.Format.OWSCommon.v1_1_0_ext = OpenLayers.Class(OpenLayers.Format.OWSCommon.v1_ext, {
 

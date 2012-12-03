@@ -21,6 +21,14 @@
  * instances for servers known to the WPSClient. The WPSClient also caches
  * DescribeProcess responses to reduce the number of requests sent to servers
  * when processes are created.
+ *
+ *
+  * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      new Class
+ *      MapStore version from Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
+ *
  */
 OpenLayers.WPSClient = OpenLayers.Class({
     

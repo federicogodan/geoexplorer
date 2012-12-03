@@ -8,10 +8,18 @@
  */
 
 /**
- * Class: OpenLayers.Format.WPSExecute version 1.0.0
+ * Class: OpenLayers.Format.WPSExecuteRequest 
+ *
+ * Read WPS Execute Request.  Create a new instance with the OpenLayers.Format.WPSExecuteRequest constructor. 
  *
  * Inherits from:
  *  - <OpenLayers.Format.XML>
+ *  
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      New Class (not Openlayers lib class)
+ * --------------------------------------------------------- 
  */
 OpenLayers.Format.WPSExecuteRequest = OpenLayers.Class(OpenLayers.Format.XML, {
     

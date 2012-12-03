@@ -12,8 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+
+
 /**
  * @requires OpenLayers/RequestExt.js
+ *
+ *
+ *
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after thwe version 2.12 stable
+ * --------------------------------------------------------- 
+ *
  */
 
 (function () {

@@ -13,6 +13,12 @@
  *
  * Inherits from:
  *  - <OpenLayers.Format.XML>
+ *  
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
  */
 OpenLayers.Format.OGCExceptionReport = OpenLayers.Class(OpenLayers.Format.XML, {
 

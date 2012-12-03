@@ -13,6 +13,13 @@
  * 
  * Inherits from:
  *  - <OpenLayers.Format.XML.VersionedOGC>
+ *  
+ *  
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
  */
 OpenLayers.Format.WPSCapabilities = OpenLayers.Class(OpenLayers.Format.XML.VersionedOGC, {
     

@@ -15,6 +15,14 @@
  *
  * Inherits from:
  *  - <OpenLayers.Format.XML>
+ *
+ *
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      new Class
+ *      MapStore version from Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
+ *
  */
 OpenLayers.Format.WPSExecute = OpenLayers.Class(OpenLayers.Format.XML,
     OpenLayers.Format.Filter.v1_1_0, {

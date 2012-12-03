@@ -26,6 +26,16 @@
  * or features as output, using WKT or GeoJSON as output format. It also
  * supports chaining of processes by using the <output> method to create a
  * handle that is used as process input instead of a static value.
+ *
+ *
+ *
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      new Class
+ *      MapStore version from Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
+ *
+ *
  */
 OpenLayers.WPSProcess = OpenLayers.Class({
     
@@ -754,6 +764,44 @@ OpenLayers.WPSProcess.BoundingBoxData = OpenLayers.Class({
     },
     
     CLASS_NAME: "OpenLayers.WPSProcess.BoundingBoxData"
+    
+});
+
+
+
+
+
+/**
+ * Class: OpenLayers.WPSProcess.Output
+ * Type for WPS output Process.
+ */
+OpenLayers.WPSProcess.Output = OpenLayers.Class({ 
+    
+    
+    /**
+     * Property: identifier
+     * {String} Mandatory. Output identifier
+     */
+    identifier: null,
+    
+    /**
+     * Property: mimeType
+     * {String} Optional. Output mime type
+     */
+    mimeType: null,
+    
+    /**
+     * Property: asReference
+     * {Boolean}  Specifies if this output should be stored by the process as a web-accessible resource.
+     */
+    asReference: null,
+    
+    
+    initialize: function(options) {
+        OpenLayers.Util.extend(this, options);
+    },
+    
+    CLASS_NAME: "OpenLayers.WPSProcess.Output"
     
 });
 
