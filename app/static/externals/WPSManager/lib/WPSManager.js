@@ -7,17 +7,12 @@
  */
 
 /**
- * @requires 
+ * requires GeoStoreClient/lib/GeoStoreClient.js 
  */
-
-/**
- * The WPS Manager Plugin
- */
-
 
 /** api: (define)
  *  module = gxp.plugins
- *  class = WPSExecuteManager
+ *  class = WPSManager
  */
 
 /** api: (extends)
@@ -28,8 +23,15 @@ Ext.namespace("gxp.plugins");
 /** api: constructor
  *  .. class:: WPSManager(config)
  *
- *    Plugin for send WPS 
- */   
+ * The WPS Manager Plugin provides a high level API for interaction with Web Processing Services (WPS) and manager the Process instances.  
+ * An gxp.plugins.WPSManager uses a OpenLayersExt.WPSClient for the WPS intercation and a gxp.plugins.GeoStoreClient to store the Execute instances.
+ * The WPS Manager Plguin supports synchronous and  asynchronus Execute requests. For the asynchronous request supports the status update, for the synchronous requests supports the "raw" data outputs.
+ * When the WPSManager plugin is instantiated a "Geostore Category" called as plugin id is created.
+ * For each Execute request a "Geostore Resource" is created. The resource description contains a execute status information and the output type (raw or not raw).
+ * The resource store data contains directly the output if the output type is raw or a JSON Object wich contains the Execute response information.
+ * For the Execute response parsing is used the OpenLayersExt.Format.WPSExecute object.
+ */  
+
 /** api: example
  *  
  *  TODO
@@ -39,21 +41,13 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: ptype = gxp_wpsmanager */
     ptype: "gxp_wpsmanager",
-    
-    /** private: property[instancePrefix]
-     *  ``String``
-     */
-    instancePrefix: "wpsExecute",
-    
+
+
     /** api: config[id] 
-     *  ``String`` Execute request identifier
+     *  ``String`` Web Processing Server identifier
      */
     id: null,
 
-    /** private: property[instances]
-     *  ``Object``
-     */
-    instances: null,
     
     /** private: property[wpsClient]
      *  ``{<OpenLayers.WPSClient>}``
@@ -65,6 +59,12 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
      *  ``{<gxp.plugins.GeoStoreClient>}``
      */
     geoStoreClient: null,
+    
+    
+    /** private: property[instancePrefix]
+     *  ``String``
+     */
+    instancePrefix: "wpsExecute",
     
 
     /** private: method[constructor]
@@ -124,11 +124,11 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: method[getExecuteInstances]
      *
-     *  Get All WPS Execute Process instnaces
-     *  *  :arg process: ``String`` Optional process name for filter the instnances
+     *  :arg process: ``String`` Optional process name for filter the instnances
      *  :arg callback: ``Function`` Optional callback to call when the
      *      instances are retrieved. 
-     *  :arg scope: ``Object`` Optional scope for the callback function.
+     *      
+     *  Get All WPS Execute Process instances. All asyncrhonous Execute instances not completed are updated.      
      */
     getExecuteInstances: function(process, callback) {
         var me= this;
@@ -136,9 +136,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             this.geoStoreClient.getCategoryResources(this.id, 
                 function(instances){
                     me.updateInstances(null,instances, callback);
-                }/*, function(){
-                    this.fireEvent("geoStoreFailure", this);
-                }*/);
+                });
         }else{
             this.geoStoreClient.getLikeName({ 
                 type: "resource", 
@@ -146,9 +144,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             }, 
             function(instances){
                 me.updateInstances(process,instances, callback);
-            }/*, function(){
-                this.fireEvent("geoStoreFailure", this);
-            }*/);
+            });
         } 
     },
     
@@ -156,20 +152,18 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: method[getExecuteInstance]
      *
-     *  Get WPS Execute Process instnace from name
+     *  Get WPS Execute Process instance from id
      
-     *  *  :arg instanceName: ``String`` Optional process name for filter the instnances
-     *  *  :arg process: ``String`` Optional process name for filter the instnances
-
+     *  :arg instanceID: ``String`` instance ID
      *  :arg callback: ``Function`` Optional callback to call when the
      *      instance is retrieved. 
      */
-    getExecuteInstance: function(instanceName, callback) {
+    getExecuteInstance: function(instanceID, callback) {
         var me= this;
    
         me.geoStoreClient.getLikeName({ 
             type: "resource",
-            name: instanceName
+            name: instanceID
         }, 
         function(instances){
             var statusInfo= JSON.parse(instances[0].description);
@@ -179,19 +173,18 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
                 statusInfo.status == "Process Paused"){ 
                   
                 var updateCallback= function(instanceID){
-                    me.getEntityByID(instanceID, "resource", function(resource){
+                    me.getEntityByID({type: "resource", id: instanceID}, function(resource){
                         
                         var instance= resource;
                         instance.store= JSON.parse(resource.store);
                         instance.description= JSON.parse(resource.description);
                         callback.call(me, instance);
-                    });
-                      
+                    });  
                 }      
                 this.updateInstance(instances[0].name, null, null,
                 statusInfo.statusLocation, updateCallback);  
             }else
-                me.getEntityByID(instances[0].id, "resource", function(resource){  
+                me.getEntityByID({type: "resource", id: instances[0].id}, function(resource){  
                     var instance= resource;
                     instance.store= JSON.parse(resource.store);
                     instance.description= JSON.parse(resource.description);
@@ -291,11 +284,41 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
         return this.getPrefixInstanceName(processName)+"_"+new Date().getTime();
     },
     
-    
-
     /** api: method[execute]
-     *
-     *  Send Execute Process request
+     *  :arg processName: ``String`` WPS Process name 
+     *  :arg executeRequest: ``OpenlayersExt.Format.WPSExecuteRequest || Object || String`` The executeRequest can be an Object which contains the request properties or a String  which contains directly the WPS Execute request.
+     *                      For the WPS Execute request parsing is used the OpenlayersExt.Format.WPSExecuteRequest which define a object with the request properties.
+     *                      This object properties are:
+     *                              - storeExecuteResponse: ``Boolean`` Optional.  Indicates if the execute response document shall be stored (if true Asynchronous instance).
+     *                              - lineage: ``Boolean`` Optional. Indicates if the Execute operation response shall include the DataInputs and OutputDefinitions elements.
+     *                              - status: ``Boolean`` Optional.  Indicates if the stored execute response document shall be updated to provide ongoing reports on the status of execution.
+     *                              - type: ``String`` Optional. Type of output ("data" or "raw")
+     *                              - inputs: ``Object`` Mandatory. The inputs for the process, keyed by input identifier.
+     *                                             The data input types currently supported are:  
+     *                                                  OpenLayers.WPSProcess.LiteralData
+     *                                                  OpenLayers.WPSProcess.ComplexData
+     *                                                  OpenLayers.WPSProcess.BoundingBoxData
+     *                                                  OpenLayers.WPSProcess.ReferenceData
+     *                              - outputs: ``Array`` Mandatory. Array of OpenLayers.WPSProcess.Output Object
+     *                           
+     *  :returns: ``String`` Execute instance ID.
+     *  
+     *   Send Execute Process request.
+     *  
+     *  api: example
+     *          
+     *  var executeRequestObj = {
+     *                           type: "raw",
+     *			         inputs:{
+     *                               userId: new OpenLayers.WPSProcess.LiteralData({value:"userId"}),
+     *			             outputUrl: new OpenLayers.WPSProcess.LiteralData({value:"outputUrl"})
+     *                           }					
+     *                           outputs: [{
+     *					   identifier: "result",
+     *					   mimeType: "text/xml; subtype=wfs-collection/1.0"
+     *				          }]
+     *				};
+     *  
      */
     execute: function(processName, executeRequest) {
         var process = this.wpsClient.getProcess('opengeo', processName);    
@@ -377,7 +400,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
         
         geoStore=this.geoStoreClient;
         
-        geoStore.getEntityByName(resourceInstance.name, resourceInstance.type, function(res){
+        geoStore.getLikeName(resourceInstance, function(res){
             if(res != null){
                 resourceInstance.id=res.id;
                 geoStore.updateEntity(resourceInstance, function(entityID){
