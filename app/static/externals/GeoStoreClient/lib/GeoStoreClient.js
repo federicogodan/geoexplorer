@@ -10,10 +10,6 @@
  * @requires 
  */
 
-/**
- * The GeoStoreClient Plugin
- */
-
 
 /** api: (define)
  *  module = gxp.plugins
@@ -28,11 +24,29 @@ Ext.namespace("gxp.plugins");
 /** api: constructor
  *  .. class:: GeoStoreClient(config)
  *
- *    Plugin that provides a GeoStore Client
- */   
+ *
+ * The GeoStoreClient Plugin provides a high level API for interaction with Geostore.  
+ * An gxp.plugins.GeoStoreClient uses a OpenLayersExt.Format.GeoStore class in order to create Geostore request and to parse the Geostore response.
+ */ 
+   
 /** api: example
  *  
- *  TODO
+ *  new gxp.plugins.GeoStoreClient({
+ *			url: "http://localhost:8080/geostore",
+ *			user: "user",
+ *			password: "password",
+ *			proxy: "/http_proxy/proxy?url=",
+ *			listeners: {
+ *				"geostorefailure": function(tool, msg){
+ *					Ext.Msg.show({
+ *						title: "Geostore Exception",
+ *						msg: msg,
+ *						buttons: Ext.Msg.OK,
+ *						icon: Ext.Msg.ERROR
+ *					});
+ *				}
+ *			}
+ *		});
  *
  */
 gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
@@ -119,47 +133,17 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
         });	
     },
     
-    
-    /** api: method[createCatagory]
-     *
-     *  Send create category request
-     */
-    createCatagory: function (category, success, failure){
-        var restPath="/categories";
-        var method= "POST";
-        var contentType= "text/xml";
-        var content= null;
-        var callFailure= null;
-	
-        var callSuccess= function(response, opts){
-            var categoryID= response.responseText;
-	  
-            success.call(this, categoryID);
-        };
-	
-	
-        if(failure)
-            callFailure= function(response, opts){
-	  
-                failure.call(response);
-            };
-	
-	
-        if(category instanceof String){
-            content= category;
-        }else {
-            if(category instanceof Object){
-                content= new OpenLayers.Format.GeoStore().write(category);
-            }
-        }
-       
-        this.sendRequest(restPath, method, content, contentType, callSuccess, callFailure);
-    },
-    
+   
     
     /** api: method[createEntity]
      *
-     *  Send create entity request
+     *  :arg entity: ``Object`` Object which contains the Geostore entity properties.
+     *                          The Object properties are  defined in the OpenlayersExt.Format.Geostore class.
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
+     *       
+     *       
+     *  Send create Geostore entity request
      */
     createEntity: function (entity, success, failure){
         var restPath="";
@@ -217,6 +201,13 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: method[deleteEntity]
      *
+     *  :arg entity: ``Object`` Object which contains the Geostore entity properties.
+     *                          This object properties are:
+     *                              - type: ``String`` Mandatory. Defines the entity type. Available values: category, resource, user
+     *                              - id: ``Number`` Mandatory. Entity identifier
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
+     *  
      *  Send delete entity request
      */
     deleteEntity: function (entity, success, failure){
@@ -256,6 +247,11 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
     
     
     /** api: method[updateEntity]
+     *
+     *  :arg entity: ``Object`` Object which contains the Geostore entity properties.
+     *                          The Object properties are  defined in the OpenlayersExt.Format.Geostore class.
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
      *
      *  Send update entity request
      */
@@ -314,6 +310,10 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: method[getCategoryResources]
      *
+     *  :arg categoryName: ``String`` Category name
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
+     *  
      *  Send get all resources by category request
      */
     getCategoryResources: function (categoryName, success, failure){
@@ -355,6 +355,13 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: method[getLikeName]
      *
+     *  :arg entity: ``Object`` Object which contains the Geostore entity properties.
+     *                          This object properties are:
+     *                              - type: ``String`` Mandatory. Defines the entity type. Available values: resource, user
+     *                              - regName: ``String`` Regular Expression for the entity name
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
+     *
      *  Send get entity by like name request
      */
     getLikeName: function (entity, success, failure){
@@ -374,16 +381,22 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
 
         var callSuccess= function(response, opts){
             var jsonResponse= JSON.parse(response.responseText);
-            var resources;
+            var entity= null;
           
-            if(jsonResponse.ResourceList.Resource instanceof Array)
-                resources=jsonResponse.ResourceList.Resource;
-            else{
-                resources= new Array();
-                resources.push(jsonResponse.ResourceList.Resource);
+            if(jsonResponse.ResourceList){
+                if(jsonResponse.ResourceList.Resource instanceof Object){
+                    entity= jsonResponse.ResourceList.Resource;
+                }
             }
+            
+            if(jsonResponse.UsersList){
+                if(jsonResponse.UsersList.User instanceof Object){
+                    entity= jsonResponse.UsersList.User;
+                }
+            }
+
 	  
-            success.call(this, resources);
+            success.call(this, entity);
         };
         
         if(failure)
@@ -404,6 +417,13 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
     
     /** api: method[existsEntity]
      *
+     * :arg entity: ``Object`` Object which contains the Geostore entity properties.
+     *                          This object properties are:
+     *                              - type: ``String`` Mandatory. Defines the entity type. Available values: category, resource, user
+     *                              - id: ``Number`` Mandatory. Entity identifier               
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
+     *                                       
      *  Send "exists entity by name" request (The method uses the count request)
      */
     existsEntity: function (entity, success, failure){
@@ -451,76 +471,28 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
     },
     
     
-    
-    /** api: method[getEntityByName]
-     *
-     *  Send "get entity by name" request
-     */
-    getEntityByName: function (entityName, entityType, success, failure){
-        var restPath="";
-        var method= "GET";
-
-        switch (entityType){
-            case "resource":
-                restPath="/resources/search/";
-                break;
-            case "user":
-                restPath="/users/search/";
-                break;
-            case "category":
-                throw "getEntity is not supported for entity type \"category\"";
-                break;    
-            default:
-                throw "Entity type not supported";     
-        }
-        
-        restPath+=entityName;
-        var callFailure;
-        
-        var callSuccess= function(response, opts){
-            var jsonResponse= JSON.parse(response.responseText);
-            var entity= null;
-          
-            if(jsonResponse.ResourceList){
-                if(jsonResponse.ResourceList.Resource instanceof Object){
-                    entity= jsonResponse.ResourceList.Resource;
-                }
-            }
-            
-            if(jsonResponse.UsersList){
-                if(jsonResponse.UsersList.User instanceof Object){
-                    entity= jsonResponse.UsersList.User;
-                }
-            }
-
-	  
-            success.call(this, entity);
-        };
-	
-	
-        if(failure)
-            callFailure= function(response, opts){
-	  
-                failure.call(this,response);
-            };
-	
-        this.sendRequest(restPath, method, null, null, callSuccess, callFailure);
-    },
-    
-    
-    
-    
+   
     /** api: method[getEntityByID]
+     *
+     * :arg entity: ``Object`` Object which contains the Geostore entity properties.
+     *                          This object properties are:
+     *                              - type: ``String`` Mandatory. Defines the entity type. Available values: category, resource, user
+     *                              - id: ``Number`` Mandatory. Entity identifier               
+     *  :arg success: ``Function`` Optional callback to call when request the has been executed successfully
+     *  :arg failure: ``Function`` Optional callback to call when the request fails
      *
      *  Send "get entity by ID" request
      */
-    getEntityByID: function (entityID, entityType, success, failure){
+    
+    getEntityByID: function (entity, success, failure){
         var restPath="";
         var method= "GET";
+        var advPar="";
 
-        switch (entityType){
+        switch (entity.type){
             case "resource":
                 restPath="/resources/resource/";
+                advPar="?full=true";
                 break;
             case "user":
                 restPath="/users/user/";
@@ -532,7 +504,7 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
                 throw "Entity type not supported";     
         }
         
-        restPath+=entityID+"?full=true";
+        restPath+=entity.id+advPar;
         var callFailure;
         
         var callSuccess= function(response, opts){
@@ -542,12 +514,19 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
         };
 	
 	
+        
         if(failure)
+            callFailure= failure;
+        else{
+            var me=this;
             callFailure= function(response, opts){
-	  
-                failure.call(this,response);
+                var msg="Get entity by ID: \"" + entity.type +"\" request failed. "
+                    + response.responseText;
+                me.fireEvent("geostorefailure", this, msg);
+                
             };
-	
+        } 
+
         this.sendRequest(restPath, method, null, null, callSuccess, callFailure);
     }
 
