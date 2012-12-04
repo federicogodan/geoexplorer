@@ -166,7 +166,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             name: instanceID
         }, 
         function(instances){
-            var statusInfo= JSON.parse(instances[0].description);
+            var statusInfo= Ext.util.JSON.decode(instances[0].description);
                  
             if(statusInfo.status == "Process Started" || 
                 statusInfo.status == "Process Accepted" ||
@@ -176,8 +176,8 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
                     me.getEntityByID({type: "resource", id: instanceID}, function(resource){
                         
                         var instance= resource;
-                        instance.store= JSON.parse(resource.store);
-                        instance.description= JSON.parse(resource.description);
+                        instance.store= Ext.util.JSON.decode(resource.store);
+                        instance.description= Ext.util.JSON.decode(resource.description);
                         callback.call(me, instance);
                     });  
                 }      
@@ -186,8 +186,8 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             }else
                 me.getEntityByID({type: "resource", id: instances[0].id}, function(resource){  
                     var instance= resource;
-                    instance.store= JSON.parse(resource.store);
-                    instance.description= JSON.parse(resource.description);
+                    instance.store= Ext.util.JSON.decode(resource.store);
+                    instance.description= Ext.util.JSON.decode(resource.description);
                     callback.call(me, instance);
                 });
         });
@@ -234,7 +234,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             statusUpdated[i]=false;
        
         for( i=0; i<instances.length; i++){
-            var statusInfo= JSON.parse(instances[i].description);
+            var statusInfo= Ext.util.JSON.decode(instances[i].description);
             if(statusInfo.status == "Process Started" || 
                 statusInfo.status == "Process Accepted" ||
                 statusInfo.status == "Process Paused"){
@@ -359,11 +359,11 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             name: processInstance,
             metadata: "",
             category: me.id,
-            store: JSON.stringify(executeResponse)
+            store: Ext.util.JSON.encode(executeResponse)
         };
         
         if(executeProcessResponse instanceof OpenLayers.Format.WPSExecute){
-            resourceInstance.store= JSON.stringify(executeProcessResponse);
+            resourceInstance.store= Ext.util.JSON.encode(executeProcessResponse);
 
             var executeResponse= executeProcessResponse.executeResponse;
             if(executeResponse.exceptionReport){
@@ -396,7 +396,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             };
             
         } 
-        resourceInstance.description= JSON.stringify(stautsInfo);
+        resourceInstance.description= Ext.util.JSON.encode(stautsInfo);
         
         geoStore=this.geoStoreClient;
         
