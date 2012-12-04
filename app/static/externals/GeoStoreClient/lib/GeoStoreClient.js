@@ -322,7 +322,7 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
         var callFailure;
 
         var callSuccess= function(response, opts){
-            var jsonResponse= JSON.parse(response.responseText);
+            var jsonResponse= Ext.util.JSON.decode(response.responseText);
             var resources;
           
             if(jsonResponse.ResourceList.Resource instanceof Array)
@@ -380,7 +380,7 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
         }
 
         var callSuccess= function(response, opts){
-            var jsonResponse= JSON.parse(response.responseText);
+            var jsonResponse= Ext.util.JSON.decode(response.responseText);
             var entity= null;
           
             if(jsonResponse.ResourceList){
@@ -508,7 +508,7 @@ gxp.plugins.GeoStoreClient =  Ext.extend(gxp.plugins.Tool,{
         var callFailure;
         
         var callSuccess= function(response, opts){
-            var entity= JSON.parse(response.responseText);
+            var entity= Ext.util.JSON.decode(response.responseText);
      
             success.call(this, entity);
         };
