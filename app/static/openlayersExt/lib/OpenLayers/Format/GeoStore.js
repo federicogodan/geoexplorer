@@ -196,7 +196,7 @@ OpenLayers.Format.GeoStore = OpenLayers.Class(OpenLayers.Format.XML,{
                             },
                             "data": function(responseInfo) {
                                 var node = this.createElementNSPlus("data", {
-                                    value: JSON.stringify(responseInfo)
+                                    value: new OpenLayers.Format.JSON().write(responseInfo)
                                 });
                
                                 return node;
