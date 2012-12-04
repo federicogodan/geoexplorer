@@ -16,7 +16,7 @@
 
 
 /**
- * @requires OpenLayers/RequestExt.js
+ * requires OpenLayers/RequestExt.js
  *
  *
  *

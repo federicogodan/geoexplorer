@@ -5,9 +5,9 @@
 
 /**
  * requires OpenLayers/Format/XML.js
- * @requires OpenLayers/Format/OWSCommon/v1_1_0_ext.js
- * @requires OpenLayers/Format/WCSGetCoverage.js
- * @requires OpenLayers/Format/WFST/v1_1_0_ext.js
+ * requires OpenLayers/Format/OWSCommon/v1_1_0_ext.js
+ * requires OpenLayers/Format/WCSGetCoverage.js
+ * requires OpenLayers/Format/WFST/v1_1_0_ext.js
  */
 
 /**

@@ -12,8 +12,8 @@
  * requires OpenLayers/Feature/Vector.js
  * requires OpenLayers/Format/WKT.js
  * requires OpenLayers/Format/GeoJSON.js
- * @requires OpenLayers/Format/WPSExecute.js
- * @requires OpenLayers/RequestExt.js
+ * requires OpenLayers/Format/WPSExecute.js
+ * requires OpenLayers/RequestExt.js
  */
 
 /**

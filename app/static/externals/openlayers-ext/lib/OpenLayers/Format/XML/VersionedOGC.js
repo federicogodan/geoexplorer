@@ -5,7 +5,7 @@
 
 /**
  * requires OpenLayers/Format/XML.js
- * @requires OpenLayers/Format/OGCExceptionReport.js
+ * requires OpenLayers/Format/OGCExceptionReport.js
  */
 
 /**
