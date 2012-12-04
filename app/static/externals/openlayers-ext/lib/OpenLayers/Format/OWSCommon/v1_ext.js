@@ -4,7 +4,7 @@
  * full text of the license. */
 
 /**
- * @requires OpenLayers/Format/OWSCommon.js
+ * requires OpenLayers/Format/OWSCommon.js
  */
 
 /**

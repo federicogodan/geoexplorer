@@ -8,10 +8,10 @@
  */
 
 /**
- * @requires OpenLayers/EventsExt.js
- * @requires OpenLayers/WPSProcess.js
- * @requires OpenLayers/Format/WPSDescribeProcess.js
- * @requires OpenLayers/RequestExt.js
+ * requires OpenLayers/EventsExt.js
+ * requires OpenLayers/WPSProcess.js
+ * requires OpenLayers/Format/WPSDescribeProcess.js
+ * requires OpenLayers/RequestExt.js
  */
 
 /**

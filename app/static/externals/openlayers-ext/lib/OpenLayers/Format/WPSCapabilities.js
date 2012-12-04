@@ -4,7 +4,7 @@
  * full text of the license. */
 
 /**
- * equires OpenLayers/Format/XML/VersionedOGC.js
+ * requires OpenLayers/Format/XML/VersionedOGC.js
  */
  
 /**

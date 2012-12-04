@@ -4,8 +4,8 @@
  * full text of the license. */
 
 /**
- * @requires OpenLayers/EventsExt.js
- * @requires OpenLayers/RequestExt/XMLHttpRequestExt.js
+ * requires OpenLayers/EventsExt.js
+ * requires OpenLayers/RequestExt/XMLHttpRequestExt.js
  */
 
 /**

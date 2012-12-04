@@ -6,7 +6,7 @@
 /**
  * requires OpenLayers/Format/WFST/v1.js
  * requires OpenLayers/Format/Filter/v1_1_0.js
- * @requires OpenLayers/Format/OWSCommon/v1_0_0_ext.js
+ * requires OpenLayers/Format/OWSCommon/v1_0_0_ext.js
  */
 
 /**
