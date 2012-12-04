@@ -103,12 +103,198 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         
        
     },
+    
+    
+
+  /*  describeLayer: function(rec, callback, scope) {
+        if (!this.describeLayerStore) {
+            this.initDescribeLayerStore();
+        }
+        function delayedCallback(arg) {
+            window.setTimeout(function() {
+                callback.call(scope, arg);
+            }, 0);
+        }
+        if (!this.describeLayerStore) {
+            delayedCallback(false);
+            return;
+        }
+        if (!this.describedLayers) {
+            this.describedLayers = {};
+        }
+        var layerName = rec.getLayer().params.LAYERS;
+        var cb = function() {
+            var recs = Ext.isArray(arguments[1]) ? arguments[1] : arguments[0];
+            var rec, name;
+            for (var i=recs.length-1; i>=0; i--) {
+                rec = recs[i];
+                name = rec.get("layerName");
+                if (name == layerName) {
+                    this.describeLayerStore.un("load", arguments.callee, this);
+                    this.describedLayers[name] = true;
+                    callback.call(scope, rec);
+                    return;
+                } else if (typeof this.describedLayers[name] == "function") {
+                    var fn = this.describedLayers[name];
+                    this.describeLayerStore.un("load", fn, this);
+                    fn.apply(this, arguments);
+                }
+            }
+            // something went wrong (e.g. GeoServer does not return a valid
+            // DescribeFeatureType document for group layers)
+            delete describedLayers[layerName];
+            callback.call(scope, false);
+        };
+        var describedLayers = this.describedLayers;
+        var index;
+        if (!describedLayers[layerName]) {
+            describedLayers[layerName] = cb;
+            this.describeLayerStore.load({
+                params: {LAYERS: layerName},
+                add: true,
+                callback: cb,
+                scope: this
+            });
+        } else if ((index = this.describeLayerStore.findExact("layerName", layerName)) == -1) {
+            this.describeLayerStore.on("load", cb, this);
+        } else {
+            delayedCallback(this.describeLayerStore.getAt(index));
+        }
+    },
+    
+
+    getSchema: function(rec, callback, scope) {
+        if (!this.schemaCache) {
+            this.schemaCache = {};
+        }
+        this.describeLayer(rec, function(r) {
+            if (r && r.get("owsType") == "WFS") {
+                var typeName = r.get("typeName");
+                var schema = this.schemaCache[typeName];
+                if (schema) {
+                    if (schema.getCount() == 0) {
+                        schema.on("load", function() {
+                            callback.call(scope, schema);
+                        }, this, {single: true});
+                    } else {
+                        callback.call(scope, schema);
+                    }
+                } else {
+                    schema = new GeoExt.data.AttributeStore({
+                        url: r.get("owsURL"),
+                        baseParams: {
+                            SERVICE: "WFS",
+                            //TODO should get version from WFS GetCapabilities
+                            VERSION: "1.1.0",
+                            REQUEST: "DescribeFeatureType",
+                            TYPENAME: typeName
+                        },
+                        autoLoad: true,
+                        listeners: {
+                            "load": function() {
+                                callback.call(scope, schema);
+                            },
+                            scope: this
+                        }
+                    });
+                    this.schemaCache[typeName] = schema;
+                }
+            } else {
+                callback.call(scope, false);
+            }
+        }, this);
+   },
+
+    setFeatureStore: function(filter, autoLoad) {
+        var record = this.layerRecord;
+        var source = this.target.getSource(record);
+        if (source && source instanceof gxp.plugins.WMSSource) {
+            source.getSchema(record, function(schema) {
+                if (schema === false) {
+                    this.clearFeatureStore();
+                } else {
+                    var fields = [], geometryName;*/
+                   // var geomRegex = /gml:((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry)).*/;
+                   /* var types = {
+                        "xsd:boolean": "boolean",
+                        "xsd:int": "int",
+                        "xsd:integer": "int",
+                        "xsd:short": "int",
+                        "xsd:long": "int",
+                        "xsd:date": "date",
+                        "xsd:string": "string",
+                        "xsd:float": "float",
+                        "xsd:double": "float"
+                    };
+                    schema.each(function(r) {
+                        var match = geomRegex.exec(r.get("type"));
+                        if (match) {
+                            geometryName = r.get("name");
+                            this.geometryType = match[1];
+                        } else {
+                            // TODO: use (and improve if needed) GeoExt.form.recordToField
+                            var type = types[r.get("type")];
+                            var field = {
+                                name: r.get("name"),
+                                type: types[type]
+                            };
+                            //TODO consider date type handling in OpenLayers.Format
+                            if (type == "date") {
+                                field.dateFormat = "Y-m-d\\Z";
+                            }
+                            fields.push(field);
+                        }
+                    }, this);
+                    var protocolOptions = {
+                        srsName: this.target.mapPanel.map.getProjection(),
+                        url: schema.url,
+                        featureType: schema.reader.raw.featureTypes[0].typeName,
+                        featureNS: schema.reader.raw.targetNamespace,
+                        geometryName: geometryName
+                    };
+                    this.hitCountProtocol = new OpenLayers.Protocol.WFS(Ext.apply({
+                        version: "1.1.0",
+                        readOptions: {output: "object"},
+                        resultType: "hits",
+                        filter: filter
+                    }, protocolOptions));
+                    this.featureStore = new gxp.data.WFSFeatureStore(Ext.apply({
+                        fields: fields,
+                        proxy: {
+                            protocol: {
+                                outputFormat: this.format 
+                            }
+                        },
+                        maxFeatures: this.maxFeatures,
+                        layer: this.featureLayer,
+                        ogcFilter: filter,
+                        autoLoad: autoLoad,
+                        autoSave: false,
+                        listeners: {
+                            "write": function() {
+                                this.redrawMatchingLayers(record);
+                            },
+                            "load": function() {
+                                this.fireEvent("query", this, this.featureStore, this.filter);
+                            },
+                            scope: this
+                        }
+                    }, protocolOptions));
+                }
+                this.fireEvent("layerchange", this, record, schema);
+            }, this);
+        } else {
+            this.clearFeatureStore();
+            this.fireEvent("layerchange", this, record, false);
+        }        
+    },*/
 
     /** api: method[addOutput]
      */
     addOutput: function(config) {
        var addLayer = this.target.tools[this.addLayerTool]; 
        var wfsStore= new GeoExt.data.FeatureStore({ 
+                sortInfo: { field: "runBegin", direction: "ASC" },
                 id: this.id+"_store",
                 fields: [{
                     name: "name", 
@@ -162,6 +348,11 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                     name: "userId", 
                     type: "string"
                 }], 
+            
+                paramNames: {
+                    start : 'startIndex',  
+                    limit : 'maxFeatures'
+                },
                 proxy: new GeoExt.data.ProtocolProxy({ 
                     protocol: new OpenLayers.Protocol.WFS({ 
                         url: this.wfsURL, 
@@ -179,6 +370,8 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 }), 
                 autoLoad: true 
             });
+            
+        var addLayerTT=this.addLayerTooltip;    
             
         var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
@@ -201,16 +394,15 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         }
                     },
                     items: [{
-                           // icon   : this.addLayerIconPath,  
-                            tooltip: this.addLayerTooltip,
-                            scope: this
-                        },{
+                            tooltip:addLayerTT,
                             getClass: function(v, meta, rec) {
-                                
-                                if (rec.get('itemStatus') == "COMPLETED")  
-                                      return 'action-add-layer';
-                                  else
-                                      return  'no-action-add-layer'
+                                if (rec.get('itemStatus') == "COMPLETED")  {
+                                     this.items[0].tooltip = addLayerTT; 
+                                     return 'action-add-layer';
+                                }else{
+                                      this.items[0].tooltip = null;
+                                      return  'no-action-add-layer';
+                                }
                             },
                             handler: function(gpanel, rowIndex, colIndex) {
                                 var store = gpanel.getStore();	
@@ -287,17 +479,25 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                             }}]
                 },{
                     header: "Model Status", 
-                    dataIndex: "itemStatus"
+                    dataIndex: "itemStatus",
+                    sortable: true
                 },{
                     header: "Model Name", 
-                    dataIndex: "name"
+                    dataIndex: "name",
+                    sortable: true
                 },{
                     header: "Model Run Date", 
                     dataIndex: "runBegin",
+                    xtype: 'datecolumn', 
+                    format: 'Y-m-d H:i:s',
+                    sortable: true,
                     width: 200
                 },{
                     header: "Model End Date", 
                     dataIndex: "runEnd",
+                    xtype: 'datecolumn', 
+                    sortable: true,
+                    format: 'Y-m-d H:i:s',
                     width: 200
                 }]
             }),
@@ -305,6 +505,11 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 pageSize: 10,
                 store: wfsStore,
                 displayInfo: true,
+                listeners: {
+                    "beforechange": function(){
+                         alert("change Page");
+                    }
+                },
                 displayMsg: this.displayMsgPaging,
                 emptyMsg: this.emptyMsg
             })
