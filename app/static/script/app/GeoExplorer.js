@@ -496,8 +496,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         }];
         
         GeoExplorer.superclass.initPortal.apply(this, arguments);        
-        
-        setInterval(function() {var store = Ext.StoreMgr.lookup('wfsGridPanel_store');store.reload();}, 10000);
     },
     
     /** private: method[createTools]
