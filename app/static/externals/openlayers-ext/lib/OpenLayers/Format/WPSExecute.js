@@ -268,7 +268,7 @@ OpenLayers.Format.WPSExecute = OpenLayers.Class(OpenLayers.Format.XML,
                                     return node;
                                 },
                                 "LiteralData": function(literalData) {
-                
+                                    
                                     var node = this.createElementNSPlus("wps:LiteralData", {
                                         attributes: {
                                             uom: literalData.uom
