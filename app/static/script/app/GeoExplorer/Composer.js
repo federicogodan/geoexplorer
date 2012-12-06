@@ -117,15 +117,16 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_idaqueryform",
                 featureManager: "featuremanager",
                 outputTarget: "idacontrol",
+                wfsGrid: "wfsGridPanel",
                 toggleGroup: this.toggleGroup,
                 appendActions: false
             }, {
-				ptype: "gxp_idaspm",
-			    wfsGrid: "wfsGridPanel",
+		ptype: "gxp_idaspm",
+	        wfsGrid: "wfsGridPanel",
                 toggleGroup: this.toggleGroup,
                 wpsManager: "wpsSPM",
-				outputTarget: "idacontrol"
-			}, {
+		   outputTarget: "idacontrol"
+		}, {
                 ptype: "gxp_saveDefaultContext",
                 actionTarget: {target: "paneltbar", index: 40},
 				needsAuthorization: true
@@ -134,10 +135,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 outputConfig: {
                     id: "attributepanel"
                 },
-				defaultBuilder: {
-					allowBlank: true,
-					allowGroups: true
-				},
+		defaultBuilder: {
+		   allowBlank: true,
+		   allowGroups: true
+	        },
                 outputTarget: "idacontrol"
             }, {
                 ptype: "gxp_idammdatabase",
@@ -158,25 +159,26 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_wpsmanager",
                 id: "wpsSPM",
                 url: spm.wpsURL,
-				geostoreUrl: geostore.url,
-				geostoreUser: geostore.user,
-				geostorePassword: geostore.password,
-				geostoreProxy: geostore.proxy
-            }, {
+		geostoreUrl: geostore.url,
+		geostoreUser: geostore.user,
+		geostorePassword: geostore.password,
+		geostoreProxy: geostore.proxy
+            },{
                 ptype: "gxp_wfsgrid",
                 addLayerTool: "addlayer",
                 title: "SPM",
-				id: "wfsGridPanel",
+		id: "wfsGridPanel",
+                autoRefresh: 10000,
                 wfsURL: spm.wfsURL,
                 featureType: spm.wfsFeature,
                 featureNS: "", 
                 srsName: "EPSG:4326", 
                 version: "1.1.0", 
                 outputTarget: "idalaylist"
-            }, {
+            },{
                 ptype: "gxp_addlayer",
-				id: "addlayer"
-		    }
+		id: "addlayer"
+	    }
         ];
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
