@@ -63,6 +63,13 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     
     
     
+    /** api: config[filter]
+     *  ``OpenLayers.Filter``
+     *  
+     */
+    filter: null,
+    
+
     /** api: config[version]
      *  ``String``
      *  
@@ -78,7 +85,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     
     addLayerTool: null,
     
+    pageSize: 2,
     
+    autoRefreshInterval: null,
     
     // start i18n
     displayMsgPaging: "Displaying topics {0} - {1} of {2}",
@@ -90,210 +99,98 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     detailsWinTitle: "Details",
     // end i18n
     
-    
-    
-    
-    
     id: "wfsGridPanel",
+    
+    countFeature: null,
 	
     /** private: method[constructor]
      */
     constructor: function(config) {
         gxp.plugins.WFSGrid.superclass.constructor.apply(this, arguments);  
         
-       
-    },
-    
-    
-
-  /*  describeLayer: function(rec, callback, scope) {
-        if (!this.describeLayerStore) {
-            this.initDescribeLayerStore();
-        }
-        function delayedCallback(arg) {
-            window.setTimeout(function() {
-                callback.call(scope, arg);
-            }, 0);
-        }
-        if (!this.describeLayerStore) {
-            delayedCallback(false);
-            return;
-        }
-        if (!this.describedLayers) {
-            this.describedLayers = {};
-        }
-        var layerName = rec.getLayer().params.LAYERS;
-        var cb = function() {
-            var recs = Ext.isArray(arguments[1]) ? arguments[1] : arguments[0];
-            var rec, name;
-            for (var i=recs.length-1; i>=0; i--) {
-                rec = recs[i];
-                name = rec.get("layerName");
-                if (name == layerName) {
-                    this.describeLayerStore.un("load", arguments.callee, this);
-                    this.describedLayers[name] = true;
-                    callback.call(scope, rec);
-                    return;
-                } else if (typeof this.describedLayers[name] == "function") {
-                    var fn = this.describedLayers[name];
-                    this.describeLayerStore.un("load", fn, this);
-                    fn.apply(this, arguments);
-                }
-            }
-            // something went wrong (e.g. GeoServer does not return a valid
-            // DescribeFeatureType document for group layers)
-            delete describedLayers[layerName];
-            callback.call(scope, false);
-        };
-        var describedLayers = this.describedLayers;
-        var index;
-        if (!describedLayers[layerName]) {
-            describedLayers[layerName] = cb;
-            this.describeLayerStore.load({
-                params: {LAYERS: layerName},
-                add: true,
-                callback: cb,
-                scope: this
-            });
-        } else if ((index = this.describeLayerStore.findExact("layerName", layerName)) == -1) {
-            this.describeLayerStore.on("load", cb, this);
-        } else {
-            delayedCallback(this.describeLayerStore.getAt(index));
+        this.setTotalRecord();
+        
+        if(config.autoRefresh){
+            this.setAutoRefresh(config.autoRefresh);
         }
     },
     
+    setTotalRecord: function(callback){
+        var hitCountProtocol = new OpenLayers.Protocol.WFS({ 
+               url: this.wfsURL, 
+               featureType: this.featureType, 
+               readOptions: {output: "object"},
+               featureNS: this.featureNS, 
+               resultType: "hits",
+               filter: this.filter,
+               outputFormat: "application/json",
+               srsName: this.srsName,
+               version: this.version
+       });
+                 
+               
+       hitCountProtocol.read({
+         callback: function(response) {
+                this.countFeature=response.numberOfFeatures;
+                if(callback)
+                    callback.call();
+         },
+         scope: this
+       });
+         
+       return this.countFeature;
+    },
+    
+    
+    setFilter: function(filter){
+        this.filter=filter;
+        this.setPage(1);
+    },
+    
+    setAutoRefresh: function(ms){
+      var me=this;  
+      this.autoRefreshInterval=setInterval(
+        function() { 
+            me.refresh()
+        }, ms);  
+    },
+    
+    
+    clearAutoRefresh: function(){
+      if(this.autoRefreshInterval)
+         clearInterval(this.autoRefreshInterval);
+    },
+    
+    resetFilter: function(){
+       this.filter=null;
+       this.setPage(1);
+    },
 
-    getSchema: function(rec, callback, scope) {
-        if (!this.schemaCache) {
-            this.schemaCache = {};
-        }
-        this.describeLayer(rec, function(r) {
-            if (r && r.get("owsType") == "WFS") {
-                var typeName = r.get("typeName");
-                var schema = this.schemaCache[typeName];
-                if (schema) {
-                    if (schema.getCount() == 0) {
-                        schema.on("load", function() {
-                            callback.call(scope, schema);
-                        }, this, {single: true});
-                    } else {
-                        callback.call(scope, schema);
-                    }
-                } else {
-                    schema = new GeoExt.data.AttributeStore({
-                        url: r.get("owsURL"),
-                        baseParams: {
-                            SERVICE: "WFS",
-                            //TODO should get version from WFS GetCapabilities
-                            VERSION: "1.1.0",
-                            REQUEST: "DescribeFeatureType",
-                            TYPENAME: typeName
-                        },
-                        autoLoad: true,
-                        listeners: {
-                            "load": function() {
-                                callback.call(scope, schema);
-                            },
-                            scope: this
-                        }
-                    });
-                    this.schemaCache[typeName] = schema;
-                }
-            } else {
-                callback.call(scope, false);
-            }
-        }, this);
-   },
 
-    setFeatureStore: function(filter, autoLoad) {
-        var record = this.layerRecord;
-        var source = this.target.getSource(record);
-        if (source && source instanceof gxp.plugins.WMSSource) {
-            source.getSchema(record, function(schema) {
-                if (schema === false) {
-                    this.clearFeatureStore();
-                } else {
-                    var fields = [], geometryName;*/
-                   // var geomRegex = /gml:((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry)).*/;
-                   /* var types = {
-                        "xsd:boolean": "boolean",
-                        "xsd:int": "int",
-                        "xsd:integer": "int",
-                        "xsd:short": "int",
-                        "xsd:long": "int",
-                        "xsd:date": "date",
-                        "xsd:string": "string",
-                        "xsd:float": "float",
-                        "xsd:double": "float"
-                    };
-                    schema.each(function(r) {
-                        var match = geomRegex.exec(r.get("type"));
-                        if (match) {
-                            geometryName = r.get("name");
-                            this.geometryType = match[1];
-                        } else {
-                            // TODO: use (and improve if needed) GeoExt.form.recordToField
-                            var type = types[r.get("type")];
-                            var field = {
-                                name: r.get("name"),
-                                type: types[type]
-                            };
-                            //TODO consider date type handling in OpenLayers.Format
-                            if (type == "date") {
-                                field.dateFormat = "Y-m-d\\Z";
-                            }
-                            fields.push(field);
-                        }
-                    }, this);
-                    var protocolOptions = {
-                        srsName: this.target.mapPanel.map.getProjection(),
-                        url: schema.url,
-                        featureType: schema.reader.raw.featureTypes[0].typeName,
-                        featureNS: schema.reader.raw.targetNamespace,
-                        geometryName: geometryName
-                    };
-                    this.hitCountProtocol = new OpenLayers.Protocol.WFS(Ext.apply({
-                        version: "1.1.0",
-                        readOptions: {output: "object"},
-                        resultType: "hits",
-                        filter: filter
-                    }, protocolOptions));
-                    this.featureStore = new gxp.data.WFSFeatureStore(Ext.apply({
-                        fields: fields,
-                        proxy: {
-                            protocol: {
-                                outputFormat: this.format 
-                            }
-                        },
-                        maxFeatures: this.maxFeatures,
-                        layer: this.featureLayer,
-                        ogcFilter: filter,
-                        autoLoad: autoLoad,
-                        autoSave: false,
-                        listeners: {
-                            "write": function() {
-                                this.redrawMatchingLayers(record);
-                            },
-                            "load": function() {
-                                this.fireEvent("query", this, this.featureStore, this.filter);
-                            },
-                            scope: this
-                        }
-                    }, protocolOptions));
-                }
-                this.fireEvent("layerchange", this, record, schema);
-            }, this);
-        } else {
-            this.clearFeatureStore();
-            this.fireEvent("layerchange", this, record, false);
-        }        
-    },*/
+    refresh: function(){
+      var pagID= this.id+"_paging"; 
+        this.setTotalRecord(function(){
+            var paging=Ext.getCmp(pagID);
+            paging.doRefresh();
+        });
+    },
+    
+    
+    setPage: function(pageNumber){
+       var pagID= this.id+"_paging"; 
+        this.setTotalRecord(function(){
+            var paging=Ext.getCmp(pagID);
+            paging.changePage(pageNumber);
+        }); 
+    },
 
     /** api: method[addOutput]
      */
     addOutput: function(config) {
        var addLayer = this.target.tools[this.addLayerTool]; 
+       var me= this;
        var wfsStore= new GeoExt.data.FeatureStore({ 
+                wfsParam: this,
                 sortInfo: { field: "runBegin", direction: "ASC" },
                 id: this.id+"_store",
                 fields: [{
@@ -348,25 +245,62 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                     name: "userId", 
                     type: "string"
                 }], 
-            
-                paramNames: {
-                    start : 'startIndex',  
-                    limit : 'maxFeatures'
-                },
+                loadRecords : function(o, options, success){
+			if (this.isDestroyed === true) {
+			   return;
+			}
+			if(!o || success === false){
+                           if(success !== false){
+			      this.fireEvent('load', this, [], options);
+			   }
+			   if(options.callback){
+			      options.callback.call(options.scope || this, [], options, false, o);
+			   }
+			  return;
+			}
+			
+			o.totalRecords = me.countFeature/*me.setTotalRecord()*/;
+				
+			var r = o.records, t = o.totalRecords || r.length;
+			if(!options || options.add !== true){
+                            if(this.pruneModifiedRecords){
+				this.modified = [];
+			    }
+                            for(var i = 0, len = r.length; i < len; i++){
+                                r[i].join(this);
+                            }
+                            if(this.snapshot){
+                            this.data = this.snapshot;
+                            delete this.snapshot;
+                            }
+                            this.clearData();
+                            this.data.addAll(r);
+                            this.totalLength = t;
+                            this.applySort();
+                            this.fireEvent('datachanged', this);
+			}else{
+                            this.totalLength = Math.max(t, this.data.length+r.length);
+                            this.add(r);
+			}
+			this.fireEvent('load', this, r, options);
+			if(options.callback){
+                            options.callback.call(options.scope || this, r, options, true);
+			}
+		},
                 proxy: new GeoExt.data.ProtocolProxy({ 
                     protocol: new OpenLayers.Protocol.WFS({ 
                         url: this.wfsURL, 
                         featureType: this.featureType, 
                         readFormat: new OpenLayers.Format.GeoJSON(),
                         featureNS: this.featureNS, 
+                        filter: this.filter, 
+                        maxFeatures: this.pageSize,
+                        sortBy: "runEnd",
+                        startIndex: 0,
                         outputFormat: "application/json",
                         srsName: this.srsName,
                         version: this.version
                     }) 
-                    /*protocol: new OpenLayers.Protocol.HTTP({
-                        url: "http://localhost:8080/MapComposer/proxy?url="+encodeURIComponent(urlTest),
-                        format: new OpenLayers.Format.GeoJSON()
-                    })*/
                 }), 
                 autoLoad: true 
             });
@@ -382,17 +316,10 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                     forceFit: true
             },
             colModel: new Ext.grid.ColumnModel({
-                
                 columns: [{
                     xtype: 'actioncolumn',
                     sortable : false, 
                     width: 30,
-                    
-                    listeners: {
-                        scope: this,
-                        click: function(column, grd, row, e){
-                        }
-                    },
                     items: [{
                             tooltip:addLayerTT,
                             getClass: function(v, meta, rec) {
@@ -462,18 +389,16 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                             viewConfig : {
                                                 forceFit: true
                                             },
-                                            columns: [
-                                                {
-                                                header: this.detailsHeaderName, 
-                                                dataIndex: "name",
-
-                                                renderer: function (val){
+                                            columns: [{
+                                               header: this.detailsHeaderName, 
+                                               dataIndex: "name",
+                                               renderer: function (val){
                                                     return '<b>' + val + '</b>';
-                                                }
-                                                },{
-                                                header: this.detailsHeaderName, 
+                                               }
+                                             },{
+                                                header: this.detailsHeaderValue, 
                                                 dataIndex: "value"
-                                                }]
+                                             }]
                                         })
                                 }).show();
                             }}]
@@ -502,13 +427,34 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 }]
             }),
             bbar: new Ext.PagingToolbar({
-                pageSize: 10,
+                pageSize: this.pageSize,
+                wfsParam: this,
+                id: this.id+"_paging",
                 store: wfsStore,
                 displayInfo: true,
                 listeners: {
-                    "beforechange": function(){
-                         alert("change Page");
-                    }
+		    render: function(){
+				this.last.setVisible(false);
+		    },
+                    "beforechange": function(paging,params){
+                        paging.store.removeAll(true);
+                        paging.store.proxy=new GeoExt.data.ProtocolProxy({ 
+                                protocol: new OpenLayers.Protocol.WFS({ 
+                                    url: this.wfsParam.wfsURL, 
+                                    featureType: this.wfsParam.featureType, 
+                                    readFormat: new OpenLayers.Format.GeoJSON(),
+                                    featureNS: this.wfsParam.featureNS, 
+                                    filter: this.wfsParam.filter,
+                                    sortBy: "runEnd",
+                                    maxFeatures: params.limit,
+                                    startIndex:  params.start,
+                                    outputFormat: "application/json",
+                                    srsName: this.wfsParam.srsName,
+                                    version: this.wfsParam.version
+                                })
+                       });
+                    }          
+                                
                 },
                 displayMsg: this.displayMsgPaging,
                 emptyMsg: this.emptyMsg
