@@ -255,7 +255,6 @@ OpenLayers.WPSProcess = OpenLayers.Class({
                     // all chained processes are added as references now, so
                     // let's proceed.
                     
-                    alert(me.description.toSource());
                     OpenLayers.RequestExt.POST({
                         url: me.client.servers[me.server].url,
                         data: new OpenLayers.Format.WPSExecute().write(me.description),
