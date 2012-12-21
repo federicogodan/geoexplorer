@@ -113,73 +113,25 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     title: "Features"
                 },
                 outputTarget: "idalaylist"
-            }, {
-                ptype: "gxp_idaqueryform",
-                featureManager: "featuremanager",
-                outputTarget: "idacontrol",
-                wfsGrid: "wfsGridPanel",
-                toggleGroup: this.toggleGroup,
-                appendActions: false
-            }, {
-		ptype: "gxp_idaspm",
-	        wfsGrid: "wfsGridPanel",
-                toggleGroup: this.toggleGroup,
-                wpsManager: "wpsSPM",
-		   outputTarget: "idacontrol"
-		}, {
-                ptype: "gxp_saveDefaultContext",
-                actionTarget: {target: "paneltbar", index: 40},
-				needsAuthorization: true
-            }, {
-                ptype: "gxp_idaattribute",
-                outputConfig: {
-                    id: "attributepanel"
-                },
-		defaultBuilder: {
-		   allowBlank: true,
-		   allowGroups: true
-	        },
-                outputTarget: "idacontrol"
-            }, {
-                ptype: "gxp_idammdatabase",
-                outputConfig: {
-                    id: "mmpanel"
-                },
-                outputTarget: "idacontrol"
-            }, {
-                ptype: "gxp_idahabitat",
-                outputConfig: {
-                    id: "habitatPanel"
-                },
-                outputTarget: "idacontrol"
-            }, {
-                ptype: "gxp_georeferences",
-                actionTarget: {target: "paneltbar", index: 22}
-            }, {
-                ptype: "gxp_wpsmanager",
-                id: "wpsSPM",
-                url: spm.wpsURL,
-		geostoreUrl: geostore.url,
-		geostoreUser: geostore.user,
-		geostorePassword: geostore.password,
-		geostoreProxy: geostore.proxy
             },{
-                ptype: "gxp_wfsgrid",
-                addLayerTool: "addlayer",
-                title: "SPM",
-		id: "wfsGridPanel",
-                autoRefresh: 10000,
-                wfsURL: spm.wfsURL,
-                featureType: spm.wfsFeature,
-                featureNS: "", 
-                srsName: "EPSG:4326", 
-                version: "1.1.0", 
-                outputTarget: "idalaylist"
+                "ptype": "gxp_idaqueryform",
+                "featureManager": "featuremanager",
+                "outputTarget": "idacontrol",
+                "wfsGrid": "wfsGridPanel",
+                "toggleGroup": this.toggleGroup,
+                "appendActions": false
             },{
-                ptype: "gxp_addlayer",
-		id: "addlayer"
-	    }
+		"ptype": "gxp_idaspm",
+	        "wfsGrid": "wfsGridPanel",
+                "svpUploader": "svpuploader",
+                "spmListUploader": "spmlistuploader",
+                "toggleGroup": this.toggleGroup,
+                "wpsManager": "wpsSPM",
+		"outputTarget": "idacontrol"
+	     }
         ];
+        
+        config.tools=config.tools.concat(customTools);
         
         GeoExplorer.Composer.superclass.constructor.apply(this, arguments);
     },
@@ -491,7 +443,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 				handler: function() {    
 					var composer = this; 
 					var win;  
-					  
+                                        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+					var xmlJsonTranslateURL=app.xmlJsonTranslateService/*+"FileUploader?type=inline"*/;
+                                        var mHost=pattern.exec(xmlJsonTranslateURL); 
+                                        xmlJsonTranslateURL= mHost[2] == location.host ? xmlJsonTranslateURL :
+                                        proxy + encodeURIComponent(xmlJsonTranslateURL);
+                                    
 					var fp = new Ext.FormPanel({
 						fileUpload: true,
 						autoWidth: true,
@@ -521,24 +478,23 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 								if(fp.getForm().isValid()){
 								  fp.getForm().submit({
 									  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-									  url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+									  //url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
+                                                                          url: xmlJsonTranslateURL+"HTTPWebGISFileUpload",
 									  waitMsg: this.loadMapUploadText,
 									  success: function(fp, o){
 										  win.hide();
 										  win.destroy();
-										  
-										  if(o.result.result.indexOf('kml') == -1){
+										  if(o.result.result){
 											  var json_str = unescape(o.result.result);
 											  json_str = json_str.replace(/\+/g, ' ');
 											  composer.loadUserConfig(json_str);  
-											  
-											  //app.modified = true;
 											  modified = true;   
 										  }else{
-											 var url = proxy + app.xmlJsonTranslateService + "temp/" + o.result.result;
-											 
-											 var geographic = new OpenLayers.Projection("EPSG:4326");
-											 var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
+                                                                                         if(o.result.success){   
+                                                                                           var url = xmlJsonTranslateURL + "FileUploader?code=" + o.result.fileID;
+
+                                                                                           var geographic = new OpenLayers.Projection("EPSG:4326");
+											   var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
 												projection: geographic,
 												strategies: [new OpenLayers.Strategy.Fixed()],
 												protocol: new OpenLayers.Protocol.HTTP({
@@ -551,7 +507,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 												})
 											});
 											
-											gxMap.addLayer(kmlLayer);
+											gxMap.addLayer(kmlLayer);  
+                                                                                      }
+											 
 										  }
 									  },                                    
 									  failure: function(fp, o){
