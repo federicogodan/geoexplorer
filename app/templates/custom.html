@@ -40,6 +40,9 @@
 <link rel="stylesheet" type="text/css" href="externals/WFSGrid/resources/css/wfsgrid.css">
 <script type="text/javascript" src="script/WFSGrid.js"></script>
 
+<!-- Uploader resources -->
+<script type="text/javascript" src="script/Uploader.js"></script>
+
 <!-- OpenLayersExt resources -->
 <script type="text/javascript" src="script/OpenLayersExt.js"></script> 
 
@@ -95,8 +98,10 @@
     }
 		            
     var proxy; 
+    var xmlJsonTranslateService;
     var geoStoreBaseURL;        
     var customSources;
+    var customTools;
        
     var scaleOverlayUnits;
         
@@ -309,11 +314,11 @@
             '<img src="theme/app/img/logos/nurc_logo_3.jpg"/>',
             '</td>',
             '<td class="header">',
-            '<h1>NURC</h1>',
+            '<h1>CMRE</h1>',
             '<p>Integrated Decision Aid</p>',
             '</td>',
             '<td align="right">',
-            '<img src="theme/app/img/logos/banner4.gif"/>',
+            '<img src="theme/app/img/logos/banner4.png"/>',
             '</td>',
             '</table>'
         ];
@@ -337,9 +342,9 @@
                             hideCollapseTool: true,
                             split: true,
                             animCollapse : false,
-                            minHeight: 90,
-                            maxHeight: 90,
-                            height: 90,
+                            minHeight: 95,
+                            maxHeight: 95,
+                            height: 95,
                             id : 'fdhHeader'
                         },appTabs],                            
                     bbar : [
@@ -353,7 +358,7 @@
         //
         var sources = "{" + 
             "\"ida\": {" + 
-            "\"url\":\"http://localhost:8080/geoserver/ows/\"," +
+            "\"url\":\"http://84.33.1.254/geoserver/ows/\"," +
             "\"title\":\"IDA GeoServer\"," +
             "\"version\":\"1.1.1\"," +
             "\"layerBaseParams\": {" +
@@ -412,7 +417,7 @@
         app = new GeoExplorer.Composer({
             modified: false,
             proxy: proxy,
-            xmlJsonTranslateService: "http://localhost:8080/xmlJsonTranslate/",
+            xmlJsonTranslateService: xmlJsonTranslateService,
             defaultSourceType: "gxp_wmssource",
             renderToTab : 'appTabs',
             //printService: "http://demo.geo-solutions.it/geoserver/pdf/",
@@ -533,6 +538,7 @@
 						group: "ida"
 				}]
             }
+         // customTools: customTools
         }, mapIdentifier, authorization, fullScreen);   
             
         app.on({
@@ -577,6 +583,9 @@
                 geoStoreBaseURL = serverConfig.geoStoreBase;                  
                 customSources = serverConfig.gsSources;
                 scaleOverlayUnits = serverConfig.scaleOverlayUnits;
+                customTools=serverConfig.customTools;
+                
+                xmlJsonTranslateService= serverConfig.xmlJsonTranslateService;
                 
                 spm= serverConfig.spm;
                 geostore= serverConfig.geostore;
