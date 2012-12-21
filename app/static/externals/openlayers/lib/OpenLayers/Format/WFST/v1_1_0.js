@@ -114,6 +114,7 @@ OpenLayers.Format.WFST.v1_1_0 = OpenLayers.Class(
                     startIndex: options.startIndex,
                     count: options.count
                 });
+                
                 return node;
             },
             "Query": function(options) {
@@ -133,6 +134,11 @@ OpenLayers.Format.WFST.v1_1_0 = OpenLayers.Class(
                 if(options.featureNS) {
                     node.setAttribute("xmlns:" + options.featurePrefix, options.featureNS);
                 }
+                
+                if(options.sortBy){
+                    this.writeNode("ogc:SortBy", options.sortBy, node);
+                }
+                
                 if(options.propertyNames) {
                     for(var i=0,len = options.propertyNames.length; i<len; i++) {
                         this.writeNode(
@@ -154,9 +160,36 @@ OpenLayers.Format.WFST.v1_1_0 = OpenLayers.Class(
                 });
             }            
         }, OpenLayers.Format.WFST.v1.prototype.writers["wfs"]),
+        
+        
         "gml": OpenLayers.Format.GML.v3.prototype.writers["gml"],
         "feature": OpenLayers.Format.GML.v3.prototype.writers["feature"],
-        "ogc": OpenLayers.Format.Filter.v1_1_0.prototype.writers["ogc"]
+        
+        "ogc": OpenLayers.Util.applyDefaults({
+           "SortBy": function(sortBy) {
+                var node = this.createElementNSPlus("ogc:SortBy");
+                this.writeNode("ogc:SortProperty", sortBy, node);
+                           
+           
+               return node; 
+            },
+            "SortProperty": function(sortBy) {
+                var node = this.createElementNSPlus("ogc:SortProperty");
+                
+                this.writeNode("ogc:PropertyName", sortBy, node);
+                this.writeNode("ogc:SortOrder", sortBy, node);
+                
+                return node; 
+            },
+            "SortOrder": function(sortBy) {
+                var node = this.createElementNSPlus("ogc:SortOrder",{
+                    value: sortBy.order
+                });
+
+                return node; 
+            }
+            
+        },OpenLayers.Format.Filter.v1_1_0.prototype.writers["ogc"])
     },
 
     CLASS_NAME: "OpenLayers.Format.WFST.v1_1_0" 
