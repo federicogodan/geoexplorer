@@ -22,17 +22,21 @@
 Ext.namespace("gxp.plugins");
 
 /** api: constructor
- *  .. class:: FeatureGrid(config)
+ *  .. class:: WFSGrid(config)
  *
- *    Plugin for displaying vector features in a grid. Requires a
- *    :class:`gxp.plugins.FeatureManager`. Also provides a context menu for
- *    the grid.
+ *    Plugin for displaying WFS features in a grid. 
  */   
 gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     
-    /** api: ptype = gxp_featuregrid */
+    /** api: ptype = gxp_wfsgrid */
     ptype: "gxp_wfsgrid",
     
+    
+    /** api: config[id]
+    *  ``String``
+    *  
+    */
+    id: "wfsGridPanel",
     
     /** api: config[featureType]
      *  ``String``
@@ -77,17 +81,19 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     version: null,
     
     
-    addLayerIconPath: "theme/app/img/silk/add.png",
+    /** api: config[pageSize]
+     *  ``Integer``
+     *  
+     */
+    pageSize: 10,
     
     
-    detailsIconPath: "theme/app/img/silk/information.png",
-    
-    
-    addLayerTool: null,
-    
-    pageSize: 2,
-    
+    /** api: config[autoRefreshInterval]
+     *  ``Integer``
+     *  
+     */
     autoRefreshInterval: null,
+    
     
     // start i18n
     displayMsgPaging: "Displaying topics {0} - {1} of {2}",
@@ -99,10 +105,17 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     detailsWinTitle: "Details",
     // end i18n
     
-    id: "wfsGridPanel",
-    
+
+    /** private: countFeature
+     *  ``Integer``
+     */
     countFeature: null,
+    
+    addLayerIconPath: "theme/app/img/silk/add.png",
+    detailsIconPath: "theme/app/img/silk/information.png",
+    addLayerTool: null,
 	
+        
     /** private: method[constructor]
      */
     constructor: function(config) {
@@ -191,10 +204,10 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
        var me= this;
        var wfsStore= new GeoExt.data.FeatureStore({ 
                 wfsParam: this,
-                sortInfo: { field: "runBegin", direction: "ASC" },
+                sortInfo: { field: "runEnd", direction: "DESC" },
                 id: this.id+"_store",
                 fields: [{
-                    name: "name", 
+                    name: "modelName", 
                     type: "string"
                 },{
                     name: "itemStatus", 
@@ -221,10 +234,13 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                     name: "season", 
                     type: "string"
                 },{
-                    name: "srcFrequency", 
+                    name: "sourceFrequency", 
                     type: "string"
                 },{
-                    name: "srcPressureLevel", 
+                    name: "sourcePressureLevel", 
+                    type: "string"
+                },{
+                    name: "sourceDepth", 
                     type: "string"
                 },{
                     name: "itemStatusMessage", 
@@ -235,14 +251,17 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 },{
                     name: "srcPath", 
                     type: "string"
-                },{
+                },/*{
                     name: "octaveConfigFilePath", 
                     type: "string"
-                },{
+                },*/{
                     name: "storeName", 
                     type: "string"
                 },{
                     name: "userId", 
+                    type: "string"
+                },{
+                    name: "soundVelocityProfile", 
                     type: "string"
                 }], 
                 loadRecords : function(o, options, success){
@@ -295,7 +314,10 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         featureNS: this.featureNS, 
                         filter: this.filter, 
                         maxFeatures: this.pageSize,
-                        sortBy: "runEnd",
+                        sortBy: {
+                            property: "runEnd",
+                            order: "DESC"
+                        },
                         startIndex: 0,
                         outputFormat: "application/json",
                         srsName: this.srsName,
@@ -359,19 +381,21 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 
                             recordDetailsData.push([ 'ftUUID', record.get("ftUUID")]);
                             recordDetailsData.push([ 'itemStatus', record.get("itemStatus")]);
-                            recordDetailsData.push([ 'name', record.get("name")]);
+                            recordDetailsData.push([ 'modelName', record.get("modelName")]);
                             recordDetailsData.push([ 'runBegin', record.get("runBegin")]);
                             recordDetailsData.push([ 'runEnd', record.get("runEnd")]);
                             recordDetailsData.push([ 'season', record.get("season")]);
-                            recordDetailsData.push([ 'srcFrequency', record.get("srcFrequency")]);
-                            recordDetailsData.push([ 'srcPressureLevel', record.get("srcPressureLevel")]);
+                            recordDetailsData.push([ 'sourceDepth', record.get("sourceDepth")]);
+                            recordDetailsData.push([ 'sourceFrequency', record.get("sourceFrequency")]);
+                            recordDetailsData.push([ 'sourcePressureLevel', record.get("sourcePressureLevel")]);
+                            recordDetailsData.push([ 'soundVelocityProfile', record.get("soundVelocityProfile")]);
                             recordDetailsData.push([ 'layerName', record.get("layerName")]);
                             recordDetailsData.push([ 'wsName', record.get("wsName")]);
                             recordDetailsData.push([ 'outputUrl', record.get("outputUrl")]);
                             recordDetailsData.push([ 'itemStatusMessage', record.get("itemStatusMessage")]);
-                            recordDetailsData.push([ 'securityLevel', record.get("securityLevel")]);
+                           // recordDetailsData.push([ 'securityLevel', record.get("securityLevel")]);
                             recordDetailsData.push([ 'srcPath', record.get("srcPath")]);
-                            recordDetailsData.push([ 'octaveConfigFilePath', record.get("octaveConfigFilePath")]);
+                          //  recordDetailsData.push([ 'octaveConfigFilePath', record.get("octaveConfigFilePath")]);
                             recordDetailsData.push([ 'storeName', record.get("storeName")]);
                             recordDetailsData.push([ 'userId', record.get("userId")]);
 
@@ -445,7 +469,10 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                     readFormat: new OpenLayers.Format.GeoJSON(),
                                     featureNS: this.wfsParam.featureNS, 
                                     filter: this.wfsParam.filter,
-                                    sortBy: "runEnd",
+                                    sortBy: {
+                                        property: "runEnd",
+                                        order: "DESC"
+                                    },
                                     maxFeatures: params.limit,
                                     startIndex:  params.start,
                                     outputFormat: "application/json",
