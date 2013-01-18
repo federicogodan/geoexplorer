@@ -250,8 +250,8 @@ public class FileUploader extends HttpServlet {
 
 			if(moveFile != null && fileToMoveName != null && moveFile.equals("true")){
 				response.setContentType("text/html");	        
-				writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\" The KML result for the currently uploaded Mission " +
-						"Script zip will be available at the following System path: "+ gbMissionScriptPublishDir +"\"}}");
+				writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\" The KML result, for the currently uploaded Mission " +
+						"Script zip file, will be available at the following System path: "+ gbMissionScriptPublishDir +"\"}}");
 			}else{
 				response.setContentType("text/html");	        
 				writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\""+ uuid +"\"}}");	
