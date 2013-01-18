@@ -37,7 +37,7 @@
 					<webXml>
 						${basedir}/src/main/webapp/WEB-INF/web.xml
 					</webXml>
-					<warName>xmlJsonTranslate</warName>
+					<warName>xmlJsonTranslate-gliders</warName>
 				</configuration>
 			</plugin>
 			
@@ -46,14 +46,14 @@
 				<artifactId>maven-jetty-plugin</artifactId>
 				<version>6.1.19</version>
 				<configuration>
-					<contextPath>xmlJsonTranslate</contextPath>
+					<contextPath>xmlJsonTranslate-gliders</contextPath>
 					<connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
 							<port>8082</port>
 							<maxIdleTime>10000</maxIdleTime>
 						</connector>
 					</connectors>
-					<contextPath>xmlJsonTranslate</contextPath>
+					<contextPath>xmlJsonTranslate-gliders</contextPath>
 					<webAppSourceDirectory>${project.build.directory}/xmlJsonTranslate-1.0-SNAPSHOT</webAppSourceDirectory>
 				</configuration>
 			</plugin>

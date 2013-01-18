@@ -50,38 +50,36 @@
 	],
 
    "models":[
-
-	{
-       "format": "image/png8",
-       "group": "Ocean Models",
-       "name": "nurc:watvelingv",
-       "opacity": 1,
-       "selected": false,
-       "source": "demo",
-       "title": "Watvel Forecast Model INGV",
-       "transparent": true,
-       "visibility": true,
-       "ratio": 1,
-       "elevation": 1.472,
-       "styles": "watvel_marker_ramp"
-   },        
-	{
-       "format": "image/png8",
-       "group": "Ocean Models",
-       "name": "nurc:watvelroms",
-       "opacity": 1,
-       "selected": false,
-       "source": "demo",
-       "title": "Watvel Forecast Model ROMS",
-       "transparent": true,
-       "visibility": true,
-       "ratio": 1,
-       "elevation": 10,
-       "styles": "watvel_marker_ramp",
-       "style": "watvel_raster"
-   }
-
-	],
+		{
+		   "format": "image/png8",
+		   "group": "Ocean Models",
+		   "name": "nurc:watvelingv",
+		   "opacity": 1,
+		   "selected": false,
+		   "source": "demo",
+		   "title": "Watvel Forecast Model INGV",
+		   "transparent": true,
+		   "visibility": true,
+		   "ratio": 1,
+		   "elevation": 1.472,
+		   "styles": "watvel_marker_ramp"
+	   },        
+		{
+		   "format": "image/png8",
+		   "group": "Ocean Models",
+		   "name": "nurc:watvelroms",
+		   "opacity": 1,
+		   "selected": false,
+		   "source": "demo",
+		   "title": "Watvel Forecast Model ROMS",
+		   "transparent": true,
+		   "visibility": true,
+		   "ratio": 1,
+		   "elevation": 10,
+		   "styles": "watvel_marker_ramp",
+		   "style": "watvel_raster"
+	   }
+   ],
 
    "gsSources":{
         "Gliders": {
@@ -325,7 +323,8 @@
 			"alternativeStyle": true,
 			"srs":  "EPSG:4326",
 			"layerName": "Pilot notes Layer"
-		}, {
+		}, 
+		{
 			"ptype": "gxp_export_kml",
 			"toggleGroup": "toolGroup", 
 			"actionTarget": {"target": "paneltbar", "index":14 },
@@ -336,6 +335,14 @@
 		{
             "ptype": "gxp_log_files",
             "outputTarget": "logfileTabs"
+        },
+		{
+			"actions": ["-"], 
+			"actionTarget": {"target": "paneltbar", "index": 15}
+		},
+		{
+			"ptype": "gxp_import_mission_script",
+			"actionTarget": {"target": "paneltbar", "index": 16}
 		}
 	]
 }
