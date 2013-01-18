@@ -38,14 +38,14 @@
    },
 
 	"backgrounds":[
-		{
-        	"format": "image/jpeg",
-        	"transparent": false,
-        	"source": "GEOSIII",
-        	"group": "background",
-        	"name": "nurcbg",
-        	"title": "Nurc Background"
-    	}
+	{
+   	"format": "image/jpeg",
+   	"transparent": false,
+   	"source": "demo1",
+   	"group": "background",
+   	"name": "GeoSolutions:ne_shaded",
+   	"title": "Nurc Background"
+	}
 	],
 	
 	"models":[
@@ -112,7 +112,17 @@
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
 			}
-        }
+        },
+	        "demo1": {
+	            "ptype": "gxp_wmssource",
+	            "title": "demo1", 
+	            "version": "1.3.0",
+	            "url": "http://demo1.geo-solutions.it/geoserver-enterprise/ows",
+				"layerBaseParams": {
+					"TILED": true,
+					"TILESORIGIN": "-180,-90" 
+				}
+	        }
    },
    "layers":[
 		{

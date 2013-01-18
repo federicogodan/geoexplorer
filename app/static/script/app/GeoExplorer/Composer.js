@@ -55,11 +55,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 }
 
             },
-			{
+			/* {
                 ptype: "gxp_log_files",
                 outputTarget: 'logfileTabs'
 
-            },
+            }, */
 			/*{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
