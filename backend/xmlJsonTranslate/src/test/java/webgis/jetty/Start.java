@@ -38,7 +38,7 @@ public class Start {
             jettyServer.setConnectors(new Connector[] { conn });
 
             WebAppContext wah = new WebAppContext();
-            wah.setContextPath("/webgis");
+            wah.setContextPath("/xmlJsonTranslate-gliders");
             wah.setWar("src/main/webapp");
             jettyServer.setHandler(wah);
             wah.setTempDirectory(new File("target/work"));
