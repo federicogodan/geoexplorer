@@ -331,11 +331,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 	
 		// TODO refactor
 		// it should be better to centralize definitions of common plugins in Composer.js
-		config.tools.unshift(
+		config.tools.push(
 				{	 
 					ptype: "gxp_synchronizer",
 					refreshTimeInterval: config.refreshTimeInterval,
-					actionTarget: {target: "paneltbar", index: 28},
+					actionTarget: {target: "paneltbar", index: 17},
 					range: config.timeRange
 				}
 			);
@@ -445,7 +445,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 							width: '100%',
 				            height: '100%'
 				        },*/
-			autoHeight: true,
+			// autoHeight: true,
             id: 'east',
             region: "east",
             width: 350,
@@ -455,9 +455,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             split: true,
             collapsible: true,
             collapseMode: "mini",
-            header: false // ,					
-			// autoScroll: true
+            header: false,					
+			autoScroll: true
         });
+
+	
         
         this.toolbar = new Ext.Toolbar({
             disabled: true,

@@ -55,6 +55,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 }
 
             },
+			{
+                ptype: "gxp_log_files",
+                outputTarget: 'logfileTabs'
+
+            },
 			/*{
                 ptype: "gxp_addlayers",
                 actionTarget: "tree.tbar",
@@ -88,28 +93,28 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 actionTarget: ["tree.tbar", "layertree.contextMenu"]
             }, {
                 ptype: "gxp_navigation", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 15}
+                actionTarget: {target: "paneltbar", index: 1}
             }, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 7}
+                actionTarget: {target: "paneltbar", index: 2}
             }, {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 12}
+                actionTarget: {target: "paneltbar", index: 3}
             }, {
                 ptype: "gxp_zoom",
-                actionTarget: {target: "paneltbar", index: 20}
+                actionTarget: {target: "paneltbar", index: 4}
             }, {
                 ptype: "gxp_zoombox", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 24}
+                actionTarget: {target: "paneltbar", index: 6}
             }, {
                 ptype: "gxp_navigationhistory",
-                actionTarget: {target: "paneltbar", index: 22}
+                actionTarget: {target: "paneltbar", index: 8}
             }, {
                 ptype: "gxp_zoomtoextent",
-                actionTarget: {target: "paneltbar", index: 26}
+                actionTarget: {target: "paneltbar", index: 10}
             }, {
 		        ptype:"gxp_embedded_link",
-		        actionTarget: {target: "paneltbar", index: 27}
+		        actionTarget: {target: "paneltbar", index: 11}
 		    }, {
 	            actions: ["-"], actionTarget: "paneltbar"
 	        }, {
@@ -155,10 +160,12 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     if(button.pressed){
                         Ext.getCmp('tree').findParentByType('panel').collapse();
 						Ext.getCmp('east').collapse();
+						Ext.getCmp('south').collapse();
 					    Ext.getCmp('main-header').collapse();
                     } else {
                         Ext.getCmp('tree').findParentByType('panel').expand();
 						Ext.getCmp('east').expand();
+						Ext.getCmp('south').expand();
 						Ext.getCmp('main-header').expand();
                     }
                 }
@@ -278,8 +285,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }
             if(this.portalItems[0].items[panel].id == "east"){                                
                 this.portalItems[0].items[panel].disable();              
-            }                
-        }       
+            }        
+        }    
+
+   		Ext.getCmp('south').disable();
         
         for(var map in this.mapPanel.items.items){
             if(this.mapPanel.items.items[map].xtype == "gx_zoomslider"){  
@@ -349,8 +358,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }
             if(this.portalItems[0].items[panel].id == "east"){  
                 this.portalItems[0].items[panel].enable();
-            }            
+            }       
         }    
+
+		Ext.getCmp('south').enable();
         
         for(var a=0;a<this.mapPanel.items.items.length;a++){
             if(this.mapPanel.items.items[a].xtype == "gx_zoomslider"){  

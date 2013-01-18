@@ -41,9 +41,9 @@
 		{
        	"format": "image/jpeg",
        	"transparent": false,
-       	"source": "GEOSIII",
+       	"source": "demo1",
        	"group": "background",
-       	"name": "nurcbg",
+       	"name": "GeoSolutions:ne_shaded",
        	"title": "Nurc Background"
    		}
 	],
@@ -103,11 +103,11 @@
 				"TILESORIGIN": "-180,-90" 
 			}
         },
-        "GEOSIII": {
+        "demo1": {
             "ptype": "gxp_wmssource",
-            "title": "GEOSIII", 
-            "version": "1.1.1",
-            "url": "http://geos3.nurc.nato.int/geoserver/ows",
+            "title": "demo1", 
+            "version": "1.3.0",
+            "url": "http://demo1.geo-solutions.it/geoserver-enterprise/ows",
 			"layerBaseParams": {
 				"TILED": true,
 				"TILESORIGIN": "-180,-90" 
@@ -291,6 +291,7 @@
 			}
 		}, {
 			"ptype": "gxp_nurcfeatureeditor",
+			"toggleGroup": "toolGroup",
 			"featureInfoBuffer": 15,
 			"featureManager": "featuremanager",
 			"gliderPropertyName": "glider_name",
@@ -315,17 +316,18 @@
 			"alternativeStyle": true,
 			"srs":  "EPSG:4326",
 			"prefix": "notefeature"
-		}, {
+		}, 
+		{
 			"ptype": "gxp_import_kml",
 			"toggleGroup": "toolGroup", 
-			"actionTarget": {"target": "notes.tbar", "index": 25},
+			"actionTarget": {"target": "paneltbar", "index": 13},
 			"alternativeStyle": true,
 			"srs":  "EPSG:4326",
 			"layerName": "Pilot notes Layer"
 		}, {
 			"ptype": "gxp_export_kml",
 			"toggleGroup": "toolGroup", 
-			"actionTarget": {"target": "notes.tbar", "index": 25},
+			"actionTarget": {"target": "paneltbar", "index":14 },
 			"alternativeStyle": true,
 			"srs":  "EPSG:4326",
 			"layerName": "Pilot notes Layer"

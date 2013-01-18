@@ -88,25 +88,6 @@ var ConfigurationBuilder =  {
 			
 			result += Ext.encode( layer );
 			
-			/*result += '{';
-					result +=  '"format": "' + item.format + '",'
-				             + '"group": "' + item.group + '",'
-				             + '"name": "' + item.name + '",'
-				             + '"opacity": ' + item.opacity + ','
-				             + '"selected": ' + item.selected + ','
-				             + '"source": "'+ item.source + '",'
-				             + '"title":"' + item.title + '",'
-				             + '"transparent": ' + item.transparent + ','
-				             + '"visibility": ' + item.visibility + ','
-				             + '"ratio": ' + item.ratio +  ','
-				             + '"elevation": ' + item.elevation +   ','
-				             + '"styles":"' + item.styles +  '"';*/
-				if ( item.style ){
-					result += ', "style":"' + item.style + '"';
-				}
-				
-			result += '}';
-			
 			if ( i < selected.length - 1){
 				result += ', ';
 			}
@@ -138,16 +119,6 @@ var ConfigurationBuilder =  {
 				name: item.name,
 				title: item.title
 			}, defaultParams);
-			
-			
-			/*result += '{';
-			result +=  '"format": "image/jpeg",'
-		             + '"transparent": false,'
-		             + '"source": "GEOSIII",'
-		             + '"group": "background",'
-		             + '"name": "' + item.value +  '",'
-		             + '"title": "' + item.text + '"'
-			result += '}';*/
 			
 			result += Ext.encode( layer );
 			

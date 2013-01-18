@@ -158,16 +158,17 @@ var ServerListView = Ext.extend(Ext.form.ComboBox, {
         allowBlank: false,
         forceSelection: true,
         mode: "local",
-		store: new Ext.data.ArrayStore({
-            fields: ["id", "title"],
-            data: []
-        }),
+		
 
 		addServer: function( source ){
 			var record = new this.store.recordType({
                 id: source.id,
                 title: source.title || this.untitledText
             });
+			this.store = new Ext.data.ArrayStore({
+	            fields: ["id", "title"],
+	            data: []
+	        });
             this.store.insert(0, [record]);
             this.onSelect(record, 0);			
 		}
@@ -229,6 +230,7 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 	},
 	addServerHandler: function(){
 		var newSourceWindow = new gxp.NewSourceWindow({
+		
             modal: true,
             listeners: {
                 "server-added": function(url) {
@@ -239,8 +241,9 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 							newSourceWindow.hide();
 						},
 						fallback: function(source, msg){
+						    var addLayerSourceErrorText = "Error getting WMS capabilities ({msg}).\nPlease check the url and try again.";
 							newSourceWindow.setError(
-                                new Ext.Template(this.addLayerSourceErrorText).apply({msg: msg})
+                                new Ext.Template(addLayerSourceErrorText).apply({msg: msg})
                             );
 						},
 						scope: this

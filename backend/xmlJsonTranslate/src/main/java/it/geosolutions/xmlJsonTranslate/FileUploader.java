@@ -115,9 +115,10 @@ public class FileUploader extends HttpServlet {
 					br.close();
 					writer.close();
 				} catch (IOException e) {
-					if (LOGGER.isLoggable(Level.SEVERE))
-						LOGGER.log(Level.SEVERE,
-								"Error closing streams ", e);
+					if (LOGGER.isLoggable(Level.SEVERE)) {
+                                        LOGGER.log(Level.SEVERE,
+                                                        "Error closing streams ", e);
+                                    }
 					throw new ServletException(e.getMessage());
 				}
 				
