@@ -6,6 +6,7 @@ CREATE TABLE aoi(
   id serial NOT NULL,
   glider_name character varying NOT NULL,
   cruise_name character varying NOT NULL,
+  creation timestamp without time zone NOT NULL,
   the_geom geometry,
   CONSTRAINT aoi_pkey PRIMARY KEY (id),
   CONSTRAINT enforce_dims_the_geom CHECK (st_ndims(the_geom) = 2),

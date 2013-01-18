@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://84.33.199.62/geostore-gliders/rest/",
-   "proxy":"/http_proxy/proxy?url=",
+   "proxy":"/proxy?url=",
    "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
@@ -31,7 +31,8 @@
 		"refreshIconPath": "../theme/app/img/silk/arrow_refresh.png",  
 		"geoserverBaseURL": "http://84.33.199.62/geoserver-gliders/",		
 		"gliderPropertyName": "glider_name",	
-		"cruisePropertyName": "cruise_name",	
+		"cruisePropertyName": "cruise_name",
+        "creationPropertyName": "creation",		
 		"glidersFeatureType": "GlidersTracks",	
 		"glidersPrefix": "it.geosolutions",
 		"wfsVersion": "1.1.0"
