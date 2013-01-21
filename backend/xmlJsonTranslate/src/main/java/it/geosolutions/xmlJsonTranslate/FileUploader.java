@@ -184,7 +184,7 @@ public class FileUploader extends HttpServlet {
 				Iterator iter = items.iterator();
 				while (iter.hasNext()) {
 					FileItem item = (FileItem) iter.next();
-
+					
 					if (!item.isFormField()) { // Process a file upload
 						// TODO build file in a proper way!
 						
@@ -241,7 +241,7 @@ public class FileUploader extends HttpServlet {
 							uploadedFile = new File( tempDirectory + "/" + uuid );
 							item.write(uploadedFile);
 						}
-					} else {
+					} else if(item.getName() != null){
 						response.setContentType("text/html");
 						writeResponse( response, "{ \"success\":false, \"errorMessage\":\"This servlet can be used only to upload files.\"}" );
 					}
