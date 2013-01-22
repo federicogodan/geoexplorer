@@ -594,8 +594,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     /** private: method[showUrl]
      */
     showUrl: function() {
+        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+        var mHost=pattern.exec(app.xmlJsonTranslateService);
+
+        var mUrl = app.xmlJsonTranslateService + "HTTPWebGISFileDownload";
+
+   
         OpenLayers.Request.POST({
-            url: proxy + app.xmlJsonTranslateService + "HTTPWebGISFileDownload",
+            url: mHost[2] == location.host ? mUrl : proxy + mUrl,
             data: this.xmlContext,
             callback: function(request) {
 
@@ -607,13 +613,12 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     if(document.getElementById("downloadIFrame")) {
                       document.body.removeChild( document.getElementById("downloadIFrame") ); 
                     }
-                    
                     //
                     //Create an hidden iframe for forced download
                     //
                     var elemIF = document.createElement("iframe"); 
                     elemIF.setAttribute("id","downloadIFrame");
-                    elemIF.src = proxy + encodeURIComponent(app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText); 
+                    elemIF.src = /*proxy + encodeURIComponent(*/app.xmlJsonTranslateService + "HTTPWebGISFileDownload?file="+request.responseText/*)*/; 
                     elemIF.style.display = "none"; 
                     document.body.appendChild(elemIF); 
                 }else{
