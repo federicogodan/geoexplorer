@@ -102,6 +102,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
        OpenLayers.ProxyHost = this.target.proxy;
 
        var geoStore= this.geoStoreClient;
+       
       
         var wpsCategory= {
             type:"category", 
@@ -119,6 +120,7 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
                     });
                 } 
         });    
+        
        
     },
     
@@ -362,9 +364,12 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             type: "resource",
             name: processInstance,
             metadata: "",
+            status: "",
             category: me.id,
             store: Ext.util.JSON.encode(executeResponse)
         };
+        
+        var meCallback= callback;
         
         if(executeProcessResponse instanceof OpenLayers.Format.WPSExecute){
             resourceInstance.store= Ext.util.JSON.encode(executeProcessResponse);
@@ -400,8 +405,8 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
             };
             
         } 
+
         resourceInstance.description= Ext.util.JSON.encode(stautsInfo);
-        
         geoStore=this.geoStoreClient;
         
         geoStore.getLikeName(resourceInstance, function(res){
@@ -411,8 +416,8 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
                     if(! entityID){
                         geoStore.fireEvent("geostorefailure", this, "Geostore: update WPS Instance Error"); 
                     }else{
-                        if(callback)
-                            callback.call(this,instanceIndex, instancesStatusUpdated);
+                        if(meCallback)
+                            meCallback.call(this,instanceIndex, instancesStatusUpdated);
                     }
                 }/*, function(){
                     me.fireEvent("geostorefailure", this); 
@@ -423,8 +428,8 @@ gxp.plugins.WPSManager =  Ext.extend(gxp.plugins.Tool,{
                     if(! entityID){
                         me.fireEvent("geostorefailure", this, "Geostore: creation WPS Instance Error"); 
                     }else{
-                        if(callback)
-                            callback.call(this,instanceIndex, instancesStatusUpdated);
+                        if(meCallback)
+                            meCallback.call(this,instanceIndex, instancesStatusUpdated);
                     }
                 }/*, function(){
                     me.fireEvent("geostorefailure", this); 
