@@ -2,7 +2,7 @@
     "geoStoreBase":"http://192.168.24.182:8080/geostore/rest/", 
     "xmlJsonTranslateService": "http://192.168.24.182:8080/xmlJsonTranslate/",
    
-    "proxy": "/http_proxy/proxy?url=",
+    "proxy": "proxy?url=",
 	
     "gsSources":[],
 	
@@ -120,15 +120,11 @@
                             },{
                                 "header": "Start Date", 
                                 "dataIndex": "runBegin",
-                                "xtype": "datecolumn", 
-                                "format": "Y-m-d H:i:s",
                                 "sortable": true
                             },{
                                 "header": "End Date", 
                                 "dataIndex": "runEnd",
-                                "xtype": "datecolumn", 
-                                "sortable": true,
-                                "format": "Y-m-d H:i:s"
+                                "sortable": true
                             }
                 ],
                 "actionColumns" : [ 
@@ -159,7 +155,7 @@
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
                 "title": "SPM",
-				"id": "wfsGridPanel",
+		"id": "wfsGridPanel",
                 "wfsURL": "http://84.33.2.26/geoserver/wfs",
                 "featureType": "nurc:IDASoundPropModel",
                 "featureNS": "", 
@@ -178,15 +174,12 @@
                             },{
                                 "header": "Model Run Date", 
                                 "dataIndex": "runBegin",
-                                "xtype": "datecolumn", 
-                                "format": "Y-m-d H:i:s",
+                             
                                 "sortable": true
                             },{
                                 "header": "Model End Date", 
                                 "dataIndex": "runEnd",
-                                "xtype": "datecolumn", 
-                                "sortable": true,
-                                "format": "Y-m-d H:i:s"
+                                "sortable": true
                             }
                 ],
                 "actionColumns" : [ 
@@ -203,7 +196,7 @@
                     },
                     {
                      "type": "details",
-                     "layerTitleAttribute" : "name"
+                     "layerTitleAttribute" : "modelName"
                     },
                     {
                      "type": "delete",
