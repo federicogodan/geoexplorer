@@ -110,7 +110,7 @@
                 "version": "1.1.0", 
                 "outputTarget": "idalaylist",
                 "columns" : [{
-                                "header": "Model Status", 
+                                "header": "Status", 
                                 "dataIndex": "itemStatus",
                                 "sortable": true
                             },{
@@ -118,13 +118,13 @@
                                 "dataIndex": "attributeName",
                                 "sortable": true
                             },{
-                                "header": "Model Run Date", 
+                                "header": "Run Date", 
                                 "dataIndex": "runBegin",
                                 "xtype": "datecolumn", 
                                 "format": "Y-m-d H:i:s",
                                 "sortable": true
                             },{
-                                "header": "Model End Date", 
+                                "header": "End Date", 
                                 "dataIndex": "runEnd",
                                 "xtype": "datecolumn", 
                                 "sortable": true,
