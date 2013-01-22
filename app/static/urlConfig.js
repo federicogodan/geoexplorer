@@ -174,7 +174,6 @@
                             },{
                                 "header": "Model Run Date", 
                                 "dataIndex": "runBegin",
-                             
                                 "sortable": true
                             },{
                                 "header": "Model End Date", 
