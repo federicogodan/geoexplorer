@@ -6,7 +6,7 @@ var app = exports.app = function(env) {
     var response;
     var request = new Request(env);
     var exchange = clientRequest({
-        url: "http://localhost:8080/geoserver/wms?" + request.queryString,
+        url: "http://84.33.2.26/geoserver/wms?" + request.queryString,
         method: "GET",
         async: false
     });
