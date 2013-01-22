@@ -1,4 +1,4 @@
- {
+{
     "geoStoreBase":"http://192.168.24.182:8080/geostore/rest/", 
     "xmlJsonTranslateService": "http://192.168.24.182:8080/xmlJsonTranslate/",
    
@@ -88,7 +88,7 @@
 		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
 		"geostoreUser": "admin",
 		"geostorePassword": "admin",
-		"geostoreProxy": "proxy"
+		"geostoreProxy": "http_proxy?url="
             },{
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
@@ -96,7 +96,7 @@
 		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
 		"geostoreUser": "admin",
 		"geostorePassword": "admin",
-		"geostoreProxy": "proxy"
+		"geostoreProxy": "http_proxy?url="
             },{
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
@@ -118,7 +118,7 @@
                                 "dataIndex": "attributeName",
                                 "sortable": true
                             },{
-                                "header": "Run Date", 
+                                "header": "Start Date", 
                                 "dataIndex": "runBegin",
                                 "xtype": "datecolumn", 
                                 "format": "Y-m-d H:i:s",
