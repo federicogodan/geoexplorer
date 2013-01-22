@@ -207,7 +207,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         return {
                 xtype: 'actioncolumn',
                 sortable : false, 
-                width: 30,
+                width: 10,
                 items: [{
                         tooltip:addLayerTT,
                         getClass: function(v, meta, rec) {
@@ -244,7 +244,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         return {
                 xtype: 'actioncolumn',
                 sortable : false, 
-                width: 30,
+                width: 10,
                 items: [{
                         icon   : me.detailsIconPath,  
                         tooltip: me.detailsTooltip,
@@ -305,7 +305,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         return {
                 xtype: 'actioncolumn',
                 sortable : false, 
-                width: 30,
+                width: 10,
                 items: [{
                         icon   : me.deleteIconPath,  
                         tooltip: me.deleteTooltip,
@@ -465,8 +465,10 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         "xsd:integer": "int",
                         "xsd:short": "int",
                         "xsd:long": "int",
-                        "xsd:date": "date",
-                        "xsd:dateTime": "date",
+                      /*  "xsd:date": "date",
+                        "xsd:dateTime": "date",*/
+                       /* "xsd:date": "string",
+                        "xsd:dateTime": "string",*/
                         "xsd:string": "string",
                         "xsd:float": "float",
                         "xsd:double": "float"
@@ -482,9 +484,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                 name: r.get("name"),
                                 type: type
                             };
-                         /*   if (type == "date") {
-                                field.dateFormat = "Y-m-d\\Z";
-                            }*/
+                           /* if (type == "date") {
+                                field.dateFormat = "Y-m-d H:i:s";
+                            }"format": "Y-m-d H:i:s"*/
                             me.featureFields.push(field);
                         }
                     }, this);
