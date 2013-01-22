@@ -467,8 +467,8 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         "xsd:long": "int",
                       /*  "xsd:date": "date",
                         "xsd:dateTime": "date",*/
-                       /* "xsd:date": "string",
-                        "xsd:dateTime": "string",*/
+                        "xsd:date": "string",
+                        "xsd:dateTime": "string",
                         "xsd:string": "string",
                         "xsd:float": "float",
                         "xsd:double": "float"
