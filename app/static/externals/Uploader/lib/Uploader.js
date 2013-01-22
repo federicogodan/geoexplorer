@@ -177,19 +177,11 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
             panelConfig.items.push(ifConfig);
         }
             
-        
-        
         this.uploadPanel = new Ext.FormPanel(panelConfig);
-                
-        /*config = Ext.apply(this.uploadPanel, config || {});
-        var uP = gxp.plugins.Uploader.superclass.addOutput.call(this, config);
-        return uP;*/
-        
         return this.uploadPanel;
     },
     
     getInputFileCmpID: function(index){
-        
         return 'form_file_'+this.inputFiles[index].name;
     }
 });
