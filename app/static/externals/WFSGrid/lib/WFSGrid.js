@@ -95,11 +95,27 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     autoRefreshInterval: null,
     
     
+    /** api: config[columns]
+     *  ``Array Object``
+     *  
+     */
+    columns: null,
+    
+    
+    /** api: config[columns]
+     *  ``Array Object``
+     *  
+     */
+    actionColumns: null,
+    
+    
     // start i18n
     displayMsgPaging: "Displaying topics {0} - {1} of {2}",
     emptyMsg: "No topics to display",
     addLayerTooltip: "Add Layer to Map",
     detailsTooltip: "View Details",
+    deleteTooltip: "Delete Feature",
+    deleteConfirmMsg: "Are you sure you want delete this feature?",
     detailsHeaderName: "Property Name",
     detailsHeaderValue: "Property Value",
     detailsWinTitle: "Details",
@@ -113,9 +129,13 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     
     addLayerIconPath: "theme/app/img/silk/add.png",
     detailsIconPath: "theme/app/img/silk/information.png",
+    deleteIconPath: "theme/app/img/silk/delete.png",
     addLayerTool: null,
-	
-        
+    
+    featureFields: null,
+    geometryType: null,
+    
+
     /** private: method[constructor]
      */
     constructor: function(config) {
@@ -154,6 +174,187 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
        return this.countFeature;
     },
     
+    
+    getSchema: function(callback,scope){
+        var schema = new GeoExt.data.AttributeStore({
+             url: this.wfsURL, 
+             baseParams: {
+                            SERVICE: "WFS",
+                            VERSION: "1.1.0",
+                            REQUEST: "DescribeFeatureType",
+                            TYPENAME: this.featureType
+             },
+             autoLoad: true,
+             listeners: {
+                    "load": function() {
+                                callback.call(scope, schema);
+                    },
+                    scope: this
+            }
+       });
+    },
+    
+    /** private: method[getAddLayerAction]
+     */
+    getAddLayerAction: function(actionConf){
+        var addLayer = this.target.tools[this.addLayerTool];
+        var addLayerTT=this.addLayerTooltip; 
+        var layerNameAtt= actionConf.layerNameAttribute || "layerName";
+        var layerTitleAtt= actionConf.layerTitleAttribute || "name";
+        var wsAtt= actionConf.wsNameAttribute || "wsName";
+        var wmsURLAtt= actionConf.wmsURLAttribute || "outputUrl";
+        var showEqualFilter= actionConf.showEqualFilter;
+        return {
+                xtype: 'actioncolumn',
+                sortable : false, 
+                width: 30,
+                items: [{
+                        tooltip:addLayerTT,
+                        getClass: function(v, meta, rec) {
+                            this.items[0].tooltip = addLayerTT;
+                            if(showEqualFilter){
+                               if (rec.get(showEqualFilter.attribute) == showEqualFilter.value)  {
+                                    return 'action-add-layer';
+                                }else{
+                                    this.items[0].tooltip = null;
+                                    return  'no-action-add-layer';
+                                } 
+                            }else
+                               return 'action-add-layer'; 
+                            
+                        },
+                        handler: function(gpanel, rowIndex, colIndex) {
+                                var store = gpanel.getStore();	
+                                var record = store.getAt(rowIndex);
+                                addLayer.addLayer(record.get(layerTitleAtt),
+                                    record.get(wsAtt) + ":" + record.get(layerNameAtt),
+                                    record.get(wmsURLAtt)
+                                );
+                        }
+                     }]  
+             };
+    },
+    
+    
+    /** private: method[getDetailsAction]
+     */
+    getDetailsAction: function(actionConf){
+        var layerTitleAtt= actionConf.layerTitleAttribute || "name";
+        var me=this;
+        return {
+                xtype: 'actioncolumn',
+                sortable : false, 
+                width: 30,
+                items: [{
+                        icon   : me.detailsIconPath,  
+                        tooltip: me.detailsTooltip,
+                        scope: me,
+                        handler: function(gpanel, rowIndex, colIndex) {
+                                   var store = gpanel.getStore();	
+                                   var record = store.getAt(rowIndex);
+                                   var detailsStore=new Ext.data.ArrayStore({
+                                       fields: ['name', 'value'],
+                                       idIndex: 0 
+                                   });
+                                   var recordDetailsData = new Array();
+
+                                   for(var k=0; k<me.featureFields.length; k++)
+                                       recordDetailsData.push([ me.featureFields[k].name , record.get(me.featureFields[k].name)]);
+
+                                   detailsStore.loadData(recordDetailsData);
+                                   
+                                   new Ext.Window({ 
+                                          title: record.get(layerTitleAtt)+ " - " + me.detailsWinTitle,
+                                          height: 400,
+                                          width: 400,
+                                          layout: 'fit',
+                                          resizable: true,
+                                          items:
+                                                    new Ext.grid.GridPanel({
+                                                        store: detailsStore,
+                                                        anchor: '100%',
+                                                        viewConfig : {
+                                                            forceFit: true
+                                                        },
+                                                        columns: [{
+                                                        header: me.detailsHeaderName, 
+                                                        dataIndex: "name",
+                                                        renderer: function (val){
+                                                                return '<b>' + val + '</b>';
+                                                        }
+                                                        },{
+                                                            header: me.detailsHeaderValue, 
+                                                            dataIndex: "value"
+                                                        }]
+                                                    })
+                                  }).show();
+                      }
+                  }]
+             };
+    },
+    
+    
+    /** private: method[getDeleteAction]
+     */
+    getDeleteAction: function(actionConf){
+        var idAtt= actionConf.idAttribute || "fid";
+        var layerNameAtt= actionConf.layerNameAttribute || "layerName";
+        var wsAtt= actionConf.wsNameAttribute || "wsName";
+  
+        var me=this;
+        return {
+                xtype: 'actioncolumn',
+                sortable : false, 
+                width: 30,
+                items: [{
+                        icon   : me.deleteIconPath,  
+                        tooltip: me.deleteTooltip,
+                        scope: me,
+                        handler: function(gpanel, rowIndex, colIndex) {
+                                   var store = gpanel.getStore();	
+                                   var record = store.getAt(rowIndex);
+                                  // var map = me.target.mapPanel.map;
+                                   var mapPanel=me.target.mapPanel;
+                                   var layerName= record.get(wsAtt) + ":" + record.get(layerNameAtt);
+                                   Ext.MessageBox.confirm(me.deleteTooltip, 
+                                   me.deleteConfirmMsg, 
+                                   function showResult(btn){
+
+                                        if(btn=="yes"){
+                                          var fidFilter=new OpenLayers.Filter.FeatureId({
+                                                fids:[record.get(idAtt)]
+                                        });
+                                    
+                                        var deleteProtocol = new OpenLayers.Protocol.WFS({ 
+                                                    url: me.wfsURL, 
+                                                    featureType: me.featureType, 
+                                                    readOptions: {output: "object"},
+                                                    featureNS: me.featureNS, 
+                                                    filter: me.filter,
+                                                    outputFormat: "application/json",
+                                                    srsName: me.srsName,
+                                                    version: me.version
+                                        });
+                                   
+                                   
+                                        deleteProtocol.filterDelete(fidFilter, {
+                                            callback: function(resp){
+                                                var layers = mapPanel.layers;
+                                                layers.data.each(function(record, index, totalItems ) {
+                                                    
+                                                    if(record.get('name') == layerName){
+                                                        layers.remove(record);
+                                                    }
+                                                }); 
+                                                me.refresh();
+                                            }
+                                        });  
+                                        }
+                                    });
+                      }
+                  }]
+             };
+    },
     
     setFilter: function(filter){
         this.filter=filter;
@@ -200,265 +401,29 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     /** api: method[addOutput]
      */
     addOutput: function(config) {
-       var addLayer = this.target.tools[this.addLayerTool]; 
        var me= this;
-       var wfsStore= new GeoExt.data.FeatureStore({ 
-                wfsParam: this,
-                sortInfo: { field: "runEnd", direction: "DESC" },
-                id: this.id+"_store",
-                fields: [{
-                    name: "modelName", 
-                    type: "string"
-                },{
-                    name: "itemStatus", 
-                    type: "string"
-                },{
-                    name: "runBegin", 
-                    type: "date"
-                },{
-                    name: "runEnd", 
-                    type: "date"
-                },{
-                    name: "wsName", 
-                    type: "string"
-                },{
-                    name: "layerName", 
-                    type: "string"
-                },{
-                    name: "outputUrl", 
-                    type: "string"
-                },{
-                    name: "ftUUID", 
-                    type: "string"
-                },{
-                    name: "season", 
-                    type: "string"
-                },{
-                    name: "sourceFrequency", 
-                    type: "string"
-                },{
-                    name: "sourcePressureLevel", 
-                    type: "string"
-                },{
-                    name: "sourceDepth", 
-                    type: "string"
-                },{
-                    name: "itemStatusMessage", 
-                    type: "string"
-                },{
-                    name: "securityLevel", 
-                    type: "string"
-                },{
-                    name: "srcPath", 
-                    type: "string"
-                },/*{
-                    name: "octaveConfigFilePath", 
-                    type: "string"
-                },*/{
-                    name: "storeName", 
-                    type: "string"
-                },{
-                    name: "userId", 
-                    type: "string"
-                },{
-                    name: "soundVelocityProfile", 
-                    type: "string"
-                }], 
-                loadRecords : function(o, options, success){
-			if (this.isDestroyed === true) {
-			   return;
-			}
-			if(!o || success === false){
-                           if(success !== false){
-			      this.fireEvent('load', this, [], options);
-			   }
-			   if(options.callback){
-			      options.callback.call(options.scope || this, [], options, false, o);
-			   }
-			  return;
-			}
-			
-			o.totalRecords = me.countFeature/*me.setTotalRecord()*/;
-				
-			var r = o.records, t = o.totalRecords || r.length;
-			if(!options || options.add !== true){
-                            if(this.pruneModifiedRecords){
-				this.modified = [];
-			    }
-                            for(var i = 0, len = r.length; i < len; i++){
-                                r[i].join(this);
-                            }
-                            if(this.snapshot){
-                            this.data = this.snapshot;
-                            delete this.snapshot;
-                            }
-                            this.clearData();
-                            this.data.addAll(r);
-                            this.totalLength = t;
-                            this.applySort();
-                            this.fireEvent('datachanged', this);
-			}else{
-                            this.totalLength = Math.max(t, this.data.length+r.length);
-                            this.add(r);
-			}
-			this.fireEvent('load', this, r, options);
-			if(options.callback){
-                            options.callback.call(options.scope || this, r, options, true);
-			}
-		},
-                proxy: new GeoExt.data.ProtocolProxy({ 
-                    protocol: new OpenLayers.Protocol.WFS({ 
-                        url: this.wfsURL, 
-                        featureType: this.featureType, 
-                        readFormat: new OpenLayers.Format.GeoJSON(),
-                        featureNS: this.featureNS, 
-                        filter: this.filter, 
-                        maxFeatures: this.pageSize,
-                        sortBy: {
-                            property: "runEnd",
-                            order: "DESC"
-                        },
-                        startIndex: 0,
-                        outputFormat: "application/json",
-                        srsName: this.srsName,
-                        version: this.version
-                    }) 
-                }), 
-                autoLoad: true 
-            });
-            
-        var addLayerTT=this.addLayerTooltip;    
-            
-        var wfsGridPanel=new Ext.grid.GridPanel({ 
+       var kk;   
+     
+       var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
-            store: wfsStore, 
+            store: [], 
             id: this.id,
             layout: "fit",
             viewConfig : {
                     forceFit: true
             },
             colModel: new Ext.grid.ColumnModel({
-                columns: [{
-                    xtype: 'actioncolumn',
-                    sortable : false, 
-                    width: 30,
-                    items: [{
-                            tooltip:addLayerTT,
-                            getClass: function(v, meta, rec) {
-                                if (rec.get('itemStatus') == "COMPLETED")  {
-                                     this.items[0].tooltip = addLayerTT; 
-                                     return 'action-add-layer';
-                                }else{
-                                      this.items[0].tooltip = null;
-                                      return  'no-action-add-layer';
-                                }
-                            },
-                            handler: function(gpanel, rowIndex, colIndex) {
-                                var store = gpanel.getStore();	
-                                var record = store.getAt(rowIndex);
-                                addLayer.addLayer(record.get("name"),
-                                    record.get("wsName") + ":" + record.get("layerName"),
-                                    record.get("outputUrl")
-                                );
-                            }
-                        }]
-                },{
-                    xtype: 'actioncolumn',
-                    sortable : false, 
-                    width: 30,
-                    items: [{
-                            icon   : this.detailsIconPath,  
-                            tooltip: this.detailsTooltip,
-                            scope: this,
-                            handler: function(gpanel, rowIndex, colIndex) {
-                                var store = gpanel.getStore();	
-                                var record = store.getAt(rowIndex);
-                                var detailsStore=new Ext.data.ArrayStore({
-                                    fields: ['name', 'value'],
-                                    idIndex: 0 
-                                });
-                            var recordDetailsData = new Array();
-
-                            recordDetailsData.push([ 'ftUUID', record.get("ftUUID")]);
-                            recordDetailsData.push([ 'itemStatus', record.get("itemStatus")]);
-                            recordDetailsData.push([ 'modelName', record.get("modelName")]);
-                            recordDetailsData.push([ 'runBegin', record.get("runBegin")]);
-                            recordDetailsData.push([ 'runEnd', record.get("runEnd")]);
-                            recordDetailsData.push([ 'season', record.get("season")]);
-                            recordDetailsData.push([ 'sourceDepth', record.get("sourceDepth")]);
-                            recordDetailsData.push([ 'sourceFrequency', record.get("sourceFrequency")]);
-                            recordDetailsData.push([ 'sourcePressureLevel', record.get("sourcePressureLevel")]);
-                            recordDetailsData.push([ 'soundVelocityProfile', record.get("soundVelocityProfile")]);
-                            recordDetailsData.push([ 'layerName', record.get("layerName")]);
-                            recordDetailsData.push([ 'wsName', record.get("wsName")]);
-                            recordDetailsData.push([ 'outputUrl', record.get("outputUrl")]);
-                            recordDetailsData.push([ 'itemStatusMessage', record.get("itemStatusMessage")]);
-                           // recordDetailsData.push([ 'securityLevel', record.get("securityLevel")]);
-                            recordDetailsData.push([ 'srcPath', record.get("srcPath")]);
-                          //  recordDetailsData.push([ 'octaveConfigFilePath', record.get("octaveConfigFilePath")]);
-                            recordDetailsData.push([ 'storeName', record.get("storeName")]);
-                            recordDetailsData.push([ 'userId', record.get("userId")]);
-
-                            detailsStore.loadData(recordDetailsData);
-                                new Ext.Window({ 
-                                    title: record.get("name")+ " - " + this.detailsWinTitle,
-                                    height: 400,
-                                    width: 400,
-                                    layout: 'fit',
-                                    resizable: true,
-                                    items:
-                                        new Ext.grid.GridPanel({
-                                            store: detailsStore,
-                                            anchor: '100%',
-                                            viewConfig : {
-                                                forceFit: true
-                                            },
-                                            columns: [{
-                                               header: this.detailsHeaderName, 
-                                               dataIndex: "name",
-                                               renderer: function (val){
-                                                    return '<b>' + val + '</b>';
-                                               }
-                                             },{
-                                                header: this.detailsHeaderValue, 
-                                                dataIndex: "value"
-                                             }]
-                                        })
-                                }).show();
-                            }}]
-                },{
-                    header: "Model Status", 
-                    dataIndex: "itemStatus",
-                    sortable: true
-                },{
-                    header: "Model Name", 
-                    dataIndex: "name",
-                    sortable: true
-                },{
-                    header: "Model Run Date", 
-                    dataIndex: "runBegin",
-                    xtype: 'datecolumn', 
-                    format: 'Y-m-d H:i:s',
-                    sortable: true,
-                    width: 200
-                },{
-                    header: "Model End Date", 
-                    dataIndex: "runEnd",
-                    xtype: 'datecolumn', 
-                    sortable: true,
-                    format: 'Y-m-d H:i:s',
-                    width: 200
-                }]
+                columns: []
             }),
             bbar: new Ext.PagingToolbar({
                 pageSize: this.pageSize,
                 wfsParam: this,
                 id: this.id+"_paging",
-                store: wfsStore,
+                store: /*wfsStore*/[],
                 displayInfo: true,
                 listeners: {
 		    render: function(){
-				this.last.setVisible(false);
+                        this.last.setVisible(false);
 		    },
                     "beforechange": function(paging,params){
                         paging.store.removeAll(true);
@@ -490,8 +455,154 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 
         config = Ext.apply(wfsGridPanel, config || {});
         var wfsGrid = gxp.plugins.WFSGrid.superclass.addOutput.call(this, config);
-		
+
+        this.getSchema(function(schema){
+                    this.featureFields= new Array();
+                    var geomRegex = /gml:((Multi)?(Point|Line|Polygon|Curve|Surface|Geometry)).*/;
+                    var types = {
+                        "xsd:boolean": "boolean",
+                        "xsd:int": "int",
+                        "xsd:integer": "int",
+                        "xsd:short": "int",
+                        "xsd:long": "int",
+                        "xsd:date": "date",
+                        "xsd:dateTime": "date",
+                        "xsd:string": "string",
+                        "xsd:float": "float",
+                        "xsd:double": "float"
+                    };
+                    schema.each(function(r) {
+                        var match = geomRegex.exec(r.get("type"));
+                        if (match) {
+                            geometryName = r.get("name");
+                            me.geometryType = match[1];
+                        } else {
+                            var type = types[r.get("type")];
+                            var field = {
+                                name: r.get("name"),
+                                type: type
+                            };
+                         /*   if (type == "date") {
+                                field.dateFormat = "Y-m-d\\Z";
+                            }*/
+                            me.featureFields.push(field);
+                        }
+                    }, this);
+
+                    var wfsStore= new GeoExt.data.FeatureStore({ 
+                        wfsParam: me,
+                        sortInfo: { field: "runEnd", direction: "DESC" },
+                        id: this.id+"_store",
+                        fields: me.featureFields,
+                        loadRecords : function(o, options, success){
+                                if (this.isDestroyed === true) {
+                                return;
+                                }
+                                if(!o || success === false){
+                                if(success !== false){
+                                    this.fireEvent('load', this, [], options);
+                                }
+                                if(options.callback){
+                                    options.callback.call(options.scope || this, [], options, false, o);
+                                }
+                                return;
+                                }
+                                o.totalRecords = me.countFeature;
+                                var r = o.records, t = o.totalRecords || r.length;
+                                if(!options || options.add !== true){
+                                    if(this.pruneModifiedRecords){
+                                        this.modified = [];
+                                    }
+                                    for(var i = 0, len = r.length; i < len; i++){
+                                        r[i].join(this);
+                                    }
+                                    if(this.snapshot){
+                                    this.data = this.snapshot;
+                                    delete this.snapshot;
+                                    }
+                                    this.clearData();
+                                    this.data.addAll(r);
+                                    this.totalLength = t;
+                                    this.applySort();
+                                    this.fireEvent('datachanged', this);
+                                }else{
+                                    this.totalLength = Math.max(t, this.data.length+r.length);
+                                    this.add(r);
+                                }
+                                this.fireEvent('load', this, r, options);
+                                if(options.callback){
+                                    options.callback.call(options.scope || this, r, options, true);
+                                }
+                        },
+                        proxy: new GeoExt.data.ProtocolProxy({ 
+                            protocol: new OpenLayers.Protocol.WFS({ 
+                                url: me.wfsURL, 
+                                featureType: me.featureType, 
+                                readFormat: new OpenLayers.Format.GeoJSON(),
+                                featureNS: me.featureNS, 
+                                filter: me.filter, 
+                                maxFeatures: me.pageSize,
+                                sortBy: {
+                                    property: "runEnd",
+                                    order: "DESC"
+                                },
+                                startIndex: 0,
+                                outputFormat: "application/json",
+                                srsName: me.srsName,
+                                version: me.version
+                            }) 
+                        }), 
+                        autoLoad: true 
+                    });
+                    
+                    
+                    var columns= [];
+                    
+                    if(me.actionColumns){
+                        for( kk=0; kk<me.actionColumns.length; kk++){
+                            switch (me.actionColumns[kk].type){
+                                case "addLayer":
+                                       columns.push(me.getAddLayerAction(me.actionColumns[kk]));
+                                   break;
+                                case "details":
+                                       columns.push(me.getDetailsAction(me.actionColumns[kk]));
+                                   break;  
+                                case "delete":
+                                       columns.push(me.getDeleteAction(me.actionColumns[kk]));
+                                   break;   
+                            }
+                        }
+                    }
+
+                    if(me.columns){
+                        for( kk=0; kk<me.columns.length; kk++){
+                            columns.push(me.columns[kk]);
+                        }
+                    }else{
+                        for(kk=0; kk<me.featureFields.length; kk++){
+                            columns.push({
+                                header: me.featureFields[kk].name, 
+                                dataIndex: me.featureFields[kk].name,
+                                sortable: true
+                            });
+                        }
+                    }   
+
+                    wfsGrid.reconfigure(
+                       wfsStore, 
+                       new Ext.grid.ColumnModel({
+                                columns: columns
+                       })
+                   );
+                       
+                   wfsGrid.getBottomToolbar().bind(wfsStore);
+                    
+                },this
+        );	
         Ext.getCmp(this.outputTarget).setActiveTab(wfsGrid);
+        
+     
+        wfsGrid.doLayout();
         
         return wfsGrid;
     }   
