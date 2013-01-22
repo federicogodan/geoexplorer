@@ -36,8 +36,12 @@ var risk_data = {
 			  max: 63
 		}
 	],
+        defualtCoverageSetting:{
+			  min: -100,
+			  max: 0
+        },
     urlParameters: {
-		geoserverURL: "http://localhost:8080/geoserver"
+		geoserverURL: "http://84.33.2.26/geoserver"
 	}
 };
 
