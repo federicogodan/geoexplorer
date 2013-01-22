@@ -1,8 +1,8 @@
  {
-    "geoStoreBase":"http://192.168.24.182:8080/geostore/rest/", 
-    "xmlJsonTranslateService": "http://192.168.24.182:8080/xmlJsonTranslate/",
+    "geoStoreBase":"http://84.33.2.26/geostore/rest/", 
+    "xmlJsonTranslateService": "http://84.33.2.26/xmlJsonTranslate/",
    
-    "proxy": "proxy?url=",
+    "proxy": "/http_proxy/proxy?url=",
 	
     "gsSources":[],
 	
@@ -12,7 +12,7 @@
         "bottomInUnits":"m",    
         "bottomOutUnits":"km"
     },
-	
+
     "spm": {
         "wpsURL": "http://84.33.2.26/geoserver/wps",
         "userId":"afabiani",
@@ -34,20 +34,20 @@
     
     "customTools":[{
                 "ptype": "gxp_uploader",
-		"id": "svpuploader",
+				"id": "svpuploader",
                 "loadMsg": "Load Sound Velocity Profile ...",
-                "uploadServiceURL": "http://192.168.24.182:8080/xmlJsonTranslate/FileUploader?uplodDir=/home/maro/",
+                "uploadServiceURL": "http://84.33.2.26/xmlJsonTranslate/FileUploader?uplodDir=/home/maro/",
                 "inputFiles": [{ "name": "svpFile", "emptyText": "Sound Velocity Profile File", "fieldLabel": "SVP File"}]
-	    },{
+			}, {
                 "ptype": "gxp_uploader",
-		"id": "spmlistuploader",
+				"id": "spmlistuploader",
                 "loadMsg": "Load SPM List...",
-                "uploadServiceURL": "http://192.168.24.182:8080/xmlJsonTranslate/FileUploader?type=inline",
+                "uploadServiceURL": "http://84.33.2.26/xmlJsonTranslate/FileUploader?type=inline",
                 "inputFiles": [{ "name": "spnListFile", "emptyText": "SPM List XML File", "fieldLabel": "SPM List File", "allowBlank": true}]
-	    },{
+			}, {
                 "ptype": "gxp_saveDefaultContext",
                 "actionTarget": {"target": "paneltbar", "index": 40},
-		"needsAuthorization": true
+				"needsAuthorization": true
             }, {
                 "ptype": "gxp_idaattribute",
                 "wpsManager": "wpsRasterAlgebra",
@@ -61,10 +61,10 @@
                 "outputConfig": {
                     "id": "attributepanel"
                 },
-		"defaultBuilder": {
-		   "allowBlank": true,
-		   "allowGroups": true
-	        },
+				"defaultBuilder": {
+				   "allowBlank": true,
+				   "allowGroups": true
+				},
                 "outputTarget": "idacontrol"
             }, {
                 "ptype": "gxp_idammdatabase",
@@ -85,23 +85,23 @@
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsSPM",
                 "url": "http://84.33.2.26/geoserver/wps",
-		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
-		"geostoreUser": "admin",
-		"geostorePassword": "admin",
-		"geostoreProxy": "proxy"
-            },{
+				"geostoreUrl": "http://84.33.2.26/geostore/rest",
+				"geostoreUser": "admin",
+				"geostorePassword": "admin",
+				"geostoreProxy": "/http_proxy/proxy?url="
+            }, {
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
                 "url": "http://84.33.2.26/geoserver/wps",
-		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
-		"geostoreUser": "admin",
-		"geostorePassword": "admin",
-		"geostoreProxy": "proxy"
-            },{
+				"geostoreUrl": "http://84.33.2.26/geostore/rest",
+				"geostoreUser": "admin",
+				"geostorePassword": "admin",
+				"geostoreProxy": "/http_proxy/proxy?url="
+            }, {
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
                 "title": "Layer Attribute",
-		"id": "wfsAlgebraGridPanel",
+				"id": "wfsAlgebraGridPanel",
                 "wfsURL": "http://84.33.2.26/geoserver/wfs",
                 "featureType": "nurc:IDARasterAlgebraProcess",
                 "featureNS": "", 
@@ -155,11 +155,11 @@
                     }
                 ]
                 
-            },{
+            }, {
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
                 "title": "SPM",
-		"id": "wfsGridPanel",
+				"id": "wfsGridPanel",
                 "wfsURL": "http://84.33.2.26/geoserver/wfs",
                 "featureType": "nurc:IDASoundPropModel",
                 "featureNS": "", 
@@ -213,9 +213,9 @@
                     }
                 ]
                 
-            },{
+            }, {
                 "ptype": "gxp_addlayer",
-		"id": "addlayer"
-	    }
+				"id": "addlayer"
+			}
 	]
 }

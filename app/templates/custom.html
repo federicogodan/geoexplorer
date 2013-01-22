@@ -19,6 +19,9 @@
 <link rel="stylesheet" type="text/css" href="externals/gxp/src/theme/gxpmapstore.css">
 <script type="text/javascript" src="script/gxp.js"></script>
 
+<script type="text/javascript" src="debug/AddLayer.js"></script>
+<script type="text/javascript" src="debug/WMSSource.js"></script>
+
 <!-- proj4js resources 
 <script type="text/javascript" src="script/proj4js.js"></script>-->
 
@@ -270,7 +273,8 @@
             }
         });
             
-        var appTabs = new Ext.TabPanel({
+        var appTabs = new Ext.Panel({
+		    layout: 'fit',
             region: 'center',
             border : false,
             id : 'appTabs',
@@ -326,7 +330,7 @@
         var appViewport = new Ext.Viewport({
             id: 'appVieport',
             layout:'fit',
-            border:false,
+            border: false,
             items: [{
                     region : 'center',
                     layout : 'border',
