@@ -192,8 +192,8 @@ OpenLayers.Protocol.WFS.v1 = OpenLayers.Class(OpenLayers.Protocol, {
         options = OpenLayers.Util.extend({}, options);
         OpenLayers.Util.applyDefaults(options, this.options || {});
         var response = new OpenLayers.Protocol.Response({requestType: "read"});
-        
         var data = OpenLayers.Format.XML.prototype.write.apply(
+     
             this.format, [this.format.writeNode("wfs:GetFeature", options)]
         );
 

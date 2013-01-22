@@ -46,7 +46,7 @@ OpenLayers.Protocol.WFS.v1_1_0 = OpenLayers.Class(OpenLayers.Protocol.WFS.v1, {
      *     requests. This can be any format advertized by the WFS's
      *     GetCapabilities response. If set, an appropriate readFormat also
      *     has to be provided, unless outputFormat is GML3, GML2 or JSON.
-     * readFormat - {<OpenLayers.Format>} An appropriate format parser if
+     * readFormat - {<OpenLayers.Format>} An appropriate format parser iflert
      *     outputFormat is none of GML3, GML2 or JSON.
      */
     initialize: function(options) {
