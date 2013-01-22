@@ -1,6 +1,6 @@
 {
-    "geoStoreBase":"http://192.168.24.182:8080/geostore/rest/", 
-    "xmlJsonTranslateService": "http://192.168.24.182:8080/xmlJsonTranslate/",
+    "geoStoreBase":"http://84.33.2.26/geostore/rest/", 
+    "xmlJsonTranslateService": "http://84.33.2.26/xmlJsonTranslate/",
    
     "proxy": "proxy?url=",
 	
@@ -85,18 +85,18 @@
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsSPM",
                 "url": "http://84.33.2.26/geoserver/wps",
-		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
+		"geostoreUrl": "http://84.33.2.26/geostore/rest",
 		"geostoreUser": "admin",
 		"geostorePassword": "admin",
-		"geostoreProxy": "http_proxy?url="
+		"geostoreProxy": "/http_proxy/proxy?url="
             },{
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
                 "url": "http://84.33.2.26/geoserver/wps",
-		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
+		"geostoreUrl": "http://84.33.2.26/geostore/rest",
 		"geostoreUser": "admin",
 		"geostorePassword": "admin",
-		"geostoreProxy": "http_proxy?url="
+		"geostoreProxy": "/http_proxy/proxy?url="
             },{
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",

@@ -479,7 +479,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 								  fp.getForm().submit({
 									  //url: app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
 									  //url: proxy + app.xmlJsonTranslateService + 'HTTPWebGISFileUpload',
-                                                                          url: xmlJsonTranslateURL+"HTTPWebGISFileUpload",
+                                      url: xmlJsonTranslateURL+"HTTPWebGISFileUpload",
 									  waitMsg: this.loadMapUploadText,
 									  success: function(fp, o){
 										  win.hide();
@@ -490,26 +490,35 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
 											  composer.loadUserConfig(json_str);  
 											  modified = true;   
 										  }else{
-                                                                                         if(o.result.success){   
-                                                                                           var url = xmlJsonTranslateURL + "FileUploader?code=" + o.result.fileID;
+											if(o.result.success){   
+												var url = xmlJsonTranslateURL + "FileUploader?code=" + o.result.fileID;
 
-                                                                                           var geographic = new OpenLayers.Projection("EPSG:4326");
-											   var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
-												projection: geographic,
-												strategies: [new OpenLayers.Strategy.Fixed()],
-												protocol: new OpenLayers.Protocol.HTTP({
-													url: url,
-													format: new OpenLayers.Format.KML({
-														extractStyles: true, 
-														extractAttributes: true,
-														maxDepth: 2
+												var geographic = new OpenLayers.Projection("EPSG:4326");
+												   
+												var kmlLayer = new OpenLayers.Layer.Vector(o.result.result, {
+													projection: geographic,
+													strategies: [new OpenLayers.Strategy.Fixed()],
+													protocol: new OpenLayers.Protocol.HTTP({
+														url: url,
+														format: new OpenLayers.Format.KML({
+															extractStyles: true, 
+															extractAttributes: true,
+															maxDepth: 2
+														})
 													})
-												})
-											});
-											
-											gxMap.addLayer(kmlLayer);  
-                                                                                      }
-											 
+												});
+												
+												gxMap.addLayer(kmlLayer);  
+												
+												Ext.Msg.show({
+													title:this.loadMapErrorText,
+													msg: "KML file successfully imported !",
+													buttons: Ext.Msg.OK,
+													icon: Ext.MessageBox.INFO
+												});
+												
+												gxMap.zoomToMaxExtent();
+                                            }											 
 										  }
 									  },                                    
 									  failure: function(fp, o){
