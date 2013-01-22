@@ -28,7 +28,7 @@
 <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
 
 <script type="text/javascript" src="script/GeoExplorer.js"></script>
-<script type="text/javascript" src="script/ux.js"></script>
+<script type="text/javascript" src="script/ux.js"></script>s
 
 <!-- GeoStore Client resources -->
 <script type="text/javascript" src="script/GeoStoreClient.js"></script>
@@ -358,7 +358,7 @@
         //
         var sources = "{" + 
             "\"ida\": {" + 
-            "\"url\":\"http://84.33.1.254/geoserver/ows/\"," +
+            "\"url\":\"http://84.33.2.26/geoserver/ows/\"," +
             "\"title\":\"IDA GeoServer\"," +
             "\"version\":\"1.1.1\"," +
             "\"layerBaseParams\": {" +
@@ -447,13 +447,13 @@
 						name: "geosolutions:ne_shaded",
 						group: "background",
 						format: "image/jpeg",
-						transparent: false
+						transparent: true
 					},{
 						source: "ida",
 						title: "Bathymetry",
 						name: "nurc:gebco_sea",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "reference"
@@ -462,7 +462,7 @@
 						title: "DEM slope",
 						name: "nurc:slope",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "reference"
@@ -471,7 +471,7 @@
 						title: "DEM aspect",
 						name: "nurc:aspect",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "reference"
@@ -480,7 +480,7 @@
 						title: "Distance 1000 m",
 						name: "nurc:eucdist_1000m",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "reference"
@@ -489,7 +489,7 @@
 						title: "Chl spring 2007",
 						name: "nurc:spring2007",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "chl"
@@ -498,7 +498,7 @@
 						title: "Chl spring 2008",
 						name: "nurc:spring2008",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "chl"
@@ -507,7 +507,7 @@
 						title: "Chl spring 2009",
 						name: "nurc:spring2009",
 						//format: "image/jpeg",
-						transparent: false,
+						transparent: true,
 						selected: false,
 						visibility: false,
 						group: "chl"
@@ -588,6 +588,7 @@
                 xmlJsonTranslateService= serverConfig.xmlJsonTranslateService;
                 
                 spm= serverConfig.spm;
+                rasterAlgebra= serverConfig.rasterAlgebra;
                 geostore= serverConfig.geostore;
 
                 //      
