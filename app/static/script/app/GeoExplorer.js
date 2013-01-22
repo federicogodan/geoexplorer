@@ -332,8 +332,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			maxWidth: 250,
             split: true,
             collapsible: true,
-            collapseMode: "mini",
-			activeTab:0,
+            //collapseMode: "mini",
+			activeTab: 0,
             header: false,
             items: [
                 {
@@ -440,9 +440,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             height: 200,
             split: true,
             collapsible: true,
-            collapseMode: "mini",
+            //collapseMode: "mini",
             collapsed: false,
-            header: false,
+            header: true,
+			title: 'Data Grids',
             listeners: {
                  "expand": function(){
                      var grid=Ext.getCmp("wfsGridPanel");
@@ -474,9 +475,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			//minWidth:455,
             split: true,
             collapsible: true,
-            collapseMode: "mini",
+            //collapseMode: "mini",
             collapsed: false,
-            header: false,
+            header: true,
+			title: 'Control Panel',
             items: [
                 {xtype: 'tabpanel', region: 'center', id: 'idacontrol', autoScroll: false, border: false}
             ]

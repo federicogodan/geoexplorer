@@ -270,7 +270,8 @@
             }
         });
             
-        var appTabs = new Ext.TabPanel({
+        var appTabs = new Ext.Panel({
+		    layout: 'fit',
             region: 'center',
             border : false,
             id : 'appTabs',
@@ -326,7 +327,7 @@
         var appViewport = new Ext.Viewport({
             id: 'appVieport',
             layout:'fit',
-            border:false,
+            border: false,
             items: [{
                     region : 'center',
                     layout : 'border',
