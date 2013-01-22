@@ -447,7 +447,7 @@ GeoExt.Lang.add("en", {
 		settingClassificationTitle: "Classification",
 		filterTitle: "Filter",
 		reloadLayerText: "Reload Layers",
-		applyFilterText: "Apply",
+		applyFilterText: "Run",
 		resetText: "Reset"
     },
     
