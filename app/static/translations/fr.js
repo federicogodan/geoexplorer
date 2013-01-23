@@ -461,7 +461,7 @@ GeoExt.Lang.add("fr", {
         removeConditionText: "Supprimer la condition"
     },
 	"gxp.plugins.IDAAttribute.prototype": {
-        title: "Attributes de niveau",
+                title: "Attributes de niveau",
 		settingsTitle: "Réglages de base",
 		settingNameTitle: "Nom",
 		settingColorTitle: "Couleur",
@@ -469,7 +469,10 @@ GeoExt.Lang.add("fr", {
 		filterTitle: "Filtrer",
 		reloadLayerText: "Recharger les niveaux",
 		applyFilterText: "Appliquer",
-		resetText: "Remettre"
+		resetText: "Remettre",
+                rasterAlgebraExecuteMessage: "Layer Attribute run demande envoyée.",
+                filterApplyTitle: "Appliquer le filtre",
+                filterApplyMsg: "Votre filtre est vide ou n'est pas correctement formaté!"
     },
     
         
@@ -480,7 +483,9 @@ GeoExt.Lang.add("fr", {
         detailsTooltip: "Afficher les détails",
         detailsHeaderName: "Nom de la propriété",
         detailsHeaderValue: "Valeur de la propriété",
-        detailsWinTitle: "Détails"
+        detailsWinTitle: "Détails",
+        deleteTooltip: "Supprimer l'entité",
+        deleteConfirmMsg: "Êtes-vous sûr de vouloir supprimer cette entité?"
      }
 
 });

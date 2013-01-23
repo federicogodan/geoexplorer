@@ -459,7 +459,7 @@ GeoExt.Lang.add("en", {
     },
 	
 	"gxp.plugins.IDAAttribute.prototype": {
-        title: "Layer Attribute",
+                title: "Layer Attribute",
 		settingsTitle: "Base Settings",
 		settingNameTitle: "Name",
 		settingColorTitle: "Color",
@@ -467,7 +467,10 @@ GeoExt.Lang.add("en", {
 		filterTitle: "Filter",
 		reloadLayerText: "Reload Layers",
 		applyFilterText: "Run",
-		resetText: "Reset"
+		resetText: "Reset",
+                rasterAlgebraExecuteMessage: "Layer Attribute run request sent.",
+                filterApplyTitle: "Filter Apply",
+                filterApplyMsg: "Your filter is empty or not properly formatted!"
     },
     
     "gxp.plugins.WFSGrid.prototype":{
@@ -477,6 +480,8 @@ GeoExt.Lang.add("en", {
         detailsTooltip: "View Details",
         detailsHeaderName: "Property Name",
         detailsHeaderValue: "Property Value",
-        detailsWinTitle: "Details"
+        detailsWinTitle: "Details",
+        deleteTooltip: "Delete Feature",
+        deleteConfirmMsg: "Are you sure you want delete this feature?"
      }
 });

@@ -413,7 +413,7 @@ GeoExt.Lang.add("it", {
 	        spmList: "Modelli Lanciati",
 		spmTooltip: "Mostra la lista dei modelli lanciati",
                 missingParameterTitle:"Parametri Mancanti",
-                missingParameterMsg:"Perfavore inserire i paramteri obbligatori mancanti",
+                missingParameterMsg:"Per favore inserire i paramteri obbligatori mancanti",
                 userInput: "User Input",
                 applyMultiText: 'Esegui Tutti',
                 saveText: 'Salva SPM',
@@ -493,7 +493,7 @@ GeoExt.Lang.add("it", {
     },
 	
 	"gxp.plugins.IDAAttribute.prototype": {
-        title: "Attributi di Livello",
+                title: "Attributi di Livello",
 		settingsTitle: "Impostazioni di base",
 		settingNameTitle: "Nome",
 		settingColorTitle: "Colore",
@@ -501,7 +501,10 @@ GeoExt.Lang.add("it", {
 		filterTitle: "Filtro",
 		reloadLayerText: "Ricarica Livelli",
 		applyFilterText: "Applica",
-		resetText: "Reimposta"
+		resetText: "Reimposta",
+                rasterAlgebraExecuteMessage: "Inviata la richiesta di run Layer Attribute.",
+                filterApplyTitle: "Applica Filtro",
+                filterApplyMsg: "Il filtro impostato è vuoto oppure non formato correttamente!"
     },
     
     "gxp.plugins.WFSGrid.prototype":{
@@ -511,6 +514,8 @@ GeoExt.Lang.add("it", {
         detailsTooltip: "Visualizza Dettagli",
         detailsHeaderName: "Nome Attributo",
         detailsHeaderValue: "Valore Attributo",
-        detailsWinTitle: "Dettagli"
+        detailsWinTitle: "Dettagli",
+        deleteTooltip: "Elimina Feature",
+        deleteConfirmMsg: "Sei è sicuri di voler elminare questa feature?"
      }
 });
