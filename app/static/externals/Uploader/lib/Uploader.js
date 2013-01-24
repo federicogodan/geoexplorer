@@ -65,6 +65,13 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
      *  
      */
     successCallback: null,
+    
+    
+    /** api: config[failureCallback]
+     *  ``Function``
+     *  
+     */
+    failureCallback: null,
 	
     /** private: method[constructor]
      */
@@ -78,6 +85,13 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
      */
    setSuccessCallback: function(method){
        this.successCallback= method;
+   },
+   
+   
+   /** api: method[setFailureCallback]
+     */
+   setFailureCallback: function(method){
+       this.failureCallback= method;
    },
 
     /** api: method[getPanel]
@@ -107,6 +121,9 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
                 }
             },                                    
             failure: function(form, action){
+                if(me.failureCallback)
+                   me.failureCallback.call(me, action.result.msg); 
+                else    
                     Ext.Msg.show({
                         title:me.uploadErrorText,
                         msg: action.result.msg,
@@ -119,7 +136,7 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
         
         var panelConfig={
            fileUpload: true,
-	   autoWidth: true,
+           autoWidth: true,
 	   autoHeight: true,
            id: me.id+"_formPanel",
 	   frame: true, 
@@ -138,7 +155,8 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
                    text: me.uploadText,
 		    handler: function(){
 			 if(me.uploadPanel.getForm().isValid()){
-                                me.uploadPanel.getForm().submit(submitConf); 
+                             me.uploadPanel.getForm().submit(submitConf); 
+                            
 			}
 		     }
 	     }];
@@ -148,6 +166,8 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
                             id: 'form_file_'+this.id,
                             buttonOnly: false,
                             emptyText: "File",
+                            autoWidth: true,
+                            autoHeight: true,
                             fieldLabel: "File",
                             name: 'form_file_'+this.id,
                             allowBlank:true,
@@ -170,6 +190,7 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
                         'fileselected': function(fb, v){
                              if(me.uploadPanel.getForm().isValid()){
                                 me.uploadPanel.getForm().submit(submitConf); 
+                               
 			     }
                         }
                     }
@@ -179,6 +200,26 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
             
         this.uploadPanel = new Ext.FormPanel(panelConfig);
         return this.uploadPanel;
+    },
+    
+    getWindowPanel: function(conf){
+        var win = new Ext.Window({
+		title: conf.winTitle,
+		id: this.id+"_window",
+		layout: 'form',
+		modal: true,
+		bodyStyle: "padding: 5px",
+		width: conf.width,
+		items: [this.getPanel({submitButton: conf.submitButton})]
+	});
+					
+	win.show();
+    },
+    
+    closeWindowPanel:function(){
+       var win=Ext.getCmp(this.id+"_window");
+       if(win)
+          win.close(); 
     },
     
     getInputFileCmpID: function(index){
