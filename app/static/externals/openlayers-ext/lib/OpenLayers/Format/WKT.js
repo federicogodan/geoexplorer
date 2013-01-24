@@ -15,6 +15,11 @@
  * 
  * Inherits from:
  *  - <OpenLayers.Format>
+ *  
+ * ---------------------------------------------------------
+ *  MapStore Integration information:
+ *      Development version after the version 2.12 stable
+ * --------------------------------------------------------- 
  */
 OpenLayers.Format.WKT = OpenLayers.Class(OpenLayers.Format, {
     
