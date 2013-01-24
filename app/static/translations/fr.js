@@ -400,7 +400,11 @@ GeoExt.Lang.add("fr", {
                 runNameMsg: "Exécutez Nom",
                 runListFieldSetName: "Exécutez Liste (Cliquez sur Tout exécuter à START)",
                 runListNoRunMsg: "Pas de SPM courir pour exécuter",
-                composerErrorTitle:"Entrez au moins deux SPM va utiliser le compositeur"
+                composerErrorTitle:"Entrez au moins deux SPM va utiliser le compositeur",
+                svpFileImportErrorTitle: "SVP charger erreur.",
+                svpFileImportErrorMsg: "SVP fichier n'est pas correctement chargé.",
+                xmlRunListImportWinTitle: "Importer Runs à partir de XML",
+                importRunButton: "Importer Runs"
 	},
 	"Ext.DatePicker.prototype":{
 		todayText         : "Aujourd'hui",

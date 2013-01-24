@@ -436,7 +436,11 @@ GeoExt.Lang.add("en", {
                 runNameMsg: "Run Name",
                 runListFieldSetName: "Run List (Click Run All to START)",
                 runListNoRunMsg: "No SPM run to execute",
-                composerErrorTitle:"Enter at least two SPM runs to use the composer"
+                composerErrorTitle:"Enter at least two SPM runs to use the composer",
+                svpFileImportErrorTitle: "SVP Upload Error.",
+                svpFileImportErrorMsg: "SVP file is not correctly loaded.",
+                xmlRunListImportWinTitle: "Import Runs from XML",
+                importRunButton: "Import Runs"
 	},
 	/*-------------------------------------------------------------*/
 	
