@@ -159,16 +159,16 @@ var ServerListView = Ext.extend(Ext.form.ComboBox, {
         forceSelection: true,
         mode: "local",
 		
+		store: new Ext.data.ArrayStore({
+            fields: ["id", "title"],
+            data: []
+        }),
 
 		addServer: function( source ){
 			var record = new this.store.recordType({
                 id: source.id,
                 title: source.title || this.untitledText
             });
-			this.store = new Ext.data.ArrayStore({
-	            fields: ["id", "title"],
-	            data: []
-	        });
             this.store.insert(0, [record]);
             this.onSelect(record, 0);			
 		}
@@ -833,7 +833,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						forceSelection: true,
 						disabled: true,
 						triggerAction: 'all',
-						// value: 'position:relative;left:5px;bottom:5px',
+						value: "position:absolute;left:5px;bottom:5px",
 						ref: '../../watermarkPosition',
 						width: 500
 					},
