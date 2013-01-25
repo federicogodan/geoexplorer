@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://84.33.199.62/geostore-gliders/rest/",
-   "proxy":"/http_proxy/proxy?url=",
+   "proxy":"/proxy?url=",
    "xmlJsonTranslateService": "http://84.33.199.62/xmlJsonTranslate-gliders/",
    "refreshTimeInterval": 10,
    "watermarkUrl": "../theme/app/img/nurc-logo.png",
@@ -300,6 +300,7 @@
 		}, {
 			"ptype": "gxp_pilot_notes",
 			"layerName": "Pilot notes Layer",
+			"logbookPageSize": 10,
 			"id": "notes",
 			"outputTarget": "east"
 		}, {

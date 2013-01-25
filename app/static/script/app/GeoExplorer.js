@@ -439,27 +439,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
 		var eastPanel = new Ext.Panel({
             border: false,
-            // layout: "border",
-			// layout:'fit',
-			/*	style: {
-							width: '100%',
-				            height: '100%'
-				        },*/
-			// autoHeight: true,
             id: 'east',
             region: "east",
-            width: 350,
-			minWidth:350,
-			maxWidth:350,
-			activeTab:0,
+            width: 368,
+			minWidth: 350,
+			maxWidth: 368,
+			activeTab: 0,
             split: true,
             collapsible: true,
             collapseMode: "mini",
             header: false,					
 			autoScroll: true
         });
-
-	
         
         this.toolbar = new Ext.Toolbar({
             disabled: true,
