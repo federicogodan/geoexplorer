@@ -128,10 +128,19 @@
 			return null;
 		} else {
 			var result = this.uri_;
-			result += '?';
-			for (key in this.params_){
-				result += key + '=' + this.params_[key] + '&';
+			var hasParams = false;
+			var paramStr = '';
+			// console.log( this.params_);
+			for (var key in this.params_){
+				if ( hasParams ){ // skip first param
+					paramStr += '&';
+				}
+				hasParams = true;
+				paramStr += key + '=' + this.params_[key];
 			}			
+			if (hasParams){
+				result += '?' + paramStr;
+			}
 			// console.log(this.isLocal_(this.uri_) ? result : this.proxy_ + encodeURIComponent( result ));
 			return this.isLocal_(this.uri_) ? result : this.proxy_ + encodeURIComponent( result );
 		}
