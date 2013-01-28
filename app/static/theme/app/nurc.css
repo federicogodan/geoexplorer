@@ -73,6 +73,10 @@ table.featureInfo td{
 .vehicle-refresh-icon{
 	background-image: url(../app/img/silk/arrow_refresh.png);
 }
+
+.refresh{
+	background-image: url(../app/img/silk/cancel.png);
+}
 		
 /* Additional OL Styles */
 .olControlMousePosition {

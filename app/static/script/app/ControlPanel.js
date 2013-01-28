@@ -217,7 +217,7 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 		});
 		this.selectedLayerList = new LayerListView({
 
-			});
+		});
 		this.serverList = new ServerListView({
 			
 		});		
@@ -346,8 +346,7 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 		return function(){
 			var layers = scope.selectedLayerList.getStore().getRange();
 			return layers;			
-		};
-	
+		};	
 	},
 	
 	selectedLayersHandler: function( scope ){
@@ -367,7 +366,10 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 	},
 	
 	reset: function(){
-		
+		var selLayList = this.scope.selectedLayerList;
+		if(selLayList){
+			selLayList.getStore().removeAll();
+		}
 	},
 	
 	getView: function(){
@@ -377,7 +379,8 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 				'View layers from: ', 
 				this.serverList,
 		            new Ext.Button({
-		                text: 'Add server',
+		                tooltip: 'Add WMS Server',
+						text: 'Add WMS',
 						ref:'../addServerBtn',
 		                iconCls: "gxp-icon-addserver",
 		                handler: this.addServerHandler,
@@ -1359,7 +1362,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	},
 
 	handleViewMap: function() {
-		window.open( this.interPageBaseUrl + + this.mapId);
+		window.open(this.interPageBaseUrl + this.mapId);
 	},
 
 	saveOrUpdate: function() {		
@@ -1442,48 +1445,47 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 								icon: Ext.MessageBox.ERROR
 							});	
 							self.cruisePanelView.name.markInvalid();				
-						} else {
+						} else {					
 							
-							
-										// create a configuration from form fields
-										var conf = ConfigurationBuilder.create({
-													name: self.cruisePanelView.name.getValue(),
-													description: self.cruisePanelView.name.getValue(),
-													timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
-																self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
-													timeStep: self.cruisePanelView.stepValueField.getValue(),
-													timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
-													timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
-													// models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
-													// backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
-													models: self.cruisePanelView.modelSelector.getSelectedLayers(),
-													backgrounds: self.cruisePanelView.backgroundSelector.getSelectedLayers(),
-													vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
-													watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
-													watermarkUrl: self.cruisePanelView.watermarkUrl.getValue(),
-													watermarkText: self.cruisePanelView.watermarkText.getValue(),
-													bounds: [self.nwTextField.getValue(), self.swTextField.getValue(), self.seTextField.getValue(), self.neTextField.getValue()],
-													geoserverBaseUrl: self.geoserverBaseUrl
-												});				
+							// create a configuration from form fields
+							var conf = ConfigurationBuilder.create({
+										name: self.cruisePanelView.name.getValue(),
+										description: self.cruisePanelView.name.getValue(),
+										timeRange: [self.cruisePanelView.startTime.getValue().format("Y-m-d\\TH:i:s.u\\Z"), 
+													self.cruisePanelView.endTime.getValue().format("Y-m-d\\TH:i:s.u\\Z")],
+										timeStep: self.cruisePanelView.stepValueField.getValue(),
+										timeFrameRate: self.cruisePanelView.rateValueField.getValue(),
+										timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
+										// models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
+										// backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
+										models: self.cruisePanelView.modelSelector.getSelectedLayers(),
+										backgrounds: self.cruisePanelView.backgroundSelector.getSelectedLayers(),
+										vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
+										watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
+										watermarkUrl: self.cruisePanelView.watermarkUrl.getValue(),
+										watermarkText: self.cruisePanelView.watermarkText.getValue(),
+										bounds: [self.nwTextField.getValue(), self.swTextField.getValue(), self.seTextField.getValue(), self.neTextField.getValue()],
+										geoserverBaseUrl: self.geoserverBaseUrl
+									});				
 
-										if (self.mapId === -1) { // a new configuration is created	
-											var filename = self.fileForm.fileuploadField.getValue();
-											if (filename && filename !== '') {
-												self.uploadFileAndSave( conf );
-											} else {
-												conf.setParam('watermarkUrl', self.defaultWatermarkUrl );
-												self.save( conf );		
-											}
+							if (self.mapId === -1) { // a new configuration is created	
+								var filename = self.fileForm.fileuploadField.getValue();
+								if (filename && filename !== '') {
+									self.uploadFileAndSave( conf );
+								} else {
+									conf.setParam('watermarkUrl', self.defaultWatermarkUrl );
+									self.save( conf );		
+								}
 
-										} else { // an old conf is updated
-											var filename = self.fileForm.fileuploadField.getValue();
+							} else { // an old conf is updated
+								var filename = self.fileForm.fileuploadField.getValue();
 
-											if (filename && filename !== '') { // a new logo is defined, use this one
-												self.updateAndUploadFile( conf );
-											} else {
-												self.update( conf );
-											}
-										}
+								if (filename && filename !== '') { // a new logo is defined, use this one
+									self.updateAndUploadFile( conf );
+								} else {
+									self.update( conf );
+								}
+							}
 						}
 					}
 				});				
@@ -1866,23 +1868,23 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		},
 
 		clean: function() {
-			this.cruisePanelView.name.reset();
-			this.cruisePanelView.startTime.reset();
-			this.cruisePanelView.endTime.reset();
-			this.mapId = -1;
+			this.cruisePanelView.name.reset(); // ok
+			this.cruisePanelView.startTime.reset(); // ok
+			this.cruisePanelView.endTime.reset(); // ok
+			this.mapId = -1; // ok
 
-			this.cruisePanelView.watermarkLogo.setVisible(false);
-			this.cruisePanelView.watermarkPosition.reset();
-			this.cruisePanelView.watermarkLogo.getEl().dom.src = '';
+			this.cruisePanelView.watermarkLogo.setVisible(false); // ok
+			this.cruisePanelView.watermarkPosition.reset(); // ok
+			this.cruisePanelView.watermarkText.reset(); // ok
+			this.cruisePanelView.watermarkLogo.getEl().dom.src = ''; // ok
 
-			this.cruisePanelView.stepValueField.reset();
-			this.cruisePanelView.rateValueField.reset();
-			this.cruisePanelView.stepUnitsField.reset();
+			this.cruisePanelView.stepValueField.reset(); // ok
+			this.cruisePanelView.rateValueField.reset(); // ok
+			this.cruisePanelView.stepUnitsField.reset(); // ok
 
-
-			this.cruisePanelView.vehicleSelector.reset();
-			this.cruisePanelView.modelSelector.reset();
-			this.cruisePanelView.backgroundSelector.reset();
+			this.cruisePanelView.vehicleSelector.reset();  // ok
+			this.cruisePanelView.modelSelector.reset(); // ok
+			this.cruisePanelView.backgroundSelector.reset(); // ok
 		},
 
 		createCruise: function() {
@@ -1893,6 +1895,9 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			this.viewButton.disable();
 			this.reloadButton.disable();
 			
+			//
+			// Defautl settings
+			//
 			this.cruisePanelView.watermarkLogo.setVisible(true);
 			this.cruisePanelView.watermarkLogo.getEl().dom.src = this.defaultWatermarkUrl;
 		},
