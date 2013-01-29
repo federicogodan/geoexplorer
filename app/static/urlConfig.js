@@ -15,18 +15,18 @@
 
     "spm": {
         "wpsURL": "http://84.33.2.26/geoserver/wps",
-        "userId":"afabiani",
+        "userId":"system",
         "outputUrl":"http://84.33.2.26/geoserver/ows",
         "srcPath": "the_path",
         "itemStatus": "CREATED",
         "itemStatusMessage" : "Created by GUI",
-        "wsName" : "nurc",
+        "wsName" : "spm",
         "styleName" : "spm"
     },
     
     "rasterAlgebra": {
         "wpsURL": "http://84.33.2.26/geoserver/wps",
-        "wsName" : "nurc",
+        "wsName" : "lyratt",
         "outputUrl":"http://84.33.2.26/geoserver/ows",
         "storeName" : "nurcdb"
     },
@@ -36,13 +36,13 @@
                 "ptype": "gxp_uploader",
 				"id": "svpuploader",
                 "loadMsg": "Load Sound Velocity Profile ...",
-                "uploadServiceURL": "http://84.33.2.26/xmlJsonTranslate/FileUploader?uplodDir=/home/maro/",
+                "uploadServiceURL": "http://192.168.24.182:8080/xmlJsonTranslate/FileUploader?uplodDir=/home/maro/",
                 "inputFiles": [{ "name": "svpFile", "emptyText": "Sound Velocity Profile File", "fieldLabel": "SVP File"}]
 			}, {
                 "ptype": "gxp_uploader",
 				"id": "spmlistuploader",
                 "loadMsg": "Load SPM List...",
-                "uploadServiceURL": "http://84.33.2.26/xmlJsonTranslate/FileUploader?type=inline",
+                "uploadServiceURL": "http://192.168.24.182:8080/xmlJsonTranslate/FileUploader?type=inline",
                 "inputFiles": [{ "name": "spnListFile", "emptyText": "SPM List XML File", "fieldLabel": "SPM List File", "allowBlank": true}]
 			}, {
                 "ptype": "gxp_saveDefaultContext",
@@ -85,7 +85,7 @@
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsSPM",
                 "url": "http://84.33.2.26/geoserver/wps",
-		"geostoreUrl": "http://84.33.2.26/geostore/rest",
+		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
 		"geostoreUser": "admin",
 		"geostorePassword": "admin",
 		"geostoreProxy": "/http_proxy/proxy?url="
@@ -93,7 +93,7 @@
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
                 "url": "http://84.33.2.26/geoserver/wps",
-		"geostoreUrl": "http://84.33.2.26/geostore/rest",
+		"geostoreUrl": "http://192.168.24.182:8080/geostore/rest",
 		"geostoreUser": "admin",
 		"geostorePassword": "admin",
 		"geostoreProxy": "/http_proxy/proxy?url="
@@ -101,9 +101,9 @@
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
                 "title": "Layer Attribute",
-				"id": "wfsAlgebraGridPanel",
+		"id": "wfsAlgebraGridPanel",
                 "wfsURL": "http://84.33.2.26/geoserver/wfs",
-                "featureType": "nurc:IDARasterAlgebraProcess",
+                "featureType": "lyratt:IDARasterAlgebraProcess",
                 "featureNS": "", 
                 "pageSize": 10,
                 "srsName": "EPSG:4326", 
@@ -157,7 +157,7 @@
                 "title": "SPM",
 		"id": "wfsGridPanel",
                 "wfsURL": "http://84.33.2.26/geoserver/wfs",
-                "featureType": "nurc:IDASoundPropModel",
+                "featureType": "spm:IDASoundPropModel",
                 "featureNS": "", 
                 "pageSize": 10,
                 "srsName": "EPSG:4326", 
