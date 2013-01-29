@@ -1,44 +1,54 @@
 var risk_data = {
 	coveragesSettings:  [
 		{
-			  name: "gebco_sea",
+			  name: "nurc:gebco_sea",
 			  min: -8000,
 			  max: 0
 		},
 		{
-			  name: "slope",
+			  name: "nurc:slope",
 			  min: 0,
 			  max: 1
 		},
 		{
-			  name: "aspect",
+			  name: "nurc:aspect",
 			  min: 0,
 			  max: 360
 		},
 		{
-			  name: "eucdist_1000m",
+			  name: "nurc:eucdist_1000m",
 			  min: 0,
 			  max: 1
 		},  
 		{
-			  name: "spring2007",
+			  name: "nurc:spring2007",
 			  min: 0,
 			  max: 63
 		},
 		{
-			  name: "spring2008",
+			  name: "nurc:spring2008",
 			  min: 0,
 			  max: 63
 		},
 		{
-			  name: "spring2009",
+			  name: "nurc:spring2009",
 			  min: 0,
 			  max: 63
 		}
 	],
         defualtCoverageSetting:{
-			  min: -100,
-			  max: 0
+		min: 0,
+		max: 250
+        },
+        spmCoverageSetting:{
+                ws: "spm",
+		min: -254,
+		max: 0
+        },
+        layerAttributeCoverageSetting:{
+                ws: "lyratt",
+		min: 0,
+		max: 1
         },
     urlParameters: {
 		geoserverURL: "http://84.33.2.26/geoserver"
