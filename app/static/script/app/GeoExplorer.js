@@ -209,14 +209,14 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     }, 
 
     loadConfig: function(config) {
-
         if(config.isLoadedFromConfigFile){
           this.applyConfig(config);
         } else {
             var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
             var mHost=pattern.exec(geoStoreBaseURL);
 
-            var mUrl = geoStoreBaseURL + "data/" + this.mapId;
+            var mUrl = geoStoreBaseURL + "data/" + this.mapId; 
+            
 
             Ext.Ajax.request({
                url: mHost[2] == location.host ? mUrl : proxy + mUrl,
@@ -268,7 +268,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         };
                        
         var failure = function(request) {                                                 
-          alert("ERROR: " + request.statusText);
+   
         };
 
         OpenLayers.Request.GET({
@@ -497,7 +497,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             ]
         }];
         
-        GeoExplorer.superclass.initPortal.apply(this, arguments);        
+        
+
+        GeoExplorer.superclass.initPortal.apply(this, arguments);      
+        Ext.getCmp('idalaylist').doLayout();
     },
     
     /** private: method[createTools]
