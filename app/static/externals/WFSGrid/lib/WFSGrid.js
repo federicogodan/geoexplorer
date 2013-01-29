@@ -403,7 +403,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
     addOutput: function(config) {
        var me= this;
        var kk;   
-     
+      
        var wfsGridPanel=new Ext.grid.GridPanel({ 
             title: this.title, 
             store: [], 
@@ -415,6 +415,12 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
             colModel: new Ext.grid.ColumnModel({
                 columns: []
             }),
+            listeners: {
+		    render: function(){
+                        
+                        //this.doLayout();
+		    }
+            },
             bbar: new Ext.PagingToolbar({
                 pageSize: this.pageSize,
                 wfsParam: this,
@@ -424,6 +430,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 listeners: {
 		    render: function(){
                         this.last.setVisible(false);
+                        //this.doLayout();
 		    },
                     "beforechange": function(paging,params){
                         paging.store.removeAll(true);
@@ -602,10 +609,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                 },this
         );	
         Ext.getCmp(this.outputTarget).setActiveTab(wfsGrid);
-        
-     
-        wfsGrid.doLayout();
-        
+
+        ///opt/tomcat_gui/webapps/xmlJsonTranslate/tem
+
         return wfsGrid;
     }   
 });
