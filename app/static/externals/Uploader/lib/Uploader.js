@@ -203,6 +203,11 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
     },
     
     getWindowPanel: function(conf){
+        var list= null;
+        if(conf.close)
+           list={
+                    close: conf.close
+                };
         var win = new Ext.Window({
 		title: conf.winTitle,
 		id: this.id+"_window",
@@ -210,6 +215,7 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
 		modal: true,
 		bodyStyle: "padding: 5px",
 		width: conf.width,
+                listeners:list,
 		items: [this.getPanel({submitButton: conf.submitButton})]
 	});
 					
