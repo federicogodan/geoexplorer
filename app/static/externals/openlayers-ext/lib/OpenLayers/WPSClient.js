@@ -221,8 +221,7 @@ OpenLayers.WPSClient = OpenLayers.Class({
                     method: 'GET',
                     success: function(response) {
                         server.processDescription[processID] = response.responseText;
-                        alert("res: " + processID);
-                        alert(server.processDescription[processID]);
+                        
                         this.events.triggerEvent('describeprocess', {
                             identifier: processID,
                             raw: response.responseText
