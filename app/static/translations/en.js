@@ -440,7 +440,8 @@ GeoExt.Lang.add("en", {
                 svpFileImportErrorTitle: "SVP Upload Error.",
                 svpFileImportErrorMsg: "SVP file is not correctly loaded.",
                 xmlRunListImportWinTitle: "Import Runs from XML",
-                importRunButton: "Import Runs"
+                importRunButton: "Import Runs",
+                errorLayerNameMsg: "The Model Name can not start with a digit, </br> can not contain blank space  </br> and can not contain characters '_', '*', '%', '-'"
 	},
 	/*-------------------------------------------------------------*/
 	
