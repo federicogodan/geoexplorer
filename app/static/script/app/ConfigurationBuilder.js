@@ -43,91 +43,102 @@ var ConfigurationBuilder =  {
 		return result;
 	},
 	
-	createModelConfiguration: function( selected ){
-		
-		var defaults ={
-			'nurc:watvelroms': {
-				format: 'image/png8',
-				transparent: true,
-				visibility: true,
-				source: 'demo',
-				group: 'Ocean Models',
-				opacity: 1,
-				selected: false,
-				ratio: 1,
-				elevation: 10,
-				styles: 'watvel_marker_ramp',
-				style:'watvel_raster'
-			},
-			'nurc:watvelingv':{
-				format: 'image/png8',
-				transparent: true,
-				visibility: true,
-				source: 'demo',
-				group: 'Ocean Models',
-				opacity: 1,
-				selected: false,
-				ratio: 1,
-				elevation: 1.472,
-				styles: 'watvel_marker_ramp'
-			}
-		};
-		
-		var result = '';
-		for (var i=0; i<selected.length; i++){
+   /**
+	* Create a proper gsSources configuration.
+	* For each source applies the default config, so 'default' is:
+	*
+	* 	"default": {
+    *       "ptype": "gxp_wmssource",
+    *       "version": "1.1.1",
+	*		"layerBaseParams": {
+	*			"TILED": true,
+	*			"TILESORIGIN": "-180,-90" 
+	*		}
+	*	}
+	*
+	*/
+	createSourcesConfiguration: function(sources, props){
+		var size = sources.getCount();
+		var records = sources.getRange(0, size);
+
+		var source = {};
+		for (var i=0; i<records.length; i++){			
+			var item = records[i].data;			
 			
-			var item = selected[i].data;
-			
-			var defaultParams = defaults[ item.name ] || {};
-			
-			var layer = Ext.applyIf({
-				name: item.name,
-				title: item.title
-			}, defaultParams);
-			
-			
-			result += Ext.encode( layer );
-			
-			if ( i < selected.length - 1){
-				result += ', ';
-			}
+			source[item.id] = Ext.applyIf({
+				title: item.title,
+				url: item.url
+			}, props['default']);
 		}
 		
+		var result = Ext.encode( source );
 		return result;
 	},
 	
-	createBackgroundConfiguration: function( selected ){
-		
-		var defaults ={
-			'nurcbg': {
-				format: 'image/jpeg',
-				transparent: 'false',
-				source: 'GEOSIII',
-				group: 'background'
-			}
-		};
-		
+   /**
+	* Create a proper configuration for models and background layers, specifying for each the releated source
+	* or the default source according to the 'default' configuration properties. 
+	* Something like that:
+	*
+	*	"modelsProperties": {
+	*		"default": {
+	*			"format": "image/png8",
+	*			"group": "Ocean Models",
+	*			"transparent": true,
+	*			"visibility": true,
+	*			"ratio": 1
+	*		},
+	*		"nurc:watvelingv": {
+	*			"format": "image/png8",
+	*			"group": "Ocean Models",
+	*			"opacity": 1,
+	*			"selected": false,
+	*			"title": "Watvel Forecast Model INGV",
+	*			"transparent": true,
+	*			"visibility": true,
+	*			"ratio": 1,
+	*			"elevation": 1.472,
+	*			"styles": "watvel_marker_ramp"
+	*		},
+	*		...
+	*	}
+	*
+	*/
+	createElementConfiguration: function(default_, props, selected){	
 		var result = '';
-		
-		for (var i=0; i<selected.length; i++){
-			
-			var item = selected[i].data;
-			
-			var defaultParams = defaults[ item.name ] || {};
-			
-			var layer = Ext.applyIf({
-				name: item.name,
-				title: item.title
-			}, defaultParams);
-			
-			result += Ext.encode( layer );
-			
-			if ( i < selected.length - 1){
-				result += ', ';
+		var size = selected.length;
+		if(size < 1){
+			result = Ext.util.JSON.encode(default_);
+		}else{
+		    result += '[';
+			for (var i=0; i<size; i++){
+				
+				var item = selected[i].data;
+				
+				//
+				// Sets the default configured item corresponding to the item.name or the default one plus the own  selected source
+				//
+				var defaultParams;
+				if(props[ item.name ]){
+					defaultParams = Ext.applyIf({source: item.source}, props[ item.name ]);
+				}else{
+					defaultParams = Ext.applyIf({source: item.source}, props['default']);
+				}
+				 
+				var layer = Ext.applyIf({
+					name: item.name,
+					title: item.title
+				}, defaultParams);
+				
+				result += Ext.encode( layer );
+				
+				if ( i < size - 1){
+					result += ', ';
+				}
 			}
+			
+			result += ']';
 		}
-		
-		// console.log(result);
 		
 		return result;
 	},
@@ -147,14 +158,30 @@ var ConfigurationBuilder =  {
 					    + '"timeStep":"' + params.timeStep  + '",'
 						+ '"timeFrameRate":"' + params.timeFrameRate + '",'
 						+ '"timeUnits":"' + params.timeUnits + '",'
-						 + '"models":['+ this.createModelConfiguration( params.models ) + '],'
-						+ '"backgrounds":['+ this.createBackgroundConfiguration( params.backgrounds ) + '],'
-				 	   + '"watermarkUrl":"'+ params.watermarkUrl + '",';
+
+			if (params.models){
+				conf.blob += '"models":'+ this.createElementConfiguration(params.defaultModels, params.modelsProperties, params.models) + ','
+			}
+			
+			if (params.backgrounds){
+				conf.blob += '"backgrounds":'+ this.createElementConfiguration(params.defaultBackgrounds, params.backgroundsProperties, params.backgrounds) + ','
+			}
+			
+			if(params.selectedModelsSources || params.slectedBackgroundsSources){
+				//
+				// Merge between the the selected source from the models and background groups.
+				//
+				var selectedSources = Ext.applyIf(params.selectedModelsSources, params.slectedBackgroundsSources);
+				conf.blob += '"gsSources":'+ this.createSourcesConfiguration(selectedSources, params.sourcesProperties) + ','
+			}
+
+			conf.blob += '"watermarkUrl":"'+ params.watermarkUrl + '",';
+						
 			if ( params.watermarkText && params.watermarkText !== '' ){
 				conf.blob += '"watermarkText":"'+ params.watermarkText + '",'
 			}
 				        
-				conf.blob += '"watermarkPosition":"'+ params.watermarkPosition + '",'
+			conf.blob += '"watermarkPosition":"'+ params.watermarkPosition + '",'
 
 						+ '"bounds":['  
 						+	params.bounds[0] + ','
@@ -175,7 +202,8 @@ var ConfigurationBuilder =  {
 					   +	'"glidersPrefix": "it.geosolutions",'
 					   +    '"wfsVersion": "1.1.0"'
 					   + '}'					
-					+' }';					
+			
+			conf.blob += ' }';					
 			conf.owner = 'admin';
 			return conf;
 	}

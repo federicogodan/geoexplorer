@@ -4,7 +4,9 @@ var Source = Ext.extend(Ext.util.Observable, {
 	constructor: function(config){
 		this.url = config.url;
 		this.id = config.id || Ext.id(null);
+		
 		Source.superclass.constructor.apply(this, arguments);
+		
         if (!this.format) {
             this.format = new OpenLayers.Format.WMSCapabilities({keepData: true});
         }
@@ -20,136 +22,207 @@ var Source = Ext.extend(Ext.util.Observable, {
 	
 	createStore: function(){
 		var baseParams = this.baseParams || {
-	            SERVICE: "WMS",
-	            REQUEST: "GetCapabilities"
-	        };
-	     if (this.version) {
+			SERVICE: "WMS",
+			REQUEST: "GetCapabilities"
+		};
+			
+	    if (this.version) {
 	         baseParams.VERSION = this.version;
-	     }
+	    }
 
-	     this.store = new GeoExt.data.WMSCapabilitiesStore({
-	            // Since we want our parameters (e.g. VERSION) to override any in the 
-	            // given URL, we need to remove corresponding paramters from the 
-	            // provided URL.  Simply setting baseParams on the store is also not
-	            // enough because Ext just tacks these parameters on to the URL - so
-	            // we get requests like ?Request=GetCapabilities&REQUEST=GetCapabilities
-	            // (assuming the user provides a URL with a Request parameter in it).
-	            url: this.url,
-	            baseParams: baseParams,
-	            format: this.format,
-	            autoLoad: true,
-	            layerParams: {exceptions: null},
-	            listeners: {
-	                load: function() {
-	                    // The load event is fired even if a bogus capabilities doc 
-	                    // is read (http://trac.geoext.org/ticket/295).
-	                    // Until this changes, we duck type a bad capabilities 
-	                    // object and fire failure if found.
-	                    if (!this.store.reader.raw || !this.store.reader.raw.service) {
-	                        this.fireEvent("failure", this, "Invalid capabilities document.");
-	                    } else {
-	                        if (!this.title) {
-	                            this.title = this.store.reader.raw.service.title;                        
-	                        }
-	                        if (!this.ready) {
-	                            this.ready = true;
-	                            this.fireEvent("ready", this);
-	                        } else {
-	                            this.lazy = false;
-	                            //TODO Here we could update all records from this
-	                            // source on the map that were added when the
-	                            // source was lazy.
-	                        }
-	                    }
-	                    // clean up data stored on format after parsing is complete
-	                    delete this.format.data;
-	                },
-	                exception: function(proxy, type, action, options, response, error) {
-	                    delete this.store;
-	                    var msg, details = "";
-	                    if (type === "response") {
-	                        if (typeof error == "string") {
-	                            msg = error;
-	                        } else {
-	                            msg = "Invalid response from server.";
-	                            // special error handling in IE
-	                            var data = this.format && this.format.data;
-	                            if (data && data.parseError) {
-	                                msg += "  " + data.parseError.reason + " - line: " + data.parseError.line;
-	                            }
-	                            var status = response.status;
-	                            if (status >= 200 && status < 300) {
-	                                // TODO: consider pushing this into GeoExt
-	                                var report = error && error.arg && error.arg.exceptionReport;
-	                                details = gxp.util.getOGCExceptionText(report);
-	                            } else {
-	                                details = "Status: " + status;
-	                            }
-	                        }
-	                    } else {
-	                        msg = "Trouble creating layer store from response.";
-	                        details = "Unable to handle response.";
-	                    }
-	                    // TODO: decide on signature for failure listeners
-	                    this.fireEvent("failure", this, msg, details);
-	                    // clean up data stored on format after parsing is complete
-	                    delete this.format.data;
-	                },
-	                scope: this
-	            }
-	        });		
-	}
-	
+	    this.store = new GeoExt.data.WMSCapabilitiesStore({
+			// Since we want our parameters (e.g. VERSION) to override any in the 
+			// given URL, we need to remove corresponding paramters from the 
+			// provided URL.  Simply setting baseParams on the store is also not
+			// enough because Ext just tacks these parameters on to the URL - so
+			// we get requests like ?Request=GetCapabilities&REQUEST=GetCapabilities
+			// (assuming the user provides a URL with a Request parameter in it).
+			url: this.url,
+			baseParams: baseParams,
+			format: this.format,
+			autoLoad: true,
+			layerParams: {exceptions: null},
+			listeners: {
+				load: function(store, records, options) {
+					// The load event is fired even if a bogus capabilities doc 
+					// is read (http://trac.geoext.org/ticket/295).
+					// Until this changes, we duck type a bad capabilities 
+					// object and fire failure if found.
+					if (!this.store.reader.raw || !this.store.reader.raw.service) {
+						this.fireEvent("failure", this, "Invalid capabilities document.");
+					} else {
+						if (!this.title) {
+							this.title = this.store.reader.raw.service.title;                        
+						}
+						if (!this.ready) {
+							this.ready = true;
+							this.fireEvent("ready", this);
+						} else {
+							this.lazy = false;
+							//TODO Here we could update all records from this
+							// source on the map that were added when the
+							// source was lazy.
+						}							
+					}
+					
+					// clean up data stored on format after parsing is complete
+					delete this.format.data;
+				},				
+				exception: function(proxy, type, action, options, response, error) {
+					delete this.store;
+					var msg, details = "";
+					if (type === "response") {
+						if (typeof error == "string") {
+							msg = error;
+						} else {
+							msg = "Invalid response from server.";
+							// special error handling in IE
+							var data = this.format && this.format.data;
+							if (data && data.parseError) {
+								msg += "  " + data.parseError.reason + " - line: " + data.parseError.line;
+							}
+							var status = response.status;
+							if (status >= 200 && status < 300) {
+								// TODO: consider pushing this into GeoExt
+								var report = error && error.arg && error.arg.exceptionReport;
+								details = gxp.util.getOGCExceptionText(report);
+							} else {
+								details = "Status: " + status;
+							}
+						}
+					} else {
+						msg = "Trouble creating layer store from response.";
+						details = "Unable to handle response.";
+					}
+					
+					// TODO: decide on signature for failure listeners
+					this.fireEvent("failure", this, msg, details);
+					// clean up data stored on format after parsing is complete
+					delete this.format.data;
+				},
+				scope: this
+			}
+		});		
+	}	
 });
 
 var SourceCollection = Ext.extend(Ext.util.Observable, {
 	
+	control: null,
+	referenceId: null,
 	
 	constructor: function(config) {
 		this.addEvents(
 			'server-added'
 		);
+		
 		Ext.apply(this, {
 	        layerSources: {}
 	    });
+		
+		this.control = config.control;
+		this.referenceId = config.referenceId;
+		
 	    SourceCollection.superclass.constructor.apply(this, arguments);
 	},
 	
 	addLayerSource: function( options ){
 	
 	    var config = options.config;
+
+		//
+		// Check before for already added WMS sources in this component
+		//
+		for(var id in this.layerSources){
+			if(id && this.layerSources[id].url.indexOf(config.url) != -1){				
+				Ext.Msg.show({
+					title: 'Add New Server',
+					msg: "Server WMS already added !",
+					buttons: Ext.Msg.OK,
+					icon: Ext.MessageBox.WARNING
+				});				
+				
+				this.fireEvent('server-added', null, this);
+				var callback = options.callback || Ext.emptyFn;
+				callback.call(options.scope || this, id);
+				
+				return;
+			}				
+		}
+		
 		var source = new Source( config );
-	  
+		
+		// ////////////////////////////////////////////////////////////////////////////////////////
+		// Check before for already added WMS sources in twin 'Add WMS' component.
+		// If we have already saved sources with the same URL we have 
+		// to use their id to not miss possible layers references or duplicate sourcse references.
+		// ////////////////////////////////////////////////////////////////////////////////////////
+		if(this.referenceId == "../../backgroundSelector"){
+		    var modelSelector = this.control.cruisePanelView.modelSelector;
+			
+			for(var id in modelSelector.scope.sources.layerSources){
+				if(id && modelSelector.scope.sources.layerSources[id].url.indexOf(config.url) != -1){				
+					source.id = id;
+				}				
+			}
+		}else if(this.referenceId == "../../modelSelector"){
+		    var backgroundSelector = this.control.cruisePanelView.backgroundSelector;
+			
+			for(var id in backgroundSelector.scope.sources.layerSources){
+				if(id && backgroundSelector.scope.sources.layerSources[id].url.indexOf(config.url) != -1){				
+					source.id = id;
+				}				
+			}
+		}
+		
+		var gsSources = this.control.gsSources;
+		
+		// ///////////////////////////////////////////////////////////////
+		// If we have already saved sources with the same URL we have 
+		// to use their id to not miss possible layers references 
+		// ///////////////////////////////////////////////////////////////
+		if(gsSources){
+			for(var id in gsSources){
+				if(id && gsSources[id].url.indexOf(source.url) != -1){
+					source.id = id;
+				}				
+			}
+		}
+  
 	    source.on({
-	            ready: {
-	                fn: function() {
-						this.fireEvent('server-added', source, this);
-	                    var callback = options.callback || Ext.emptyFn;
-	                    callback.call(options.scope || this, id);
-	                },
-	                scope: this,
-	                single: true
-	            },
-	            failure: {
-	                fn: function() {
-	                    var fallback = options.fallback || Ext.emptyFn;
-	                    delete this.layerSources[id];
-	                    fallback.apply(options.scope || this, arguments);
-	                },
-	                scope: this,
-	                single: true
-	            }
+			ready: {
+				fn: function() {
+					this.fireEvent('server-added', source, this);
+					var callback = options.callback || Ext.emptyFn;
+					callback.call(options.scope || this, id);
+				},
+				scope: this,
+				single: true
+			},
+			failure: {
+				fn: function() {
+					var fallback = options.fallback || Ext.emptyFn;
+					delete this.layerSources[id];
+					fallback.apply(options.scope || this, arguments);
+				},
+				scope: this,
+				single: true
+			}
 	    });
-	   this.layerSources[source.id] = source;
-	   source.init(this);
-	   return source;		
+		
+	    this.layerSources[source.id] = source;
+	    source.init(this);
+		
+	    return source;		
 	},
+	
 	get: function( key ){
 		return this.layerSources[key];
 	}
 });
 
 var ServerListView = Ext.extend(Ext.form.ComboBox, {
+
 		untitledText: 'Title not specified',
         valueField: "id",
         displayField: "title",
@@ -159,18 +232,34 @@ var ServerListView = Ext.extend(Ext.form.ComboBox, {
         forceSelection: true,
         mode: "local",
 		
-		store: new Ext.data.ArrayStore({
-            fields: ["id", "title"],
-            data: []
-        }),
+		listeners:{
+			select: function (combo, record, index){
+				combo.selectedRecord = record;
+			}
+		},
+		
+		store: null,
+		
+		constructor: function(config){
+			this.store = new Ext.data.ArrayStore({
+				fields: ["id", "title", "url"],
+				data: []
+			});
+			
+			ServerListView.superclass.constructor.apply(this, arguments);
+		},
 
-		addServer: function( source ){
-			var record = new this.store.recordType({
-                id: source.id,
-                title: source.title || this.untitledText
-            });
-            this.store.insert(0, [record]);
-            this.onSelect(record, 0);			
+		addServer: function( source ){			
+			if(source){
+				var record = new this.store.recordType({
+					id: source.id,
+					title: source.title || this.untitledText,
+					url: source.url
+				});
+				
+				this.store.insert(0, [record]);
+				this.onSelect(record, 0);	
+			}			
 		}
 });
 
@@ -180,80 +269,95 @@ var LayerListView = Ext.extend(Ext.grid.GridPanel,{
 	loadMask: true,
 	height: 100,
 	
-
 	initComponent: function( ){
-		
+	
 		this.sm = new Ext.grid.RowSelectionModel({
-	            // singleSelect: true
+	        // singleSelect: true
 	    });
+		
 		this.colModel = new Ext.grid.ColumnModel([
 	        {id: "title", header: 'Title', dataIndex: "title", sortable: true},
 	        {header: "Id", dataIndex: "name", width: 150, sortable: true},
+			{header: "Source", dataIndex: "source", width: 150, sortable: true, hidden: false},
 	        {header: "uuid", dataIndex: "keywords", width: 150, sortable: true, hidden: true}
 	    ]);
-		this.store = new Ext.data.ArrayStore({
-	        fields: ["name", "keywords", "title"],
-	        data: []
-	    });
 		
+		this.store = new Ext.data.ArrayStore({
+	        fields: ["name", "source", "keywords", "title"],
+	        data: []
+	    });		
 		
 		LayerListView.superclass.initComponent.call(this, arguments);
 	}
-	
-
 });
 
 var LayerSelector = Ext.extend(Ext.util.Observable, {
 	
-	
-	constructor: function(config){
-		
+	constructor: function(config){		
 		this.name = config.name;
 		this.ref = config.ref;
+		this.control = config.control;
 	
-		this.sources = new SourceCollection({});
+		this.sources = new SourceCollection({
+			control: this.control,
+			referenceId: this.ref
+		});
+		
 		this.layerList = new LayerListView({
 			
 		});
+		
 		this.selectedLayerList = new LayerListView({
 
 		});
+		
 		this.serverList = new ServerListView({
-			
+		
 		});		
+		
         LayerSelector.superclass.constructor.apply(this, config);		
 		this.bind();
     },
+	
 	bind: function(){
 		this.sources.on('server-added', this.serverList.addServer, this.serverList);
 		this.serverList.on('select', this.uploadLayersHandler, this);
 	},
+	
 	addServerHandler: function(){
 		var newSourceWindow = new gxp.NewSourceWindow({
 		
             modal: true,
+			
             listeners: {
                 "server-added": function(url) {
-                    newSourceWindow.setLoading();
-					this.sources.addLayerSource({
-						config: {url:url},
-						callback: function(id){
-							newSourceWindow.hide();
-						},
-						fallback: function(source, msg){
-						    var addLayerSourceErrorText = "Error getting WMS capabilities ({msg}).\nPlease check the url and try again.";
-							newSourceWindow.setError(
-                                new Ext.Template(addLayerSourceErrorText).apply({msg: msg})
-                            );
-						},
-						scope: this
-					 });
+				    if(url){
+						newSourceWindow.setLoading();
+						this.sources.addLayerSource({
+							config: {url:url},
+							callback: function(id){
+								newSourceWindow.hide();
+							},
+							fallback: function(source, msg){
+								var addLayerSourceErrorText = "Error getting WMS capabilities ({msg}).\nPlease check the url and try again.";
+								newSourceWindow.setError(
+									new Ext.Template(addLayerSourceErrorText).apply({msg: msg})
+								);
+							},
+							scope: this
+						});
+					}else{
+						newSourceWindow.hide();
+					}
+
                 },
                 scope: this
             }
         });
+		
 		newSourceWindow.show();
 	},
+	
 	uploadLayersHandler: function(  combo, record, index){
 		// get the store with layers of the selected source
 		var store = this.sources.get( record.get("id") ).getStore();
@@ -264,9 +368,11 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 		var selectedLayers = this.selectedLayerList.getStore().getRange();
 		this.layerList.getSelectionModel().selectRecords( selectedLayers );
 	},
+	
 	addToRightHandler: function(){
-		// add selected layer to the list of selected layers
+		// Add selected layer to the list of selected layers
 		var selectedLayers = this.layerList.getSelectionModel().getSelections();
+		
 		if ( selectedLayers.length === 0){
 				Ext.Msg.show({
 						title: 'Cannot add layer',
@@ -276,10 +382,17 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 				});
 				return;
 		}
+		
 		for (var i=0; i<selectedLayers.length; i++){
 			var layer = selectedLayers[i];
 			var index = this.selectedLayerList.getStore().find('name', layer.data.name);
 			if ( index === -1 ){
+				var selectedRecord = this.serverList.selectedRecord;
+				
+				if(selectedRecord){
+					layer.data.source = selectedRecord.data.id;
+				}
+				
 				this.selectedLayerList.getStore().add( layer );
 			} else {
 				Ext.Msg.show({
@@ -288,28 +401,27 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 						buttons: Ext.Msg.OK,
 						icon: Ext.MessageBox.WARNING
 				});
-			}
-			
-		}
-		
+			}			
+		}		
 	},
 	
 	removeFromRightHandler: function(){
 		var selectedLayers = this.selectedLayerList.getSelectionModel().getSelections();
+		
 		if ( selectedLayers.length === 0){
-					Ext.Msg.show({
-							title: 'Cannot remove layer',
-							msg: 'No layer selected in right grid.',
-							buttons: Ext.Msg.OK,
-							icon: Ext.MessageBox.WARNING
-					});
-					return;
-			}
+			Ext.Msg.show({
+					title: 'Cannot remove layer',
+					msg: 'No layer selected in right grid.',
+					buttons: Ext.Msg.OK,
+					icon: Ext.MessageBox.WARNING
+			});
+			return;
+		}
+		
 		for (var i=0; i<selectedLayers.length; i++){
 			var layer = selectedLayers[i];
 			this.selectedLayerList.getStore().remove( layer );
-		}
-		
+		}		
 	},
 	
 	resetHandler: function(){
@@ -325,21 +437,19 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 				scope.right.addBtn.enable();
 				scope.right.removeBtn.enable();
 				scope.right.resetBtn.enable();
-		};
-	
+		};	
 	},
 	
 	disableHandler: function( scope ){
 		return function(){
-				scope.left.addServerBtn.disable();
-				scope.layerList.disable();
-				scope.selectedLayerList.disable();
-				scope.serverList.disable();
-				scope.right.addBtn.disable();
-				scope.right.removeBtn.disable();
-				scope.right.resetBtn.disable();
-		};
-	
+			scope.left.addServerBtn.disable();
+			scope.layerList.disable();
+			scope.selectedLayerList.disable();
+			scope.serverList.disable();
+			scope.right.addBtn.disable();
+			scope.right.removeBtn.disable();
+			scope.right.resetBtn.disable();
+		};	
 	},
 	
 	getSelectedLayersHandler: function( scope ){
@@ -356,13 +466,19 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 				var layer = layers[i];
 				var record = new store.recordType({
 					title: layer.title,
-					name: layer.name
+					name: layer.name,
+					source: layer.source
 				});
 				store.add( record );
-			}
-				
-		};
+			}				
+		};	
+	},
 	
+	getSourcesListHandler: function(scope){
+		return function(){
+			var list = scope.serverList.getStore();			
+			return list;
+		}
 	},
 	
 	reset: function(){
@@ -391,37 +507,38 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 				this.layerList
 			]
 		});
+		
 		this.right = new Ext.Panel({
-				buttonAlign:'right',
-				scope: this,
-				tbar: [ 
-						new Ext.Button({
-			                text: 'Add',
-							ref:'../addBtn',
-			                iconCls: "add",
-			                handler: this.addToRightHandler,
-			                scope : this
-			            }),
-						new Ext.Button({
-			                text: 'Remove',
-							ref:'../removeBtn',
-			                iconCls: "delete",
-			                handler: this.removeFromRightHandler,
-			                scope : this
-			            }),
-						'->',
-			            new Ext.Button({
-			                text: 'Reset',
-							ref:'../resetBtn',
-			                iconCls: "refresh",
-			                handler: this.resetHandler,
-			                scope : this
-			            })
-					],
-				items:[
-					this.selectedLayerList
-				]
-			});
+			buttonAlign:'right',
+			scope: this,
+			tbar: [ 
+					new Ext.Button({
+						text: 'Add',
+						ref:'../addBtn',
+						iconCls: "add",
+						handler: this.addToRightHandler,
+						scope : this
+					}),
+					new Ext.Button({
+						text: 'Remove',
+						ref:'../removeBtn',
+						iconCls: "delete",
+						handler: this.removeFromRightHandler,
+						scope : this
+					}),
+					'->',
+					new Ext.Button({
+						text: 'Reset',
+						ref:'../resetBtn',
+						iconCls: "refresh",
+						handler: this.resetHandler,
+						scope : this
+					})
+				],
+			items:[
+				this.selectedLayerList
+			]
+		});
 			
 		var columns = 	new Ext.Container( 
 			{
@@ -439,6 +556,7 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 				disable: this.disableHandler( this ),
 				getSelectedLayers: this.getSelectedLayersHandler( this ),
 				selectLayers: this.selectedLayersHandler( this ),
+				getSourcesList: this.getSourcesListHandler(this),
 				reset: this.reset,
 				scope:this,
 			    items: [
@@ -455,10 +573,7 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 		
 		return columns;
 	}
-	
-	
 });
-
 
 var ControlPanel = Ext.extend(Ext.Panel, {
 
@@ -503,6 +618,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		this.urlData = config.geostoreBaseUrl + 'data';
 		this.geoserverBaseUrl = config.geoserverBaseUrl;
 		this.defaultWatermarkUrl = config.defaultWatermarkUrl;
+		
+		this.backgrounds = config.backgrounds;
+		this.models = config.models;
+		
+		this.defaultBackgrounds = config.defaultBackgrounds;
+		this.defaultModels = config.defaultModels;
+		
+		this.sourcesProperties = config.sourcesProperties;
 		
 		// create an instance of geostore client
 		this.geostore = new GeoStore.Maps({
@@ -744,8 +867,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			}]
 		});
 
-
-
 		var self = this;
 		this.cruisePanelView = new Ext.Panel({
 			// layout: 'fit',
@@ -889,7 +1010,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						}]
 					}
 					,*/ (new LayerSelector( {
-							ref: '../../modelSelector'
+							ref: '../../modelSelector',
+							control: self
 						 } )).getView()
 					
 					
@@ -928,7 +1050,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						}]
 					}*/
 					(new LayerSelector( {
-							ref: '../../backgroundSelector'
+							ref: '../../backgroundSelector',
+							control: self
 						 } )).getView()
 					]
 				},				
@@ -1458,8 +1581,19 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 										timeUnits: self.cruisePanelView.stepUnitsField.getValue(),
 										// models: self.cruisePanelView.modelSelector.toMultiselect.store.data.items,
 										// backgrounds: self.cruisePanelView.backgroundSelector.toMultiselect.store.data.items,
+										
 										models: self.cruisePanelView.modelSelector.getSelectedLayers(),
+										modelsProperties: self.models,
+										defaultModels: self.defaultModels,	
+		
 										backgrounds: self.cruisePanelView.backgroundSelector.getSelectedLayers(),
+										backgroundsProperties: self.backgrounds,
+										defaultBackgrounds: self.defaultBackgrounds,
+										
+										sourcesProperties: self.sourcesProperties,
+										selectedModelsSources: self.cruisePanelView.modelSelector.getSourcesList(),
+										slectedBackgroundsSources: self.cruisePanelView.backgroundSelector.getSourcesList(),										
+										
 										vehicles: self.cruisePanelView.vehicleSelector.toMultiselect.store.data.items,
 										watermarkPosition: self.cruisePanelView.watermarkPosition.getValue(),
 										watermarkUrl: self.cruisePanelView.watermarkUrl.getValue(),
@@ -1554,6 +1688,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 						if (payload) {
 
+								self.gsSources = payload.gsSources;
+								
 								// TODO externalize
 								self.cruisePanelView.startTime.setValue(Date.parseDate(payload.timeRange[0], "Y-m-d\\TH:i:s.u\\Z"));
 								self.cruisePanelView.endTime.setValue(Date.parseDate(payload.timeRange[1], "Y-m-d\\TH:i:s.u\\Z"));
@@ -1990,15 +2126,37 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 
 		validateForm: function() {
-			return this.cruisePanelView.name.isValid(false) && this.cruisePanelView.startTime.isValid(false) && this.cruisePanelView.endTime.isValid(false) &&
+		
+			var vSelector = this.cruisePanelView.vehicleSelector;
+			var vehicleIsValid = vSelector.toMultiselect.store.data.items.length > 0;
+			
+			if(!vehicleIsValid){
+				vSelector.markInvalid("At least one vehicle must be selected");
+			}else{
+				vSelector.clearInvalid();
+			}
+			
+			/*var bgSelector = this.cruisePanelView.backgroundSelector;
+			var bgIsValid = bgSelector.getSelectedLayers().length > 0;
+			
+			if(!bgIsValid){
+				Ext.Msg.show({
+						title: 'Background Settings',
+						msg: "At least one background layer must be selected",
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.ERROR
+				});
+			}*/
+			
+			var isValid = this.cruisePanelView.name.isValid(false) && this.cruisePanelView.startTime.isValid(false) && this.cruisePanelView.endTime.isValid(false) &&
 			// this.cruisePanelView.watermarkUrl.isValid(false) &&
 			this.cruisePanelView.watermarkPosition.isValid(false) 
 			// && this.cruisePanelView.modelSelector.isValid(false) 
-			// && this.cruisePanelView.vehicleSelector.isValid(false)
-			// && this.cruisePanelView.backgroundSelector.isValid(false) 
+			&& vehicleIsValid
+			//&& bgIsValid
 			/*&& this.cruisePanelView.vehicleSelector.toMultiselect.isValid(false) && this.cruisePanelView.backgroundSelector.toMultiselect.isValid(false)*/
-			 && this.cruisePanelView.stepValueField.isValid(false) && this.cruisePanelView.rateValueField.isValid(false) && this.cruisePanelView.stepUnitsField.isValid(false);
-		}
-
-
+			&& this.cruisePanelView.stepValueField.isValid(false) && this.cruisePanelView.rateValueField.isValid(false) && this.cruisePanelView.stepUnitsField.isValid(false);
+			
+			return isValid;
+		}		
 	});

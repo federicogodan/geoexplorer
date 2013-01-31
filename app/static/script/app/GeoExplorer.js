@@ -284,11 +284,13 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     prepareConfig: function(config, addConfig){
 	
 		if ( addConfig ){
+		    // before merging WMS sources
+			addConfig.sources = Ext.applyIf(addConfig.gsSources, config.sources);
+			
 			// add properties of config if they are not defined in addConfig
 			config = Ext.applyIf(addConfig, config);
 		}
 	
-		
 		// add models to layers if defined
 		if ( config.models ){
 			for (var i=0; i<config.models.length; i++){
@@ -299,8 +301,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			// remove model configuration
 			delete config.models;
 		}
-	
-		
+			
 		// add background if any
 		if ( config.backgrounds ){
 			for (var i=0; i<config.backgrounds.length; i++){
@@ -311,13 +312,11 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			delete config.backgrounds;
 		} 
 
-		
 		if ( config.bounds ){
 			config.map.extent = config.bounds;
 			config.map.maxExtent = config.bounds;
 			delete config.bounds;		
 		}
-	
 			
 		// console.log('Apply this configuration:');
 		// console.log(config);

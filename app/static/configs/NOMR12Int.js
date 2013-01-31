@@ -36,7 +36,7 @@
 		"glidersFeatureType": "GlidersTracks",	
 		"glidersPrefix": "it.geosolutions",
 		"wfsVersion": "1.1.0"
-   },
+    },
 
 	"backgrounds":[
 		{
@@ -49,7 +49,7 @@
    		}
 	],
 
-   "models":[
+    "models":[
 		{
 		   "format": "image/png8",
 		   "group": "Ocean Models",
@@ -63,7 +63,7 @@
 		   "ratio": 1,
 		   "elevation": 1.472,
 		   "styles": "watvel_marker_ramp"
-	   },        
+	    },        
 		{
 		   "format": "image/png8",
 		   "group": "Ocean Models",
@@ -78,10 +78,10 @@
 		   "elevation": 10,
 		   "styles": "watvel_marker_ramp",
 		   "style": "watvel_raster"
-	   }
-   ],
+	    }
+    ],
 
-   "gsSources":{
+    "gsSources":{
         "Gliders": {
             "ptype": "gxp_wmssource",
             "title": "Gliders", 
@@ -112,8 +112,9 @@
 				"TILESORIGIN": "-180,-90" 
 			}
         }
-   },
-   "layers":[
+    },
+	
+    "layers":[
 		{
             "format": "image/png8",
             "transparent": true,

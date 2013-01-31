@@ -33,8 +33,9 @@
 		<script type="text/javascript" src="../script/app/ControlPanel.js"></script>
 		<script type="text/javascript" src="../externals/utils/base64.js"></script> -->
 		<script type="text/javascript" src="../script/GeoExplorer.js"></script> 
-
-	
+        
+		<!--script type="text/javascript" src="../script/ControlPanel.js"></script>
+		<script type="text/javascript" src="../script/ConfigurationBuilder.js"></script-->
 		
 		<!-- additional component from ext examples -->
 		<link rel="stylesheet" type="text/css" href="../externals/ext/examples/ux/fileuploadfield/css/fileuploadfield.css"/>
@@ -185,17 +186,16 @@
 						        fields: ['value', 'text', 'url']
 						});
 						
-						
 						var models = new Ext.data.JsonStore({
-								// data: builder.getModelData( config.models ),
-								// fields: ['value','text']
-								data: config.models,
-								fields: ['format', 'group', 'name', 'opacity', 'selected', 
-									'source', 'title', 'transparent', 'visibility', 'ratio', 'elevation', 'styles', 'style']
+							// data: builder.getModelData( config.models ),
+							// fields: ['value','text']
+							data: config.models,
+							fields: ['format', 'group', 'name', 'opacity', 'selected', 
+								'source', 'title', 'transparent', 'visibility', 'ratio', 'elevation', 'styles', 'style']
 						});
 						
 					    var backgrounds = new Ext.data.ArrayStore({
-					        data: builder.getBackgroundData( config.backgrounds ),
+					        data: builder.getBackgroundData( config.backgroundsProperties ),
 					        fields: ['value','text']
 					    });
 						
@@ -206,9 +206,12 @@
 							imgsBaseUrl: config.imgsBaseUrl,
 							geostoreBaseUrl: config.geostoreBaseUrl,
 							proxy: config.proxy,
-							models: models,
+							models: config.modelsProperties,
+							defaultModels: config.defaultModels,
 							vehicles: vehicles,
-							backgrounds: backgrounds,
+							backgrounds: config.backgroundsProperties,
+							defaultBackgrounds: config.defaultBackgrounds,
+							sourcesProperties: config.sourcesProperties,
 							// info for map embedded in control panel
 							background: config.background,
 							sources: config.sources,
