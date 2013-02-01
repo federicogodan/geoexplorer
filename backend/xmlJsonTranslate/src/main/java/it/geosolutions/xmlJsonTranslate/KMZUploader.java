@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +32,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -45,7 +47,12 @@ import org.w3c.dom.NodeList;
  */
 public class KMZUploader extends HttpServlet {
 
-    private final static String PROPERTY_FILE_PARAM = "app.properties";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private final static String PROPERTY_FILE_PARAM = "app.properties";
     private final static Logger LOGGER = Logger.getLogger(KMZUploader.class.getSimpleName());
     private Properties properties = new Properties();
     private String tempDirectory;
@@ -99,6 +106,8 @@ public class KMZUploader extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String code = request.getParameter("code");
+        
+        String filename = request.getParameter("filename");
 
         if (code != null) {
 
@@ -106,7 +115,7 @@ public class KMZUploader extends HttpServlet {
             BufferedReader br = null;
             PrintWriter writer = null;
             try {
-                file = new File(tempDirectory + File.separator + code);
+                file = new File(tempDirectory + File.separatorChar + code + File.separatorChar + filename);
                 br = new BufferedReader(new FileReader(file));
                 writer = response.getWriter();
                 String line = null;
@@ -177,6 +186,8 @@ public class KMZUploader extends HttpServlet {
                             byte[] buffer = new byte[1024];
                             String kmlFileName = null;
 
+                            String newFileName = null;
+                            
                             //get the zip file content
                             zis = new ZipInputStream(item.getInputStream());
                             //get the zipped file list entry
@@ -190,7 +201,7 @@ public class KMZUploader extends HttpServlet {
 
 
                                     // save file "as is" in the temporary directory
-                                    File originalFile = new File(tempDirectory + File.separator + uuid + File.separator + fileName);
+                                    File originalFile = new File(tempDirectory + File.separatorChar + uuid + File.separatorChar + fileName);
                                     if (LOGGER.isLoggable(Level.INFO)) {
                                         LOGGER.log(Level.INFO, "file unzip: {0}", originalFile.getAbsoluteFile());
                                     }
@@ -233,9 +244,9 @@ public class KMZUploader extends HttpServlet {
                                                                 request.getScheme() + "://"
                                                                 + request.getServerName() + ":"
                                                                 + request.getServerPort()
-                                                                + request.getContextPath() + File.separator
-                                                                + dir.getName() + File.separator
-                                                                + uuid + File.separator + urlString);
+                                                                + request.getContextPath() + "/"
+                                                                + dir.getName() + "/"
+                                                                + uuid + "/" + urlString);
                                                     }
 
 
@@ -243,8 +254,9 @@ public class KMZUploader extends HttpServlet {
                                             }
                                         }
 
-                                        kmlFileName = uuid + File.separator + "new_" + fileName;
-                                        File newFile = new File(tempDirectory + File.separator + kmlFileName);
+                                        newFileName = "new_" + fileName;
+                                        kmlFileName = uuid + File.separatorChar + newFileName;
+                                        File newFile = new File(tempDirectory + File.separatorChar + kmlFileName);
                                         fos = new FileOutputStream(newFile);
 
                                         TransformerFactory tFactory =
@@ -269,7 +281,7 @@ public class KMZUploader extends HttpServlet {
                             zis.close();
 
                             response.setContentType("text/html");
-                            writeResponse(response, "{ \"success\":true, \"result\":{ \"code\":\"" + kmlFileName + "\"}}");
+                            writeResponse(response, "{ \"success\":true, \"result\":{\"code\":\"" + uuid + "\",\"newFileName\":\"" + newFileName + "\"}}");
 
                         } catch (IOException ex) {
                             if (LOGGER.isLoggable(Level.SEVERE)) {

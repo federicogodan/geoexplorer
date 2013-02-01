@@ -245,8 +245,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                   'Accept': "application/json"
                },
                success: function(response, opts){  
-                    var addConfig;
-                    
+                    var addConfig;                    
 
                     try {
                       addConfig = Ext.util.JSON.decode(response.responseText);

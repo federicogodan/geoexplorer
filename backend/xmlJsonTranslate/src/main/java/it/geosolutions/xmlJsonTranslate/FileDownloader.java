@@ -98,7 +98,7 @@ public class FileDownloader extends HttpServlet {
                 response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
 
                 // get file
-                file = new File(tempDirectory + "/" + code);
+                file = new File(tempDirectory + File.separatorChar + code);
                 br = new BufferedReader(new FileReader(file));
                 writer = response.getWriter();
                 String line = null;

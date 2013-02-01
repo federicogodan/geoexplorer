@@ -288,7 +288,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }        
         }    
 
-   		Ext.getCmp('south').disable();
+   		var south = Ext.getCmp('south');
+		
+		if(south){
+			south.disable();
+		}
         
         for(var map in this.mapPanel.items.items){
             if(this.mapPanel.items.items[map].xtype == "gx_zoomslider"){  
@@ -361,7 +365,11 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }       
         }    
 
-		Ext.getCmp('south').enable();
+		var south = Ext.getCmp('south');
+		
+		if(south){
+			south.enable();
+		}
         
         for(var a=0;a<this.mapPanel.items.items.length;a++){
             if(this.mapPanel.items.items[a].xtype == "gx_zoomslider"){  

@@ -108,7 +108,7 @@ public class FileUploader extends HttpServlet {
 			PrintWriter writer = null;
 			try{
 				// get file
-				file = new File(tempDirectory + "/" + code);
+				file = new File(tempDirectory + File.separatorChar + code);
 				br = new BufferedReader( new FileReader( file ));
 				writer = response.getWriter();
 				String line = null;
@@ -195,14 +195,14 @@ public class FileUploader extends HttpServlet {
 						//
 						if(moveFile != null && fileToMoveName != null && moveFile.equals("true")){
 							String fileExtension = item.getName().toLowerCase().split("\\.")[1];
-							uploadedFile = new File( tempDirectory + "/" + fileToMoveName + "." + fileExtension);
+							uploadedFile = new File( tempDirectory + File.separatorChar + fileToMoveName + "." + fileExtension);
 							item.write(uploadedFile);
 							
 							//
 							// Move the uploaded file
 							//
 							
-							fileToMove = new File(moveDirectory + "/" + fileToMoveName + "." + fileExtension); 
+							fileToMove = new File(moveDirectory + File.separatorChar + fileToMoveName + "." + fileExtension); 
 							
 							FileInputStream in = null;
 							FileOutputStream out = null;
@@ -238,7 +238,7 @@ public class FileUploader extends HttpServlet {
 						// Basic behavior
 						//
 						else{
-							uploadedFile = new File( tempDirectory + "/" + uuid );
+							uploadedFile = new File( tempDirectory + File.separatorChar + uuid );
 							item.write(uploadedFile);
 						}
 					} else if(item.getName() != null){

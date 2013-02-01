@@ -93,7 +93,7 @@ public class HTTPWebGISFileDownload extends HttpServlet {
 
 		String fileName = (String) request.getParameter("file");
 		String temp = this.props.getProperty("temp");
-		String filePath = temp + "/" + fileName;
+		String filePath = temp + File.separatorChar + fileName;
 
 		response.setContentType("application/force-download");
 		response.setHeader("Content-Disposition", "attachment; filename="
