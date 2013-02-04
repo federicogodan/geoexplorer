@@ -278,7 +278,7 @@ var LayerListView = Ext.extend(Ext.grid.GridPanel,{
 		this.colModel = new Ext.grid.ColumnModel([
 	        {id: "title", header: 'Title', dataIndex: "title", sortable: true},
 	        {header: "Id", dataIndex: "name", width: 150, sortable: true},
-			{header: "Source", dataIndex: "source", width: 150, sortable: true, hidden: false},
+			{header: "Source", dataIndex: "source", width: 150, sortable: true, hidden: true},
 	        {header: "uuid", dataIndex: "keywords", width: 150, sortable: true, hidden: true}
 	    ]);
 		

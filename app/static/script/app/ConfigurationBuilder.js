@@ -57,11 +57,15 @@ var ConfigurationBuilder =  {
 	*	}
 	*
 	*/
-	createSourcesConfiguration: function(sources, props){
-		var size = sources.getCount();
-		var records = sources.getRange(0, size);
+	createSourcesConfiguration: function(selectedModelsSources, slectedBackgroundsSources, props){
+		var size = selectedModelsSources.getCount();
+		var records = selectedModelsSources.getRange(0, size);
 
 		var source = {};
+		
+		//
+		// Add models sources as first
+		//
 		for (var i=0; i<records.length; i++){			
 			var item = records[i].data;			
 			
@@ -69,6 +73,24 @@ var ConfigurationBuilder =  {
 				title: item.title,
 				url: item.url
 			}, props['default']);
+		}
+		
+		size = slectedBackgroundsSources.getCount();
+		records = slectedBackgroundsSources.getRange(0, size);
+		
+	    //
+		// Add background sources as second
+		//
+		for (var i=0; i<records.length; i++){			
+			var item = records[i].data;			
+			
+			var index = selectedModelsSources.find('id', item.id);
+			if ( index === -1 ){
+				source[item.id] = Ext.applyIf({
+					title: item.title,
+					url: item.url
+				}, props['default']);
+			}
 		}
 		
 		var result = Ext.encode( source );
@@ -171,8 +193,8 @@ var ConfigurationBuilder =  {
 				//
 				// Merge between the the selected source from the models and background groups.
 				//
-				var selectedSources = Ext.applyIf(params.selectedModelsSources, params.slectedBackgroundsSources);
-				conf.blob += '"gsSources":'+ this.createSourcesConfiguration(selectedSources, params.sourcesProperties) + ','
+				//var selectedSources = Ext.applyIf(params.selectedModelsSources, params.slectedBackgroundsSources);
+				conf.blob += '"gsSources":'+ this.createSourcesConfiguration(params.selectedModelsSources, params.slectedBackgroundsSources, params.sourcesProperties) + ','
 			}
 
 			conf.blob += '"watermarkUrl":"'+ params.watermarkUrl + '",';
