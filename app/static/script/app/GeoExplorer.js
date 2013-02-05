@@ -417,7 +417,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         
         this.portalItems = [{
             region: "center",
-            layout: "border",            
+            layout: "border",
             items: [
                 this.mapPanelContainer,
                 westPanel
