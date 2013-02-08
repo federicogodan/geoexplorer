@@ -43,6 +43,9 @@ public class FileUploader extends HttpServlet {
 	private String moveDirectory;
 
 	private String gbMissionScriptPublishDir;
+	
+	private String writeRights;
+	private String executeRights;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -75,11 +78,16 @@ public class FileUploader extends HttpServlet {
 		// get the file name for the temporary directory
 		String temp = properties.getProperty("temp");
 		String moveDir = properties.getProperty("moveDir");
+		String writePermissions = properties.getProperty("setWritePermissions");
+		String executePermissions = properties.getProperty("setExecutePermissions");		
 		
 		gbMissionScriptPublishDir = properties.getProperty("gbMissionScriptPublishDir");
 
 		// The move directory must exists !!!
 		moveDirectory = moveDir;
+		
+		writeRights = writePermissions;
+		executeRights = executePermissions;
 		
 		// if it does not exists create the file
 		tempDirectory = temp;
@@ -140,7 +148,6 @@ public class FileUploader extends HttpServlet {
 					}
 					throw new ServletException(e.getMessage());
 				}
-
 			}
 
 		} else {
@@ -151,7 +158,6 @@ public class FileUploader extends HttpServlet {
 			response.setContentType("text/html");
 			writeResponse( response, "{ \"success\":false, \"errorMessage\":\"malformed request: code param is required\"}" );
 		}
-
 	}
 
 	/**
@@ -225,6 +231,15 @@ public class FileUploader extends HttpServlet {
 									if(out != null){
 										out.close();
 									}
+									
+									if(this.writeRights.equals("true")){
+										fileToMove.setWritable(true, false);
+									} 	
+									
+									if(this.executeRights.equals("true")){
+										fileToMove.setExecutable(true, false);
+									} 	
+									
 								}catch(IOException exc){
 									if (LOGGER.isLoggable(Level.SEVERE))
 										LOGGER.log(Level.SEVERE,
