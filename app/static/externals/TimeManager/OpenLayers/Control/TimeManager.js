@@ -395,29 +395,33 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         var lyr = evt.layer;
         if(lyr.metadata.timeInterval) {
             var lyrIntervals = lyr.metadata.timeInterval;
-            var lyrIndex = OpenLayers.Util.indexOf(this.layers, lyr);
-            this.layers.splice(lyrIndex, 1);
-            this.removeAgentLayer(lyr);
+			
+			if(this.layers){
+				var lyrIndex = OpenLayers.Util.indexOf(this.layers, lyr);
+				this.layers.splice(lyrIndex, 1);
+				
+				this.removeAgentLayer(lyr);
 
-            if(lyrIntervals.length && lyrIntervals[0] instanceof Date && !this.fixedIntervals) {
-                this.intervals = this.buildIntervals(this.timeAgents);
-                if(this.intervals) {
-                    if(this.intervals[0] < this.range[0] || this.intervals[1] > this.range[1]) {
-                        this.setRange([Math.max(this.intervals[0], this.range[0]), Math.min(this.intervals[1], this.range[1])]);
-                    }
-                }
-            }
-            else if(!this.fixedRange) {
-                if(this.timeSpans) {
-                    if(lyrIntervals.start < this.range[0] || lyrIntervals.end > this.range[1]) {
-                        this.setRange([Math.max(lyrIntervals.start, this.range[0]), Math.min(lyrIntervals.end, this.range[1])]);
-                    }
-                }
-            }
-            if(!this.fixedRange && !this.fixedIntervals && !this.intervals && !this.timeSpans) {
-                //we have NO time layers
-                this.setRange([null, null]);
-            }
+				if(lyrIntervals.length && lyrIntervals[0] instanceof Date && !this.fixedIntervals) {
+					this.intervals = this.buildIntervals(this.timeAgents);
+					if(this.intervals) {
+						if(this.intervals[0] < this.range[0] || this.intervals[1] > this.range[1]) {
+							this.setRange([Math.max(this.intervals[0], this.range[0]), Math.min(this.intervals[1], this.range[1])]);
+						}
+					}
+				}
+				else if(!this.fixedRange) {
+					if(this.timeSpans) {
+						if(lyrIntervals.start < this.range[0] || lyrIntervals.end > this.range[1]) {
+							this.setRange([Math.max(lyrIntervals.start, this.range[0]), Math.min(lyrIntervals.end, this.range[1])]);
+						}
+					}
+				}
+				if(!this.fixedRange && !this.fixedIntervals && !this.intervals && !this.timeSpans) {
+					//we have NO time layers
+					this.setRange([null, null]);
+				}
+			}
         }
     },
     /**

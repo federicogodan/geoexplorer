@@ -319,13 +319,15 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			
 		// console.log('Apply this configuration:');
 		// console.log(config);
-			
-		this.mapItems.push({
-	            xtype: "gxp_watermark", 
-				url: config.watermarkUrl, 
-				text: config.watermarkText, 
-				position: config.watermarkPosition 
-	    });
+		
+		if(!Ext.isIE7){
+			this.mapItems.push({
+					xtype: "gxp_watermark", 
+					url: config.watermarkUrl, 
+					text: config.watermarkText, 
+					position: config.watermarkPosition 
+			});
+		}
 	
 		// TODO refactor
 		// it should be better to centralize definitions of common plugins in Composer.js
