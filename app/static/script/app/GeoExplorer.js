@@ -969,12 +969,18 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			var popupTitle = this.markerPopupTitle;
             function onFeatureSelect(feature) {
                 if (feature.attributes.html){
-                    new GeoExt.Popup({
+					if(this.popup){
+						this.popup.close();
+						this.popup.destroy();
+						
+					}
+                    this.popup = new GeoExt.Popup({
                         title: popupTitle,
                         width: 300,
                         height: 200,
                         layout: "fit",
                         map: app.mapPanel,
+						destroyOnClose:true,
                         location: feature.geometry.getBounds().getCenterLonLat(),
                         items: [{   
                             title: feature.fid,
@@ -990,7 +996,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                                selectControl.unselect(feature);
                             }
                         }
-                    }).show();
+                    });
+					this.popup.show();
                 } else {
                     // Use unselect to not highlight the marker. I could not delete the selection. This happens when I close the popup
                     selectControl.unselect(feature);
@@ -1041,8 +1048,9 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             
             var selectControl = new OpenLayers.Control.SelectFeature(vectorSelect ,{
 				onSelect: onFeatureSelect,
+				
 				clickout: false,
-				multiple: true,
+				multiple: false,
                 autoActivate: true
 			});        
                   
