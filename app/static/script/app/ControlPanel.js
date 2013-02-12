@@ -315,7 +315,7 @@ var LayerSelector = Ext.extend(Ext.util.Observable, {
 		
 		});		
 		
-        LayerSelector.superclass.constructor.apply(this, config);		
+        LayerSelector.superclass.constructor.apply(this, arguments);		
 		this.bind();
     },
 	
