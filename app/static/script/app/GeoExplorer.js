@@ -233,7 +233,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_dynamicgeocoder",
                 outputConfig:{
-                    emptyText:"Google Places"
+                    emptyText:"Places"
                 },
                 outputTarget:"paneltbar"
             }/*, {
