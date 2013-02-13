@@ -338,7 +338,10 @@ GeoExt.Lang.add("fr", {
         premiumSizeLabel: "Premium",
         largeSizeLabel: "Grand"
     },
-    "gxp.plugins.GoogleGeocoder.prototype": {
-        addMarkerTooltip: "Réinitialiser Marker"
+     "gxp.plugins.DynamicGeocoder.prototype": {
+        addMarkerTooltip: "réinitialiser marqueur",
+		outputConfig:{
+			emptyText:'Rechercher des lieux..'
+		}
     }
 });

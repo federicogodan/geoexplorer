@@ -369,7 +369,10 @@ GeoExt.Lang.add("it", {
         premiumSizeLabel: "Premium",
         largeSizeLabel: "Grande"
     },
-    "gxp.plugins.GoogleGeocoder.prototype": {
-        addMarkerTooltip: "Resetta Marker"
+    "gxp.plugins.DynamicGeocoder.prototype": {
+        addMarkerTooltip: "Resetta Marker",
+		outputConfig:{
+			emptyText:'Cerca Luoghi'
+		}
     }
 });

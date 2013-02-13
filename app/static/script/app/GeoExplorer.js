@@ -232,9 +232,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_dynamicgeocoder",
-                outputConfig:{
-                    emptyText:"Places"
-                },
                 outputTarget:"paneltbar"
             }/*, {
                 leaf: true,
