@@ -130,11 +130,9 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_googleearth",
                 actionTarget: {target: "paneltbar", index: 24}
             },*/{
-                ptype: "gxp_googlegeocoder",
+                ptype: "gxp_dynamicgeocoder",
                 //actionTarget: {target: "paneltbar", index: 28},
-                outputConfig:{
-                    emptyText:"Google Places"
-                },
+                
                 outputTarget:"paneltbar",
                 index: 25
             }/*,{

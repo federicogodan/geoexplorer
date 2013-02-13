@@ -231,7 +231,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 text: "Google Places",
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
-                ptype: "gxp_googlegeocoder",
+                ptype: "gxp_dynamicgeocoder",
                 outputConfig:{
                     emptyText:"Google Places"
                 },
