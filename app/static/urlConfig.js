@@ -50,6 +50,7 @@
 				"needsAuthorization": true
             }, {
                 "ptype": "gxp_idaattribute",
+                "id": "idaLayerAttribute",
                 "wpsManager": "wpsRasterAlgebra",
                 "wfsGrid" : "wfsAlgebraGridPanel",
                 "colorStyles": [
