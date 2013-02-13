@@ -436,7 +436,7 @@ GeoExt.Lang.add("it", {
                 svpFileImportErrorMsg: "Il file SVP non è stato correttamente caricato.",
                 xmlRunListImportWinTitle: "Importa Run da XML",
                 importRunButton: "Importa Run",
-                errorLayerNameMsg: "In Nome del Modello non può iniziare con una cifra, </br> non può contenere spazi </br> e non può contere i caratteri '_', '*', '%', '-'"
+                errorLayerNameMsg: "In Nome del Modello non può iniziare con una cifra, </br> non può contenere spazi </br> e non può contere i caratteri '*', '%', '-'"
 	},	
 	"Ext.DatePicker.prototype":{
 		todayText         : "Oggi",

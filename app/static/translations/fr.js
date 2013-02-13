@@ -405,7 +405,7 @@ GeoExt.Lang.add("fr", {
                 svpFileImportErrorMsg: "SVP fichier n'est pas correctement chargé.",
                 xmlRunListImportWinTitle: "Importer Runs à partir de XML",
                 importRunButton: "Importer Runs",
-                errorLayerNameMsg: "The Model Name can not begin with a digit </br> and can not contain characters '_', '*', '%'"
+                errorLayerNameMsg: "The Model Name can not begin with a digit </br> and can not contain characters '*', '%'"
 	},
 	"Ext.DatePicker.prototype":{
 		todayText         : "Aujourd'hui",
