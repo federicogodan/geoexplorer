@@ -127,6 +127,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 "spmListUploader": "spmlistuploader",
                 "toggleGroup": this.toggleGroup,
                 "wpsManager": "wpsSPM",
+                "idaAttribute" : "idaLayerAttribute",
 		"outputTarget": "idacontrol"
 	     }
         ];
