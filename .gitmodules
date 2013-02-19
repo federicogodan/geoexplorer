@@ -35,3 +35,6 @@ url = git://github.com/tschaub/ringojs.git
 [submodule "app/static/externals/PrintPreview"]
 	path = app/static/externals/PrintPreview
 	url = git://github.com/opengeo/PrintPreview.git
+[submodule "app/static/externals/gxp"]
+	path = app/static/externals/gxp
+	url = git@github.com:geosolutions-it/gxp.git
