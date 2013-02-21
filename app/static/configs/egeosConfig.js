@@ -16,7 +16,7 @@
    "startTime": "2010-12-24T03:00:00.000Z",
    "endTime":   "2010-12-24T19:00:00.000Z",
    "timeUnits": "Minutes",
-   "timeStep": 60,
+   "timeStep": 15,
    "timeFrameRate": 5,
 
 	"backgrounds":[
@@ -51,15 +51,15 @@
    "layers":[
 		{
 			"source": "eGeos",
-			"title": "points",
-			"name": "tem_sd__1p",
+			"title": "mosaic",
+			"name": "TEM_QL__1P_mosaic",
 			"displayInLayerSwitcher": true,
 			"tiled": true
 		},
 		{
 			"source": "eGeos",
-			"title": "mosaic",
-			"name": "TEM_QL__1P_mosaic",
+			"title": "points",
+			"name": "tem_sd__1p",
 			"displayInLayerSwitcher": true,
 			"tiled": true
 		},
