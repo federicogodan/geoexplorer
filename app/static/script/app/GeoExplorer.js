@@ -316,30 +316,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 			config.map.maxExtent = config.bounds;
 			delete config.bounds;		
 		}
-			
-		// console.log('Apply this configuration:');
-		// console.log(config);
 		
-		if(!Ext.isIE7){
-			this.mapItems.push({
-					xtype: "gxp_watermark", 
-					url: config.watermarkUrl, 
-					text: config.watermarkText, 
-					position: config.watermarkPosition 
-			});
-		}
-	
-		// TODO refactor
-		// it should be better to centralize definitions of common plugins in Composer.js
-		config.tools.push(
-				{	 
-					ptype: "gxp_synchronizer",
-					refreshTimeInterval: config.refreshTimeInterval,
-					actionTarget: {target: "paneltbar", index: 17},
-					range: config.timeRange
-				}
-			);
-			
 		config.tools.unshift(
 				{
                 ptype:"gxp_playback",
@@ -423,11 +400,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					border: false, 
 					id: 'tree', 
 					title: this.layersText
-				}, 
-				{
-					region:'north', xtype: "panel", title:'Vehicles', 
-					autoScroll:true,
-                    border: false, height: 200, id: 'vehicle-selector'	
 				},
                 {
                     region: 'south', xtype: "panel", 
@@ -435,21 +407,6 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                     border: false, height: 200, id: 'legend', title:'Legend'
                 }
             ]
-        });
-
-		var eastPanel = new Ext.Panel({
-            border: false,
-            id: 'east',
-            region: "east",
-            width: 368,
-			minWidth: 350,
-			maxWidth: 368,
-			activeTab: 0,
-            split: true,
-            collapsible: true,
-            collapseMode: "mini",
-            header: false,					
-			autoScroll: true
         });
         
         this.toolbar = new Ext.Toolbar({
@@ -492,8 +449,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             layout: "border",            
             items: [
                 this.mapPanelContainer,
-                westPanel,
-				eastPanel
+                westPanel
             ]
         }];
         

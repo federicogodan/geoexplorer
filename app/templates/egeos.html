@@ -16,8 +16,6 @@
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
     
     <script type="text/javascript" src="../script/GeoExplorer.js"></script>
-	<!--script type="text/javascript" src="../script/PilotNotes.js"></script>
-	<script type="text/javascript" src="../script/FeatureSelector.js"></script-->
     
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/en.js"></script>
@@ -85,7 +83,6 @@
         var cruiseName; 
 		var vehicles;
 		var timeUnit;
-		
 		
 		// //////////////////////////////////////////////////
 		// Parsing the request to get the parameters
@@ -183,13 +180,13 @@
             }
 			
             if(!cruiseName){
-                cruiseName = "NOMR12";
+                cruiseName = "eGeos";
             }
 			
 			if (!vehicles){
 				vehicles = serverConfig.vehicles
 			}
-			
+
             OpenLayers.ImgPath = "../externals/openlayers/theme/default/img/";
             gxp.plugins.ZoomToExtent.prototype.closest = false;
                         
@@ -209,13 +206,6 @@
                 border : false,
 				layout: 'fit',
                 id : 'appTabs'
-            });
-
-			var logfileTabs = new Ext.Panel({
-                region: 'center',
-                border : false,
-				layout:'fit',
-                id : 'logfileTabs'
             });
 
             var aboutButton = new Ext.Button({
@@ -264,94 +254,70 @@
                         collapsed: false,
                         collapseMode: 'mini',
                         split: true,
-					    html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_InterPage.png" height="100%"/><div style= "loat:right;text-align:right"><h1 style="color:white"></h1></div>',
-                        bodyStyle: 'padding:0px;background-color: #0055bb;'
+						html:'<img style="position:absolute; top:0px; left:20px; z-index:1000" src="../theme/app/img/logo_e-geos.jpg" height="100%"/><h1 style="color:grey; font-size:30px; position:absolute; top:20px; left:260px; z-index:1000">MARISS Project</h1></div>',
+					    //html: '<h1>MARISS project</h1>',
+                        bodyStyle: 'padding:30px;background-color: #FFFFFF;'
                     },{
                         region : 'center',
-						tbar: [ '->', Application.user.getLoginButton()],
                         layout : 'border',
                         border : false,
                         header : false,                    
-                        items : [appTabs]
-                        /*bbar : [
-                            poweredByGeoSol,"-",aboutButton
-                        ]*/
-                    },{
-						region:'south',
-						id:'south',
-						// hideCollapseTool: true,
-						collapsible : true,
-						collapsed: false,
-						title:'Log files',
-						// collapseMode: 'mini',
-						split: true,
-						layout:'border',
-						height:300,
-						border:false,
-						// header:false,
-						items: [ logfileTabs ],
-						bbar : [
+                        items : [appTabs],
+                        bbar : [
                             poweredByGeoSol,"-",aboutButton
                         ]
-					}]
+                    }]
             });
-                 
+                 			
 			var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, loading..."});
 			appMask.show();
 			
-			
-			    // initialize cross-cutting features of the app
-				Application.init( {geostoreBaseUrl:serverConfig.geoStoreBase} );
-			
-			
-		            app = new GeoExplorer.Composer({
-					    modified: false,
-						watermarkUrl: serverConfig.watermarkUrl, //
-						watermarkText: serverConfig.watermarkText, 
-						watermarkPosition: serverConfig.watermarkPosition, //
-		                timeVisualizationPosition: serverConfig.timeVisualizationPosition,
-						customTools: serverConfig.customTools,
-						//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
-						cruiseName: cruiseName,
-		                proxy: proxy,
-						xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
-		                defaultSourceType: "gxp_wmssource",
-		                renderToTab : 'appTabs',
-						// Time Animator //
-		                timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES, //
-		                timeRange: [startTime, endTime], //
-		                timeStep: serverConfig.timeStep, //
-		                timeFrameRate: serverConfig.timeFrameRate, //
-						// Real Time Synch //
-						refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
-		                about: {
-		                    title: "NOMR12 Cruise Gliders Map",
-		                    'abstract': "NOMR12 Cruise Gliders Map",
-		                    contact: "<a href='#'>#</a>."
-		                },
-						vehicleSelector: serverConfig.vehicleSelector, //
-		                sources: serverConfig.gsSources,
-						bounds: [ bounds[0], bounds[1], bounds[2], bounds[3]],  //
-						backgrounds: serverConfig.backgrounds, //
-						models: serverConfig.models,
-		                map: {
-							projection: "EPSG:4326",
-		                    units: "dd",
-							extent: [
-		                        bounds[0], bounds[1],
-		                        bounds[2], bounds[3]
-		                    ],
-							maxExtent: [
-		                        maxExtent[0], maxExtent[1],
-		                        maxExtent[2], maxExtent[3]
-		                    ],
-		                    layers: serverConfig.layers
-		                    // center: [center[0], center[1]],
-		                    // zoom: zoom
-		                }
-		            }, mapIdentifier, authorization, fullScreen);   
-
+		
+            app = new GeoExplorer.Composer({
+			    modified: false,
+                timeVisualizationPosition: serverConfig.timeVisualizationPosition,
+				customTools: serverConfig.customTools,
+				//vehicles: vehicles, //TODO: Integrate this with the 'vehicleSelector' tool.
+				cruiseName: cruiseName, //
+                proxy: proxy,
+				xmlJsonTranslateService: serverConfig.xmlJsonTranslateService,
+                defaultSourceType: "gxp_wmssource",
+                renderToTab : 'appTabs',
+				// Time Animator //
+                 timeUnits: serverConfig.timeUnits ? serverConfig.timeUnits : OpenLayers.TimeUnit.MINUTES, //
+                timeRange: [startTime, endTime], //
+                timeStep: serverConfig.timeStep, //
+                timeFrameRate: serverConfig.timeFrameRate, //
+				// Real Time Synch //
+				refreshTimeInterval: serverConfig.refreshTimeInterval, // msec
+                about: {
+                    title: "eGeos Home page",
+                    'abstract': "eGeos Home page",
+                    contact: "<a href='#'>#</a>."
+                },
+				vehicleSelector: serverConfig.vehicleSelector, //
+				bounds: [ bounds[0], bounds[1], bounds[2], bounds[3]], //
+				backgrounds: serverConfig.backgrounds, //
+				models: serverConfig.models,
+                sources: serverConfig.gsSources,
+                map: {
+					projection: serverConfig.projection||"EPSG:4326",
+                    units: serverConfig.units||"dd",
+					extent: [
+                        bounds[0], bounds[1],
+                        bounds[2], bounds[3]
+                    ],
+					maxExtent: [
+                        maxExtent[0], maxExtent[1],
+                        maxExtent[2], maxExtent[3]
+                    ],
+                    layers: serverConfig.layers
+                    // center: [center[0], center[1]],
+                    // zoom: zoom
+                }
+            }, mapIdentifier, authorization, fullScreen);   
             
+   
             app.on({
                 'portalready' : function(){
                     if(fullScreen){
@@ -371,7 +337,7 @@
             });
       };			
 			
-      var cfgFile = cruiseName ? "../configs/" + cruiseName  +"Int.js" : "../configs/NOMR12Int.js";
+      var cfgFile = "../configs/egeosConfig.js";
       Ext.Ajax.request({
           url: cfgFile,
           method: 'GET',
@@ -393,7 +359,7 @@
               if(serverConfig){
                   proxy = serverConfig.proxy; 
                   geoStoreBaseURL = serverConfig.geoStoreBase;                  
-
+				  
                   //      
                   // Run the application when browser is ready
                   //

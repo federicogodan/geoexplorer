@@ -9,5 +9,5 @@ var auth = require("../auth");
 
 app.get("/", function(request) {
     var status = auth.getStatus(request);
-    return app.render("composer.html", {status: status || 404});
+    return app.render("egeos.html", {status: status || 404});
 });

@@ -4,18 +4,8 @@ var app = Application();
 app.configure("notfound", "error", "static", "params", "mount");
 app.static(module.resolve("static"));
 
-app.mount("/", function(request) {
-    if (request.pathInfo.length > 1) {
-        throw {notfound: true};
-    }
-    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/informational/";
-    return {
-        status: 303,
-        headers: {"Location": target},
-        body: []
-    };
-});
-app.mount("/composer", require("./root/composer").app);
+// Mount on root the composer page
+app.mount("/", require("./root/egeos").app);
 app.mount("/login", require("./root/login").app);
 app.mount("/maps/", require("./root/maps").app);
 app.mount("/proxy", require("./root/proxy").app);
@@ -23,10 +13,6 @@ app.mount("/proxy", require("./root/proxy").app);
 app.mount("/viewer/proxy", require("./root/proxy").app);
 app.mount("/composer/proxy", require("./root/proxy").app);
 app.mount("/viewer", require("./root/viewer").app);
-
-app.mount("/informational", require("./root/informational").app);
-app.mount("/interactive", require("./root/interactive").app);
-app.mount("/control", require("./root/control").app);
 
 // debug mode loads unminified scripts
 // assumes markup pulls in scripts under the path /servlet_name/script/
