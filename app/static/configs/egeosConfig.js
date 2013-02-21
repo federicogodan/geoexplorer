@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://84.33.2.25/geostore/rest/",
-   "proxy":"/proxy?url=",
+   "proxy":"/http_proxy/proxy?url=",
    "refreshTimeInterval": 10,
    "timeVisualizationPosition": "position:relative;left:60px;top:10px;background-color:#0055BB;color:#FFFFFF;font-size: 12px;",
    "projection": "EPSG:900913",
