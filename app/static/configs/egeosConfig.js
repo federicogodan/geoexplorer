@@ -1,6 +1,6 @@
 {
    "geoStoreBase":"http://84.33.2.25/geostore/rest/",
-   "proxy":"/http_proxy/proxy?url=",
+   "proxy":"/proxy/proxy?url=",
    "refreshTimeInterval": 10,
    "timeVisualizationPosition": "position:relative;left:60px;top:10px;background-color:#0055BB;color:#FFFFFF;font-size: 12px;",
    "projection": "EPSG:900913",
@@ -13,8 +13,8 @@
 			3000000.00, 3800000.00
 		],
    "units": "m",
-   "startTime": "2010-12-24T03:00:00.000Z",
-   "endTime":   "2010-12-24T19:00:00.000Z",
+   "startTime": "2010-12-24T00:00:00.000Z",
+   "endTime":   "2010-12-24T23:59:00.000Z",
    "timeUnits": "Minutes",
    "timeStep": 15,
    "timeFrameRate": 5,
@@ -34,9 +34,9 @@
 	],
    
    "gsSources":{
-        "eGeos": {
+        "MARISS-Layers": {
             "ptype": "gxp_wmssource",
-            "title": "Gliders", 
+            "title": "MARISS", 
             "version": "1.1.1",
             "url": "http://84.33.2.25/geoserver/mariss/ows",
 			"layerBaseParams": {
@@ -50,15 +50,22 @@
    },
    "layers":[
 		{
-			"source": "eGeos",
-			"title": "mosaic",
+			"source": "MARISS-Layers",
+			"title": "SAR-imagery",
 			"name": "TEM_QL__1P_mosaic",
 			"displayInLayerSwitcher": true,
 			"tiled": true
 		},
 		{
-			"source": "eGeos",
-			"title": "points",
+			"source": "MARISS-Layers",
+			"title": "SAR-imagery-footprints",
+			"name": "TEM_QL__1P_mosaic_idx",
+			"displayInLayerSwitcher": true,
+			"tiled": true
+		},
+		{
+			"source": "MARISS-Layers",
+			"title": "SHIP-detection",
 			"name": "tem_sd__1p",
 			"displayInLayerSwitcher": true,
 			"tiled": true
@@ -81,7 +88,14 @@
 		}
 	],
 	"customTools":[
-	    
-		
+		{
+			"actions": ["->"], 
+			"actionTarget": "paneltbar"
+		},
+	    {
+			"ptype": "gxp_dynamicgeocoder",
+			"outputTarget":"paneltbar",
+			"index": 27
+		}
 	]
 }

@@ -42,7 +42,7 @@ body {
 }
 
 .x-btn .icon-geoexplorer {
-    background-image: url(img/geoexplorer.png);
+    background-image: url(img/mapstore.png);
 }
 
 .x-btn .icon-about {
@@ -239,6 +239,10 @@ body {
 
 .gx-item-margin-left{
     margin-left: 2px;
+}
+
+.x-btn .icon-removemarkers {
+    background-image: url(img/geosilk/vector_delete.png);
 }
 
 

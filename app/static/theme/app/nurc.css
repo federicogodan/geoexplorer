@@ -1,4 +1,6 @@
 /* GetFeatureInfo tools */
+
+/*
 #main {
 	text-align:center;
 }
@@ -52,8 +54,9 @@ table.featureInfo td{
 		text-transform:lowercase;
 		padding:.2em .2em;              
 }  
-
+/*
 /* Vehicle selector tools */
+/*
 .x-grid3-row-over .x-grid3-cell-inner {
 	font-weight: bold;
 }
@@ -77,8 +80,9 @@ table.featureInfo td{
 .refresh{
 	background-image: url(../app/img/silk/cancel.png);
 }
-		
+		*/
 /* Additional OL Styles */
+
 .olControlMousePosition {
     top: 5px !important;
     right: 5px !important;
