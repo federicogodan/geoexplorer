@@ -363,13 +363,22 @@ GeoExt.Lang.add("en", {
         animationFieldsetText: "Animation Options",
         startText: "Start",
         endText: "End",
+        saveText: 'Save',
+        cancelText: 'Cancel',         
         listOnlyText: "Use Exact List Values Only",
         stepText: "Animation Step",
         unitsText: "Animation Units",
+        frameRateText:'Animation Delay (s)',        
         noUnitsText: "Snap To Time List",
         loopText: "Loop Animation",
         reverseText: "Reverse Animation",
         rangeChoiceText: "Choose the range for the time control",
-        rangedPlayChoiceText: "Playback Mode"
+        rangedPlayChoiceText: "Playback Mode",
+        secondsText: 'Seconds', 
+        minutesText: 'Minutes', 
+        hoursText: 'Hours', 
+        daysText: 'Days', 
+        monthsText: 'Months', 
+        yearsText: 'Years'        
     }
 });

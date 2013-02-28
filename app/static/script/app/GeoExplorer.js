@@ -136,7 +136,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 })
             },{
 	            xtype: "gxp_timevisualization",
-				position: "position:relative;color:#FFFFFF;font-weight:bold;padding:2px;"
+				position: "position:relative;color:#FFFFFF;font-weight:bold;"
 	        }
         ];
         
@@ -665,6 +665,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
         this.on("ready", function() {
             
             mask.hide();
+         
             // enable only those items that were not specifically disabled
             var disabled = this.toolbar.items.filterBy(function(item) {
                 return item.initialConfig && item.initialConfig.disabled;
@@ -711,7 +712,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
      */
     createTools: function() {
         var tools = [
-            "-"
+            //"-"
         ];
         return tools;
     },

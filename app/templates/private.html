@@ -15,12 +15,21 @@
     <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
     
     <script type="text/javascript" src="../script/GeoExplorer.js"></script>
+    
+    <!-- jquery  -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>    
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css"  />    
+    
+    <!-- Highstock  -->
+    <script type="text/javascript" src="../highstock/js/highstock.js"></script>
+    <script type="text/javascript" src="../highstock/js/modules/exporting.js"></script>    
 
     <!-- translation data  -->
     <script type="text/javascript" src="../translations/it.js"></script>
     <script type="text/javascript" src="../translations/fr.js"></script>
     <script type="text/javascript" src="../translations/en.js"></script>
-
+    
   <style type="text/css">
         #main {
             text-align:center;
@@ -83,10 +92,10 @@
         top:0px;
         left:0px;
     }   
-    .olTimeBack {
+    .olTime {
         position:relative;
         left:60px;
-        top:10px;
+        top:10px;        
         background-color:#222B43;
     }     
   </style>
@@ -381,13 +390,29 @@
             });
 */
 
-            var appTabs = new Ext.TabPanel({
+            var appTabs = new Ext.Panel({
                 //items: [geoportalPanel,geonetworkPanel],
-                items: [geonetworkPanel],
+                //items: [geonetworkPanel],
                 region: 'center',
                 border : false,
                 id : 'appTabs',
-                enableTabScroll: true
+                layout: 'fit',
+                enableTabScroll: true,
+                listeners:{
+                    tabchange: function(){
+                        if (app){
+                            for(var tool in app.tools){            
+                                if(app.tools[tool].ptype == "gxp_wmsgetfeatureinfo"){
+                                      if (app.tools[tool].popupCache){
+                                          for (var popupKey in app.tools[tool].popupCache){
+                                              app.tools[tool].popupCache[popupKey].close();
+                                          }
+                                    }
+                                }                        
+                            }
+                        }                
+                    }
+                }
             });
 
 
@@ -446,10 +471,17 @@
             //
             var sources = "{" +
                  "\"LaMMA_Stazioni\": {" +
+                        "\"ptype\": \"gxp_wmssource\"," +
                         "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"," +                
                         "\"title\": \"LaMMA Stazioni\"" +
 
-                "}," +          
+                "}," +         
+                 "\"LaMMA_confini\": {" +
+                        "\"ptype\": \"gxp_wmssource\"," +
+                        "\"url\":\"http://159.213.57.108/geoserver/gwc/service/wms\"," +                
+                        "\"title\": \"LaMMA Confini\"" +
+
+                "}," +                  
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -547,54 +579,123 @@
                     ],
                     layers: [
                     {
-                        source: "osm",
-                        title: "Open Street Map",
-                        name: "mapnik",
-                        group: "background"
+                       "fixed":true,
+                       "group":"background",
+                       "name":"Aerial",
+                       "selected":false,
+                       "source":"bing",
+                       "title":"Bing Aerial",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"mapnik",
+                       "selected":false,
+                       "source":"osm",
+                       "title":"Open Street Map",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"osm",
+                       "selected":false,
+                       "source":"mapquest",
+                       "title":"MapQuest OpenStreetMap",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"ROADMAP",
+                       "selected":false,
+                       "source":"google",
+                       "title":"Google Roadmap",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"TERRAIN",
+                       "opacity":1,
+                       "selected":false,
+                       "source":"google",
+                       "title":"Google Terrain",
+                       "visibility":true
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"HYBRID",
+                       "selected":false,
+                       "source":"google",
+                       "title":"Google Hybrid",
+                       "visibility":false
+                    },{
+                        "source": "ol",
+                        "group": "background",
+                        "fixed": true,
+                        "type": "OpenLayers.Layer",
+                        "visibility": false,
+                        "args": [
+                            "None", {"visibility": false}
+                        ]
+                    },{
+                       "format":"image/png",
+                       "group":"Limiti mondiali",
+                       "name":"lamma:confini_mondiali",
+                       "quaryable": false,
+                       "selected":false,                   
+                       "source":"LaMMA_confini", 
+                       "styles":["confini"],
+                       "style":["confini"],
+                       "title":"Confini",
+                       "transparent":true,
+                       "visibility":true,
+                       "ratio":1,
+                       "getGraph": false,
+                       "srs":"EPSG:900913"
                     },{
                        "format":"image/png8",
                        "group":"Stazioni",
                        "name":"lamma_stazioni:prec60_web",
                        "opacity":0.9,
+                       "buffer": 2,
                        "selected":false,
+                       "tiled":false,
                        "source":"LaMMA_Stazioni", 
-                       "styles":[],
+                       "styles":["heatmap_pioggia"],
+                       "style":["pioggia"],
                        "title":"Pioggia oraria",
                        "transparent":true,
                        "visibility":true,
                        "ratio":1,
                        "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
+                       "getGraph": true,
+                       "graphTable": "prec60_web",
+                       "graphAttribute": "prec_mm",
+                       "cumulative": true,                        
                        "elevation":"0.0"
-                    }/*,{
-                       "format":"image/png8",
-                       "group":"Stazioni",
-                       "name":"lamma_stazioni:prec15_web",
-                       "opacity":0.9,
-                       "selected":false,
-                       "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Pioggia 15 minuti",
-                       "transparent":true,
-                       "visibility":false,
-                       "ratio":1,
-                       "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
-                       "elevation":"0.0"
-                    }*/,{
+                    },{
                        "format":"image/png8",
                        "group":"Stazioni",
                        "name":"lamma_stazioni:prec360_web",
                        "opacity":0.9,
                        "selected":false,
+                       "tiled":false,                       
                        "source":"LaMMA_Stazioni", 
-                       "styles":[],
+                       "styles":["heatmap_pioggia"],
+                       "style":["pioggia"],
                        "title":"Pioggia 6 ore",
                        "transparent":true,
                        "visibility":false,
                        "ratio":1,
                        "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
+                       "getGraph": true,
+                       "graphTable": "prec360_web",
+                       "graphAttribute": "prec_mm",
+                       "cumulative": true, 
                        "elevation":"0.0"
                     },{
                        "format":"image/png8",
@@ -602,14 +703,19 @@
                        "name":"lamma_stazioni:temparia_web",
                        "opacity":0.9,
                        "selected":false,
+                       "tiled":false,                       
                        "source":"LaMMA_Stazioni", 
-                       "styles":[],
+                       "styles":["temperatura"],
+                       "style":["temperatura_legend"],
                        "title":"Temperatura oraria",
                        "transparent":true,
                        "visibility":false,
                        "ratio":1,
                        "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
+                       "getGraph": true,
+                       "graphTable": "temparia_web",
+                       "graphAttribute": "temp_c",
+                       "cumulative": false,                        
                        "elevation":"0.0"
                     },{
                        "format":"image/png8",
@@ -617,14 +723,19 @@
                        "name":"lamma_stazioni:pres_web",
                        "opacity":0.9,
                        "selected":false,
+                       "tiled":false,                       
                        "source":"LaMMA_Stazioni", 
-                       "styles":[],
+                       "styles":["pressione"],
+                       "style":["pressione"],
                        "title":"Pressione oraria",
                        "transparent":true,
                        "visibility":false,
                        "ratio":1,
                        "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
+                       "getGraph": true,
+                       "graphTable": "pres_web",
+                       "graphAttribute": "pres_hpa",
+                       "cumulative": false,                        
                        "elevation":"0.0"
                     },{
                        "format":"image/png8",
@@ -632,14 +743,37 @@
                        "name":"lamma_stazioni:umid_web",
                        "opacity":0.9,
                        "selected":false,
+                       "tiled":false,                       
                        "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Umidità oraria",
+                       "styles":["umidita"],
+                       "style":["umidita"],
+                       "title":"Umidita oraria",
                        "transparent":true,
                        "visibility":false,
                        "ratio":1,
                        "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
+                       "getGraph": true,
+                       "graphTable": "umid_web",
+                       "graphAttribute": "umid_per",                       
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:umid_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["temp_rugiada_legend"],
+                       "style":["temp_rugiada_legend"],
+                       "title":"Temp rugiada oraria",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "umid_web",
+                       "graphAttribute": "trug_c",                       
                        "elevation":"0.0"
                     },{
                        "format":"image/png8",
@@ -647,14 +781,18 @@
                        "name":"lamma_stazioni:vent_web",
                        "opacity":0.9,
                        "selected":false,
+                       "tiled":false,                       
                        "source":"LaMMA_Stazioni", 
-                       "styles":[],
-                       "title":"Vento orario",
+                       "styles":["vento"],
+                       "style":["vento"],
+                       "title":"Vento",
                        "transparent":true,
                        "visibility":false,
                        "ratio":1,
                        "srs":"EPSG:900913",
-                       "transitionEffect":"resize",
+                       "getGraph": true,
+                       "graphTable": "vent_web",
+                       "graphAttribute": "vven_ms",
                        "elevation":"0.0"
                     }],
                     center: [1250000.000000, 5375000.000000],
@@ -699,15 +837,14 @@
 				  });        
 						  
 				  if (record) {
+                    if(enableViewTab){
+                        appTabs.setActiveTab(1);
+                    }                  
 					var layerStore = app.mapPanel.layers;  
 					layerStore.add([record]);
 
 					modified = true;
-                                        
-                    if(enableViewTab){
-                        appTabs.setActiveTab(1);
-                    }
-					
+
 					//
 					// Zoom To Layer extent
 					//

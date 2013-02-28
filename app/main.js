@@ -8,7 +8,8 @@ app.mount("/", function(request) {
     if (request.pathInfo.length > 1) {
         throw {notfound: true};
     }
-    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/private/";
+    //var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/private/";
+    var target = request.scheme + "://" + request.host + ":" + request.port + request.scriptName + "/public/";
     return {
         status: 303,
         headers: {"Location": target},
@@ -23,8 +24,8 @@ app.mount("/maps/", require("./root/maps").app);
 //app.mount("/viewer/proxy", require("./root/proxy").app);
 //app.mount("/composer/proxy", require("./root/proxy").app);
 //app.mount("/viewer", require("./root/viewer").app);
-//app.mount("/public", require("./root/public").app);
-app.mount("/private", require("./root/private").app);
+app.mount("/public", require("./root/public").app);
+//app.mount("/private", require("./root/private").app);
 
 // debug mode loads unminified scripts
 // assumes markup pulls in scripts under the path /servlet_name/script/

@@ -114,15 +114,21 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 ptype: "gxp_wmsgetfeatureinfo", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 21}
             }, {
+                ptype: "gxp_wfsgetgraphs", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 22}
+            }, {
+                ptype: "gxp_wmsgetgraphs", toggleGroup: this.toggleGroup,
+                actionTarget: {target: "paneltbar", index: 22}
+            }, {
                 actions: ["-"], actionTarget: "paneltbar"
             }, {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,
-                actionTarget: {target: "paneltbar", index: 20}
+                actionTarget: {target: "paneltbar", index: 24}
             }, {
                 actions: ["-"], actionTarget: "paneltbar"
             },{
                 ptype: "gxp_saveDefaultContext",
-                actionTarget: {target: "paneltbar", index: 22},
+                actionTarget: {target: "paneltbar", index: 25},
 				        needsAuthorization: true
             }/*, {
                 actions: ["->"], actionTarget: "paneltbar"
@@ -147,8 +153,8 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
         return this;
     };
         
-        if (config.map.layers[22]){
-            var layerName = config.map.layers[22].name;
+        if (config.map.layers[40]){
+            var layerName = config.map.layers[40].name;
             var layerNameData = layerName.substring(layerName.lastIndexOf("_")+1,layerName.lastIndexOf("_")+12);
             var anno = layerNameData.substring(0,4);
             var mese = layerNameData.substring(4,6);
@@ -227,6 +233,27 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 }
             })
         }else if (config.sources.MSG2 && !arw3kmRun && !arw9kmRun && !gfsRun){
+            config.tools.push({
+                ptype:"gxp_playback",
+                outputTarget: "paneltbar",
+                playbackMode: "track",
+                showIntervals: true,
+                labelButtons: true,
+                settingsButton: true,
+                rateAdjuster: false,
+                dynamicRange: false,
+                timeFormat: 'c',
+                outputConfig: {
+                    controlConfig:{
+                        units: OpenLayers.TimeUnit.MINUTES,
+                        step: 15//,
+                        //units:config.units,
+                        //timeSpans: config.timeSpans,
+                        //range: config.range
+                    }
+                }
+            })
+        }else if (config.sources.MSG3 && !arw3kmRun && !arw9kmRun && !gfsRun){
             config.tools.push({
                 ptype:"gxp_playback",
                 outputTarget: "paneltbar",

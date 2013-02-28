@@ -83,6 +83,12 @@
         top:0px;
         left:0px;
     }   
+    .olTime {
+        position:relative;
+        left:60px;
+        top:10px;        
+        background-color:#222B43;
+    }     
   </style>
   
     <script type="text/javascript">
@@ -381,17 +387,29 @@
                 region: 'center',
                 border : false,
                 id : 'appTabs',
-                enableTabScroll: true
+                enableTabScroll: true,
+                listeners:{
+                    tabchange: function(){
+                        if (app){
+                            for(var tool in app.tools){            
+                                if(app.tools[tool].ptype == "gxp_wmsgetfeatureinfo"){
+                                      if (app.tools[tool].popupCache){
+                                          for (var popupKey in app.tools[tool].popupCache){
+                                              app.tools[tool].popupCache[popupKey].close();
+                                          }
+                                    }
+                                }                        
+                            }                           
+                        }                
+                    }
+                }
             });
-            //gfs_50km_Temperature_height_above_ground_20121009T120000000Z
-            //ARW_9KM_RUN00:arw_9km_Temperature_surface_20121012T000000000Z:0.0
-            // 	gfs_50km_Relative_humidity_20121012T060000000Z
-            //arw_3km_Wind_20121012T000000000Z computed on 2012-10-12T00:00:00.000Z with elevation 1000.0
 
             var prova = new Ext.Button({
                 text: "Prova",
                 handler: function(){
-                    addMSLayer("ARW_3KM_RUN12:arw_3km_Temperature_20121110T120000000Z:1000.0","arw_3km_Temperature_20121110T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
+                    //addMSLayer("ARW_3KM_RUN12:arw_3km_Wind_20121209T120000000Z:1000.0","arw_3km_Wind_20121209T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
+                    addMSLayer("ARW_3KM_RUN12:arw_3km_Geopotential_height_20121209T120000000Z:925.0","arw_3km_Geopotential_height_20121209T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
                 }
             });
             var aboutButton = new Ext.Button({
@@ -607,31 +625,37 @@
             addMSLayerRecord = function(source, sourceId, msLayerName, msLayerUUID, gnUrl, enableViewTab){
                   var layerString = msLayerName.split(":");
                   var styles;
+                  var style;
+                  
                   if(layerString[1].indexOf("Wind") != -1){
                         styles = "wind_arrow_palette";
+                        style = "wind_arrow_palette_raster"; 
                   }else{
                         styles = layerString[1].substring(0,layerString[1].lastIndexOf("_")) + "_" + layerString[2];                                     
+                        style = layerString[1].substring(0,layerString[1].lastIndexOf("_")) + "_" + layerString[2];                                     
                   }
-                  //wind_arrow_palette
+
 				  var record = source.createLayerRecord({
-					name: layerString[0] + ":" + layerString[1], //msLayerName.substring(0,msLayerName.lastIndexOf(":")),
-					title: layerString[2] ? layerString[1] + ":" + layerString[2] : layerString[1], //msLayerName,
-                    elevation: layerString[2] ? layerString[2] : "", //msLayerName.substring(msLayerName.lastIndexOf(":")+1,msLayerName.lastIndexOf(":")+(numElev)),
+					name: layerString[0] + ":" + layerString[1],
+					title: layerString[2] ? layerString[1] + ":" + layerString[2] : layerString[1],
+                    elevation: layerString[2] ? layerString[2] : "",
                     styles: layerString[2] ? [styles] : [],
+                    style: layerString[2] ? [style] : [],
 					uuid : msLayerUUID,
 					gnURL: gnUrl + "srv/" + gnLangStr + "/",
 					source: sourceId
 				  });  
 						  
 				  if (record) {
+                    if(enableViewTab){
+                        appTabs.setActiveTab(1);
+                    }
 					var layerStore = app.mapPanel.layers;  
 					layerStore.add([record]);
 
 					modified = true;
                                         
-                    if(enableViewTab){
-                        appTabs.setActiveTab(1);
-                    }
+
 					
 					//
 					// Zoom To Layer extent

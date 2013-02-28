@@ -470,6 +470,9 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                 }
             }else if(this.stepType == "play"){
                 //if(this.currentTime >= this.range[1] && this.loop) {
+                    if (this.toolbar.btnBack.disabled == true){
+                        this.toolbar.btnBack.enable();
+                    }                      
                     this.incrementTime();
                 /*}
                 if(this.currentTime >= this.range[1] && !this.loop) {
@@ -712,7 +715,7 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
      * time - {Date|String} UTC current animantion time/date using either a
      *     Date object or ISO 8601 formatted string.
      */ 
-     setTime:function(time, pippo) {
+     setTime:function(time, change) {
         if(!( time instanceof Date)) {
             time = OpenLayers.Date.parse(time);
         }
@@ -737,18 +740,14 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         }
         else {
             this.currentTime = time;
-            /*if(this.toolbar.slider instanceof Ext.slider.MultiSlider){
-                //var pippo = new Date(this.toolbar.slider.getValue(0));
-                var pippo = new Date(this.toolbar.slider.thumbs[0].value);
-            }*/
-            
+
             //SCRIVE IL TIME DI LAYER SULLA MAPPA
             OpenLayers.Util.getElement('olTime').innerHTML = time;
         }
-        if (!pippo){
-        this.events.triggerEvent('tick', {
-            'currentTime' : this.currentTime
-        });
+        if (!change){
+            this.events.triggerEvent('tick', {
+                'currentTime' : this.currentTime
+            });
         }
     },
     /**
