@@ -180,7 +180,7 @@
             }
 			
             if(!cruiseName){
-                cruiseName = "eGeos";
+                cruiseName = "Layer tree";
             }
 			
 			if (!vehicles){
@@ -231,14 +231,8 @@
                 }
             });            
             
-            var poweredByGeoSol = new Ext.Button({
-                tooltip: 'Powered by GeoSolutions',
-                iconCls: "icon-geosol",
-                width : 150,
-                handler: function(btn){
-                    window.open('http://geo-solutions.it/', '_blank');
-                }
-            });    
+
+            
             
             var appViewport = new Ext.Viewport({
                 id: 'appVieport',
@@ -254,7 +248,7 @@
                         //collapsed: false,
                         //collapseMode: 'mini',
                         //split: true,
-						html:'<img style="position:absolute; top:0px; left:20px; z-index:1000" src="theme/app/img/logo_e-geos.jpg" height="100%"/><h1 style="color:grey; font-size:30px; position:absolute; top:20px; left:260px; z-index:1000">MARISS Project</h1></div>',
+						html:'<img style="position:absolute; top:0px; left:20px; z-index:1000" src="theme/app/img/mariss_logo.jpg" height="100%"/><h1 style="color:grey; font-size:30px; position:absolute; top:20px; left:260px; z-index:1000">MARISS Project</h1></div>',
 					    //html: '<h1>MARISS project</h1>',
                         bodyStyle: 'padding:30px;background-color: #FFFFFF;'
                     },{
@@ -264,7 +258,7 @@
                         header : false,                    
                         items : [appTabs],
                         bbar : [
-                            poweredByGeoSol,"-",aboutButton
+                            aboutButton
                         ]
                     }]
             });

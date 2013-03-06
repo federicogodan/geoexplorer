@@ -42,6 +42,15 @@ div.geosolutions_logo {
     background: url('img/GeoSolutions_logo1.png') center no-repeat;
 }
 
+div.mapstore_logo {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+    height: 100px;
+    background: url('img/mapstore_logo.png') center no-repeat;
+}
+
 h3 {
     font-weight: bold;
     color: #ffffff;
