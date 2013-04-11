@@ -116,10 +116,10 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_wfsgetgraphs", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 22}
-            }, {
+            },/* {
                 ptype: "gxp_wmsgetgraphs", toggleGroup: this.toggleGroup,
                 actionTarget: {target: "paneltbar", index: 22}
-            }, {
+            }, */{
                 actions: ["-"], actionTarget: "paneltbar"
             }, {
                 ptype: "gxp_measure", toggleGroup: this.toggleGroup,

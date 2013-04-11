@@ -409,7 +409,8 @@
                 text: "Prova",
                 handler: function(){
                     //addMSLayer("ARW_3KM_RUN12:arw_3km_Wind_20121209T120000000Z:1000.0","arw_3km_Wind_20121209T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
-                    addMSLayer("ARW_3KM_RUN12:arw_3km_Geopotential_height_20121209T120000000Z:925.0","arw_3km_Geopotential_height_20121209T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
+                    addMSLayer("ARW_3KM_RUN12:arw_3km_Temperature_height_above_ground_20130226T120000000Z:2.0","arw_3km_Temperature_height_above_ground_20130226T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
+                    addMSLayer("GFS_50KM_RUN12:gfs_50km_Temperature_height_above_ground_20130226T120000000Z:2.0","gfs_50km_Temperature_height_above_ground_20130226T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=GFS_50KM_RUN12",true);
                 }
             });
             var aboutButton = new Ext.Button({
@@ -467,6 +468,12 @@
             // Parsing WMS servers Sources for getCapabilities operation
             //
             var sources = "{" +         
+                 "\"LaMMA_confini\": {" +
+                        "\"ptype\": \"gxp_wmssource\"," +
+                        "\"url\":\"http://159.213.57.108/geoserver/gwc/service/wms\"," +                
+                        "\"title\": \"LaMMA Confini\"" +
+
+                "}," +                
                 "\"mapquest\": {" +
                     "\"ptype\": \"gxp_mapquestsource\"" +
                 "}," + 
@@ -547,15 +554,6 @@
                 },
                 sources: sources,
                 map: {
-                    /*plugins: [
-                        {
-                            ptype: "gxp_loadingindicator",
-                            onlyShowOnFirstLoad: true
-                        }
-                    ],
-                    layoutConfig: {
-                        monitorResize: true
-                    },*/
                     projection: "EPSG:900913",
                     units: "m",
                     maxExtent: [
@@ -564,38 +562,86 @@
                     ],
                     layers: [
                     {
-                        source: "bing",
-                        title: "Bing Aerial",
-                        name: "Aerial",
-                        group: "background"
+                       "fixed":true,
+                       "group":"background",
+                       "name":"Aerial",
+                       "selected":false,
+                       "source":"bing",
+                       "title":"Bing Aerial",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"mapnik",
+                       "selected":false,
+                       "source":"osm",
+                       "title":"Open Street Map",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"osm",
+                       "selected":false,
+                       "source":"mapquest",
+                       "title":"MapQuest OpenStreetMap",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"ROADMAP",
+                       "selected":false,
+                       "source":"google",
+                       "title":"Google Roadmap",
+                       "visibility":false
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"TERRAIN",
+                       "opacity":1,
+                       "selected":false,
+                       "source":"google",
+                       "title":"Google Terrain",
+                       "visibility":true
+                    },
+                    {
+                       "fixed":true,
+                       "group":"background",
+                       "name":"HYBRID",
+                       "selected":false,
+                       "source":"google",
+                       "title":"Google Hybrid",
+                       "visibility":false
                     },{
-                        source: "osm",
-                        title: "Open Street Map",
-                        name: "mapnik",
-                        group: "background"
+                        "source": "ol",
+                        "group": "background",
+                        "fixed": true,
+                        "type": "OpenLayers.Layer",
+                        "visibility": false,
+                        "args": [
+                            "None", {"visibility": false}
+                        ]
                     },{
-                        source: "mapquest",
-                        title: "MapQuest OpenStreetMap",
-                        name: "osm",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Roadmap",
-                        name: "ROADMAP",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Hybrid",
-                        name: "HYBRID",
-                        group: "background"
-                    },{
-                        source: "google",
-                        title: "Google Terrain",
-                        name: "TERRAIN",
-                        group: "background"
+                       "format":"image/png",
+                       "group": "Limiti Mondiali",
+                       "name":"lamma:confini_mondiali",
+                       "selected":false,                   
+                       "source":"LaMMA_confini", 
+                       "styles":["confini"],
+                       "style":["confini"],
+                       "title":"Confini",
+                       "transparent":true,
+                       "visibility":true,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "queryable": false,
+                       "displayInLayerSwitcher": true,
                     }],
                     center: [1250000.000000, 5375000.000000],
-                    zoom: 7
+                    zoom: 5
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
@@ -652,6 +698,9 @@
                     }
 					var layerStore = app.mapPanel.layers;  
 					layerStore.add([record]);
+                    
+                    var baseLayer = app.mapPanel.map.getLayersByName("Confini")[0];
+                    app.mapPanel.map.raiseLayer(baseLayer, app.mapPanel.map.layers.length);
 
 					modified = true;
                                         

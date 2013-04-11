@@ -370,7 +370,8 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
                         if(!this.range) {
                             this.setRange([lyrIntervals.start, lyrIntervals.end]);
                         }
-                        else if(lyrIntervals.start < this.range[0] || lyrIntervals.end > this.range[1]) {
+                        //else if(lyrIntervals.start < this.range[0] || lyrIntervals.end > this.range[1]) {
+                        else if(lyrIntervals[0][0] < this.range[0] || lyrIntervals[0][1] > this.range[1]) {
                             this.setRange([Math.min(lyrIntervals.start, this.range[0]), Math.max(lyrIntervals.end, this.range[1])]);
                         }
                     }

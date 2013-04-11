@@ -67,12 +67,12 @@ OpenLayers.TimeAgent.WMS = OpenLayers.Class(OpenLayers.TimeAgent, {
     },
 
     removeLayer : function(layer) {
-        layer.events.un({
+        /*layer.events.un({
             'loadend' : this.onLayerLoadEnd,
             'loadstart' : this.onLayerLoadStart,
             scope : this
-        });
-        OpenLayers.TimeAgent.prototype.removeLayer.call(this, layer);
+        });*/
+        //OpenLayers.TimeAgent.prototype.removeLayer.call(this, layer);
     },
 
     destroy : function() {

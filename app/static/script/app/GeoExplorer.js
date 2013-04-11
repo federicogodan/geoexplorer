@@ -608,7 +608,8 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                             {
                                 region: 'center',
                                 xtype: "panel",
-                                layout: "fit", 
+                                layout: "fit",
+                                title: "Legenda",
                                 collapsible : true,
                                 collapseMode:  'mini',
                                 split : true,
