@@ -145,10 +145,19 @@ OpenLayers.TimeAgent.WMS = OpenLayers.Class(OpenLayers.TimeAgent, {
             //format time in ISO:8601 format
             isotime = OpenLayers.Date.toISOString(time);
         }
+        
         layer.mergeNewParams({
             time : isotime
-        });
-	
+        });        
+        
+        /*var countDown = function(){	
+            layer.mergeNewParams({
+                time : isotime
+            });
+            clearInterval( tooltipInterval );
+        };        
+
+        var tooltipInterval = setInterval( countDown, 100 );*/
     	/*
         if(!layer.visiblity) {
             layer.setVisibility(true);

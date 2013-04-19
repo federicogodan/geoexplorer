@@ -752,6 +752,48 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
         }
     },
     /**
+     * APIMethod:setTime
+     * Manually sets the currentTime used in the control's animation.
+     *
+     * Parameters: {Object} time
+     * time - {Date|String} UTC current animantion time/date using either a
+     *     Date object or ISO 8601 formatted string.
+     */ 
+     setTimeModelsAdded:function(time, curTime) {
+        if(!( time instanceof Date)) {
+            time = OpenLayers.Date.parse(time);
+        }
+        if(this.snapToIntervals) {
+            var nearest = OpenLayers.TimeAgent.WMS.prototype.findNearestTimes.apply(this, [time, this.intervals]);
+            var index = this.lastTimeIndex;
+            if(nearest.exact > -1){
+                index = nearest.exact;
+            } else if(nearest.before > -1 &&  nearest.after > -1) {
+                //requested time is somewhere between 2 valid times
+                //find the actual closest one.
+                var bdiff = this.intervals[nearest.before] - this.currentTime;
+                var adiff = this.currentTime - this.intervals[nearest.after];
+                index = (adiff > bdiff) ? nearest.before : nearest.after;
+            } else if (nearest.before > -1){
+                index = nearest.before;
+            } else if (nearest.after >-1){
+                index = nearest.after;
+            }
+            this.currentTime = this.intervals[index];
+            this.lastTimeIndex = index;
+        }
+        else {
+            this.currentTime = time;
+            this.curTime = curTime;
+            //SCRIVE IL TIME DI LAYER SULLA MAPPA
+            OpenLayers.Util.getElement('olTime').innerHTML = time;
+        }
+            this.events.triggerEvent('tick', {
+                'currentTime' : this.currentTime,
+                'curTime' : this.curTime
+            });
+    },    
+    /**
      * APIMethod:setFrameRate
      * Sets the control's playback frameRate (ticks/second)
      * Parameters: {Number} rate - the ticks/second rate
@@ -821,7 +863,24 @@ OpenLayers.Control.TimeManager = OpenLayers.Class(OpenLayers.Control, {
             this.currentTime['setUTC'+stepUnit](newTime);
         }
     },
-    
+    /**
+     * APIMethod:currenttime
+     * Set the time to the animation current UTC time. Fires the 'currenttime' event.
+     * 
+     * Parameters: {Boolean} looped - trigger reset event with looped = true
+     * Returns:
+     * {Date} the control's currentTime
+     */ 
+     currenttime:function(time,looped) {
+        this.clearTimer();
+        //this.clearTooltipTimer();
+
+        this.setTimeModelsAdded(time,"curTime");
+        this.events.triggerEvent('reset', {
+            'looped' : !!looped
+        });
+        return this.currentTime;
+    },       
 	/**
 	 * Method: buildTimeAgents
 	 * Creates the controls "managed" by this control.
