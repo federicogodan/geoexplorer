@@ -658,7 +658,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 
         
         this.toolbar = new Ext.Toolbar({
-            disabled: true,
+            disabled: false,
             id: 'paneltbar',
             items: this.createTools()
         });
