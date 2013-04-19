@@ -398,7 +398,14 @@
                                               app.tools[tool].popupCache[popupKey].close();
                                           }
                                     }
-                                }                        
+                                }   
+                                if(app.tools[tool].ptype == "gxp_wfsgetgraphs"){
+                                      if (app.tools[tool].popupCache){
+                                          for (var popupKey in app.tools[tool].popupCache){
+                                              app.tools[tool].popupCache[popupKey].close();
+                                          }
+                                    }
+                                }                                  
                             }                           
                         }                
                     }
@@ -406,13 +413,23 @@
             });
 
             var prova = new Ext.Button({
-                text: "Prova",
+                text: "3KM",
                 handler: function(){
                     //addMSLayer("ARW_3KM_RUN12:arw_3km_Wind_20121209T120000000Z:1000.0","arw_3km_Wind_20121209T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
-                    addMSLayer("ARW_3KM_RUN12:arw_3km_Temperature_height_above_ground_20130226T120000000Z:2.0","arw_3km_Temperature_height_above_ground_20130226T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
-                    addMSLayer("GFS_50KM_RUN12:gfs_50km_Temperature_height_above_ground_20130226T120000000Z:2.0","gfs_50km_Temperature_height_above_ground_20130226T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=GFS_50KM_RUN12",true);
+                    addMSLayer("ARW_3KM_RUN00:arw_3km_Wind_height_above_ground_20130416T000000000Z","arw_3km_Wind_height_above_ground_20130416T000000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN00",true);
+                    //addMSLayer("GFS_50KM_RUN12:gfs_50km_Temperature_height_above_ground_20130414T120000000Z:2.0","gfs_50km_Temperature_height_above_ground_20130414T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=GFS_50KM_RUN12",true);
                 }
             });
+            
+            var prova1 = new Ext.Button({
+                text: "50KM",
+                handler: function(){
+                    //addMSLayer("ARW_3KM_RUN12:arw_3km_Wind_20121209T120000000Z:1000.0","arw_3km_Wind_20121209T120000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN12",true);
+                    //addMSLayer("ARW_3KM_RUN00:arw_3km_Temperature_height_above_ground_20130413T000000000Z:2.0","arw_3km_Temperature_height_above_ground_20130413T000000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=ARW_3KM_RUN00",true);
+                    addMSLayer("GFS_50KM_RUN00:gfs_50km_Wind_height_above_ground_20130417T000000000Z","gfs_50km_Wind_height_above_ground_20130417T000000000Z","http://159.213.57.108/geonetwork/","http://159.213.57.108/geoserver/ows?namespace=GFS_50KM_RUN00",true);
+                }
+            }); 
+            
             var aboutButton = new Ext.Button({
                 text: GeoExplorer.prototype.appInfoText,
                 iconCls: "icon-geoexplorer",
@@ -443,13 +460,39 @@
                         id:'main-header',
                         region: 'north',
                         border: false,
-                        height: 75,
+                        height: 90,
                         hideCollapseTool: true,
                         collapsible : false,
                         collapsed: false,
                         collapseMode: 'mini',
                         split: true,
-                        html: '<table width="100%"><tr><td><a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page"><img width="180" src="http://geoportale.lamma.rete.toscana.it/bd_geo/logo.png"/></a></td><td><div id="run" style="color: white;" align="center"></div></td></tr></table>',
+                        /*html:  [
+                            '<div align="center" style="background-color:#222b43;">',
+                                '<img  width="220" src="/theme/app/img/banner/logo.png" style="float:left" usemap="#IM_left-banner"/>',
+                                '<img  src="/theme/app/img/banner/GeoPortale_title.png" style="float:right;position:absolute;top:10px;right:450px;" usemap="#IM_right-banner"/>',
+                            '</div>'],*/
+                        html:   [
+                                '<table width="100%">'+
+                                    '<tr>'+
+                                        '<td width="40%">'+
+                                            '<a href="http://www.lamma.rete.toscana.it" target="_blank" title="Consorzio LaMMA Home page">'+
+                                                '<img width="220" src="/theme/app/img/banner/logo.png"/>'+
+                                            '</a>'+
+                                        '</td>'+/*
+                                        '<td width="30%">'+
+                                            '<a >'+
+                                                '<img width="220" src="/theme/app/img/banner/GeoPortale_title.png"/>'+
+                                            '</a>'+
+                                        '</td>'+                                        
+                                        '<td>'+
+                                            '<div id="run1" style="color: white;" align="left"></div>'+
+                                            '<div id="run2" style="color: white;" align="left"></div>'+
+                                            '<div id="run3" style="color: white;" align="left"></div>'+
+                                            '<div id="run4" style="color: white;" align="left"></div>'+
+                                        '</td>'+*/
+                                    '</tr>'+
+                                '</table>'
+                                ],
                         bodyStyle: 'padding:0px;background-color: #222b43;'
                     },{
                         region : 'center',
@@ -459,7 +502,7 @@
                         items : [appTabs],                            
                         bbar : [
                             //aboutButton, '->',languageSelector
-                            prova, aboutButton, '->',languageSelector
+                            prova, "-",prova1, aboutButton, '->',languageSelector
                         ]
                     }]
             });
@@ -467,7 +510,13 @@
             //
             // Parsing WMS servers Sources for getCapabilities operation
             //
-            var sources = "{" +         
+            var sources = "{" + 
+                 "\"LaMMA_Stazioni\": {" +
+                        "\"ptype\": \"gxp_wmssource\"," +
+                        "\"url\":\"http://159.213.57.108/geoserver/ows?namespace=lamma_stazioni\"," +                
+                        "\"title\": \"LaMMA Stazioni\"" +
+
+                "}," +               
                  "\"LaMMA_confini\": {" +
                         "\"ptype\": \"gxp_wmssource\"," +
                         "\"url\":\"http://159.213.57.108/geoserver/gwc/service/wms\"," +                
@@ -639,9 +688,147 @@
                        "srs":"EPSG:900913",
                        "queryable": false,
                        "displayInLayerSwitcher": true,
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:prec60_web",
+                       "opacity":0.9,
+                       "buffer": 2,
+                       "selected":false,
+                       "tiled":false,
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["heatmap_pioggia"],
+                       "style":["pioggia"],
+                       "title":"Pioggia oraria",
+                       "transparent":true,
+                       "visibility":true,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "prec60_web",
+                       "graphAttribute": "prec_mm",
+                       "cumulative": true,                        
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:prec360_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["heatmap_pioggia"],
+                       "style":["pioggia"],
+                       "title":"Pioggia 6 ore",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "prec360_web",
+                       "graphAttribute": "prec_mm",
+                       "cumulative": true, 
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:temparia_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["temperatura"],
+                       "style":["temperatura_legend"],
+                       "title":"Temperatura oraria",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "temparia_web",
+                       "graphAttribute": "temp_c",
+                       "cumulative": false,                        
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:pres_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["pressione"],
+                       "style":["pressione"],
+                       "title":"Pressione oraria",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "pres_web",
+                       "graphAttribute": "pres_hpa",
+                       "cumulative": false,                        
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:umid_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["umidita"],
+                       "style":["umidita"],
+                       "title":"Umidita oraria",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "umid_web",
+                       "graphAttribute": "umid_per",                       
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:umid_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["temp_rugiada_legend"],
+                       "style":["temp_rugiada_legend"],
+                       "title":"Temp rugiada oraria",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "umid_web",
+                       "graphAttribute": "trug_c",                       
+                       "elevation":"0.0"
+                    },{
+                       "format":"image/png8",
+                       "group":"Stazioni",
+                       "name":"lamma_stazioni:vent_web",
+                       "opacity":0.9,
+                       "selected":false,
+                       "tiled":false,                       
+                       "source":"LaMMA_Stazioni", 
+                       "styles":["vento"],
+                       "style":["vento"],
+                       "title":"Vento",
+                       "transparent":true,
+                       "visibility":false,
+                       "ratio":1,
+                       "srs":"EPSG:900913",
+                       "getGraph": true,
+                       "graphTable": "vent_web",
+                       "graphAttribute": "vven_ms",
+                       "elevation":"0.0"
                     }],
                     center: [1250000.000000, 5375000.000000],
-                    zoom: 5
+                    zoom: 7
                 }
             }, mapIdentifier, authorization, fullScreen);   
             
@@ -654,17 +841,21 @@
                         ovestPanel.collapse();
                     }
 
-                    //
-                    // Visualizing metadata tab and layer at startup
-                    //
+
+                },
+                'ready': function(){
+                        
+                        //
+                        // Visualizing metadata tab and layer at startup
+                        //
+                        
+                        if(lay && wmsurl && gnBaseUrl && uuid)
+                        addMSLayer(lay, uuid, gnBaseUrl, wmsurl, false);
                     
-                    if(lay && wmsurl && gnBaseUrl && uuid)
-                    addMSLayer(lay, uuid, gnBaseUrl, wmsurl, false);
-                
-                    if(lay && gnBaseUrl && uuid){
-                        app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, lay);
-                        appTabs.setActiveTab(2);	
-                    }
+                        if(lay && gnBaseUrl && uuid){
+                            app.viewMetadata(gnBaseUrl + "srv/" + gnLangStr + "/", uuid, lay);
+                            appTabs.setActiveTab(2);	
+                        }                        
                 }
             });
 
@@ -673,9 +864,13 @@
                   var styles;
                   var style;
                   
-                  if(layerString[1].indexOf("Wind") != -1){
+                  if((layerString[1].indexOf("Wind") != -1) && (layerString[1].indexOf("gfs") != -1)){
+                        styles = "wind_arrow_palette_gfs";
+                        style = "wind_arrow_palette_raster_gfs"; 
+                  }
+                  else if ((layerString[1].indexOf("Wind") != -1) && (layerString[1].indexOf("arw") != -1)){
                         styles = "wind_arrow_palette";
-                        style = "wind_arrow_palette_raster"; 
+                        style = "wind_arrow_palette_raster";                         
                   }else{
                         styles = layerString[1].substring(0,layerString[1].lastIndexOf("_")) + "_" + layerString[2];                                     
                         style = layerString[1].substring(0,layerString[1].lastIndexOf("_")) + "_" + layerString[2];                                     
@@ -685,8 +880,10 @@
 					name: layerString[0] + ":" + layerString[1],
 					title: layerString[2] ? layerString[1] + ":" + layerString[2] : layerString[1],
                     elevation: layerString[2] ? layerString[2] : "",
-                    styles: layerString[2] ? [styles] : [],
-                    style: layerString[2] ? [style] : [],
+                    //styles: layerString[2] ? [styles] : [],
+                    //style: layerString[2] ? [style] : [],
+                    styles: ((layerString[1].indexOf("Wind") != -1) || layerString[2]) ? [styles] : [],
+                    style: ((layerString[1].indexOf("Wind") != -1) || layerString[2]) ? [styles] : [],
 					uuid : msLayerUUID,
 					gnURL: gnUrl + "srv/" + gnLangStr + "/",
 					source: sourceId
@@ -698,18 +895,50 @@
                     }
 					var layerStore = app.mapPanel.layers;  
 					layerStore.add([record]);
-                    
-                    var baseLayer = app.mapPanel.map.getLayersByName("Confini")[0];
-                    app.mapPanel.map.raiseLayer(baseLayer, app.mapPanel.map.layers.length);
 
-					modified = true;
-                                        
-
-					
 					//
 					// Zoom To Layer extent
 					//
 					var layer = record.get('layer');
+                    app.mapPanel.map.setLayerIndex(layer, 1);
+                    var valTime =  OpenLayers.Date.parse(layer.metadata.timeInterval[0][0]);
+                    var valStep =  layer.metadata.timeInterval[0][2];
+                    var r = /\d+/g;
+                    var s = valStep;
+                    var m;
+                    while ((m = r.exec(s)) != null) {
+                      var step = m[0];
+                    }                    
+                    var timeManagers = app.mapPanel.map.getControlsByClass('OpenLayers.Control.TimeManager');
+                    
+                    if (timeManagers[0].range[1] < OpenLayers.Date.parse(layer.metadata.timeInterval[0][1])){
+                        timeManagers[0].setEnd(OpenLayers.Date.parse(layer.metadata.timeInterval[0][1]));
+                        timeManagers[0].fixedRange=true;
+                    }     
+                    
+                    timeManagers[0].step = step;
+                    timeManagers[0].events.triggerEvent("rangemodified");
+                    timeManagers[0].fixedRange=true; 
+
+                    timeManagers[0].units = valStep.slice(-1) == "H" ? "Hours" : "Minutes";
+                    timeManagers[0].events.triggerEvent("rangemodified");               
+                    timeManagers[0].fixedRange=true;
+            
+                    timeManagers[0].currenttime(valTime,false);             
+                    
+                    /*var pippo = layer.metadata.timeInterval[0][0].indexOf("T");
+                    var ciccio = layer.metadata.timeInterval[0][0].substring(pippo+1,pippo+3);
+                    
+                    OpenLayers.Util.getElement('run1').innerHTML = "RUN: " + ciccio;
+                    OpenLayers.Util.getElement('run2').innerHTML = "Data inizio: " + layer.metadata.timeInterval[0][0];
+                    OpenLayers.Util.getElement('run3').innerHTML = "Data fine: " + layer.metadata.timeInterval[0][1];
+                    OpenLayers.Util.getElement('run4').innerHTML = "Step: " + layer.metadata.timeInterval[0][2];*/
+                    
+                    var baseLayer = app.mapPanel.map.getLayersByName("Confini")[0];
+                    //app.mapPanel.map.raiseLayer(baseLayer, app.mapPanel.map.layers.length);
+                    app.mapPanel.map.setLayerIndex(baseLayer, 7);
+
+					modified = true;                    
 					var extent = layer.restrictedExtent || layer.maxExtent || app.mapPanel.map.maxExtent;
 					var map = app.mapPanel.map;
 
