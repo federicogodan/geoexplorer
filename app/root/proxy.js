@@ -12,7 +12,8 @@ var app = exports.app = function(request) {
     if (url) {
         response = proxyPass({
             request: request, 
-            url: url
+            url: url,
+            allowAuth:true
         });
     } else {
         response = responseForStatus(400, "Request must contain url parameter.");
@@ -131,6 +132,7 @@ function proxyPass(config) {
         headers.unset("WWW-Authenticate");
         headers.unset("Set-Cookie");
     }
+    headers.unset("Content-Length"); 
     return {
         status: exchange.status,
         headers: headers,
