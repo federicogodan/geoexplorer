@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nurc - Global Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <!-- Ext resources -->
+        <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/ext-all.css">
+        <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/xtheme-gray.css">
+        
+        <script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
+        
+        <!-- OpenLayers resources -->
+        <link rel="stylesheet" type="text/css" href="../externals/openlayers/theme/default/style.css">
+        
+        <!-- GeoExt resources -->
+        <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/popup.css">
+        <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/layerlegend.css">
+        <link rel="stylesheet" type="text/css" href="../externals/GeoExt/resources/css/gxtheme-gray.css">
+        
+        <!-- gxp resources -->
+        <link rel="stylesheet" type="text/css" href="../externals/gxp/src/theme/all.css">
+        
+        <!-- GeoExplorer resources -->
+        <link rel="stylesheet" type="text/css" href="../theme/app/geoexplorer.css" />
+        <link rel="stylesheet" type="text/css" href="../theme/app/composer.css" />
+        <link rel="stylesheet" type="text/css" href="../theme/app/nurc.css" />
+        <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
+        
+        <script type="text/javascript" src="../script/GeoExplorer.js"></script> 
+        
+    </head>
+    <body>
+        <script type="text/javascript">
+            //
+            // Fix for IE7 and IE8
+            //
+            if (!Date.prototype.toISOString) {
+                Date.prototype.toISOString = function() {
+                    function pad(n) { return n < 10 ? '0' + n : n }
+                    return this.getUTCFullYear() + '-'
+                        + pad(this.getUTCMonth() + 1) + '-'
+                        + pad(this.getUTCDate()) + 'T'
+                        + pad(this.getUTCHours()) + ':'
+                        + pad(this.getUTCMinutes()) + ':'
+                        + pad(this.getUTCSeconds()) + 'Z';
+                };
+            }
+    
+            // see http://stackoverflow.com/questions/11020658/javascript-json-date-parse-in-ie7-ie8-returns-nan
+            var D= new Date('2011-06-02T09:34:29+02:00');
+            if(!D || +D!== 1307000069000){
+                Date.fromISO= function(s){
+                    var day, tz,
+                    rx=/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):(\d\d))?$/,
+                    p= rx.exec(s) || [];
+                    if(p[1]){
+                        day= p[1].split(/\D/);
+                        for(var i= 0, L= day.length; i<L; i++){
+                            day[i]= parseInt(day[i], 10) || 0;
+                        };
+                        day[1]-= 1;
+                        day= new Date(Date.UTC.apply(Date, day));
+                        if(!day.getDate()) return NaN;
+                        if(p[5]){
+                            tz= (parseInt(p[5], 10)*60);
+                            if(p[6]) tz+= parseInt(p[6], 10);
+                            if(p[4]== '+') tz*= -1;
+                            if(tz) day.setUTCMinutes(day.getUTCMinutes()+ tz);
+                        }
+                        return day;
+                    }
+                    return NaN;
+                }
+            }
+            else{
+                Date.fromISO = function(s){
+                    return new Date(s);
+                }
+            }
+    
+            /**
+             *    Converts XML to Ext.data.Store compatible format 
+             */
+            var GeostoreReader = Ext.extend(Ext.data.DataReader, {
+                thatsmine:true,
+                constructor: function(meta) {
+            
+                    meta = meta || {};
+                    if (!meta.format) {
+                        meta.format = new OpenLayers.Format.XML();
+                    }
+                    
+                    GeostoreReader.superclass.constructor.call(this, meta);
+                },
+                read : function(request) {
+            
+                    var data = request.responseXML;        
+                    if (!data || !data.documentElement) {
+                        data = request.responseText;
+                    }
+                    return this.readRecords(data);
+                },
+                readRecords : function(data) {
+                    
+                        if ( data === "" ){
+                                    return {
+                                        totalRecords: 0,
+                                        success: true,
+                                        records: []
+                                    };    
+                        }
+                    
+                        if (typeof data === "string") {
+                            data = this.meta.format.read(data);        
+                        }
+            
+                        if ( data.getElementsByTagName("ExtResourceList").length === 0 ){
+                            return {
+                                totalRecords: 0,
+                                success: true,
+                                records: []
+                            };
+                        }
+            
+                        var resources = data.getElementsByTagName("ExtResourceList")[0].childNodes;
+                        var records = [];
+            
+                        for(var i=0; i<resources.length; i++){
+                            
+                            var values = {};
+                            var resource = resources[i];
+                            
+                            if ( resource.nodeName == 'ResourceCount'){
+                                continue;
+                            }
+                        
+                            var attributes = resource.getElementsByTagName("Attributes")[0].childNodes;
+                            for (var j=0; j<attributes.length; j++){
+                                var attribute = attributes[j];
+                                var property = attribute.getElementsByTagName('name')[0].childNodes[0].data;
+                                var value = attribute.getElementsByTagName('value')[0].childNodes[0].data;
+                                values[ property ] = value;
+                            }
+                    
+                            var children = resource.childNodes;
+                            for (var j=0; j<children.length; j++){
+                                var child = children[j];
+                                switch( child.nodeName ){
+                                    case 'name':
+                                        values['name'] = child.childNodes[0].data;
+                                        break;
+                                    case 'id':
+                                        values['id'] = child.childNodes[0].data;
+                                        break;
+                                    case 'owner':
+                                        values['owner'] = child.childNodes[0].data;
+                                        break;
+                                    case 'description':
+                                        values['description'] = child.childNodes[0].data;
+                                        break;
+                                    case 'creation':
+                                        values['creation'] = child.childNodes[0].data;
+                                        break;
+                                    case 'lastUpdate':
+                                        values['lastUpdate'] = child.childNodes[0].data;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            values['category_name'] = resource.getElementsByTagName("category")[0].getElementsByTagName('name')[0].childNodes[0].data;
+                        
+                            var record = new Ext.data.Record({
+                                owner: values['owner'],
+                                id: values['id'],
+                                name: values['name'],
+                                description: values['description'],
+                                creation: values['creation'],
+                                lastUpdate: values['lastUpdate']
+                            });
+            
+                            records.push(record);
+                        }
+                        
+                        var count = data.getElementsByTagName("ResourceCount")[0].childNodes[0].data;
+            
+                        return {
+                            totalRecords: count,
+                            success: true,
+                            records: records
+                        };
+                    }
+            });
+    
+            /**
+             *    Return a RESTful Ext.data.Store
+             */
+            function getStore(opts){
+                
+                this.baseUrl_ = opts.baseUrl;
+                this.category_ = opts.category;
+                this.proxy_ = opts.proxy;
+                this.searchPath_ = opts.searchPath ;
+                this.searchMethod_ = opts.searchMethod;
+            
+                var uri = new Uri({'url':this.baseUrl_});
+                    uri.setProxy( this.proxy_);
+                    uri.appendPath( this.searchPath_ );
+            
+                var store = new Ext.data.Store({
+                
+                            reader: new GeostoreReader,
+                            autoDestroy: true,
+                            scope: this,
+                            root: 'results',
+                            totalProperty: 'totalCount',
+                            successProperty: 'success',
+                            idProperty: 'id',
+                            remoteSort: false,
+                            fields: [
+                                {
+                                      name: "id",  // Field
+                                      type: "int"
+                                  },{
+                                      name: "name",  // Field
+                                      type: "string"
+                                  },{
+                                      name: "owner",  // Attribute
+                                      type: "string"
+                                  },{
+                                      name: "description",  // Field
+                                      type: "string"
+                                  },{
+                                      name: "creation",  // Field
+                                      type: "date",
+                                      dateFormat: 'c'
+                                  },{
+                                      name: "lastUpdate",  // Field
+                                      type: "date",
+                                      dateFormat: 'c'
+                                  }
+                              ],
+                            proxy: new Ext.data.HttpProxy({
+                                headers: {
+                                    'Accept': 'text/xml',
+                                    'Content-Type': 'text/xml'
+                                },
+                                restful: true,
+                                api:{
+                                    load: {url: uri.toString(), method: 'POST'}
+                                },
+                                disableCaching: true,
+                                failure: function (result) {
+                                   console.error(result);
+                                }
+                            }),
+                            listeners:{
+                                 // hack: when we use a proxy, we need to set params for geostore by hand
+                                 // in order to avoid the issue described here 
+                                 // https://github.com/geosolutions-it/mapstore/issues/31
+                                 beforeload:function(inputstore, options){
+                                    var params = options.params;
+                                    
+                                    var uri = new Uri({'url':this.baseUrl_});
+                                    uri.setProxy( this.proxy_);
+                                    uri.appendPath( 'extjs/search/list' );
+                                    uri.addParam('start', params.start );
+                                    uri.addParam('limit', params.limit );
+                                    uri.addParam('includeAttributes', true );
+                    
+                                    if(!Ext.isFunction(inputstore.filter))
+                                        options.params.xmlData = inputstore.filter;
+                                    else
+                                        options.params.xmlData = '<AND><CATEGORY><name>MAP</name><operator>EQUAL_TO</operator></CATEGORY></AND>';
+                                    
+                                    inputstore.proxy.setApi( Ext.data.Api.actions.read, {url: uri.toString(), method: 'POST'} );
+                                 },
+                                 scope: this
+                            }
+                      });
+                        
+                return store;
+            };
+            
+            /**
+             *  Creates an XML filter from the input form and reload the store
+             */
+            function loadHandler(form, store, categoryName ){
+                        var buildFilter = function( creationFrom, creationTo, name, owner ){    
+                        var filter = '<AND>';
+                        if(creationFrom){
+                            filter += 
+                            '<FIELD>'+
+                                '<field>CREATION</field>'+
+                                '<operator>GREATER_THAN_OR_EQUAL_TO</operator>'+
+                                '<value>'+creationFrom+'</value>'+
+                            '</FIELD>';
+                        }
+                        if(creationTo){
+                            filter+=
+                            '<FIELD>'+
+                                '<field>CREATION</field>'+
+                                '<operator>LESS_THAN_OR_EQUAL_TO</operator>'+
+                                '<value>'+creationTo+'</value>'+
+                            '</FIELD>';
+                            
+                        }
+                        if(name){
+                            filter +=
+                            '<FIELD>'+
+                                '<field>NAME</field>'+
+                                '<operator>LIKE</operator>'+
+                                '<value>%'+name+'%</value>'+
+                            '</FIELD>';
+                        }
+                        if ( owner ){
+                          filter +=  
+                          '<ATTRIBUTE>'+
+                            '<name>owner</name>'+
+                            '<operator>LIKE</operator>'+
+                            '<type>STRING</type>'+
+                            '<value>%' + owner +'%</value>'+
+                         '</ATTRIBUTE>'                
+                        }
+            
+                        filter += '<CATEGORY><name>'+categoryName+'</name><operator>EQUAL_TO</operator></CATEGORY>'    +
+                                      '</AND>';
+                    return filter;
+                };
+                
+                return function(){
+                    
+                    if ( form.getForm().isValid()){
+                        
+                        var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, searching..."});
+                        appMask.show();
+                        
+                        var creationFrom = null;
+                        if(form.fromDate.getValue()!="" && form.fromTime.getValue()!="")
+                            creationFrom = Date.parseDate( form.fromDate.getValue().format("Y-m-d")+ ' ' +  form.fromTime.getValue(), 'Y-m-d H:i:s' ).format("Y-m-d H:i:s.000");
+                        var creationTo = null;
+                        if(form.toDate.getValue()!="" && form.toTime.getValue()!="")
+                            creationTo = Date.parseDate( form.toDate.getValue().format("Y-m-d")+ ' ' +  form.toTime.getValue(), 'Y-m-d H:i:s' ).format("Y-m-d H:i:s.000");
+                        
+                        var name = form.name.getValue();
+                        var owner = form.owner.getValue();
+                        
+                        var filter = buildFilter(creationFrom, creationTo, name, owner);
+                        
+                        // Overloading
+                        store.filter = filter;
+                        
+                        var handler = function (){
+                            store.un('load', handler, this);
+                            store.un('exception', handler, this);
+                            appMask.hide();
+                        };
+                        store.on('load', handler, this);
+                        store.on('exception', handler, this);
+                        
+                        store.lastOptions.params.start = 0;
+                        
+                        store.reload();
+                        
+                    } else {
+                        Ext.Msg.show({
+                            title: 'Invalid search criteria',
+                            msg: 'Some fields are invalid.',
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    }
+                    
+                    
+                };
+            };
+
+            /**
+             * 
+             */
+            var GlobalPageUIBuilder = {
+              
+              createFooter: function(){
+                  var aboutButton = new Ext.Button({
+                      text: GeoExplorer.prototype.appInfoText,
+                      tooltip: 'Credits',
+                      iconCls: "icon-geoexplorer",
+                      handler: function(){
+                          var appInfo = new Ext.Panel({
+                              header: false,
+                              html: "<iframe style='border: none; height: 100%; width: 100%' src='../about.html' frameborder='0' border='0'><a target='_blank' href='../about.html'>" + GeoExplorer.prototype.aboutText+"</a> </iframe>"
+                          });
+                  
+                          var win = new Ext.Window({
+                              title:  GeoExplorer.prototype.aboutThisMapText,
+                              modal: true,
+                              layout: "fit",
+                              width: 370,
+                              height: 380,
+                              items: [appInfo]
+                          });
+                  
+                          win.show();
+                      }
+                  });            
+              
+                  var poweredByGeoSol = new Ext.Button({
+                      tooltip: 'Powered by GeoSolutions',
+                      iconCls: "icon-geosol",
+                      width : 150,
+                      handler: function(btn){
+                          window.open('http://geo-solutions.it/', '_blank');
+                      }
+                  });            
+                  return [poweredByGeoSol,"-",aboutButton];
+              },
+            
+            
+            
+              /**
+               * return a function which builds the user interface
+               */
+              instance: function( config ){
+                  var builder = this;
+                  return function(){
+                      
+                      var searchBtn = new Ext.Button({
+                          text: 'Search',
+                          iconCls:'gxp-icon-geonetworksearch'
+                      });
+                      
+                      var resetBtn = new Ext.Button({
+                          text: 'Reset',
+                          iconCls:'gxp-icon-refresh'
+                      });
+            
+                      var search_store = getStore({
+                                          category: "MAP",
+                                          proxy: config.proxy,
+                                          baseUrl: config.geostoreBaseUrl,
+                                          searchPath : 'extjs/search/list',
+                                          searchMethod : 'POST'
+                                      });
+                      
+                      search_store.load({
+                                      params:{
+                                          start: 0,
+                                          limit: config.pageSize,
+                                          xmlData: '<AND><CATEGORY><name>MAP</name><operator>EQUAL_TO</operator></CATEGORY></AND>'
+                                      }
+                                  });
+                          
+                      var search = new Ext.FormPanel({
+                          padding: 10,
+                          frame: false,
+                          border:false,
+                          region: 'nord',
+                          labelAlign: 'top',
+                          width: 1100,
+                          hideCollapseTool: true,
+                          collapsible: true,
+                          collapsed: false,
+                          collapseMode: 'mini',
+                          layout: 'hbox',
+                          items:[    {    
+                                      layout:'form',
+                                      margins: {top:0, right:8, bottom:0, left:0},
+                                      items: [{
+                                  
+                                          xtype: "textfield",
+                                          fieldLabel: 'Name',
+                                          allowBlank: true,
+                                          emptyText: 'Search  name...',
+                                          mode: 'local',
+                                          editable: true,
+                                          forceSelection: false,
+                                          triggerAction: 'all',
+                                          ref: '../name',
+                                          width: 180
+                                  
+                                      }]
+                                  },
+                                 {    
+                                      layout:'form',
+                                      margins: {top:0, right:8, bottom:0, left:0},
+                                      items: [{
+                                          xtype: "textfield",
+                                          fieldLabel: 'Owner',
+                                          allowBlank: true,
+                                          emptyText: 'Search  owner...',
+                                          mode: 'local',
+                                          editable: true,
+                                          forceSelection: false,
+                                          triggerAction: 'all',
+                                          ref: '../owner',
+                                          width: 180
+                                  
+                                      }]
+                                  },
+                                 {    
+                                      layout:'form',
+                                      items: [{
+                                          xtype: 'compositefield',
+                                          width: 250,
+                                          anchor: '100%',
+                                          items: [{
+                                              id: 'fromdate',
+                                              ref: '../../fromDate',
+                                              xtype: 'datefield',
+                                              allowBlank: true,
+                                              emptyText: 'Creation from...',
+                                              editable: false,
+                                              format: "d/m/Y",
+                                              fieldLabel: 'Start date',
+                                              width: 120,
+                                              anchor: '100%'
+                                          }, {
+                                              ref: '../../fromTime',
+                                              xtype: 'timefield',
+                                              allowBlank: true,
+                                              emptyText: 'Select a time...',
+                                              fieldLabel: 'time',
+                                              format: 'H:i:s',
+                                              width: 100
+                                          }]
+                                      }]
+                                  },
+                                 {
+                                      layout:'form',
+                                      items: [{
+                                          xtype: 'compositefield',
+                                          width: 250,
+                                          anchor: '100%',
+                                          items: [{
+                                              id: 'todate',
+                                              ref: '../../toDate',
+                                              xtype: 'datefield',
+                                              allowBlank: true,
+                                              editable: false,
+                                              format: "d/m/Y",
+                                              fieldLabel: 'End date',
+                                              emptyText: 'Creation to...',
+                                              width: 120,
+                                              anchor: '100%'
+                                          }, {
+                                              ref: '../../toTime',
+                                              xtype: 'timefield',
+                                              allowBlank: true,
+                                              fieldLabel: 'time',
+                                              emptyText: 'Select a time...',
+                                              format: 'H:i:s',
+                                              width: 100
+                                          }]
+                                      }]}
+                                 
+                                      , searchBtn
+                                      , resetBtn
+                                      ]
+                              
+                      });
+                      
+                      // Fix for IE10
+                      if(Ext.isIE)
+                      {
+                          Ext.override(Ext.menu.Menu, {
+                              autoWidth : function(){
+                                  var el = this.el, ul = this.ul;
+                                  if(!el){
+                                      return;
+                                  }
+                                  var w = this.width;
+                                  if(w){
+                                      el.setWidth(w);
+                                  }else if(Ext.isIE && !Ext.isIE8){
+                                      el.setWidth(this.minWidth);
+                                      var t = el.dom.offsetWidth; // force recalc
+                                      el.setWidth(ul.getWidth()+el.getFrameWidth("lr"));
+                                  }
+                              }
+                          });
+                      }    
+                      
+                      
+                      new Ext.Viewport({
+                              layout: 'border',
+                              title: 'Nurc - Global Page',
+                              margins: '0 0 0 0 ',
+                              items: [
+                                  {
+                                      id: 'main-header',
+                                      region: 'north',
+                                      border: false,
+                                      height: 75,
+                                      hideCollapseTool: true,
+                                      collapsible : true,
+                                      collapsed: false,
+                                      collapseMode: 'mini',
+                                      split: true,
+                                      html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_GlobalPage.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:white"></h1></div>',
+                                      bodyStyle: 'padding:0px;background-color: #0055bb;'
+                                  },
+                                  {
+                                      region: 'center', 
+                                      width:700,
+                                      layout: 'fit',
+                                      activeItem: 0,
+                                      border: false,
+                                      frame:true,
+                                      items: {
+                                          layout: 'border',
+                                          margins: '0 0 0 0 ',
+                                          items:[
+                                              {
+                                                  id: 'cruise-lister',
+                                                  title:"Cruise List",
+                                                  style:'background:white;',
+                                                  region:'center',
+                                                  border: false,
+                                                  split:true,
+                                                  tbar: [ search ],
+                                                  items: new Ext.grid.GridPanel({
+                                                                      store: search_store,
+                                                                      colModel: new Ext.grid.ColumnModel({
+                                                                          defaults: {
+                                                                              width: 120,
+                                                                              sortable: true
+                                                                          },
+                                                                          columns: [{
+                                                                                  header: 'ID',
+                                                                                  hidden: true,
+                                                                                  dataIndex: 'id'
+                                                                              },{
+                                                                                  header: 'Name',
+                                                                                  dataIndex: 'name'
+                                                                              },{
+                                                                                  header: 'Owner',
+                                                                                  dataIndex: 'owner'
+                                                                              },{
+                                                                                  header: 'Creation',
+                                                                                  dataIndex: 'creation',
+                                                                                  type: 'date',
+                                                                                  dateFormat: 'c'
+                                                                              },{
+                                                                                  header: 'Last Update',
+                                                                                  dataIndex: 'lastUpdate',
+                                                                                  type: 'date',
+                                                                                  dateFormat: 'c'
+                                                                              },{
+                                                                                  header: 'Description',
+                                                                                  dataIndex: 'description',
+                                                                                  type: 'string'
+                                                                              },{
+                                                                                  xtype: 'actioncolumn',
+                                                                                  header: 'Actions',
+                                                                                  sortable: false,
+                                                                                  dataIndex: 'id',
+                                                                                  iconCls: 'gxp-icon-view-map',
+                                                                                  handler: function(grid, rowIndex, colIndex) {
+                                                                                              var rec = grid.getStore().getAt(rowIndex);
+                                                                                              window.open(config.infoPageBaseUrl+rec.get('id'), "_blank");
+                                                                                     },
+                                                                                     tooltip: 'View map'
+                                                                              }
+                                                                           ]
+                                                                      }),
+                                                                      viewConfig: {
+                                                                          forceFit: true
+                                                                      },
+                                                                      sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+                                                                      height: 300,
+                                                                      frame: false,
+                                                                      iconCls: 'icon-grid'
+                                                                  })
+                                                  ,
+                                                  bbar: new Ext.PagingToolbar({
+                                                              store: search_store,
+                                                              displayInfo: true,
+                                                              pageSize: config.pageSize,
+                                                              prependButtons: true
+                                                  })
+                                              }
+                                          ]
+                                          
+                                      }
+                                      ,bbar : builder.createFooter()
+                                  }
+                                  ],
+                                  renderTo: Ext.getBody()
+                              });  // ViewPort
+                              
+                              
+                              searchBtn.on('click', this.loadHandler(search, search_store, "MAP"), this);
+                              
+                              resetBtn.on('click', 
+                                   function(){
+                                      var appMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait, reloading..."});
+                                      appMask.show();
+                                      var handler = function (){
+                                          search_store.un('load', handler, this);
+                                          appMask.hide();
+                                      };
+                                      search_store.filter = '<CategoryFilter><name>MAP</name><operator>EQUAL_TO</operator></CategoryFilter>';
+                                      search_store.on('load', handler, this);
+                                      search_store.reload();
+                                      
+                                      search.fromDate.reset();    
+                                      search.fromTime.reset();    
+                                      search.toDate.reset();    
+                                      search.toTime.reset();    
+                                      search.name.reset();    
+                                      search.owner.reset();                
+                                  }, this);
+            
+                      };  // return
+              }  // instance
+            
+            };  // GlobalPageUIBuilder
+        
+            var configFilename = "../configs/globalConfig.js";
+            Ext.Ajax.request({
+                url: configFilename,
+                method: 'GET',
+                success: function(response, opts){              
+                    try{
+                        var globalPageConfig = Ext.util.JSON.decode(response.responseText);
+                    }catch(e){
+                        Ext.Msg.show({
+                              title: "Startup",
+                              msg: "An error occurred while parsing configuration file: " + e,
+                              buttons: Ext.Msg.OK,
+                              icon: Ext.MessageBox.ERROR
+                        });
+                    }
+                  // This should be outside the try-block because an exception is not a parsing error
+                  if ( globalPageConfig ){
+                      Application.init( globalPageConfig );
+                      Ext.onReady( GlobalPageUIBuilder.instance( globalPageConfig ) );
+                  }
+                },
+                failure:  function(response, opts){
+                    Ext.Msg.show({
+                          title: "Startup",
+                          msg: "An error occurred while parsing configuration file: " + response.status,
+                          buttons: Ext.Msg.OK,
+                          icon: Ext.MessageBox.ERROR
+                    });
+                }
+            });
+        
+        </script>
+    </body>
+</html>
