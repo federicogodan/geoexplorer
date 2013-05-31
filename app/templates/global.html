@@ -82,7 +82,7 @@
     
             /**
              *    Converts XML to Ext.data.Store compatible format 
-             */
+             *//*
             var GeostoreReader = Ext.extend(Ext.data.DataReader, {
                 thatsmine:true,
                 constructor: function(meta) {
@@ -192,7 +192,7 @@
                             records: records
                         };
                     }
-            });
+            });*/
     
             /**
              *    Return a RESTful Ext.data.Store
@@ -211,7 +211,7 @@
             
                 var store = new Ext.data.Store({
                 
-                            reader: new GeostoreReader,
+                            reader: new ResourcesXMLReader,
                             autoDestroy: true,
                             scope: this,
                             root: 'results',

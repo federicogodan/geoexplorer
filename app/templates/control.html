@@ -65,7 +65,7 @@
 			            + pad(this.getUTCMinutes()) + ':'
 			            + pad(this.getUTCSeconds()) + 'Z';
 			    };
-			}
+			};
 
 			// see http://stackoverflow.com/questions/11020658/javascript-json-date-parse-in-ie7-ie8-returns-nan
 			var D= new Date('2011-06-02T09:34:29+02:00');
@@ -97,8 +97,29 @@
 		        Date.fromISO = function(s){
 		            return new Date(s);
 		        }
-		    }
-	
+		    };
+		    
+    
+            // Fix for IE10
+            if(Ext.isIE)
+            {
+                Ext.override(Ext.menu.Menu, {
+                    autoWidth : function(){
+                        var el = this.el, ul = this.ul;
+                        if(!el){
+                            return;
+                        }
+                        var w = this.width;
+                        if(w){
+                            el.setWidth(w);
+                        }else if(Ext.isIE && !Ext.isIE8){
+                            el.setWidth(this.minWidth);
+                            var t = el.dom.offsetWidth; // force recalc
+                            el.setWidth(ul.getWidth()+el.getFrameWidth("lr"));
+                        }
+                    }
+                });
+            }    
 	
 	
 		
@@ -219,6 +240,66 @@
 							defaultWatermarkUrl: config.defaultWatermarkUrl,
 							pageSize: config.pageSize
 						});
+
+
+						// recupero le risorse "gliders"
+						var glidersResources = new Resources({
+                            authorization: config.token,
+                            proxy: config.proxy,
+                            baseUrl: config.geostoreBaseUrl,
+                            category: 'glider',
+                            searchPath : 'extjs/search/list'
+                        });
+                       
+                        var store = glidersResources.getStore();
+/*                         
+                        var pagingToolbar = new Ext.PagingToolbar({
+                                store: store,       
+                                displayInfo: true,
+                                pageSize: config.pageSize,
+                                prependButtons: true
+                        });
+*/
+                        // init store
+                        /*
+                        store.load({
+                            params:{
+                                start: 0,
+                                limit: config.pageSize,
+                                includeAttributes: true,
+                                xmlData: '<AND><CATEGORY><name>glider</name><operator>EQUAL_TO</operator></CATEGORY></AND>'
+                            }
+                        });
+                        */
+                        // Fatto
+                        
+                        control.cruiseListView.on('click', function(list, index, node, evt) {
+                            var listItem = control.store.getAt(index).data;
+                            if ( listItem.id !== control.mapId){
+                                store.load({
+                                    params:{
+                                        start: 0,
+                                        limit: config.pageSize,
+                                        includeAttributes: true,
+                                        xmlData: '<AND><CATEGORY><name>glider</name><operator>EQUAL_TO</operator></CATEGORY><FIELD><field>NAME</field><operator>LIKE</operator><value>'+listItem.name+'_%</value></FIELD></AND>'
+                                    }
+                                });
+                            } 
+                        });
+
+                        var glider_names = new Ext.data.ArrayStore({
+                                data: builder.getVehicleData( config.vehicles ),
+                                fields: ['value', 'text', 'url']
+                        });
+                        
+                        var prediction = new GliderPredictionToolPanel({
+                            geostoreBaseUrl: config.geostoreBaseUrl,
+                            proxy: config.proxy,
+                            geoserverBaseUrl: config.geoserverBaseUrl,
+                            glider_names: glider_names,
+                            glider_resources : store
+                        });
+        
 						
 						new Ext.Viewport({
 								layout: 'border',
@@ -228,8 +309,6 @@
 									{
 										id: 'main-header',
 										region: 'north',
-										
-									
 										border: false,
 						                height: 75,
 										hideCollapseTool: true,
@@ -240,61 +319,99 @@
 										html: '<img style="position:absolute; left:0px; z-index:1000" src="../theme/app/img/header_ControlPage.png" height="100%"/><div style= "float:right;text-align:left"><h1 style="color:white"></h1></div>',
 						                bodyStyle: 'padding:0px;background-color: #0055bb;'
 									},
+									
+									// wrappo il tabpanel
 									{
-										// id: 'content-panel',
-										region: 'center', 
-										tbar: [ '->', control.getLoginButton()],
-										width:700,
-										layout: 'fit',
-										// margins: '2 5 5 0',
-										activeItem: 0,
-										border: false,
-										frame:true,
-										// items: control.getCruisePanelView(),
-										items: {
-											layout: 'border',
-											margins: '0 0 0 0 ',
-											items:[
-												{
-													id: 'cruise-browser',
-													title:"Cruise List",
-													style:'background:white;',
-													tbar: [ control.getCreateButton(), control.reloadListButton ],
-											        region:'west',
-											        border: false,
-											        split:true,
-													// margins: '2 0 5 5',
-											        width: 200,
-											        // minSize: 100,
-											        // maxSize: 500,
-													items:control.getCruiseListView()	
-												
-														
-													
-													,
-													bbar: control.pagingToolbar
-												},
-												{
-													id: 'content-panel',
-													
-													region: 'center', 
-													// layout: 'fit',
-													layout:'border',
-													activeItem: 0,
-													border: false,
-													frame:true,
-													items: [ control.getCruisePanelView() ]
-													
-												}
-											]
-											
-										},
-										bbar : builder.createFooter()
-									}
-
-									],
-							        renderTo: Ext.getBody()
-							    });
+                                        layout: 'fit',
+                                        region:'center',
+                                        frame:true,
+                                        tbar: [ '->', control.getLoginButton()],
+                                        items: [
+            									{
+            										id: 'tab-panel',
+            										xtype: 'tabpanel',
+            										width:700,
+            										activeTab: 0,
+            										items: 
+                										[
+            										/////////// Items TABPANEL
+                    										{
+                    											title:'Cruise control',
+                    											layout: 'border',
+                    											margins: '0 0 0 0 ',
+                    											items:[
+                    											    {
+                    											        region:'west',
+                    											        margins:'0 0 0 0',
+                                                                        split:true,
+                                                                        width: 200,
+                                                                        layout:'border',
+                                                                        
+                                                                        items:[
+                    											        {
+                        												    title:"Cruise List",
+                        													style:'background:white;',
+                        													tbar: [ control.getCreateButton(), control.reloadListButton, '->', prediction.onDemandButton],
+                        											        border: false,
+                        											        //split:true,
+                        													// margins: '2 0 5 5',
+                        											        region:'center',
+                                                                            width: 200,
+                        											        // minSize: 100,
+                        											        // maxSize: 500,
+                        													items:control.getCruiseListView(),
+                        													bbar: control.pagingToolbar
+                        												},
+                        												{
+                                                                            title:"Glider Batches",
+                                                                            style:'background:white;',
+                                                                            tbar: [ prediction.getEditButton(), prediction.getDeleteButton(), '->', prediction.reloadListButton ],
+                                                                            border: false,
+                                                                            split:true,
+                                                                            collapsible :true,
+                                                                            // margins: '2 0 5 5',
+                                                                            region:'south',
+                                                                            width: 200,
+                                                                            boxMinHeight:100,
+                                                                            // minSize: 100,
+                                                                            // maxSize: 500,
+                                                                            items: prediction.getGliderListView(),
+                                                                            //bbar: control.pagingToolbar
+                                                                            ref: 'glidersListPanel'
+                                                                        }
+                                                                        ]
+                        											},
+                    												{
+                    													id: 'content-panel',
+                    													
+                    													region: 'center', 
+                    													// layout: 'fit',
+                    													layout:'border',
+                    													activeItem: 0,
+                    													border: false,
+                    													frame:true,
+                    													items: [ control.getCruisePanelView() ]
+                    													
+                    												}
+                    											]
+                    											
+                    										}
+                    										
+                    										// GliderPredictionTool 
+                    										,prediction.getGliderPanelView()
+            										///////// Items TABPANEL
+            										]
+            										,bbar : builder.createFooter()
+            									}
+									
+									     ]
+									}// fine wrap
+								],
+							    renderTo: Ext.getBody()
+							 });
+							 
+							 
+							 //prediction.getGliderListView().store = control.getCruiseListView.vehicleSelector.toMultiselect.store;
 
 
 						};
