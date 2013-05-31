@@ -11,7 +11,7 @@
 
     <target name="init">
 
-        <echo message="pulling in submodules"/>
+        <!--echo message="pulling in submodules"/>
         <exec executable="git" failonerror="true">
             <arg line="submodule init"/>
         </exec>
@@ -20,7 +20,7 @@
         </exec>
         <exec executable="git" failonerror="true">
             <arg line="submodule update"/>
-        </exec>
+        </exec-->
 
         <echo message="building ringo jars"/>
         <ant dir="externals/ringojs" target="jar"/>
