@@ -666,6 +666,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 
 		// list of cruise configurations
 		this.cruiseListView = new Ext.list.ListView({
+		    id:'cruise-list-view',
 			store: this.store,
 			hideHeaders: true,
 			autoScroll: true,
@@ -675,7 +676,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			reserveScrollOffset: true,
 			columns: [{
 				header: 'Name',
-				width: .5,
+				//width: .5,
 				dataIndex: 'name'
 			}]
 		});
@@ -1060,83 +1061,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					xtype: 'fieldset',
 					title: 'Select vehicles',
 					buttonAlign: 'left',
-					buttons: [{
-						id: 'vehicle-selector-btn',
-						// ref:'../../../../vehicleSelectorBtn',
-						disabled: true,
-						text: 'Add vehicle',
-						handler: function() {
-							var form = new Ext.FormPanel({
-								width: 500,
-								frame: true,
-								autoHeight: true,
-								bodyStyle: 'padding: 10px 10px 0 10px;',
-								labelWidth: 50,
-								defaults: {
-									anchor: '95%',
-									allowBlank: false,
-									msgTarget: 'side'
-								},
-								items: [{
-									xtype: "textfield",
-									fieldLabel: 'Name',
-									invalidText: 'A name must be specified',
-									width: 200,
-									allowBlank: false,
-									ref: 'name'
-								}, {
-									xtype: 'textfield',
-									vtype: 'url',
-									invalidText: 'A valid url must be specified',
-									fieldLabel: 'Url',
-									width: 200,
-									allowBlank: false,
-									ref: 'url'
-								}]
-							});
-							// open modal window
-							var win = new Ext.Window({
-								closable: true,
-								title: 'Add vehicle',
-								// iconCls: "",
-								border: false,
-								modal: true,
-								bodyBorder: false,
-								width: 500,
-								// height: 200,
-								resizable: false,
-								items: [
-								form],
-								buttons: [{
-									text: 'Add vehicle',
-									formBind: true,
-									handler: function() {
-
-										if (form.name.isValid(false) && form.url.isValid(false)) {
-											var store = self.cruisePanelView.vehicleSelector.fromMultiselect.store;
-											var record = new store.recordType({
-												value: form.name.getValue(),
-												text: form.name.getValue(),
-												url: form.url.getValue()
-											});
-											self.cruisePanelView.vehicleSelector.fromMultiselect.store.add(
-											record);
-											win.destroy();
-										} else {
-											Ext.Msg.show({
-												title: 'Invalid values for a vehicle',
-												msg: 'Some fields are invalid',
-												buttons: Ext.Msg.OK,
-												icon: Ext.MessageBox.ERROR
-											});
-										}
-
-									}
-								}]
-							});
-							win.show();
-						}
-					}],
+					//buttons: [],
 					items: [{
 						xtype: 'itemselector',
 						name: 'itemselector',
@@ -1151,7 +1076,84 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							height: 200,
 							store: config.vehicles,
 							displayField: 'text',
-							valueField: 'value'
+							valueField: 'value',
+							tbar: [{
+                                    id: 'vehicle-selector-btn',
+                                    // ref:'../../../../vehicleSelectorBtn',
+                                    disabled: true,
+                                    text: 'Add vehicle',
+                                    handler: function() {
+                                        var form = new Ext.FormPanel({
+                                            width: 500,
+                                            frame: true,
+                                            autoHeight: true,
+                                            bodyStyle: 'padding: 10px 10px 0 10px;',
+                                            labelWidth: 50,
+                                            defaults: {
+                                                anchor: '95%',
+                                                allowBlank: false,
+                                                msgTarget: 'side'
+                                            },
+                                            items: [{
+                                                xtype: "textfield",
+                                                fieldLabel: 'Name',
+                                                invalidText: 'A name must be specified',
+                                                width: 200,
+                                                allowBlank: false,
+                                                ref: 'name'
+                                            }, {
+                                                xtype: 'textfield',
+                                                vtype: 'url',
+                                                invalidText: 'A valid url must be specified',
+                                                fieldLabel: 'Url',
+                                                width: 200,
+                                                allowBlank: false,
+                                                ref: 'url'
+                                            }]
+                                        });
+                                        // open modal window
+                                        var win = new Ext.Window({
+                                            closable: true,
+                                            title: 'Add vehicle',
+                                            // iconCls: "",
+                                            border: false,
+                                            modal: true,
+                                            bodyBorder: false,
+                                            width: 500,
+                                            // height: 200,
+                                            resizable: false,
+                                            items: [
+                                            form],
+                                            buttons: [{
+                                                text: 'Add vehicle',
+                                                formBind: true,
+                                                handler: function() {
+            
+                                                    if (form.name.isValid(false) && form.url.isValid(false)) {
+                                                        var store = self.cruisePanelView.vehicleSelector.fromMultiselect.store;
+                                                        var record = new store.recordType({
+                                                            value: form.name.getValue(),
+                                                            text: form.name.getValue(),
+                                                            url: form.url.getValue()
+                                                        });
+                                                        self.cruisePanelView.vehicleSelector.fromMultiselect.store.add(
+                                                        record);
+                                                        win.destroy();
+                                                    } else {
+                                                        Ext.Msg.show({
+                                                            title: 'Invalid values for a vehicle',
+                                                            msg: 'Some fields are invalid',
+                                                            buttons: Ext.Msg.OK,
+                                                            icon: Ext.MessageBox.ERROR
+                                                        });
+                                                    }
+            
+                                                }
+                                            }]
+                                        });
+                                        win.show();
+                                    }
+                                }]
 						}, {
 							width: 250,
 							height: 200,
@@ -1165,7 +1167,45 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 									this.cruisePanelView.vehicleSelector.reset();
 								},
 								scope: this
-							}]
+							},{
+                                id: 'vehicle-selector-config-btn',
+                                text: 'Config Gliders Batches',
+                                handler: function(){
+
+                                    // TODO gestire il pulsante con gli eventi, come catturarli?
+                                    var toms = self.cruisePanelView.vehicleSelector.toMultiselect;
+                                    if(toms.view.getSelectionCount() != 1)
+                                        return;
+                                        
+                                    //var returnArray = [];
+                                    var store = toms.view.getStore();
+                                    var valueField = toms.valueField;
+                                    /*
+                                    for (var i=0; i<store.getCount(); i++) {                                  
+                                        returnArray.push(store.getAt(i).get(valueField));
+                                    }
+                                    */
+                                    //alert(Ext.getCmp('cruise-list-view').getSelectedRecords()[0].data.id);
+                                    //alert(returnArray.join(','));
+
+                                    var GPT = Ext.getCmp('glider-panel-view');
+                                    
+                                    GPT.clean();
+                                    // TODO Ext.getCmp('cruise-list-view') potrebbe non avere niente di selezionato
+                                    GPT.cruiseName.setValue(Ext.getCmp('cruise-list-view').getSelectedRecords()[0].data.name);
+                                    GPT.gliderName.setValue(toms.view.getSelectedRecords()[0].get(valueField));
+                                    //GPT.gliderName.setValue(returnArray[0]);
+                                    
+                                    // PRIMA si switcha sul GPT in modo da fare il rendering
+                                    Ext.getCmp('tab-panel').setActiveTab(GPT);
+                                    // POI si sincronizza tutto, altrimenti non e' istanziato
+                                    GPT.syncSize().doLayout();
+                                    
+                                    // TODO: Open gliders panel with status if not open
+                                    //console.log(self.cruisePanelView.vehicleSelector.toMultiselect.view.getNodes());
+                                },
+                                scope:this
+                            }]
 						}]
 					}]
 				}, {
