@@ -4,9 +4,6 @@
 [submodule "externals/buildkit"]
 	path = externals/buildkit
 	url = git://github.com/tschaub/buildkit.git
-[submodule "app/static/externals/gxp"]
-	path = app/static/externals/gxp
-	url = git@geosolutions.sourcerepo.com:geosolutions/gxp.git
 [submodule "app/static/externals/GeoExt"]
 	path = app/static/externals/GeoExt
 	url = git://github.com/opengeo/GeoExt.git
@@ -16,3 +13,6 @@
 [submodule "app/static/externals/PrintPreview"]
 	path = app/static/externals/PrintPreview
 	url = git://github.com/GeoNode/PrintPreview.git
+[submodule "app/static/externals/gxp"]
+	path = app/static/externals/gxp
+	url = https://github.com/geosolutions-it/gxp.git
