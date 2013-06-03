@@ -120,16 +120,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                 "wfsGrid": "wfsGridPanel",
                 "toggleGroup": this.toggleGroup,
                 "appendActions": false
-            },{
-		"ptype": "gxp_idaspm",
-	        "wfsGrid": "wfsGridPanel",
-                "svpUploader": "svpuploader",
-                "spmListUploader": "spmlistuploader",
-                "toggleGroup": this.toggleGroup,
-                "wpsManager": "wpsSPM",
-                "idaAttribute" : "idaLayerAttribute",
-		"outputTarget": "idacontrol"
-	     }
+            }
         ];
         
         config.tools=config.tools.concat(customTools);

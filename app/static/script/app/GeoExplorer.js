@@ -480,7 +480,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
             header: true,
 			title: 'Control Panel',
             items: [
-                {xtype: 'tabpanel', region: 'center', id: 'idacontrol', autoScroll: false, border: false}
+                {xtype: 'tabpanel', region: 'center', id: 'idacontrol', autoScroll: false, enableTabScroll:true, border: false}
             ]
         });
         

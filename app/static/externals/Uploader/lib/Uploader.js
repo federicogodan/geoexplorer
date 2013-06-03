@@ -42,15 +42,13 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
      *  
      */
     uploadServiceURL: null,
-    
-    
+
     /** api: config[inputFiles]
      *  ``Array <Object>``
      *  
      */
     inputFiles: null,
-    
-    
+
     uploadPanel: null,
     
     // start i18n
@@ -58,15 +56,13 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
     loadMsg: "Please Wait ... ",
     uploadErrorText: "Upload Error",
     // end i18n
-    
-    
+
     /** api: config[successCallback]
      *  ``Function``
      *  
      */
     successCallback: null,
-    
-    
+
     /** api: config[failureCallback]
      *  ``Function``
      *  
@@ -78,106 +74,102 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
     constructor: function(config) {
         gxp.plugins.Uploader.superclass.constructor.apply(this, arguments);   
     },
-    
-    
-    
+
     /** api: method[setSuccessCallback]
      */
-   setSuccessCallback: function(method){
+    setSuccessCallback: function(method){
        this.successCallback= method;
-   },
-   
-   
-   /** api: method[setFailureCallback]
+    },
+
+    /** api: method[setFailureCallback]
      */
-   setFailureCallback: function(method){
+    setFailureCallback: function(method){
        this.failureCallback= method;
-   },
+    },
 
     /** api: method[getPanel]
      *  config submitButton: boolan
      */
-    getPanel: function(config) {
-       
+    getPanel: function(config) {       
         var conf=  config || {};
         var me = this;
-        var pattern=/(.+:\/\/)?([^\/]+)(\/.*)*/i;
+        var pattern = /(.+:\/\/)?([^\/]+)(\/.*)*/i;
         var mHost=pattern.exec(me.uploadServiceURL); 
-        var uploadURL= mHost[2] == location.host ? me.uploadServiceURL :
+        var uploadURL = mHost[2] == location.host ? me.uploadServiceURL :
         this.target.proxy + encodeURIComponent(me.uploadServiceURL);
         
-        var submitConf={
-            url: uploadURL,
-            waitMsg: me.loadMsg,
-            success: function(form, action){
-                if(action.result.content){
-                   action.result.content=action.result.content.replace(/\+/g,'%20');
-                   var content=decodeURIComponent(action.result.content);  
-                   if(me.successCallback)
-                      me.successCallback.call(me, content);
-                }else{
-                    if(me.successCallback)
-                       me.successCallback.call(me, action.result);
-                }
-            },                                    
-            failure: function(form, action){
-                if(me.failureCallback)
-                   me.failureCallback.call(me, action.result.msg); 
-                else    
-                    Ext.Msg.show({
-                        title:me.uploadErrorText,
-                        msg: action.result.msg,
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.ERROR
-                     });
-            },
-            scope: this
-	};
-        
-        var panelConfig={
-           fileUpload: true,
-           autoWidth: true,
-	   autoHeight: true,
-           id: me.id+"_formPanel",
-	   frame: true, 
-           bodyStyle: 'padding: 10px 10px 0 10px;',
-	   labelWidth: 50,
-	   defaults: {
-              anchor: '95%',
-	      allowBlank: false,
-	      msgTarget: 'side'
-	   },
-           items: []
-        };
-        
-        if(conf.submitButton)
-            panelConfig.buttons= [{
-                   text: me.uploadText,
-		    handler: function(){
-			 if(me.uploadPanel.getForm().isValid()){
-                             me.uploadPanel.getForm().submit(submitConf); 
-                            
+		var submitConf = {
+			url: uploadURL,
+			waitMsg: me.loadMsg,
+			success: function(form, action){
+				if(action.result.content){
+				   action.result.content=action.result.content.replace(/\+/g,'%20');
+				   var content=decodeURIComponent(action.result.content);  
+				   if(me.successCallback)
+					  me.successCallback.call(me, content);
+				}else{
+					if(me.successCallback)
+					   me.successCallback.call(me, action.result);
+				}
+			},                                    
+			failure: function(form, action){
+				if(me.failureCallback)
+				   me.failureCallback.call(me, action.result.msg); 
+				else    
+					Ext.Msg.show({
+						title:me.uploadErrorText,
+						msg: action.result.msg,
+						buttons: Ext.Msg.OK,
+						icon: Ext.MessageBox.ERROR
+				    });
+			},
+			scope: this
+		};
+			
+		var panelConfig = {
+		   fileUpload: true,
+		   autoWidth: true,
+		   autoHeight: true,
+		   id: me.id+"_formPanel",
+		   frame: true, 
+		   bodyStyle: 'padding: 10px 10px 0 10px;',
+		   labelWidth: 50,
+		   defaults: {
+				anchor: '95%',
+			    allowBlank: false,
+			    msgTarget: 'side'
+		   },
+		   items: []
+		};
+			
+		if(conf.submitButton)
+			panelConfig.buttons = [{
+			text: me.uploadText,
+			handler: function(){
+				if(me.uploadPanel.getForm().isValid()){
+					 me.uploadPanel.getForm().submit(submitConf); 
+								
+				}
 			}
-		     }
-	     }];
+		}];
 
-        var inputFileConfig= {
-                            xtype: 'fileuploadfield',
-                            id: 'form_file_'+this.id,
-                            buttonOnly: false,
-                            emptyText: "File",
-                            autoWidth: true,
-                            autoHeight: true,
-                            fieldLabel: "File",
-                            name: 'form_file_'+this.id,
-                            allowBlank:true,
-                            buttonText: '',
-                            buttonCfg: {
-                                iconCls: 'upload-icon'
-                            }
-        };   
+		var inputFileConfig = {
+			xtype: 'fileuploadfield',
+			id: 'form_file_'+this.id,
+			buttonOnly: false,
+			emptyText: "File",
+			autoWidth: true,
+			autoHeight: true,
+			fieldLabel: "File",
+			name: 'form_file_'+this.id,
+			allowBlank:true,
+			buttonText: '',
+			buttonCfg: {
+				iconCls: 'upload-icon'
+			}
+		};   
         
-        var ifConfig={};
+        var ifConfig = {};
         for(var i=0; i< me.inputFiles.length; i++){
             Ext.apply(ifConfig,inputFileConfig);
             Ext.apply(ifConfig, me.inputFiles[i]);
@@ -186,14 +178,14 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
                 ifConfig.id='form_file_'+me.inputFiles[i].name;
             
             if(!conf.submitButton){
-                ifConfig.listeners= {
-                        'fileselected': function(fb, v){
-                             if(me.uploadPanel.getForm().isValid()){
-                                me.uploadPanel.getForm().submit(submitConf); 
-                               
-			     }
-                        }
-                    }
+                ifConfig.listeners = {
+					'fileselected': function(fb, v){
+						if(me.uploadPanel.getForm().isValid()){
+							me.uploadPanel.getForm().submit(submitConf); 
+						   
+						}
+					}
+				}
             }
             panelConfig.items.push(ifConfig);
         }
@@ -205,21 +197,22 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
     getWindowPanel: function(conf){
         var list= null;
         if(conf.close)
-           list={
-                    close: conf.close
-                };
+			list = {
+				close: conf.close
+			};
+			
         var win = new Ext.Window({
-		title: conf.winTitle,
-		id: this.id+"_window",
-		layout: 'form',
-		modal: true,
-		bodyStyle: "padding: 5px",
-		width: conf.width,
-                listeners:list,
-		items: [this.getPanel({submitButton: conf.submitButton})]
-	});
+			title: conf.winTitle,
+			id: this.id+"_window",
+			layout: 'form',
+			modal: true,
+			bodyStyle: "padding: 5px",
+			width: conf.width,
+			listeners:list,
+			items: [this.getPanel({submitButton: conf.submitButton})]
+		});
 					
-	win.show();
+		win.show();
     },
     
     closeWindowPanel:function(){
