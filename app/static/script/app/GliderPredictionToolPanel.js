@@ -394,7 +394,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                         //name: 'Point'+id,
                                         allowBlank: false,
                                         border: true,
-                                        //regEx: /[{0,1}/   <- TODO regEx to validate!!
                                         validator: self.pointValidator
                                     })
                                 );
@@ -413,7 +412,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                 ref: 'Point0',
                                 //name: 'Point0',
                                 itemId: 'vertex0',
-                                //,regEx: '^\-?(1[0-8] | [0-9])?[0-9](\.[0-9]{1,2})?$'
                                 validator: this.pointValidator
                                 
                             }
@@ -735,7 +733,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         fieldLabel: 'Point 0 [ lon , lat ] ',
                         allowBlank: false,
                         border: true,
-                        //regEx: /[{0,1}/   <- TODO regEx to validate!!
+                        validator: this.pointValidator
                     })
                 );
                 this.ftpFS.show();
@@ -869,7 +867,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         this.gliderPanelView.pathVertexSet.items.each(
             function addToJson(field){
                 if(field.validate()){
-                    //console.log(field.getValue());
                     pathVertex.push(Ext.util.JSON.decode('['+field.getValue()+']'));
                 }else
                     valido = false;
@@ -1177,7 +1174,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                                 value: payload.dssArea.pathVertex[i],
                                                 allowBlank: false,
                                                 border: true,
-                                                //regEx: /[{0,1}/   <- TODO regEx to validate!!
                                                 validator: self.pointValidator
                                             })
                                         );
