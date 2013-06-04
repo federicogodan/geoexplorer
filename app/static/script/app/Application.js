@@ -33,7 +33,12 @@ var Application =  {
 						Application.user.role = user.User.role;
 					}
 					if ( this.handlers['login'] ){
-						this.handlers['login'].call(this, Application.user);
+					    //this.handlers['login'].call(this, Application.user);
+					    var i = 0, len = this.handlers['login'].length , l ;
+					    for(; i< len; i++){
+					       l = this.handlers['login'][i];
+					       l.call(this, Application.user);
+					    }
 					}
 					
 	            },
@@ -41,7 +46,12 @@ var Application =  {
 					console.error( response );
 	                Application.user.token = null;
 					if ( this.handlers['failed'] ){
-						this.handlers['failed'].call(this, Application.user);
+                        //this.handlers['failed'].call(this, Application.user);
+						var i = 0, len = this.handlers['failed'].length , l ;
+                        for(; i< len; i++){
+                           l = this.handlers['failed'][i];
+                           l.call(this, Application.user);
+                        }
 					}
 					
 	            }
@@ -52,12 +62,20 @@ var Application =  {
 			this.role = null;
 			this.token = null;
 			if ( this.handlers['logout'] ){
-				this.handlers['logout'].call(this, this);
+				//this.handlers['logout'].call(this, this);
+                var i = 0, len = this.handlers['logout'].length , l ;
+                for(; i< len; i++){
+                   l = this.handlers['logout'][i];
+                   l.call(this, Application.user);
+                }
 			}
 			
 		},
 		on: function( action, handler ){
-			this.handlers[ action ] = handler;
+            //this.handlers[ action ] = handler;
+		    if(!this.handlers[ action ])
+		      this.handlers[ action ] = [];
+			this.handlers[ action ].push(handler);
 		},
 		// TODO this should not be here
 		getLoginButton: function(){
