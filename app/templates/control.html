@@ -267,7 +267,7 @@
                                 start: 0,
                                 limit: config.pageSize,
                                 includeAttributes: true,
-                                xmlData: '<AND><CATEGORY><name>glider</name><operator>EQUAL_TO</operator></CATEGORY></AND>'
+                                xmlData: '<AND><CATEGORY><name>batch</name><operator>EQUAL_TO</operator></CATEGORY></AND>'
                             }
                         });
                         */
@@ -281,7 +281,7 @@
                                         start: 0,
                                         limit: config.pageSize,
                                         includeAttributes: true,
-                                        xmlData: '<AND><CATEGORY><name>glider</name><operator>EQUAL_TO</operator></CATEGORY><FIELD><field>NAME</field><operator>LIKE</operator><value>'+listItem.name+'_%</value></FIELD></AND>'
+                                        xmlData: '<AND><CATEGORY><name>batch</name><operator>EQUAL_TO</operator></CATEGORY><FIELD><field>NAME</field><operator>LIKE</operator><value>'+listItem.name+'_%</value></FIELD></AND>'
                                     }
                                 });
                             } 
@@ -293,6 +293,7 @@
                         });
                         
                         var prediction = new GliderPredictionToolPanel({
+                            token:config.token,
                             geostoreBaseUrl: config.geostoreBaseUrl,
                             proxy: config.proxy,
                             geoserverBaseUrl: config.geoserverBaseUrl,
@@ -300,6 +301,13 @@
                             glider_resources : store
                         });
         
+                        // disable config glider button on unsaved changes
+                        control.cruisePanelView.vehicleSelector.on(
+                                                                'change',
+                                                                function(a){
+                                                                    Ext.getCmp('vehicle-selector-config-btn').disable();
+                                                                    }
+                                                                );
 						
 						new Ext.Viewport({
 								layout: 'border',
@@ -357,6 +365,7 @@
                         													// margins: '2 0 5 5',
                         											        region:'center',
                                                                             width: 200,
+                                                                            boxMinHeight:200,
                         											        // minSize: 100,
                         											        // maxSize: 500,
                         													items:control.getCruiseListView(),
@@ -372,7 +381,7 @@
                                                                             // margins: '2 0 5 5',
                                                                             region:'south',
                                                                             width: 200,
-                                                                            boxMinHeight:100,
+                                                                            boxMinHeight:200,
                                                                             // minSize: 100,
                                                                             // maxSize: 500,
                                                                             items: prediction.getGliderListView(),

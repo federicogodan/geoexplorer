@@ -1170,6 +1170,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							},{
                                 id: 'vehicle-selector-config-btn',
                                 text: 'Config Gliders Batches',
+                                disabled: true,
                                 handler: function(){
 
                                     // TODO gestire il pulsante con gli eventi, come catturarli?
@@ -1198,6 +1199,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
                                     
                                     // PRIMA si switcha sul GPT in modo da fare il rendering
                                     Ext.getCmp('tab-panel').setActiveTab(GPT);
+                                    GPT.enable();
                                     // POI si sincronizza tutto, altrimenti non e' istanziato
                                     GPT.syncSize().doLayout();
                                     
@@ -1492,8 +1494,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			});
 			self.geostore.invalidateToken( null );
 		} );
-
-
 
 	},
 	
@@ -1999,7 +1999,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			
 
 			Ext.getCmp('vehicle-selector-btn').enable();
-
+            Ext.getCmp('vehicle-selector-config-btn').enable();
+            
 			this.cruisePanelView.stepValueField.enable();
 			this.cruisePanelView.rateValueField.enable();
 			this.cruisePanelView.stepUnitsField.enable();
@@ -2135,28 +2136,57 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			// in this array I keep the list of removed item from the multiselect
 			// I need it because it is not safe to delete items within a for loop
 			var removed = new Array;
+			var toSplice = new Array;
 			var availableItems = selector.fromMultiselect.view.store.data.items;
 			if (!availableItems || !selectedItems) {
 				return;
 			}
-
+            
+            //TODO sporca il fromStore con glider di altre cruise
+            //console.log(availableItems);
+            
 			for (var i = 0; i < availableItems.length; i++) {
 				var item = availableItems[i];
 
 				for (var j = 0; j < selectedItems.length; j++) {
 					
 					if (isEqual(selectedItems[j], item.data) ) {
+					    //console.log('Adding');
+					    //console.log(item);
 						selector.toMultiselect.store.add(item);
 						removed.push(item);
+						toSplice.push(j);
 					}
 				}
 			}
+
+			//console.log(toSplice);
+			var len = toSplice.length;
+			while(len--){
+                selectedItems[toSplice[len]] = null;
+            }
+            //console.log(selectedItems);
+            
+			// Remaining are added
+			for (var j = 0; j < selectedItems.length; j++) {
+			    if(selectedItems[j]){
+			        //console.log(selectedItems[j]);
+			        var record = new selector.toMultiselect.store.recordType({
+                                                        value: selectedItems[j][1],
+                                                        text: selectedItems[j][1],
+                                                        url: selectedItems[j][2]
+                                                    });
+			        selector.toMultiselect.store.add(record);
+                    removed.push(record);              
+			    }
+            }
 
 			if (removed.length > 0) {
 				for (var i = 0; i < removed.length; i++) {
 					selector.fromMultiselect.view.store.remove(removed[i]);
 				}
-			}
+			}		
+			
 			// tricky: it seems necessary to refresh the content of toMultiselect
 			selector.toMultiselect.view.refresh();
 			selector.fromMultiselect.view.refresh();
