@@ -159,13 +159,13 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     xtype: 'fieldset',
                     title: 'Glider Path Prediction Tool',
                     //anchor: '100%',
-                    //labelWidth: 10,
+                    labelWidth: 200,
                     items:[{
                         xtype: 'displayfield',
                         value: 'Questa &egrave; la descrizione del GPT'
                     },{
                         xtype: 'displayfield',
-                        fieldLabel: 'Cruise Name',
+                        fieldLabel: 'Cruise Name (experimentName)',
                         value: 'onDemand',
                         name:'cruiseName',
                         // reference attached to GPT
@@ -242,7 +242,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     labelWidth: 200,
                     //buttonAlign: 'left',
                     //buttons: [],
-                    items: [{
+                    items: [
+                    /*{
                         fieldLabel: 'Experiment Name',
                         xtype: 'textfield',
                         allowBlank: false,
@@ -253,8 +254,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         name: 'experimentName',
                         width: 225
                         
-                    },{
-                        // TODO: filtrare lo store in base alla cruise selezionata?
+                    },*/
+                    {
                         fieldLabel: 'Select Glider Name',
                         xtype: 'combo',
                         store: this.glider_names,
@@ -355,13 +356,9 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     },
                     {
                         fieldLabel: 'Glider Input Script Name',
-                        xtype: 'textfield',
-                        allowBlank: false,
-                        // disabled: true,
-                        //value: '',
+                        xtype: 'hidden',
                         ref: '../../gliderInputScriptName',
                         name: 'gliderInputScriptName',
-                        // width: 500
                         
                     },{
                         fieldLabel: 'Confidence Interval Probability',
@@ -412,7 +409,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                 ref: 'Point0',
                                 //name: 'Point0',
                                 itemId: 'vertex0',
-                                validator: this.pointValidator
+                                validator: self.pointValidator
                                 
                             }
                         ]
@@ -733,7 +730,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         fieldLabel: 'Point 0 [ lon , lat ] ',
                         allowBlank: false,
                         border: true,
-                        validator: this.pointValidator
+                        validator: self.pointValidator
                     })
                 );
                 this.ftpFS.show();
@@ -771,7 +768,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         GPV.onDemandRunningMode.setValue(true);
         GPV.ownerCt.setActiveTab(GPV);
         GPV.cruiseName.setValue(cruiseName);
-        GPV.syncSize().doLayout();
+        GPV.syncSize().doLayout();  // TODO ineffective!
         GPV.enable();
     },
 
@@ -851,20 +848,21 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         //alert('valido');
         var valido = true;
         var tojson = {};
-        this.gliderPanelView.formPanel.getForm().items.each(
-                                                            function s(c){
-                                                                    //console.log(c.getName()+' : '+c.getValue());
-                                                                    valido = (c.validate() && valido);
-                                                                    if(valido  && c.xtype != 'displayfield' && !c.getName().contains('ext-')){
-                                                                        //console.log(c.getName()+' : '+c.getValue());
-                                                                        tojson[c.getName()] = c.getValue();
-                                                                    }
-                                                                        
-                                                                }
-                                                            );        
+        var GPV = this.gliderPanelView;
+        GPV.formPanel.getForm().items.each(
+                                            function s(c){
+                                                    //console.log(c.getName()+' : '+c.getValue());
+                                                    valido = (c.validate() && valido);
+                                                    if(valido  && c.xtype != 'displayfield' && !c.getName().contains('ext-')){
+                                                        //console.log(c.getName()+' : '+c.getValue());
+                                                        tojson[c.getName()] = c.getValue();
+                                                    }
+                                                        
+                                                }
+                                            );        
 
         var pathVertex = [];
-        this.gliderPanelView.pathVertexSet.items.each(
+        GPV.pathVertexSet.items.each(
             function addToJson(field){
                 if(field.validate()){
                     pathVertex.push(Ext.util.JSON.decode('['+field.getValue()+']'));
@@ -873,7 +871,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             }
         );
         // chiudo il poligono
-        var pVSet = this.gliderPanelView.pathVertexSet;
+        var pVSet = GPV.pathVertexSet;
         if(pVSet.items.first().getValue() != pVSet.items.last().getValue())
             pathVertex.push(Ext.util.JSON.decode('['+pVSet.items.first().getValue()+']'));
         tojson.dssArea = {
@@ -887,7 +885,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             return;
         }
         
-        var t0 = this.gliderPanelView.t0my;
+        var t0 = GPV.t0my;
         if(t0.t0Date.validate() && t0.t0Time.validate() &&
            t0.t0Date.getRawValue()!= '' && t0.t0Time.getRawValue() != ''){
             tojson.t0 = t0.t0Date.getRawValue()+ ':'+ t0.t0Time.getRawValue();
@@ -897,21 +895,36 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         }
         else  // clean bad values
             delete tojson.t0;
-                    
-        //alert(t0.t0Date.getRawValue()+ ':'+ t0.t0Time.getRawValue());
+        
+        // Three different checkbox interpretations, none a true/false
+        
+        var goOnDemand = tojson.onDemandRunningMode;        
+        tojson.onDemandRunningMode = goOnDemand?"1":"0";
+        
+        var doDriftCorrection = tojson.driftCorrection;        
+        tojson.driftCorrection = doDriftCorrection?"y":"n";
+        
+        var doLoop = tojson.loopWP;        
+        tojson.loopWP = doLoop?"yes":"no";
+
+        // autosetting parameters
+        tojson.experimentName = GPV.cruiseName.getValue();
+        tojson.glider_names = tojson.gliderName;
+        tojson.gliderInputScriptName = 'initGliderPathPrediction_'+tojson.gliderName+'.json';
+        
         
         //console.log(tojson);
         var jsoned = Ext.encode(tojson)
         //console.log(jsoned);
         // check and send or update
         if(valido){
-            if(tojson.onDemandRunningMode){
+            if(goOnDemand){
                 var d = new Date;
-                this.sendBatch(this.gliderPanelView.cruiseName.getValue(), 'onDemand_'+d.getMilliseconds(), jsoned, 'ondemand');
+                this.sendBatch(GPV.cruiseName.getValue(), 'onDemand_'+d.getMilliseconds(), jsoned, 'ondemand');
             }else{
                 this.checkBatch(
-                            this.gliderPanelView.cruiseName.getValue(),
-                            this.gliderPanelView.gliderName.getValue(),
+                            GPV.cruiseName.getValue(),
+                            GPV.gliderName.getValue(),
                             jsoned
                             );
                     }
@@ -1152,10 +1165,12 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                     GPT.ftpFS.hide();
                                 }
                                
-                                GPT.experimentName.setValue(payload.experimentName);
+                                //GPT.experimentName.setValue(payload.experimentName);
+                                GPT.cruiseName.setValue(payload.experimentName);
+                                
                                 //GPT.gliderName.filter(); // TODO siamo in loadbatch, azzerare i filtri e forzare la selezione al glider scelto
                                 GPT.gliderName.setValue(payload.gliderName);
-                                GPT.onDemandRunningMode.setValue(payload.onDemandRunningMode);
+                                GPT.onDemandRunningMode.setValue(payload.onDemandRunningMode == 1);
                                 GPT.lonCenter.setValue(payload.lonCenter);
                                 GPT.latCenter.setValue(payload.latCenter);
                                 GPT.modelID.setValue(payload.modelID);
@@ -1184,7 +1199,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                 GPT.deltaT.setValue(payload.deltaT); 
                                 GPT.deltaT_surfacing.setValue(payload.deltaT_surfacing);
                                 GPT.deltaT_atSurf.setValue(payload.deltaT_atSurf);
-                                GPT.driftCorrection.setValue(payload.driftCorrection);
+                                GPT.driftCorrection.setValue(payload.driftCorrection == "y");
+                                GPT.loopWP.setValue(payload.loopWP == "yes");
                                 if(payload.t0){
                                     GPT.t0my.t0Date.setValue(Date.parseDate(payload.t0.split(':')[0], "Ymd"));
                                     GPT.t0my.t0Time.setValue(Date.parseDate(payload.t0.split(':')[1], "his"));
