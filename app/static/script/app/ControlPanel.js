@@ -601,6 +601,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 	cruiseListView: null,
 	cruisePanelView: null,
 	token: null,
+	vehicles: null,
 	
 	toggleGroup: "toolGroup",
 
@@ -627,6 +628,17 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		
 		this.sourcesProperties = config.sourcesProperties;
 		
+		if(config.vehicles){
+		    var records = [];
+            config.vehicles.each(function(r){
+                records.push(r.copy());
+            });
+            this.vehicles = new Ext.data.Store({
+                recordType: config.vehicles.recordType
+            });
+            this.vehicles.add(records);
+		}
+        
 		// create an instance of geostore client
 		this.geostore = new GeoStore.Maps({
 			authorization: this.token,
@@ -2133,6 +2145,14 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		},
 
 		updateItemSelector: function(selector, selectedItems, isEqual) {
+			// restore default data
+			var records = [];
+            this.vehicles.each(function(r){
+                records.push(r.copy());
+            });
+            selector.fromMultiselect.store.removeAll();
+            selector.fromMultiselect.store.add(records);        
+			
 			// in this array I keep the list of removed item from the multiselect
 			// I need it because it is not safe to delete items within a for loop
 			var removed = new Array;
@@ -2142,8 +2162,6 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				return;
 			}
             
-            //TODO sporca il fromStore con glider di altre cruise
-            //console.log(availableItems);
             
 			for (var i = 0; i < availableItems.length; i++) {
 				var item = availableItems[i];
@@ -2151,26 +2169,21 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 				for (var j = 0; j < selectedItems.length; j++) {
 					
 					if (isEqual(selectedItems[j], item.data) ) {
-					    //console.log('Adding');
-					    //console.log(item);
-						selector.toMultiselect.store.add(item);
+					    selector.toMultiselect.store.add(item);
 						removed.push(item);
 						toSplice.push(j);
 					}
 				}
 			}
 
-			//console.log(toSplice);
 			var len = toSplice.length;
 			while(len--){
                 selectedItems[toSplice[len]] = null;
             }
-            //console.log(selectedItems);
             
 			// Remaining are added
 			for (var j = 0; j < selectedItems.length; j++) {
 			    if(selectedItems[j]){
-			        //console.log(selectedItems[j]);
 			        var record = new selector.toMultiselect.store.recordType({
                                                         value: selectedItems[j][1],
                                                         text: selectedItems[j][1],
