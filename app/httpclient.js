@@ -360,7 +360,7 @@ var Exchange = function(url, options, callbacks) {
                 }
             }
             return;
-        },
+        }
     });
 
     exchange.setMethod(options.method);

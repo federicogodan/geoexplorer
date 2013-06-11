@@ -85,7 +85,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             columns: [{
                 header: 'Name',
                 //width: .5,
-                dataIndex: 'name',
+                dataIndex: 'name'
             }],
             listeners:{
                 /*click: {
@@ -350,15 +350,14 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // disabled: true,
                         emptyText: 'Insert File name HERE',
                         ref: '../../bathymetryFileName',
-                        name: 'bathymetryFileName',
-                        // width: 500
+                        name: 'bathymetryFileName'
                         
                     },
                     {
                         fieldLabel: 'Glider Input Script Name',
                         xtype: 'hidden',
                         ref: '../../gliderInputScriptName',
-                        name: 'gliderInputScriptName',
+                        name: 'gliderInputScriptName'
                         
                     },{
                         fieldLabel: 'Confidence Interval Probability',
@@ -368,7 +367,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 99.99999,
                         defaultValue: 99.99999,
                         ref: '../../confidenceIntervalProb',
-                        name: 'confidenceIntervalProb',
+                        name: 'confidenceIntervalProb'
                         // width: 500
                         
                     },
@@ -432,8 +431,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 6,
                         defaultValue: 6,
                         ref: '../../deltaT',
-                        name: 'deltaT',
-                        // width: 500
+                        name: 'deltaT'
                         
                     },{
                         fieldLabel: 'Surfacing interval',
@@ -443,8 +441,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 9900,
                         defaultValue: 9900,
                         ref: '../../deltaT_surfacing',
-                        name: 'deltaT_surfacing',
-                        // width: 500
+                        name: 'deltaT_surfacing'
+
                         
                     },{
                         fieldLabel: 'Time at surface',
@@ -454,8 +452,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 900,
                         defaultValue: 900,
                         ref: '../../deltaT_atSurf',
-                        name: 'deltaT_atSurf',
-                        // width: 500
+                        name: 'deltaT_atSurf'
                         
                     },{
                         fieldLabel: 'Apply Drift Correction',
@@ -523,7 +520,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         //allowBlank: false,
                         // disabled: true,
                         ref: '../../lonWP',
-                        name: 'lonWP',
+                        name: 'lonWP'
                         // width: 500
                         
                     },{
@@ -532,7 +529,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         //allowBlank: false,
                         // disabled: true,
                         ref: '../../latWP',
-                        name: 'latWP',
+                        name: 'latWP'
                         // width: 500
                         
                     },{
@@ -549,7 +546,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         //allowBlank: false,
                         // disabled: true,
                         ref: '../../idxStartWP',
-                        name: 'idxStartWP',
+                        name: 'idxStartWP'
                         // width: 500
                         
                     },{
@@ -560,7 +557,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 1000,
                         defaultValue: 1000,
                         ref: '../../reachedWPThreshold',
-                        name: 'reachedWPThreshold',
+                        name: 'reachedWPThreshold'
                         // width: 500
                         
                     },{
@@ -571,7 +568,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 10,
                         defaultValue: 10,
                         ref: '../../positionStd0',
-                        name: 'positionStd0',
+                        name: 'positionStd0'
                         // width: 500
                         
                     },{
@@ -581,7 +578,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // disabled: true,
                         //value: 'default_value',
                         ref: '../../targetDepthDiving',
-                        name: 'targetDepthDiving',
+                        name: 'targetDepthDiving'
                         // width: 500
                         
                     },{
@@ -591,9 +588,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // disabled: true,
                         //value: 'default_value',
                         ref: '../../targetDepthClimbing',
-                        name: 'targetDepthClimbing',
-                        // width: 500
-                        
+                        name: 'targetDepthClimbing'
+                        // width: 500                        
                     },{
                         fieldLabel: 'Minimum altitude from sea floor',
                         xtype: 'numberfield',
@@ -601,8 +597,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // disabled: true,
                         //value: 'default_value',
                         ref: '../../tagerAltitude',
-                        name: 'tagerAltitude',
-                        // width: 500,
+                        name: 'tagerAltitude'
                         
                     },{
                         fieldLabel: 'Pitch angle Diving',
@@ -662,7 +657,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: 0.14,
                         defaultValue: 0.14,
                         ref: '../../VzDive',
-                        name: 'VzDive',
+                        name: 'VzDive'
                         // width: 500
                         
                     },{
@@ -672,7 +667,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // disabled: true,
                         value: 0.04,
                         ref: '../../stdVzDive',
-                        name: 'stdVzDive',
+                        name: 'stdVzDive'
                         // width: 500
                         
                     },{
@@ -683,7 +678,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         value: -0.14,
                         defaultValue: -0.14,
                         ref: '../../VzClimb',
-                        name: 'VzClimb',
+                        name: 'VzClimb'
                         // width: 500
                         
                     },{
@@ -693,7 +688,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // disabled: true,
                         value: 0.04,
                         ref: '../../stdVzClimb',
-                        name: 'stdVzClimb',
+                        name: 'stdVzClimb'
                         // width: 500
                         
                     },{
@@ -1145,9 +1140,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         // TODO add a switch to enable defaultValues?
                         GPT.clean();
                         
-                        // TODO Resources ha l'afterfind che ingora gli attributi e setta owner
-                        //GPT.cruiseName.setValue(data.owner);
-
                         if (payload) {
 
                                 // TODO externalize
@@ -1168,7 +1160,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                 //GPT.experimentName.setValue(payload.experimentName);
                                 GPT.cruiseName.setValue(payload.experimentName);
                                 
-                                //GPT.gliderName.filter(); // TODO siamo in loadbatch, azzerare i filtri e forzare la selezione al glider scelto
                                 GPT.gliderName.setValue(payload.gliderName);
                                 GPT.onDemandRunningMode.setValue(payload.onDemandRunningMode == 1);
                                 GPT.lonCenter.setValue(payload.lonCenter);
