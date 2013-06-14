@@ -279,7 +279,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     title: 'Main parameters',
                     labelWidth: 200,
                     defaults:{
-                        width: 225
+                        width: 225,
+                        decimalPrecision: 6
                     },
                     items:[
                     {
@@ -421,7 +422,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     labelWidth: 200,
                     ref: '../gliderFieldset',
                     defaults:{
-                        width: 225
+                        width: 225,
+                        decimalPrecision: 6
                     },
                     items: [{
                         fieldLabel: 'Delta T',
