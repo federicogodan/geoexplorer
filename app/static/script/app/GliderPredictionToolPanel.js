@@ -167,7 +167,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         xtype: 'displayfield',
                         fieldLabel: 'Cruise Name (experimentName)',
                         value: 'onDemand',
-                        name:'cruiseName',
+                        name:'experimentName',
                         // reference attached to GPT
                         ref:'../../cruiseName'
                     }]
@@ -388,7 +388,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                     new Ext.form.TextField({
                                         itemId: 'vertex'+id,
                                         fieldLabel: 'Point '+id+' [ lon , lat ] ',
-                                        //name: 'Point'+id,
+                                        name: 'dssArea.pathVertex',
                                         allowBlank: false,
                                         border: true,
                                         validator: self.pointValidator
@@ -407,7 +407,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                 // disabled: true,
                                 emptyText: 'Qui ci sta un array',
                                 ref: 'Point0',
-                                //name: 'Point0',
+                                name: 'dssArea.pathVertex',
                                 itemId: 'vertex0',
                                 validator: self.pointValidator
                                 
@@ -726,6 +726,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         itemId: 'vertex0',
                         fieldLabel: 'Point 0 [ lon , lat ] ',
                         allowBlank: false,
+                        name: 'dssArea.pathVertex',
                         border: true,
                         validator: self.pointValidator
                     })
@@ -788,7 +789,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             return;
 
         var gliderId = this.gliderListView.getSelectedRecords()[0].data.id;
-        console.log('Eliminazione di '+gliderId);
+        //console.log('Eliminazione di '+gliderId);
         
         var uri = new Uri({'url':this.geostoreBaseUrl});
         uri.setProxy( this.proxy );
@@ -813,7 +814,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                 
             },
             failure: function(response, opts){
-                console.error(response);
+                //console.error(response);
                 Ext.Msg.show({
                     title: 'Cannot read response',
                     msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -846,17 +847,19 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         var valido = true;
         var tojson = {};
         var GPV = this.gliderPanelView;
-        GPV.formPanel.getForm().items.each(
-                                            function s(c){
-                                                    //console.log(c.getName()+' : '+c.getValue());
-                                                    valido = (c.validate() && valido);
-                                                    if(valido  && c.xtype != 'displayfield' && !c.getName().contains('ext-')){
-                                                        //console.log(c.getName()+' : '+c.getValue());
-                                                        tojson[c.getName()] = c.getValue();
-                                                    }
-                                                        
-                                                }
-                                            );        
+
+        if(!GPV.formPanel.getForm().isValid()){
+            alert('Completa tutti i campi necessari');
+            return;
+        }
+        
+        var fv = GPV.formPanel.getForm().getFieldValues();
+        for(var key in fv)
+            {
+                if( key != 'undefined' && key != 'dssArea.pathVertex'){
+                    tojson[key] = fv[key];
+                }
+            };        
 
         var pathVertex = [];
         GPV.pathVertexSet.items.each(
@@ -886,9 +889,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         if(t0.t0Date.validate() && t0.t0Time.validate() &&
            t0.t0Date.getRawValue()!= '' && t0.t0Time.getRawValue() != ''){
             tojson.t0 = t0.t0Date.getRawValue()+ ':'+ t0.t0Time.getRawValue();
-            //alert(t0.t0Date.getValue());
-            //alert(t0.t0Time.getValue());
-            //alert('data valida');
         }
         else  // clean bad values
             delete tojson.t0;
@@ -948,7 +948,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         return;
                     this.updateBatch(resId, cruiseName, gliderName, jsoned);
                 }else{
-                    console.error(response);
                     Ext.Msg.show({
                         title: 'Cannot read response',
                         msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1001,13 +1000,11 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
            scope: this,
            params: xml,
            success: function(response, opts){
-                //console.log(response);
                 alert(cruiseName+'_'+gliderName+' Caricato correttamente ('+response.responseText+')');
                 this.gliderListView.getStore().reload();
            },
            failure:  function(response, opts){
                 alert('FALLITO!');
-                console.log(response);
            }
         });     
         
@@ -1034,11 +1031,9 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
            params: json,
            success: function(response, opts){
                 alert('ANDATA!\n'+response.responseText);
-                //console.log(response);
            },
            failure:  function(response, opts){
                 alert('FALLITO!');
-                console.log(response);
            }
         });     
         
@@ -1064,12 +1059,10 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             success: function(response, opts){
                 if(response.responseXML){
                     var resArray = Ext.DomQuery.select('Resource/name', response.responseXML);
-                    console.log(resArray);
                     if(callBack)
                         callBack.call(resArray);
                     //this.updateBatch(resId, cruiseName, gliderName, jsoned);
                 }else{
-                    console.error(response);
                     Ext.Msg.show({
                         title: 'Cannot read response',
                         msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1116,7 +1109,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             params: { full: true },
             onFailure: function loadBatch_findByPK_callback_failed(response){
                 appMask.hide();
-                console.error(response);
                 Ext.Msg.show({
                     title: 'Cannot read configuration',
                     msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1132,7 +1124,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                             // payload = JSON.parse(data.blob);
                             payload = Ext.util.JSON.decode(data.blob);
                         } catch (e) {
-                            console.error(e);
+                            //console.error(e);
                         }
                         //console.log(data);
                         
@@ -1180,6 +1172,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                                                 itemId: 'vertex'+i,
                                                 fieldLabel: 'Point '+i+' [ lon , lat ] ',
                                                 value: payload.dssArea.pathVertex[i],
+                                                name: 'dssArea.pathVertex',
                                                 allowBlank: false,
                                                 border: true,
                                                 validator: self.pointValidator

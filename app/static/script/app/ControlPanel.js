@@ -1713,7 +1713,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 			params: { full: true },
 			onFailure: function loadCruise_findByPK_callback_failed(response){
 				appMask.hide();
-				console.error(response);
+				//console.error(response);
 				Ext.Msg.show({
 					title: 'Cannot read configuration',
 					msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1729,7 +1729,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							// payload = JSON.parse(data.blob);
 							payload = Ext.util.JSON.decode(data.blob);
 						} catch (e) {
-							console.error(e);
+							//console.error(e);
 						}
 
 						// reset original values
@@ -1812,7 +1812,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 		this.geostore.create(conf.build(), {
 				onFailure: function save_create_failed( response ){
 					appMask.hide();
-					console.error(response);
+					//console.error(response);
 					Ext.Msg.show({
 						title: 'Cannot save this configuration',
 						msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1873,7 +1873,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					}					
 				},
 				onFailure: function( response ) {
-					console.error( response );
+					//console.error( response );
 					Ext.Msg.show({
 						title: "Cannot upload watermark",
 						msg: "File does not exist or is not valid.",
@@ -1897,7 +1897,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 						self.mapId, conf.build().blob,{
 						onFailure: function(response){
 							appMask.hide();
-							console.error(response);
+							//console.error(response);
 							Ext.Msg.show({
 									title: 'Cannot save this configuration',
 									msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1911,7 +1911,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							self.geostore.update(
 								self.mapId, conf.build(), {
 									onFailure: function update_geostore_update_failed( response ){
-										console.error(response);
+										//console.error(response);
 										Ext.Msg.show({
 											title: 'Cannot save this configuration',
 											msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
@@ -1959,7 +1959,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 					waitMsg: 'Uploading watermark',
 					waitMsgTarget: true,
 					onFailure: function(response) {
-						console.error(response);
+						//console.error(response);
 						Ext.Msg.show({
 							title: "Cannot upload watermark",
 							msg: action.responseText,
@@ -2122,7 +2122,7 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 								self.geostore.deleteByPk(self.mapId, {
 									onFailure: function(response){
 										appMask.hide();
-										console.error(response);
+										//console.error(response);
 										Ext.Msg.show({
 												title: 'Cannot delete this configuration',
 												msg: response.statusText + "(status " + response.status + "):  " + response.responseText,
