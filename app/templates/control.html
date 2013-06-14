@@ -261,13 +261,13 @@
                         });
 */
                         // init store
-                        
+                        // the xmlData is wrong to show an empty store
                         store.load({
                             params:{
                                 start: 0,
                                 limit: config.pageSize,
                                 includeAttributes: true,
-                                xmlData: '<AND><CATEGORY><name>batch</name><operator>EQUAL_TO</operator></CATEGORY></AND>'
+                                xmlData: '<AND><CATEGORY><name>nonamecategory</name><operator>EQUAL_TO</operator></CATEGORY></AND>'
                             }
                         });
                         
