@@ -270,23 +270,25 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                           layout: 'fit',
                                           resizable: true,
                                           items:
-                                                    new Ext.grid.GridPanel({
-                                                        store: detailsStore,
-                                                        anchor: '100%',
-                                                        viewConfig : {
-                                                            forceFit: true
-                                                        },
-                                                        columns: [{
-                                                        header: me.detailsHeaderName, 
-                                                        dataIndex: "name",
-                                                        renderer: function (val){
-                                                                return '<b>' + val + '</b>';
-                                                        }
-                                                        },{
-                                                            header: me.detailsHeaderValue, 
-                                                            dataIndex: "value"
-                                                        }]
-                                                    })
+												new Ext.grid.GridPanel({
+													store: detailsStore,
+													anchor: '100%',
+													viewConfig : {
+														forceFit: true
+													},
+													columns: [
+														{
+															header: me.detailsHeaderName, 
+															dataIndex: "name",
+															renderer: function (val){
+																return '<b>' + val + '</b>';
+															}
+														}, {
+															header: me.detailsHeaderValue, 
+															dataIndex: "value"
+														}
+													]
+												})
                                   }).show();
                       }
                   }]
