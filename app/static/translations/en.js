@@ -365,7 +365,10 @@ GeoExt.Lang.add("en", {
 		fallText : "Fall",
 		summerText : "Summer",
 		modelRunDateText:'Model Run Date',
-		modelEndDateText:'Model End Date'
+		modelEndDateText:'Model End Date',
+		qualityLabel: "Quality",
+		bottomTypeLabel: "Bottom Type",
+		tlModelLabel: "TL Model"
     },	
     "gxp.plugins.QueryForm.prototype": {
         queryActionText: "Query",

@@ -384,7 +384,11 @@ GeoExt.Lang.add("it", {
 		fallText : "Autunno",
 		summerText : "Estate",
 		modelRunDateText:'Data Avvio Modello',
-		modelEndDateText:'Data Fine Modello'
+		modelEndDateText:'Data Fine Modello',
+		qualityLabel: "Qualità",
+		bottomTypeLabel: "Tipo Fondale",
+		tlModelLabel: "Modello TL"
+
     },
 	"gxp.plugins.GeoReferences.prototype": {
         initialText: "Seleziona un'area",
