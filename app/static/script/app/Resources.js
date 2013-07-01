@@ -74,6 +74,9 @@ var ResourcesXMLReader = Ext.extend(Ext.data.DataReader, {
                         case 'owner':
                             values['owner'] = child.childNodes[0].data;
                             break;
+                        case 'statusMessage':
+                            values['statusMessage'] = child.childNodes[0].data;
+                            break;
                         case 'cruiseId':
                             values['cruiseId'] = child.childNodes[0].data;
                             break;
@@ -95,6 +98,7 @@ var ResourcesXMLReader = Ext.extend(Ext.data.DataReader, {
                     owner: values['owner'],
                     id: values['id'],
                     name: values['name'],
+                    statusMessage: values['statusMessage'],
                     description: values['description'],
                     creation: values['creation'],
                     lastUpdate: values['lastUpdate'],
@@ -224,7 +228,7 @@ var Resources = ContentProvider.extend({
     },
     afterFind: function(json){
         
-        //console.log(json);
+//        console.log(json);
         
         if ( json.Resource){
             var data = new Object;
