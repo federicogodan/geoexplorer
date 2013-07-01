@@ -138,9 +138,20 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
             ref: 'glidersListView'
         });
         
+        this.cancelButton = new Ext.Button({
+            iconCls: 'cancel',
+            text: 'Cancel',
+            tootlip: 'Return to Cruise Control without saving',
+            ref: '../cancelButton',
+            disabled: false,
+            handler: this.cancelHandler,
+            scope: this
+        });
+
         this.saveButton = new Ext.Button({
             iconCls: 'save',
             text: 'Save',
+            tooltip: 'Save batch and return to Cruise Control',
             ref: '../saveButton',
             disabled: true,
             handler: this.validate,
@@ -192,7 +203,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     allowBlank: false,
                     msgTarget: 'side'
                 },
-                buttons: [this.saveButton],
+                buttons: [this.cancelButton, this.saveButton],
                 items: [{
                     xtype: 'fieldset',
                     title: 'Glider Path Prediction Tool',
@@ -210,7 +221,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         ref:'../../cruiseName'
                     }]
                     
-                },{
+                },/*{
                     xtype: 'fieldset',
                     title: 'FTP properties',
                     labelWidth: 200,
@@ -247,7 +258,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                            this.items.each(function(i){i.enable()});
                        }
                    }
-                },{
+                },*/{
                     xtype: 'fieldset',
                     title: 'Path',
                     labelWidth: 200,
@@ -329,11 +340,15 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         name: 'onDemandRunningMode',
                         handler: function(me, state){
                             if(state){
-                                self.gliderPanelView.ftpFS.hide();
+                                //self.gliderPanelView.ftpFS.hide();
                                 self.gliderPanelView.pathFS.show();
+                                if(self.gliderPanelView.pathFS.rendered)
+                                    self.gliderPanelView.syncSize().doLayout();
                             }else{
                                 self.gliderPanelView.pathFS.hide();
-                                self.gliderPanelView.ftpFS.show();
+                                //self.gliderPanelView.ftpFS.show();
+                                if(self.gliderPanelView.pathFS.rendered)
+                                    self.gliderPanelView.syncSize().doLayout();
                             }
                             
                         }
@@ -418,7 +433,9 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         ref:'../../pathVertexSet',
                         buttonAlign: 'right',
                         buttons:[{
-                            text:'Aggiungi punto',
+                            text:'Add point',
+                            icon :'../theme/app/img/silk/add.png',
+                            tooltip: 'Add a new vertex to the Experiment Area',
                             handler: function(){
                                 var id = self.gliderPanelView.pathVertexSet.items.getCount();
 
@@ -771,7 +788,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         validator: self.pointValidator
                     })
                 );
-                this.ftpFS.show();
+                //this.ftpFS.show();
                 this.pathFS.hide();
                 
             }
@@ -801,13 +818,14 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         this.clean();
         var cruiseName = Ext.getCmp('cruise-list-view').getSelectedRecords()[0].data.name;
         var GPV = this.gliderPanelView;
-        GPV.ftpFS.hide();
+        //GPV.ftpFS.hide();
         GPV.pathFS.show();
         GPV.onDemandRunningMode.setValue(true);
         GPV.ownerCt.setActiveTab(GPV);
         GPV.cruiseName.setValue(cruiseName);
         GPV.syncSize().doLayout();  // TODO ineffective!
         GPV.enable();
+        Ext.getCmp('cruise-control-panel').disable();
     },
 
     editBatch: function(b,e) {
@@ -821,7 +839,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         this.gliderPanelView.cruiseName.setValue(cruiseName);
         this.gliderPanelView.ownerCt.setActiveTab(this.gliderPanelView);
         this.gliderPanelView.enable();
-        
+        Ext.getCmp('cruise-control-panel').disable();
     },
     
     deleteBatch: function(b,e){
@@ -891,7 +909,6 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
     
     validate: function(){
         
-        //alert('valido');
         var valido = true;
         var tojson = {};
         var GPV = this.gliderPanelView;
@@ -923,7 +940,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     valido = false;
             }
         );
-        // chiudo il poligono
+        // close polygon
         var pVSet = GPV.pathVertexSet;
         if(pVSet.items.first().getValue() != pVSet.items.last().getValue())
             pathVertex.push(Ext.util.JSON.decode('['+pVSet.items.first().getValue()+']'));
@@ -966,10 +983,8 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
         tojson.glider_names = tojson.gliderName;
         tojson.gliderInputScriptName = 'initGliderPathPrediction_'+tojson.gliderName+'.json';
         
-        
-        //console.log(tojson);
         var jsoned = Ext.encode(tojson)
-        //console.log(jsoned);
+
         // check and send or update
         if(valido){
             if(goOnDemand){
@@ -982,9 +997,15 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                             jsoned
                             );
             }
-        }
-        //this.sendBatch(this.gliderPanelView.cruiseName.getValue(), this.gliderPanelView.gliderName.getValue(), jsoned);
+        }        
         
+    },
+    
+    cancelHandler: function(){
+        var cruiseControlPanel = Ext.getCmp('cruise-control-panel');
+        cruiseControlPanel.enable();
+        Ext.getCmp('tab-panel').setActiveTab(cruiseControlPanel);
+        this.gliderPanelView.disable();
     },
 
     checkBatch: function(cruiseName, gliderName, jsoned){
@@ -1070,6 +1091,7 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                     icon: Ext.MessageBox.QUESTION
                 });
                 this.gliderListView.getStore().reload();
+                this.cancelHandler();
            },
            failure:  function(response, opts){
                 Ext.Msg.show({
@@ -1226,10 +1248,10 @@ var GliderPredictionToolPanel = Ext.extend(Ext.Panel, {
                         if (payload) {
 
                                 // TODO externalize
-                                if(payload.username){
-                                    GPT.username.setValue(payload.username);
-                                    GPT.password.setValue(payload.password);
-                                    GPT.ftpFS.show();
+                                if(payload.onDemandRunningMode == 0){
+                                    //GPT.username.setValue(payload.username);
+                                    //GPT.password.setValue(payload.password);
+                                    //GPT.ftpFS.show();
                                     GPT.pathFS.hide();
                                 }
 

@@ -1094,6 +1094,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
                                     // ref:'../../../../vehicleSelectorBtn',
                                     disabled: true,
                                     text: 'Add vehicle',
+                                    tooltip: 'Define a new vehicle',
+                                    icon :'../theme/app/img/silk/page_add.png',
                                     handler: function() {
                                         var form = new Ext.FormPanel({
                                             width: 500,
@@ -1175,7 +1177,9 @@ var ControlPanel = Ext.extend(Ext.Panel, {
 							store: [],
 							tbar: [{
 								text: 'clear',
-								handler: function() {
+								tooltip: 'Remove all gliders from this cruise',
+								icon :'../theme/app/img/silk/page_delete.png',
+                                handler: function() {
 									this.cruisePanelView.vehicleSelector.reset();
 								},
 								scope: this
@@ -1183,6 +1187,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
                                 id: 'vehicle-selector-config-btn',
                                 text: 'Config Gliders Batches',
                                 disabled: true,
+                                tooltip: 'Configure a batch for the selected glider',
+                                icon :'../theme/app/img/silk/page_edit.png',
                                 handler: function(){
 
                                     // TODO gestire il pulsante con gli eventi, come catturarli?
@@ -1212,6 +1218,8 @@ var ControlPanel = Ext.extend(Ext.Panel, {
                                     // PRIMA si switcha sul GPT in modo da fare il rendering
                                     Ext.getCmp('tab-panel').setActiveTab(GPT);
                                     GPT.enable();
+                                    Ext.getCmp('cruise-control-panel').disable();
+
                                     // POI si sincronizza tutto, altrimenti non e' istanziato
                                     GPT.syncSize().doLayout();
                                     
