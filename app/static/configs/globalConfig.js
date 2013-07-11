@@ -1,8 +1,8 @@
 {
 
-	"infoPageBaseUrl": "http://localhost:8081/informational/?mapId=",
+	"infoPageBaseUrl": "/informational/?mapId=",
 	"proxy": "/proxy/?url=",
-	"geostoreBaseUrl":"http://localhost:8080/geostore/rest/",
+	"geostoreBaseUrl":"http://84.33.199.62/geostore-gliders/rest/",
 	"pageSize":20
 	
 }

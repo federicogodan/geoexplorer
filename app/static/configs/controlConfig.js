@@ -146,9 +146,9 @@
 	},
 		
 	"imgsBaseUrl": "http://84.33.199.62/xmlJsonTranslate-gliders/temp/",
-	"interPageBaseUrl": "http://84.33.199.62/MapStore-gliders/interactive/?mapId=",
-	"infoPageBaseUrl": "http://84.33.199.62/MapStore-gliders/informational/?mapId=",
-	"proxy": "/http_proxy/proxy?url=",
+	"interPageBaseUrl": "../interactive/?mapId=",
+	"infoPageBaseUrl": "../informational/?mapId=",
+	"proxy": "/proxy?url=",
 	"fileUploaderServlet": "http://84.33.199.62/xmlJsonTranslate-gliders/",
 	"geostoreBaseUrl":"http://84.33.199.62/geostore-gliders/rest/",
 	"geoserverBaseUrl":"http://84.33.199.62/geoserver-gliders/",
