@@ -217,6 +217,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 checked: true,
                 iconCls: "gxp-icon-googleearth",
                 ptype: "gxp_googleearth",
+
                 actionTarget: {target: "paneltbar", index: 11}
         }*/];
 
@@ -328,7 +329,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
 					position: config.watermarkPosition 
 			});
 		}
-	
+        
 		// TODO refactor
 		// it should be better to centralize definitions of common plugins in Composer.js
 		config.tools.push(
@@ -361,6 +362,17 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 }
                }
 		   );
+       
+       if(config.map.layers){
+            var re = /cruise_name\s*=\s*\'[A-Za-z0-9]*\'/g ;
+            for(var i = 0 ; i < config.map.layers.length; i++){
+                var filter =config.map.layers[i].cql_filter;
+                if(filter){
+                    config.map.layers[i].cql_filter=config.map.layers[i].cql_filter.replace(re,"cruise_name = '"+config.cruiseName+"'");
+                    alert(config.map.layers[i].cql_filter.match(re));
+                }
+            }
+        }
 		return config;	
 	},
     
