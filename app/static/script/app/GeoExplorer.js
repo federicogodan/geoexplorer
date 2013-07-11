@@ -369,7 +369,7 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                 var filter =config.map.layers[i].cql_filter;
                 if(filter){
                     config.map.layers[i].cql_filter=config.map.layers[i].cql_filter.replace(re,"cruise_name = '"+config.cruiseName+"'");
-                    alert(config.map.layers[i].cql_filter.match(re));
+                    
                 }
             }
         }
