@@ -173,6 +173,8 @@
                 "pageSize": 10,
                 "srsName": "EPSG:4326", 
                 "version": "1.1.0", 
+                "displaySource": true,
+                "wmsURL": "http://localhost:8080/geoserver/ows",
                 "outputTarget": "idalaylist",
                 "columns" : [{
                                 "header": "Model Status", 
