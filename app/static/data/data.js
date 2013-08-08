@@ -51,32 +51,21 @@ var risk_data = {
 		max: 1
         },
     urlParameters: {
-		geoserverURL: "http://84.33.2.26/geoserver"
+		geoserverURL: "http://localhost:8080/geoserver"
 	}
 };
 
 var mammalData = {		
     "speciesInformationData":[
-        ["Acadian redfish", "Sebastes fasciatus", "Scorpaenidae", "http://www.fao.org/fishery/species/2525/en"],
-        ["Adriatic sturgeon", "Acipenser naccarii", "Acipenseridae", "http://www.fao.org/fishery/species/10183/en"],
-        ["Aesop shrimp", "Pandalus montagui", "Pandalidae", "http://www.fao.org/fishery/species/3426/en"],
-        ["African angelshark", "Squatina africana", "Squatinidae", "http://www.fao.org/fishery/species/15415/en"],
-        ["African blackspot threadfin", "Polydactylus malagasyensis", "Polynemidae", "http://www.fao.org/fishery/species/18801/en"],
-        ["African cuttlefish", "Sepia bertheloti", "Sepiidae", "http://www.fao.org/fishery/species/16968/en"],
-        ["African squid", "Alloteuthis africana", "Loliginidae", "http://www.fao.org/fishery/species/17016/en"],
-        ["Akiami paste shrimp", "Acetes japonicus", "Sergestidae", "http://www.fao.org/fishery/species/3428/en"],
-        ["Alaska pollock(=Walleye poll.)", "Theragra chalcogramma", "Gadidae", "http://www.fao.org/fishery/species/3017/en"],
-        ["Albacore", "Thunnus alalunga", "Scombridae", "http://www.fao.org/fishery/species/2496/en"],
-        ["Amer. plaice(=Long rough dab)", "Hippoglossoides platessoides", "Pleuronectidae", "http://www.fao.org/fishery/species/3359/en"],
-        ["American angler", "Lophius americanus", "Lophiidae", "http://www.fao.org/fishery/species/3380/en"],
-        ["American cupped oyster", "Crassostrea virginica", "Ostreidae", "http://www.fao.org/fishery/species/2669/en"],
-        ["American lobster", "Homarus americanus", "Nephropidae", "http://www.fao.org/fishery/species/3482/en"],
-        ["American sea scallop", "Placopecten magellanicus", "Pectinidae", "http://www.fao.org/fishery/species/3519/en"],
-        ["Amur sturgeon", "Acipenser schrenckii", "Acipenseridae", "http://www.fao.org/fishery/species/10187/en"],
-        ["Analogous bobtail squid", "Sepiola affinis", "Sepiolidae", "http://www.fao.org/fishery/species/17097/en"],
-        ["Anchoveta(=Peruvian anchovy", "Engraulis ringens", "Engraulidae", "http://www.fao.org/fishery/species/2917/en"],
-        ["Andrea cuttlefish", "Sepia andreana", "Sepiidae", "http://www.fao.org/fishery/species/17071/en"],
-        ["Angel squid", "Ancistroteuthis lichtensteini", "Onychoteuthidae", "http://www.fao.org/fishery/species/16948/en"]
+        ["Fin whale", "Balaenoptera physalus", "Balaenopteridae", "http://solmar.nurc.nato.int/education/species-finwhale.html"],
+        ["Sperm whale", "Physeter macrocephalus", "Physeteroidae", "http://solmar.nurc.nato.int/education/species-spermwhale.html"],
+        ["Pilot whale", "Globicephala melas", "Delphinidae", "http://solmar.nurc.nato.int/education/species-pilotwhale.html"],
+        ["Cuvier's beaked whale", "Ziphius cavirostris", "Ziphiidae", "http://solmar.nurc.nato.int/education/species-cuvierswhale.html"],
+        ["Common dolphin", "Delphinus delphis", "Delphinidae", "http://solmar.nurc.nato.int/education/species-commondolphin.html"],
+        ["Bottlenose dolphin", "Tursiops truncatus", "Delphinidae", "http://solmar.nurc.nato.int/education/species-bottlenosedolphin.html"],
+        ["Striped dolphin", "Stenella coeruleoalba", "Delphinidae", "http://solmar.nurc.nato.int/education/species-stripeddolphin.html"],
+        ["Risso's dolphin", "Grampus griseus", "Delphinidae", "http://solmar.nurc.nato.int/education/species-rissosdolphin.html"]
+
     ]
 };
 
