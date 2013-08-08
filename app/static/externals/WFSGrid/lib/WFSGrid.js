@@ -204,6 +204,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         var wsAtt= actionConf.wsNameAttribute || "wsName";
         var wmsURLAtt= actionConf.wmsURLAttribute || "outputUrl";
         var showEqualFilter= actionConf.showEqualFilter;
+        var me = this;
         return {
                 xtype: 'actioncolumn',
                 sortable : false, 
@@ -226,10 +227,26 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         handler: function(gpanel, rowIndex, colIndex) {
                                 var store = gpanel.getStore();	
                                 var record = store.getAt(rowIndex);
-                                addLayer.addLayer(record.get(layerTitleAtt),
-                                    record.get(wsAtt) + ":" + record.get(layerNameAtt),
-                                    record.get(wmsURLAtt)
+                                addLayer.addLayer({
+                                    msLayerTitle: record.get(layerTitleAtt),
+                                    msLayerName: record.get(wsAtt) + ":" + record.get(layerNameAtt),
+                                    wmsURL: record.get(wmsURLAtt)
+                                }
                                 );
+                                
+                                // only spm has source points to be displayed
+                                if(me.displaySource == true){
+                                    addLayer.addLayer({
+                                        msLayerTitle: "Sources of " + record.get(layerNameAtt),
+                                        msLayerName: me.featureType,
+                                        wmsURL: me.wmsURL, //record.get(wmsURLAtt),
+                                        // the CQL_FILTER must be lowercase (see WMSSource)
+                                        customParams: {
+                                            cql_filter: 'layerName = \''+ record.get(layerNameAtt)+'\''                           
+                                        }
+                                    });
+                                }
+                                
                         }
                      }]  
              };

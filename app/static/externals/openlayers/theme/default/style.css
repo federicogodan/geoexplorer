@@ -47,7 +47,7 @@ div.olLayerDiv {
    position: absolute;
    left: 10px;
    bottom: 15px;
-   font-size: xx-small;
+   font-size: small;
 }
 .olControlScaleLineBottom {
    border: solid 2px black;
