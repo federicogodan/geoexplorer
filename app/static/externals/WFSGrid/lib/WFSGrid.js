@@ -227,6 +227,13 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         handler: function(gpanel, rowIndex, colIndex) {
                                 var store = gpanel.getStore();	
                                 var record = store.getAt(rowIndex);
+                                addLayer.addLayer({
+                                    msLayerTitle: record.get(layerTitleAtt),
+                                    msLayerName: record.get(wsAtt) + ":" + record.get(layerNameAtt),
+                                    wmsURL: record.get(wmsURLAtt)
+                                }
+                                );
+                                
                                 // only spm has source points to be displayed
                                 if(me.displaySource == true){
                                     addLayer.addLayer({
@@ -239,13 +246,6 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                         }
                                     });
                                 }
-                                addLayer.addLayer({
-                                    msLayerTitle: record.get(layerTitleAtt),
-                                    msLayerName: record.get(wsAtt) + ":" + record.get(layerNameAtt),
-                                    wmsURL: record.get(wmsURLAtt)
-                                }
-                                );
-                                
                                 
                         }
                      }]  
