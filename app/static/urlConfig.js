@@ -174,6 +174,7 @@
                 "srsName": "EPSG:4326", 
                 "version": "1.1.0", 
                 "displaySource": true,
+                "sourcePrefix": "Sources of ",
                 "wmsURL": "http://localhost:8080/geoserver/ows",
                 "outputTarget": "idalaylist",
                 "columns" : [{
