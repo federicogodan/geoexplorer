@@ -108,6 +108,12 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
      */
     actionColumns: null,
     
+    /** api: config[sourcePrefix]
+     *  ``String``
+     *  Default prefix for sources layer title
+     */
+    sourcePrefix: "Sources of ",
+    
     
     // start i18n
     displayMsgPaging: "Displaying topics {0} - {1} of {2}",
@@ -242,7 +248,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                 // only spm has source points to be displayed
                                 if(me.displaySource == true){
                                     addLayer.addLayer({
-                                        msLayerTitle: "Sources of " + record.get(layerNameAtt),
+                                        msLayerTitle: me.sourcePrefix + record.get(layerNameAtt),
                                         msLayerName: me.featureType,
                                         wmsURL: me.wmsURL,
                                         // the CQL_FILTER must be lowercase (see WMSSource)
@@ -251,6 +257,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                         },
                                         zoomAfterAdd: false
                                     });
+                                    
+                                    // TODO: temporary fix
+                                    addLayer.zoomAfterAdd = true;
                                 }
                                 
                         }
@@ -341,6 +350,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                   // var map = me.target.mapPanel.map;
                                    var mapPanel=me.target.mapPanel;
                                    var layerName= record.get(wsAtt) + ":" + record.get(layerNameAtt);
+                                   var layerSrcTitle= me.sourcePrefix + record.get(layerNameAtt);
                                    Ext.MessageBox.confirm(me.deleteTooltip, 
                                    me.deleteConfirmMsg, 
                                    function showResult(btn){
@@ -367,7 +377,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                 var layers = mapPanel.layers;
                                                 layers.data.each(function(record, index, totalItems ) {
                                                     
-                                                    if(record.get('name') == layerName){
+                                                    if(record.get('name') == layerName || record.get('title') == layerSrcTitle){
                                                         layers.remove(record);
                                                     }
                                                 }); 
