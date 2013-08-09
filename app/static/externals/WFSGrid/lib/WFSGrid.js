@@ -227,8 +227,13 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         handler: function(gpanel, rowIndex, colIndex) {
                                 var store = gpanel.getStore();	
                                 var record = store.getAt(rowIndex);
+                                // prevent ExtJs to generate title
+                                var title = record.get(layerTitleAtt);
+                                if(title === undefined)
+                                    title = record.get(layerNameAtt);
+                                    
                                 addLayer.addLayer({
-                                    msLayerTitle: record.get(layerTitleAtt),
+                                    msLayerTitle: title,
                                     msLayerName: record.get(wsAtt) + ":" + record.get(layerNameAtt),
                                     wmsURL: record.get(wmsURLAtt)
                                 }
@@ -239,11 +244,12 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                     addLayer.addLayer({
                                         msLayerTitle: "Sources of " + record.get(layerNameAtt),
                                         msLayerName: me.featureType,
-                                        wmsURL: me.wmsURL, //record.get(wmsURLAtt),
+                                        wmsURL: me.wmsURL,
                                         // the CQL_FILTER must be lowercase (see WMSSource)
                                         customParams: {
                                             cql_filter: 'layerName = \''+ record.get(layerNameAtt)+'\''                           
-                                        }
+                                        },
+                                        zoomAfterAdd: false
                                     });
                                 }
                                 
