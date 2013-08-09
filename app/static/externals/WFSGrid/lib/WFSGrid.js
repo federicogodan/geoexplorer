@@ -237,14 +237,12 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                 var title = record.get(layerTitleAtt);
                                 if(title === undefined)
                                     title = record.get(layerNameAtt);
-                                    
+                                
                                 addLayer.addLayer({
                                     msLayerTitle: title,
                                     msLayerName: record.get(wsAtt) + ":" + record.get(layerNameAtt),
                                     wmsURL: record.get(wmsURLAtt)
-                                }
-                                );
-                                
+							}, function(r){								
                                 // only spm has source points to be displayed
                                 if(me.displaySource == true){
                                     addLayer.addLayer({
@@ -253,7 +251,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                         wmsURL: me.wmsURL,
                                         // the CQL_FILTER must be lowercase (see WMSSource)
                                         customParams: {
-                                            cql_filter: 'layerName = \''+ record.get(layerNameAtt)+'\''                           
+											cql_filter: 'layerName = \'' + record.get(layerNameAtt) + '\''                           
                                         },
                                         zoomAfterAdd: false
                                     });
@@ -261,7 +259,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                     // TODO: temporary fix
                                     addLayer.zoomAfterAdd = true;
                                 }
-                                
+							});                               
                         }
                      }]  
              };

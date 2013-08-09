@@ -221,7 +221,12 @@
                 
             }, {
                 "ptype": "gxp_addlayer",
+				"useEvents": true,
 				"id": "addlayer"
+			}, {
+                "ptype": "gxp_addlayer",
+				"useEvents": true,
+				"id": "addlayerAttribute"
 			}
 	]
 }
