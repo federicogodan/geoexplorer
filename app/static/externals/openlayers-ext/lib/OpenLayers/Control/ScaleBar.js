@@ -137,7 +137,7 @@ OpenLayers.Control.ScaleBar = OpenLayers.Class(OpenLayers.Control, {
             units: ['nautical miles', 'nautical miles', 'nautical miles'],
             abbr: ['nmi', 'nmi', 'nmi'],
             inches: [72913.385826772, 72913.385826772, 72913.385826772]
-        },
+        }
     },
 
     /**
