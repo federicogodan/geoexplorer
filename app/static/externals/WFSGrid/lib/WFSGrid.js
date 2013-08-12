@@ -251,7 +251,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                         wmsURL: me.wmsURL,
                                         // the CQL_FILTER must be lowercase (see WMSSource)
                                         customParams: {
-											cql_filter: 'layerName = \'' + record.get(layerNameAtt) + '\''                           
+                                            cql_filter: 'layerName = \'' + record.get(layerNameAtt) + '\''
                                         },
                                         zoomAfterAdd: false
                                     });
