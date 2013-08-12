@@ -195,7 +195,8 @@ GeoExt.Lang.add("it", {
         cacheFieldText: "Usa versione in cache",
         stylesText: "Stile",
         idaRasterRiskSummaryText: "Statistiche Risk Summary",
-        idaRasterRiskSummaryInfoText: "Statistiche Raster nella Viewport corrente"
+        idaRasterRiskSummaryInfoText: "Statistiche Raster nella Viewport corrente",
+        loadMaskMsg:"Caricamento.."
     },
 
     "gxp.WMSStylesDialog.prototype": {
