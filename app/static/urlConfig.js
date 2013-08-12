@@ -96,23 +96,23 @@
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsSPM",
                 "url": "http://localhost:8080/geoserver/wps",
-		"geostoreUrl": "http://localhost:8080/geostore/rest",
-		"geostoreUser": "admin",
-		"geostorePassword": "admin",
-		"geostoreProxy": "/proxy?url="
+		        "geostoreUrl": "http://localhost:8080/geostore/rest",
+		        "geostoreUser": "admin",
+		        "geostorePassword": "admin",
+		        "geostoreProxy": "/proxy?url="
             },{
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
                 "url": "http://localhost:8080/geoserver/wps",
-		"geostoreUrl": "http://localhost:8080/geostore/rest",
-		"geostoreUser": "admin",
-		"geostorePassword": "admin",
-		"geostoreProxy": "/proxy?url="
+		        "geostoreUrl": "http://localhost:8080/geostore/rest",
+		        "geostoreUser": "admin",
+		        "geostorePassword": "admin",
+		        "geostoreProxy": "/proxy?url="
             },{
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
                 "title": "Layer Attribute",
-		"id": "wfsAlgebraGridPanel",
+		        "id": "wfsAlgebraGridPanel",
                 "wfsURL": "http://localhost:8080/geoserver/wfs",
                 "featureType": "lyratt:IDARasterAlgebraProcess",
                 "featureNS": "", 
@@ -166,7 +166,7 @@
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayer",
                 "title": "SPM",
-		"id": "wfsGridPanel",
+		        "id": "wfsGridPanel",
                 "wfsURL": "http://localhost:8080/geoserver/wfs",
                 "featureType": "spm:IDASoundPropModel",
                 "featureNS": "", 

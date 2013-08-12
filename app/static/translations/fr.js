@@ -201,7 +201,9 @@ GeoExt.Lang.add("fr", {
         transparentText: "Transparent",
         cacheText: "Cache",
         cacheFieldText: "Utiliser la version mise en cache",
-        stylesText: "Styles"
+        stylesText: "Styles",
+        idaRasterRiskSummaryText: "Risk Summary Stats",
+        idaRasterRiskSummaryInfoText: "Current Viewport Raster Statistics"
     },  
 
     "gxp.NewSourceWindow.prototype": {
