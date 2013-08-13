@@ -61,7 +61,34 @@
 <script type="text/javascript" src="data/data.js"></script>
 
 <script>
-        
+    
+    // IE6 IE7 IE8 fix
+    if ( !Date.prototype.toISOString ) {
+      ( function() {
+    
+        function pad(number) {
+          var r = String(number);
+          if ( r.length === 1 ) {
+            r = '0' + r;
+          }
+          return r;
+        }
+    
+        Date.prototype.toISOString = function() {
+          return this.getUTCFullYear()
+            + '-' + pad( this.getUTCMonth() + 1 )
+            + '-' + pad( this.getUTCDate() )
+            + 'T' + pad( this.getUTCHours() )
+            + ':' + pad( this.getUTCMinutes() )
+            + ':' + pad( this.getUTCSeconds() )
+            + '.' + String( (this.getUTCMilliseconds()/1000).toFixed(3) ).slice( 2, 5 )
+            + 'Z';
+        };
+    
+      }() );
+    }
+    
+    
     var app;
         
     var modified = false; var mapIdentifier; var authorization; var fullScreen;
