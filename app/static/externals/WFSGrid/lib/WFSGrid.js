@@ -352,15 +352,77 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                        sortInfo:{field: 'coverage', direction: "ASC"},
                                        groupField:'coverage'
                                    });
+						           var controls = [
+						            	new OpenLayers.Control.Navigation(),
+							            new OpenLayers.Control.Attribution(),
+							            new OpenLayers.Control.PanPanel()
+							            //new OpenLayers.Control.ZoomPanel()
+						            ];
+                                   
+                                   var layers = [];
+
+								   // add current map visible layers
+                                   for (var lyCount = 0; lyCount < this.target.mapPanel.map.layers.length; lyCount++) {
+                                   		var layer = this.target.mapPanel.map.layers[lyCount];
+                                   		layers.push(layer.clone());
+                                   }
+                                   
+                                   // add current Layer
+                                   var currentLayer = new OpenLayers.Layer.WMS( "My WMS", record.get('outputUrl'),
+									                    {layers: record.get('layerName'), styles: record.get('styleName'),transparent: true, 'VERSION': "1.1.1"}//,
+							                            /*{'maxExtent': new OpenLayers.Bounds(minx,miny,maxx,maxy),'maxResolution': "auto"}*/);
+                                   layers.push(currentLayer);
+                                   
+                                   // setting initial Map extent
+                                   var extent = null;
+                                   
+                                   if (record.get('areaOfInterest')) {
+                                   	  var roi = record.get('areaOfInterest');
+                                   	      roi = roi.replace('[','').replace(']','').replace(';','');
+                                   	  var coords = roi.split(' ');
+                                   	  extent = [parseFloat(coords[0]), parseFloat(coords[1]), parseFloat(coords[2]), parseFloat(coords[3])];
+                                   } else {
+                                   	  extent = this.target.mapPanel.extent; 
+                                   }
                                    
                                    new Ext.Window({ 
                                           title: record.get(layerTitleAtt)+ " - " + me.detailsWinTitle,
                                           height: 400,
-                                          width: 400,
-                                          layout: 'fit',
-                                          resizable: true,
-                                          items:
+                                          width: 700,
+                                          layout: 'border',
+                                          resizable: false,
+                                          items:[
+                                          		new Ext.Panel({
+										            title: 'ROI',
+										            region: 'west',
+										            split: true,
+										            width: 200,
+										            collapsible: true,
+										            margins:'3 0 3 3',
+										            cmargins:'3 3 3 3',
+										            items:[
+										            	{
+												            xtype: "gx_mappanel",
+												            //ref: "mapPanel",
+												            region: "center",
+												            height: 400,
+                                          					width: 200,
+												            map: {
+												            	bounds: this.target.mapPanel.map.bounds,
+												            	projection: this.target.mapPanel.map.projection,
+												                numZoomLevels: this.target.mapPanel.map.numZoomLevels,
+												                controls: controls
+												            },
+												            extent: extent,
+												            layers: layers
+												        }
+										            ]
+										        }, this),
                                                 new Ext.grid.GridPanel({
+                                                	region: 'center',
+										            margins:'3 3 3 0', 
+										            defaults:{autoScroll:true},
+										            //width: 400,
                                                     //store: detailsStore,
                                                     store: groupstore,
                                                     view: new Ext.grid.GroupingView({
@@ -388,6 +450,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                         }
                                                     ]
                                                 })
+                                             ]
                                   }).show();
                       }
                   }]
