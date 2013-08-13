@@ -110,7 +110,7 @@
 		        "geostoreProxy": "/proxy?url="
             },{
                 "ptype": "gxp_wfsgrid",
-                "addLayerTool": "addlayer",
+                "addLayerTool": "addlayerAttribute",
                 "title": "Layer Attribute",
 		        "id": "wfsAlgebraGridPanel",
                 "wfsURL": "http://localhost:8080/geoserver/wfs",
