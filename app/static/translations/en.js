@@ -203,7 +203,8 @@ GeoExt.Lang.add("en", {
         stylesText: "Styles",
         idaRasterRiskSummaryText: "Risk Summary Stats",
         idaRasterRiskSummaryInfoText: "Current Viewport Raster Statistics",
-        loadMaskMsg:"Fetching data.."
+        loadMaskMsg:"Fetching data..",
+        noDataMsg: "No data available in current view"
     },
 
     "gxp.NewSourceWindow.prototype": {

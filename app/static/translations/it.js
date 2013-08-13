@@ -196,7 +196,8 @@ GeoExt.Lang.add("it", {
         stylesText: "Stile",
         idaRasterRiskSummaryText: "Statistiche Risk Summary",
         idaRasterRiskSummaryInfoText: "Statistiche Raster nella Viewport corrente",
-        loadMaskMsg:"Caricamento.."
+        loadMaskMsg:"Caricamento..",
+        noDataMsg: "Nessun dato disponibile per la vista corrente"
     },
 
     "gxp.WMSStylesDialog.prototype": {
