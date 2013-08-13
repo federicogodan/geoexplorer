@@ -368,10 +368,15 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                    }
                                    
                                    // add current Layer
-                                   var currentLayer = new OpenLayers.Layer.WMS( "My WMS", record.get('outputUrl'),
-									                    {layers: record.get('layerName'), styles: record.get('styleName'),transparent: true, 'VERSION': "1.1.1"}//,
-							                            /*{'maxExtent': new OpenLayers.Bounds(minx,miny,maxx,maxy),'maxResolution': "auto"}*/);
-                                   layers.push(currentLayer);
+                                   var layerReady = false;
+                                   if (record.get('itemStatus') && record.get('itemStatus') == "COMPLETED") layerReady = true;
+                                   
+                                   if (layerReady) {
+	                                   var currentLayer = new OpenLayers.Layer.WMS( "My WMS", record.get('outputUrl'),
+										                    {layers: record.get('layerName'), styles: record.get('styleName'),transparent: true, 'VERSION': "1.1.1"}//,
+								                            /*{'maxExtent': new OpenLayers.Bounds(minx,miny,maxx,maxy),'maxResolution': "auto"}*/);
+	                                   layers.push(currentLayer);
+                                   }
                                    
                                    // setting initial Map extent
                                    var extent = null;
@@ -398,6 +403,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 										            split: true,
 										            width: 200,
 										            collapsible: true,
+										            collapsed: !layerReady,
 										            margins:'3 0 3 3',
 										            cmargins:'3 3 3 3',
 										            items:[
@@ -408,9 +414,9 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
 												            height: 400,
                                           					width: 200,
 												            map: {
-												            	bounds: this.target.mapPanel.map.bounds,
-												            	projection: this.target.mapPanel.map.projection,
-												                numZoomLevels: this.target.mapPanel.map.numZoomLevels,
+												            	//bounds: this.target.mapPanel.map.bounds,
+												            	//projection: this.target.mapPanel.map.projection,
+												                //numZoomLevels: this.target.mapPanel.map.numZoomLevels,
 												                controls: controls
 												            },
 												            extent: extent,
