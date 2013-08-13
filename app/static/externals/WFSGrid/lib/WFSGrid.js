@@ -646,7 +646,8 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
         ///opt/tomcat_gui/webapps/xmlJsonTranslate/tem
 
         return wfsGrid;
-    }   
+    }
+       
 });
 
 Ext.preg(gxp.plugins.WFSGrid.prototype.ptype, gxp.plugins.WFSGrid);
