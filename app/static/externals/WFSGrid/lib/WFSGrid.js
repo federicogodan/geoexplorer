@@ -282,16 +282,76 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         handler: function(gpanel, rowIndex, colIndex) {
                                    var store = gpanel.getStore();	
                                    var record = store.getAt(rowIndex);
+                                   
+                                   // shared reader
+                                   var reader = new Ext.data.ArrayReader({}, [
+                                       {name: 'name'},
+                                       {name: 'value'},
+                                       {name: 'coverage'}
+                                   ]);
+                                   
+                                   /*
                                    var detailsStore=new Ext.data.ArrayStore({
-                                       fields: ['name', 'value'],
+                                       fields: ['name', 'value', 'coverage'],
                                        idIndex: 0 
                                    });
+                                   */
+
                                    var recordDetailsData = new Array();
 
-                                   for(var k=0; k<me.featureFields.length; k++)
-                                       recordDetailsData.push([ me.featureFields[k].name , record.get(me.featureFields[k].name)]);
+                                   for(var k=0; k<me.featureFields.length; k++){
+                                       var fname = me.featureFields[k].name;
+                                       switch(fname){
+                                           case 'ftUUID':
+                                                // ignore
+                                                break;
+                                           case 'count':
+                                           case 'min':
+                                           case 'max':
+                                           case 'sum':
+                                           case 'avg':
+                                           case 'stddev':
+                                                // do nothing, they will be se on 'coverage' catch
+                                                break;
+                                           case 'coverages':
+                                                {
+                                                    var coverages_string = record.get(fname);
+                                                    var coverages = coverages_string.split(' | ');
+                                                    // data must match!
+                                                    // I'm using this long coding style for easy debugging
+                                                    // and to avoid browser compatibility issues
+                                                    var counts = record.get('count').split(' | ');
+                                                    var mins = record.get('min').split(' | ');
+                                                    var maxs = record.get('max').split(' | ');
+                                                    var sums = record.get('sum').split(' | ');
+                                                    var avgs = record.get('avg').split(' | ');
+                                                    var stddevs = record.get('stddev').split(' | ');
+                                                     for(var i = 0; i<coverages.length; i++)
+                                                    {
+                                                        recordDetailsData.push([ 'count' , counts[i], coverages[i]]);
+                                                        recordDetailsData.push([ 'min' , mins[i], coverages[i]]);
+                                                        recordDetailsData.push([ 'max' , maxs[i], coverages[i]]);
+                                                        recordDetailsData.push([ 'sum' , sums[i], coverages[i]]);
+                                                        recordDetailsData.push([ 'avg' , avgs[i], coverages[i]]);
+                                                        recordDetailsData.push([ 'stddev' , stddevs[i], coverages[i]]);
+                                                    }
+                                                }
+                                                break;
+                                           default:
+                                                // '0' because coverages names cannot begin with a digit and it's usefull when sorting
+                                                recordDetailsData.push([ fname , record.get(fname), '0']);
+                                                break;
+                                       }
+                                   }
 
-                                   detailsStore.loadData(recordDetailsData);
+                                   //detailsStore.loadData(recordDetailsData);
+
+                                   var groupstore = new Ext.data.GroupingStore({
+                                       reader: reader,
+                                       data: recordDetailsData,
+                                       sortInfo:{field: 'coverage', direction: "ASC"},
+                                       groupField:'coverage'
+                                   });
                                    
                                    new Ext.Window({ 
                                           title: record.get(layerTitleAtt)+ " - " + me.detailsWinTitle,
@@ -300,25 +360,34 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                           layout: 'fit',
                                           resizable: true,
                                           items:
-												new Ext.grid.GridPanel({
-													store: detailsStore,
-													anchor: '100%',
-													viewConfig : {
-														forceFit: true
-													},
-													columns: [
-														{
-															header: me.detailsHeaderName, 
-															dataIndex: "name",
-															renderer: function (val){
-																return '<b>' + val + '</b>';
-															}
-														}, {
-															header: me.detailsHeaderValue, 
-															dataIndex: "value"
-														}
-													]
-												})
+                                                new Ext.grid.GridPanel({
+                                                    //store: detailsStore,
+                                                    store: groupstore,
+                                                    view: new Ext.grid.GroupingView({
+                                                        forceFit:true,
+                                                        groupTextTpl: '{[(values.group == "0") ? "General Properties" : "Coverage "+values.group]}'
+                                                    }),
+                                                    anchor: '100%',
+                                                    //viewConfig : {
+                                                    //	forceFit: true
+                                                    //},
+                                                    columns: [
+                                                        {
+                                                            header: me.detailsHeaderName, 
+                                                            dataIndex: "name",
+                                                            renderer: function (val){
+                                                                return '<b>' + val + '</b>';
+                                                            }
+                                                        }, {
+                                                            header: me.detailsHeaderValue, 
+                                                            dataIndex: "value"
+                                                        }, {
+                                                            header: me.detailsHeaderValue, 
+                                                            dataIndex: "coverage",
+                                                            hidden: true
+                                                        }
+                                                    ]
+                                                })
                                   }).show();
                       }
                   }]
