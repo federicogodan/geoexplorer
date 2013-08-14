@@ -63,6 +63,7 @@
                 "id": "idaLayerAttribute",
                 "wpsManager": "wpsRasterAlgebra",
                 "wfsGrid" : "wfsAlgebraGridPanel",
+                "toggleGroup": "toolGroup",
                 "colorStyles": [
                     "Red",
                     "Blue",
