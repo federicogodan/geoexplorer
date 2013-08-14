@@ -480,22 +480,23 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                         icon   : me.deleteIconPath,  
                         tooltip: me.deleteTooltip,
                         scope: me,
-                        handler: function(gpanel, rowIndex, colIndex) {
-                                   var store = gpanel.getStore();	
-                                   var record = store.getAt(rowIndex);
-                                  // var map = me.target.mapPanel.map;
-                                   var mapPanel=me.target.mapPanel;
-                                   var layerName= record.get(wsAtt) + ":" + record.get(layerNameAtt);
-                                   var layerSrcTitle= me.sourcePrefix + record.get(layerNameAtt);
-                                   Ext.MessageBox.confirm(me.deleteTooltip, 
-                                   me.deleteConfirmMsg, 
-                                   function showResult(btn){
+                        handler: function(gpanel, rowIndex, colIndex)
+                            {
+                               var store = gpanel.getStore();	
+                               var record = store.getAt(rowIndex);
+                              // var map = me.target.mapPanel.map;
+                               var mapPanel=me.target.mapPanel;
+                               var layerName= record.get(wsAtt) + ":" + record.get(layerNameAtt);
+                               var layerSrcTitle= me.sourcePrefix + record.get(layerNameAtt);
+                               Ext.MessageBox.confirm(me.deleteTooltip, 
+                               me.deleteConfirmMsg, 
+                               function showResult(btn){
 
-                                        if(btn=="yes"){
-                                          var fidFilter=new OpenLayers.Filter.FeatureId({
-                                                fids:[record.get(idAtt)]
+                                    if(btn=="yes"){
+                                        var fidFilter=new OpenLayers.Filter.FeatureId({
+                                            fids:[record.get(idAtt)]
                                         });
-                                    
+                                
                                         var deleteProtocol = new OpenLayers.Protocol.WFS({ 
                                                     url: me.wfsURL, 
                                                     featureType: me.featureType, 
@@ -506,8 +507,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                     srsName: me.srsName,
                                                     version: me.version
                                         });
-                                   
-                                   
+                               
                                         deleteProtocol.filterDelete(fidFilter, {
                                             callback: function(resp){
                                                 var layers = mapPanel.layers;
@@ -520,8 +520,8 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                 me.refresh();
                                             }
                                         });  
-                                        }
-                                    });
+                                    }
+                                });
                       }
                   }]
              };
