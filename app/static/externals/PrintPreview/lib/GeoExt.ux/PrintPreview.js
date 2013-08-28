@@ -38,7 +38,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
     /** api: config[emptyCommentText] ``String`` i18n */
     emptyCommentText: "Enter comments here.",
     /** api: config[creatingPdfText] ``String`` i18n */
-    creatingPdfText: "Creating PDF...",
+    creatingPdfText: "Rendering Layout...",
     /* end i18n */
     
     /** api: config[printProvider]
@@ -168,6 +168,24 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
                 printMapPanelOptions);
         }
         this.sourceMap = this.printMapPanel.sourceMap;
+
+		/*/ load Vectorial layers
+        var wfs = new OpenLayers.Layer.Vector(
+        "Stavros Features",
+        {
+            strategies: [new OpenLayers.Strategy.BBOX()],
+            projection: new OpenLayers.Projection("EPSG:4326"),
+            protocol: new OpenLayers.Protocol.WFS({
+                version: "1.1.0",
+                srsName: "EPSG:4326",
+                url: "http://localhost:8181/geoserver/wfs",
+                featureNS :  "http://www.nurc.nato.int",
+                featureType: "strandings",
+                geometryName: "the_geom"
+            })
+        });
+		this.sourceMap.addLayer(wfs);*/
+
         this.printProvider = this.printMapPanel.printProvider;
         
         this.form = this.createForm();
@@ -200,13 +218,16 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
 				this.busyMask = new Ext.LoadMask(this.getEl(), {
 					msg: this.creatingPdfText
 				});
-                this.printProvider.on({
+                this.mon(this.printProvider,{
                     "beforeprint": function(printProvider){
-						//this.busyMask.show();
-						
+						this.busyMask.show();
 					},
-                    "print": this.busyMask.hide,
-                    "printexception": this.busyMask.hide,
+                    "print": function(printProvider){
+						this.busyMask.hide;
+					},
+                    "printexception": function(printProvider){
+						this.busyMask.hide;
+					},
                     scope: this
                 });
             },
@@ -291,7 +312,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
         };
         
         if(this.legend) {
-            var legendOnSeparatePageCheckbox = new Ext.form.Checkbox({
+            /*var legendOnSeparatePageCheckbox = new Ext.form.Checkbox({
                 name: "legend",
                 checked: this.legendOnSeparatePage,
                 boxLabel: this.legendOnSeparatePageText,
@@ -303,7 +324,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
                 },
 				cls : "gx-item-margin-left",				
                 scope: this
-            });
+            });*/
 			
 			var legendCheckbox = new Ext.form.Checkbox({
                 name: "legendSeparatePage",
@@ -345,7 +366,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
                 		style:"text-align:left",
 				items: [
 					legendCheckbox, 
-					legendOnSeparatePageCheckbox,
+					//legendOnSeparatePageCheckbox,
 					compactLegendCheckbox
 				]
 			});
@@ -497,8 +518,8 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
      */
     beforeDestroy: function() {
         if (this.busyMask) {
-            this.printProvider.un("beforeprint", this.busyMask.show, this.busyMask);
-            this.printProvider.un("print", this.busyMask.hide, this.busyMask);
+            //this.printProvider.mun("beforeprint", this.busyMask.show, this.busyMask);
+            //this.printProvider.mun("print", this.busyMask.hide, this.busyMask);
         }
         this.printMapPanel.un("resize", this.updateSize, this);
         GeoExt.ux.PrintPreview.superclass.beforeDestroy.apply(this, arguments);

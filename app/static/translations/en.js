@@ -201,7 +201,7 @@ GeoExt.Lang.add("en", {
         cacheText: "Cache",
         cacheFieldText: "Use cached version",
         stylesText: "Styles",
-        idaRasterRiskSummaryText: "Risk Summary Stats",
+        idaRasterRiskSummaryText: "Statistics",
         idaRasterRiskSummaryInfoText: "Current Viewport Raster Statistics",
         loadMaskMsg:"Fetching data..",
         noDataMsg: "No data available in current view",
@@ -263,7 +263,7 @@ GeoExt.Lang.add("en", {
         legendOnSeparatePageText: "Legend on separate page?",
         compactLegendText: "Compact legend?",	
         emptyCommentText: "Enter comments here.",
-        creatingPdfText: "Creating PDF..."
+        creatingPdfText: "Rendering Layout..."
     },
     "gxp.plugins.GeonetworkSearch.prototype":{
         geonetworkSearchText: "View metadata",
@@ -463,7 +463,7 @@ GeoExt.Lang.add("en", {
 		bottomTypeLabelText: "Bottom Type",
 		qualityEmptyText: "Quality Selection",
 		qualityLabelText:	 "Quality",		
-		maxRangeText: "Max Range"
+		maxRangeText: "Max Range (km)"
 	},
 	/*-------------------------------------------------------------*/
 	

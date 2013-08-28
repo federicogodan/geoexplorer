@@ -317,6 +317,38 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                 {
                                                     var coverages_string = record.get(fname);
                                                     var coverages = coverages_string.split(' | ');
+                                                    
+                                                    var aoiString = record.get("areaOfInterest");
+                                                    var aoiCorners = aoiString.split("; ");
+                                                    
+                                                    var aoiCoords = [];
+                                                        aoiCoords.push(aoiCorners[0].split(" ")[0].trim().replace('[',''));
+                                                        aoiCoords.push(aoiCorners[0].split(" ")[1].trim());
+
+                                                        aoiCoords.push(aoiCorners[1].split(" ")[0].trim());
+                                                        aoiCoords.push(aoiCorners[1].split(" ")[1].trim().replace(']',''));
+                                                        
+                                                    var points = [
+													    new OpenLayers.Geometry.Point(aoiCoords[0], aoiCoords[1]),
+													    new OpenLayers.Geometry.Point(aoiCoords[0], aoiCoords[3]),
+													    new OpenLayers.Geometry.Point(aoiCoords[2], aoiCoords[3]),
+													    new OpenLayers.Geometry.Point(aoiCoords[2], aoiCoords[1])
+													];
+													
+													var ring = new OpenLayers.Geometry.LinearRing(points);
+													var polygon = new OpenLayers.Geometry.Polygon([ring]);
+													var projection = this.target.mapPanel.map.getProjectionObject();
+													var poly = new OpenLayers.Geometry.MultiPolygon(polygon);
+													var area = poly.getGeodesicArea( projection );
+													var inPerDisplayUnit = OpenLayers.INCHES_PER_UNIT["km"];
+											        if(inPerDisplayUnit) {
+											            var inPerMapUnit = OpenLayers.INCHES_PER_UNIT["m"];
+											            area *= Math.pow((inPerMapUnit / inPerDisplayUnit), 2);
+											        }
+											        
+											        	// nmi -> area = (area.toFixed(2) * 1000 * 0.000539956803);
+											        	area = Math.round(area*100)/100; 
+													
                                                     // data must match!
                                                     // I'm using this long coding style for easy debugging
                                                     // and to avoid browser compatibility issues
@@ -328,6 +360,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                     var stddevs = record.get('stddev').split(' | ');
                                                      for(var i = 0; i<coverages.length; i++)
                                                     {
+                                                    	recordDetailsData.push([ 'area' , area + " km<sup>2</sup>", coverages[i]]);
                                                         recordDetailsData.push([ 'count' , counts[i], coverages[i]]);
                                                         recordDetailsData.push([ 'min' , mins[i], coverages[i]]);
                                                         recordDetailsData.push([ 'max' , maxs[i], coverages[i]]);
@@ -395,7 +428,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                           height: 400,
                                           width: 700,
                                           layout: 'border',
-                                          resizable: false,
+                                          resizable: true,
                                           items:[
                                           		new Ext.Panel({
 										            title: 'ROI',

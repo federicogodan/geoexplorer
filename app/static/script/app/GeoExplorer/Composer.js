@@ -101,7 +101,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
             }, {
                 ptype: "gxp_zoomtoextent",
                 actionTarget: {target: "paneltbar", index: 26}
-            },{
+            }, {
                 // shared FeatureManager for feature editing, grid and querying
                 ptype: "gxp_featuremanager",
                 id: "featuremanager"
@@ -113,7 +113,7 @@ GeoExplorer.Composer = Ext.extend(GeoExplorer, {
                     title: "Features"
                 },
                 outputTarget: "idalaylist"
-            },{
+            }, {
                 "ptype": "gxp_idaqueryform",
                 "featureManager": "featuremanager",
                 "outputTarget": "idacontrol",
