@@ -169,23 +169,6 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
         }
         this.sourceMap = this.printMapPanel.sourceMap;
 
-		/*/ load Vectorial layers
-        var wfs = new OpenLayers.Layer.Vector(
-        "Stavros Features",
-        {
-            strategies: [new OpenLayers.Strategy.BBOX()],
-            projection: new OpenLayers.Projection("EPSG:4326"),
-            protocol: new OpenLayers.Protocol.WFS({
-                version: "1.1.0",
-                srsName: "EPSG:4326",
-                url: "http://localhost:8181/geoserver/wfs",
-                featureNS :  "http://www.nurc.nato.int",
-                featureType: "strandings",
-                geometryName: "the_geom"
-            })
-        });
-		this.sourceMap.addLayer(wfs);*/
-
         this.printProvider = this.printMapPanel.printProvider;
         
         this.form = this.createForm();
