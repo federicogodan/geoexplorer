@@ -1,7 +1,7 @@
 {
     "geoStoreBase":"http://localhost:8080/geostore/rest/", 
     "xmlJsonTranslateService": "http://localhost:8080/xmlJsonTranslate/",   
-    "proxy": "/proxy?url=",	
+    "proxy": "/http_proxy/proxy?url=",	
     "gsSources":[],
 	
     "scaleOverlayUnits":{
@@ -28,20 +28,19 @@
         "outputUrl":"http://localhost:8080/geoserver/ows",
         "storeName" : "nurcdb"
     },
-	
     
     "customTools":[
 		{
-				"ptype":"gxp_print",
-				"customParams":{
-					"outputFilename":"mapstore-print"
-				},
-				"printService":"http://localhost:8080/geoserver/pdf/",
-				"legendPanelId":"legendPanel",
-				"actionTarget":{
-					"target":"paneltbar",
-					"index":4
-				}
+			"ptype":"gxp_print",
+			"customParams":{
+				"outputFilename":"mapstore-print"
+			},
+			"printService":"http://localhost:8080/geoserver/pdf/",
+			"legendPanelId":"legendPanel",
+			"actionTarget":{
+				"target":"paneltbar",
+				"index":4
+			}
 	    },{
 			"ptype": "gxp_idaspm",
 			"wfsGrid": "wfsGridPanel",
@@ -52,7 +51,23 @@
 			"idaAttribute" : "idaLayerAttribute",
 			"outputTarget": "idacontrol",
 			"maxRangeMin": 0,
-			"maxRangeMax": 2000
+			"maxRangeMax": 2000,
+			"tlModelStore": [
+				"IsoVelocity",
+				"Bellhop",
+				"RAM"
+			],
+			"bottomTypeStore": [
+				"Silt",
+				"Gravel",
+				"Limestone",
+				"Basalt"
+			],
+			"qualityStore": [
+				"low",
+				"medium",
+				"high"
+			]
 		}, {
                 "ptype": "gxp_uploader",
 				"id": "svpuploader",
@@ -111,7 +126,7 @@
 		        "geostoreUrl": "http://localhost:8080/geostore/rest",
 		        "geostoreUser": "admin",
 		        "geostorePassword": "admin",
-		        "geostoreProxy": "/proxy?url="
+		        "geostoreProxy": "/http_proxy/proxy?url="
             },{
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
@@ -119,7 +134,7 @@
 		        "geostoreUrl": "http://localhost:8080/geostore/rest",
 		        "geostoreUser": "admin",
 		        "geostorePassword": "admin",
-		        "geostoreProxy": "/proxy?url="
+		        "geostoreProxy": "/http_proxy/proxy?url="
             },{
                 "ptype": "gxp_wfsgrid",
                 "addLayerTool": "addlayerAttribute",

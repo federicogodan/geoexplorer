@@ -486,7 +486,7 @@ GeoExt.Lang.add("en", {
     },
 	
 	"gxp.plugins.IDAAttribute.prototype": {
-                title: "Layer Attribute",
+        title: "Layer Attribute",
 		settingsTitle: "Base Settings",
 		settingNameTitle: "Name",
 		settingColorTitle: "Color",
@@ -495,13 +495,13 @@ GeoExt.Lang.add("en", {
 		reloadLayerText: "Reload Layers",
 		applyFilterText: "Run",
 		resetText: "Reset",
-                rasterAlgebraExecuteMessage: "Layer Attribute run request sent.",
-                filterApplyTitle: "Filter Apply",
-                filterApplyMsg: "Your filter is empty or not properly formatted!"
+        rasterAlgebraExecuteMessage: "Layer Attribute run request sent.",
+        filterApplyTitle: "Filter Apply",
+        filterApplyMsg: "Your filter is empty or not properly formatted!"
     },
     
     "gxp.plugins.WFSGrid.prototype":{
-	displayMsgPaging: "Displaying topics {0} - {1} of {2}",
+	    displayMsgPaging: "Displaying topics {0} - {1} of {2}",
         emptyMsg: "No topics to display",
         addLayerTooltip: "Add Layer to Map",
         detailsTooltip: "View Details",
