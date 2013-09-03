@@ -24,6 +24,8 @@ GeoExt.Lang.add("fr", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "À propos de cette carte",
+        cleanTempFilesTooltip: "Nettoyage des fichiers temporaires",
+        cleanTempFilesConfirmMsg: "Êtes-vous sûr de vouloir supprimer les fichiers temporaires?",
 		resetButtonTooltip: "Réinitialiser la Page",
 		helpButtonTooltip: "Aide",
         searchTabTitle : "Chercher",

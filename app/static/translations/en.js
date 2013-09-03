@@ -23,6 +23,8 @@ GeoExt.Lang.add("en", {
         descriptionText: "Description",
         contactText: "Contact",
         aboutThisMapText: "About this Map",
+        cleanTempFilesTooltip: "Cleanup temp files",
+        cleanTempFilesConfirmMsg: "Are you sure you want to cleanup all temp files?",
 		resetButtonTooltip: "Reset Page",
 		helpButtonTooltip: "Help",
         searchTabTitle : "Search",

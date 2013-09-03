@@ -70,8 +70,10 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
     southPanelTitle: "Layer List Panel",
     eastPanelTitle: "Control Panel",
     
+    cleanTempFilesTooltip: "Cleanup temp files",
+    cleanTempFilesConfirmMsg: "Are you sure you want to cleanup all temp files?",
     resetButtonTooltip: "Reset Page",
-   	helpButtonTooltip: "help",
+   	helpButtonTooltip: "Help",
    	
    	reloadTitle: "Context Reload",
    	reloadText: "You are sure to reload the context? All unsaved data will be lost",
@@ -392,6 +394,34 @@ var GeoExplorer = Ext.extend(gxp.Viewer, {
                {
                   xtype: 'tbfill'
                },{
+                  tooltip:  this.cleanTempFilesTooltip ,
+                  iconCls: "edit-clear",
+                  handler: function(btn){
+                      var wps = c.tools["wpsSPM"];
+                      Ext.MessageBox.confirm(c.cleanTempFilesTooltip, 
+                               c.cleanTempFilesConfirmMsg, 
+                               function showResult(btn){
+
+                                    if(btn=="yes"){
+                                    	var requestObject={
+											type: "raw",
+											inputs:{
+											},
+											outputs: [{
+												identifier: "result",
+												mimeType: "text/xml"
+											}]
+										};
+										
+                                    	wps.execute("gs:IDACleanup",requestObject,
+                        					function(response){
+                        						// Boolean
+                        					}, c
+                        				);
+                                    }
+                               });
+                  }
+              },{
                   tooltip:  this.resetButtonTooltip ,
                   iconCls: "x-tbar-loading",
                   handler: function(btn){

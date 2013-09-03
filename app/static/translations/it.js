@@ -20,6 +20,8 @@ GeoExt.Lang.add("it", {
         descriptionText: "Descrizione",
         contactText: "Contatto",
         aboutThisMapText: "Approposito di questa Mappa",
+        cleanTempFilesTooltip: "Pulizia dei file temporanei",
+        cleanTempFilesConfirmMsg: "Si è sicuri di voler eliminare tutti i file temporanei?",
         searchTabTitle : "Portale",
         viewTabTitle : "Vista"
     },

@@ -105,6 +105,10 @@ body {
    background-image: url(img/geosilk/ruler_square.png) !important;
 }
 
+.x-btn .edit-clear {
+    background-image: url(img/silk/edit-clear.png);
+}
+
 .x-btn .icon-layer-switcher {
    background-image: url(img/silk/layers.png);
 }
