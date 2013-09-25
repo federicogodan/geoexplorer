@@ -311,6 +311,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                            case 'sum':
                                            case 'avg':
                                            case 'stddev':
+                                           case 'riskarea':
                                                 // do nothing, they will be se on 'coverage' catch
                                                 break;
                                            case 'coverages':
@@ -358,6 +359,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                     var sums = record.get('sum').split(' | ');
                                                     var avgs = record.get('avg').split(' | ');
                                                     var stddevs = record.get('stddev').split(' | ');
+                                                    var riskareas = record.get('riskarea').split(' | ');
                                                      for(var i = 0; i<coverages.length; i++)
                                                     {
                                                     	recordDetailsData.push([ 'area' , area + " km<sup>2</sup>", coverages[i]]);
@@ -367,6 +369,7 @@ gxp.plugins.WFSGrid = Ext.extend(gxp.plugins.Tool, {
                                                         recordDetailsData.push([ 'sum' , sums[i], coverages[i]]);
                                                         recordDetailsData.push([ 'avg' , avgs[i], coverages[i]]);
                                                         recordDetailsData.push([ 'stddev' , stddevs[i], coverages[i]]);
+                                                        recordDetailsData.push([ 'riskarea' , riskareas[i], coverages[i]]);
                                                     }
                                                 }
                                                 break;

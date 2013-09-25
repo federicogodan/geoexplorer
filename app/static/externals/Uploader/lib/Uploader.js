@@ -148,7 +148,6 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
 			handler: function(){
 				if(me.uploadPanel.getForm().isValid()){
 					 me.uploadPanel.getForm().submit(submitConf); 
-								
 				}
 			}
 		}];
@@ -181,8 +180,7 @@ gxp.plugins.Uploader = Ext.extend(gxp.plugins.Tool, {
                 ifConfig.listeners = {
 					'fileselected': function(fb, v){
 						if(me.uploadPanel.getForm().isValid()){
-							me.uploadPanel.getForm().submit(submitConf); 
-						   
+							me.uploadPanel.getForm().submit(submitConf);
 						}
 					}
 				}

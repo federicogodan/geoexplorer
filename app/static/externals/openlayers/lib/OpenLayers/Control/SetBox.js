@@ -31,14 +31,29 @@ OpenLayers.Control.SetBox = OpenLayers.Class(OpenLayers.Control, {
     
     onChangeAOI: null,
     
+    layerName: "AOI",
+    
+    aoiStyle: null,
+    
     map: null,
+    
+    displayInLayerSwitcher: false,
 
     /**
      * Method: draw
      */    
     draw: function() {
+       
         this.handler = new OpenLayers.Handler.Box( this,
-                            {done: this.setAOI}, {keyMask: this.keyMask} );
+        {
+            done: this.setAOI
+        }, 
+        {
+            boxDivClassName: this.boxDivClassName   
+        },
+        {
+            keyMask: this.keyMask
+        } );
     },
 
     /**
@@ -59,7 +74,7 @@ OpenLayers.Control.SetBox = OpenLayers.Class(OpenLayers.Control, {
         if(control){    
     
             if(this.aoi!=null){       
-              this.boxes.removeMarker(this.aoi);
+                this.boxes.removeFeatures(this.aoi);
             }
             
             var bounds;
@@ -92,22 +107,26 @@ OpenLayers.Control.SetBox = OpenLayers.Class(OpenLayers.Control, {
                     this.currentAOI=xmin+','+ymin+','+xmax+','+ymax;
                 }
 
-                var x=this.map.getLayersByName("AOI");
-                var index=null;
-                if(x.length>0){
-                    index=this.map.getLayerIndex(x[0]);
-                    this.map.removeLayer(x[0]);
+                if(this.layerName){
+                    var x=this.map.getLayersByName(this.layerName);
+                    var index=null;
+                    if(x.length>0){
+                        index=this.map.getLayerIndex(x[0]);
+                        this.map.removeLayer(x[0]);
+                    }
+                    var me=this;
+                    this.boxes  = new OpenLayers.Layer.Vector( this.layerName,{
+                        displayInLayerSwitcher: me.displayInLayerSwitcher,
+                        styleMap: me.aoiStyle
+                    });
+                    this.aoi = new OpenLayers.Feature.Vector(bounds.toGeometry());
+                    this.boxes.addFeatures(this.aoi);
+                    this.map.addLayer(this.boxes);
+
+                    if(index)
+                        this.map.setLayerIndex(this.boxes,index); 
                 }
-                  
-                this.boxes = new OpenLayers.Layer.Boxes("AOI",{
-                    displayInLayerSwitcher: false
-                });
-                this.aoi = new OpenLayers.Marker.Box(bounds);
-                this.boxes.addMarker(this.aoi);
-                this.map.addLayer(this.boxes);
                 
-                if(index)
-                    this.map.setLayerIndex(this.boxes,index);
                     
                 if(this.onChangeAOI)
                    this.onChangeAOI();

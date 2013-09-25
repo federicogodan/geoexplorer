@@ -578,62 +578,71 @@ GeoExt.data.PrintProvider = Ext.extend(Ext.util.Observable, {
      * 
      */     
     decorateEncodedLayer: function(jsonData, encLayers, encodedLayersCounter){
-    	var wfsUrl = encLayers[encodedLayersCounter].baseURL;
-    	    wfsUrl = wfsUrl.replace("wms", "wfs");
-    	    wfsUrl = wfsUrl.replace("WMS", "WFS");
-		var featureType = encLayers[encodedLayersCounter].layers[0].split(":")[1];
-		var featurePrefix = encLayers[encodedLayersCounter].layers[0].split(":")[0];
-		
-		var filter = new OpenLayers.Filter.Comparison({
-           type: OpenLayers.Filter.Comparison.EQUAL_TO,
-           property: (featurePrefix == "spm" ? "layerName" : "attributeName"),
-           value: featureType
-        });
-          
-		var protocol = new OpenLayers.Protocol.WFS({
-           version: "1.1.0",
-           readFormat: new OpenLayers.Format.GeoJSON(),
-		   outputFormat: "json",
-           url:  wfsUrl,
-           maxFeatures: 1,            
-           featureType: (featurePrefix == "spm" ? "spm:IDASoundPropModel" : "spm:IDARasterAlgebraProcess"),
-           featurePrefix: featurePrefix,
-           srsName: "EPSG:4326",
-           defaultFilter: filter
-	     });
-		
-		 var me = this;
-		 var featuresBodyFunction = function(layer) {
-		 	if(layer && layer.features && layer.features.length) {
-            	var encFeatures = [];
-            	var featureFormat = new OpenLayers.Format.GeoJSON();
-            	var feature;
-            	for(var i=0, len=layer.features.length; i<len; ++i) {
-            		feature = layer.features[i];
-            		var featureGeoJson = featureFormat.extract.feature.call(featureFormat, feature);
-            		encFeatures.push(featureGeoJson);
-            	}
-            	
-            	if (!jsonData.features) {
-            		jsonData.features = [];
-            	}
-            	jsonData.features.push(encFeatures);
-            	//encLayers[encodedLayersCounter].features = encFeatures;
-            }
-            
-            if (encodedLayersCounter < encLayers.length-1) {
+    	if (encLayers[encodedLayersCounter].type == "Vector") {
+    		if (encodedLayersCounter < encLayers.length-1) {
 	        	encodedLayersCounter = encodedLayersCounter+1;
-	        	me.decorateEncodedLayer(jsonData, encLayers, encodedLayersCounter);
+	        	this.decorateEncodedLayer(jsonData, encLayers, encodedLayersCounter);
 	        } else {
 		        // send JSON Data to the print provider
-				me.doPrint(jsonData);
+				this.doPrint(jsonData);
 	        }
-		};
-         
-		var response = protocol.read({
-         	callback: featuresBodyFunction
-        }, this);
-    	
+    	} else {
+	    	var wfsUrl = encLayers[encodedLayersCounter].baseURL;
+	    	    wfsUrl = wfsUrl.replace("wms", "wfs");
+	    	    wfsUrl = wfsUrl.replace("WMS", "WFS");
+			var featureType = encLayers[encodedLayersCounter].layers[0].split(":")[1];
+			var featurePrefix = encLayers[encodedLayersCounter].layers[0].split(":")[0];
+			
+			var filter = new OpenLayers.Filter.Comparison({
+	           type: OpenLayers.Filter.Comparison.EQUAL_TO,
+	           property: (featurePrefix == "spm" ? "layerName" : "attributeName"),
+	           value: featureType
+	        });
+	          
+			var protocol = new OpenLayers.Protocol.WFS({
+	           version: "1.1.0",
+	           readFormat: new OpenLayers.Format.GeoJSON(),
+			   outputFormat: "json",
+	           url:  wfsUrl,
+	           maxFeatures: 1,            
+	           featureType: (featurePrefix == "spm" ? "spm:IDASoundPropModel" : "spm:IDARasterAlgebraProcess"),
+	           featurePrefix: featurePrefix,
+	           srsName: "EPSG:4326",
+	           defaultFilter: filter
+		     });
+			
+			 var me = this;
+			 var featuresBodyFunction = function(layer) {
+			 	if(layer && layer.features && layer.features.length) {
+	            	var encFeatures = [];
+	            	var featureFormat = new OpenLayers.Format.GeoJSON();
+	            	var feature;
+	            	for(var i=0, len=layer.features.length; i<len; ++i) {
+	            		feature = layer.features[i];
+	            		var featureGeoJson = featureFormat.extract.feature.call(featureFormat, feature);
+	            		encFeatures.push(featureGeoJson);
+	            	}
+	            	
+	            	if (!jsonData.features) {
+	            		jsonData.features = [];
+	            	}
+	            	jsonData.features.push(encFeatures);
+	            	//encLayers[encodedLayersCounter].features = encFeatures;
+	            }
+	            
+	            if (encodedLayersCounter < encLayers.length-1) {
+		        	encodedLayersCounter = encodedLayersCounter+1;
+		        	me.decorateEncodedLayer(jsonData, encLayers, encodedLayersCounter);
+		        } else {
+			        // send JSON Data to the print provider
+					me.doPrint(jsonData);
+		        }
+			};
+	         
+			var response = protocol.read({
+	         	callback: featuresBodyFunction
+	        }, this);
+    	}    	
     },
     
     /** private: method[encodeLayer]

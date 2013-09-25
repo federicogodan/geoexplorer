@@ -377,8 +377,14 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
     },
 
 	updateLayout: function() {
-					
-		var currentLayout = this.printProvider.layout.get('name').substr(0,2);
+		var currentLayout;
+		
+		if(!this.printProvider.layout) {
+    		currentLayout = this.printProvider.layouts.getAt(this.printProvider.defaultLayoutIndex ||0).get('name').substr(0,2);
+	    } else {
+	   	    currentLayout = this.printProvider.layout.get('name').substr(0,2);
+	    }
+		
 		var newLayoutName = '';
 		var newLayout = null;
 		/*
