@@ -59,6 +59,7 @@
 
 <!-- data  -->
 <script type="text/javascript" src="data/data.js"></script>
+<!-- script type="text/javascript" src="data/data_debug.js"></script -->
 
 <!-- Print Plugin -->
 <link rel="stylesheet" type="text/css" href="externals/PrintPreview/resources/css/printpreview.css">
@@ -597,8 +598,8 @@
 	};			
 			
 	Ext.Ajax.request({
-	  url: "urlConfig_debug.js",
-	  //url: "urlConfig.js",
+	  //url: "urlConfig_debug.js",
+	  url: "urlConfig.js",
 	  method: 'GET',
 	  success: function(response, opts){      
 			var serverConfig;    

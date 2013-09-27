@@ -12,9 +12,9 @@
     },
 
     "spm": {
-        "wpsURL": "http://localhost:8080/geoserver/wps",
+        "wpsURL": "http://localhost:8181/geoserver/wps",
         "userId":"system",
-        "outputUrl":"http://localhost:8080/geoserver/ows",
+        "outputUrl":"http://localhost:8181/geoserver/ows",
         "srcPath": "the_path",
         "itemStatus": "CREATED",
         "itemStatusMessage" : "Created by GUI",
@@ -23,9 +23,9 @@
     },
     
     "rasterAlgebra": {
-        "wpsURL": "http://localhost:8080/geoserver/wps",
+        "wpsURL": "http://localhost:8181/geoserver/wps",
         "wsName" : "lyratt",
-        "outputUrl":"http://localhost:8080/geoserver/ows",
+        "outputUrl":"http://localhost:8181/geoserver/ows",
         "storeName" : "nurcdb"
     },
     
@@ -35,7 +35,7 @@
 			"customParams":{
 				"outputFilename":"mapstore-print"
 			},
-			"printService":"http://localhost:8080/geoserver/pdf/",
+			"printService":"http://localhost:8181/geoserver/pdf/",
 			"legendPanelId":"legendPanel",
 			"actionTarget":{
 				"target":"paneltbar",
@@ -122,7 +122,7 @@
             }, {
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsSPM",
-                "url": "http://localhost:8080/geoserver/wps",
+                "url": "http://localhost:8181/geoserver/wps",
 		        "geostoreUrl": "http://localhost:8080/geostore/rest",
 		        "geostoreUser": "admin",
 		        "geostorePassword": "admin",
@@ -130,7 +130,7 @@
             },{
                 "ptype": "gxp_wpsmanager",
                 "id": "wpsRasterAlgebra",
-                "url": "http://localhost:8080/geoserver/wps",
+                "url": "http://localhost:8181/geoserver/wps",
 		        "geostoreUrl": "http://localhost:8080/geostore/rest",
 		        "geostoreUser": "admin",
 		        "geostorePassword": "admin",
@@ -140,7 +140,7 @@
                 "addLayerTool": "addlayerAttribute",
                 "title": "Layer Attribute",
 		        "id": "wfsAlgebraGridPanel",
-                "wfsURL": "http://localhost:8080/geoserver/wfs",
+                "wfsURL": "http://localhost:8181/geoserver/wfs",
                 "featureType": "lyratt:IDARasterAlgebraProcess",
                 "featureNS": "", 
                 "pageSize": 10,
@@ -194,7 +194,7 @@
                 "addLayerTool": "addlayer",
                 "title": "SPM",
 		        "id": "wfsGridPanel",
-                "wfsURL": "http://localhost:8080/geoserver/wfs",
+                "wfsURL": "http://localhost:8181/geoserver/wfs",
                 "featureType": "spm:IDASoundPropModel",
                 "featureNS": "", 
                 "pageSize": 10,
@@ -202,7 +202,7 @@
                 "version": "1.1.0", 
                 "displaySource": true,
                 "sourcePrefix": "Sources of ",
-                "wmsURL": "http://localhost:8080/geoserver/ows",
+                "wmsURL": "http://localhost:8181/geoserver/ows",
                 "outputTarget": "idalaylist",
                 "columns" : [{
                                 "header": "Model Status", 
