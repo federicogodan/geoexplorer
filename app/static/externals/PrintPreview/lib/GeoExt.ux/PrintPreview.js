@@ -348,7 +348,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
 				cls: "x-form-item",
                 		style:"text-align:left",
 				items: [
-					legendCheckbox, 
+					//legendCheckbox, 
 					//legendOnSeparatePageCheckbox,
 					compactLegendCheckbox
 				]
@@ -426,6 +426,7 @@ GeoExt.ux.PrintPreview = Ext.extend(Ext.Container, {
         var scaleLine = new OpenLayers.Control.ScaleLine();
         this.printMapPanel.map.addControl(scaleLine);
         scaleLine.activate();
+        
         return new Ext.Panel({
             cls: "gx-map-overlay",
             layout: "column",

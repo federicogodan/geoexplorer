@@ -51,7 +51,7 @@ var risk_data = {
 		max: 1
         },
     urlParameters: {
-		geoserverURL: "http://localhost:8181/geoserver"
+		geoserverURL: "http://localhost:8080/geoserver"
 	}
 };
 
