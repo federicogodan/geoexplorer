@@ -33,13 +33,22 @@
 		{
 			"ptype":"gxp_print",
 			"customParams":{
-				"outputFilename":"mapstore-print"
+				"outputFilename":"ida-report"
 			},
 			"printService":"http://localhost:8080/geoserver/pdf/",
 			"legendPanelId":"legendPanel",
 			"actionTarget":{
 				"target":"paneltbar",
 				"index":4
+			}
+	    },{
+			"ptype":"gxp_printsnapshot",
+			"customParams":{
+				"outputFilename":"mapstore-print"
+			},
+			"actionTarget":{
+				"target":"paneltbar",
+				"index":5
 			}
 	    },{
 			"ptype": "gxp_idaspm",
